@@ -4,7 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
-@Entity
+@Entity(name = "`USER`")
 public class User {
     @Id
     String id;
@@ -31,7 +31,6 @@ public class User {
         this.roleEnum = roleEnum;
         this.levelEnum = levelEnum;
     }
-
     public String getId() {
         return id;
     }
