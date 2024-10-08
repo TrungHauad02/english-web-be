@@ -8,5 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface TopicRepository extends JpaRepository<Topic, String> {
+    @Query("SELECT t FROM Topic t")
     Page<Topic> findAllTopics(Pageable pageable);
 }
