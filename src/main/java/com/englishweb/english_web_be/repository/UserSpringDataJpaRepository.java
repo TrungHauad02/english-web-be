@@ -7,5 +7,4 @@ import org.springframework.data.jpa.repository.Query;
 public interface UserSpringDataJpaRepository extends JpaRepository<User, String> {
     // @Query("select u from User u where u.id = ?")
     User findUserById(String id);
-
 }
