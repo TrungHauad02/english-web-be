@@ -4,8 +4,11 @@ import com.englishweb.english_web_be.model.StatusEnum;
 import com.englishweb.english_web_be.model.Test;
 import com.englishweb.english_web_be.model.TestTypeEnum;
 import com.englishweb.english_web_be.model.Topic;
+import com.englishweb.english_web_be.model.Vocabulary;
+import com.englishweb.english_web_be.model.WordTypeEnum;
 import com.englishweb.english_web_be.repository.TestRepository;
 import com.englishweb.english_web_be.repository.TopicRepository;
+import com.englishweb.english_web_be.repository.VocabularyRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -15,12 +18,12 @@ import java.util.Random;
 public class DataLoader implements CommandLineRunner {
 
     private final TopicRepository topicRepository;
+    private final VocabularyRepository vocabularyRepository;
     private final TestRepository testRepository;
     private static final TestTypeEnum[] TEST_TYPES = TestTypeEnum.values();
     private final Random random = new Random();
-
-
-    public DataLoader(TopicRepository topicRepository, TestRepository testRepository) {
+    public DataLoader(TopicRepository topicRepository, TestRepository testRepository, VocabularyRepository vocabularyRepository) {
+        this.vocabularyRepository = vocabularyRepository;
         this.topicRepository = topicRepository;
         this.testRepository = testRepository;
     }
@@ -32,8 +35,18 @@ public class DataLoader implements CommandLineRunner {
             String name = "Environment " + i;
             String imageUrl = "/environment.png";
             String description = "This is environment " + i;
-
-            topicRepository.save(new Topic(id, name, i, imageUrl, description, StatusEnum.ACTIVE));
+            Topic topic = new Topic(id, name, i, imageUrl, description, StatusEnum.ACTIVE);
+            topicRepository.save(topic);
+            for(int j = 40; j >= 1; --j){
+                String vocabId = "vocab_" + i + j;
+                String word = "environment";
+                String example = "This is an example for this vocab";
+                String meaning = "Môi trường";
+                String phonetic = "/environment/";
+                String image = "/environment.png";
+                WordTypeEnum wordType = WordTypeEnum.NOUN;
+                vocabularyRepository.save(new Vocabulary(vocabId, example, image, word, phonetic, meaning, wordType, StatusEnum.ACTIVE, topic));
+            }
         }
         for (int i = 100; i >= 1; i--) {
             String testId = "test_" + i;
