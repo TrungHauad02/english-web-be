@@ -1,18 +1,28 @@
 package com.englishweb.english_web_be.fakedata;
 
 import com.englishweb.english_web_be.model.StatusEnum;
+import com.englishweb.english_web_be.model.Test;
+import com.englishweb.english_web_be.model.TestTypeEnum;
 import com.englishweb.english_web_be.model.Topic;
+import com.englishweb.english_web_be.repository.TestRepository;
 import com.englishweb.english_web_be.repository.TopicRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.util.Random;
 
 @Component
 public class DataLoader implements CommandLineRunner {
 
     private final TopicRepository topicRepository;
+    private final TestRepository testRepository;
+    private static final TestTypeEnum[] TEST_TYPES = TestTypeEnum.values();
+    private final Random random = new Random();
 
-    public DataLoader(TopicRepository topicRepository) {
+
+    public DataLoader(TopicRepository topicRepository, TestRepository testRepository) {
         this.topicRepository = topicRepository;
+        this.testRepository = testRepository;
     }
 
     @Override
@@ -24,6 +34,16 @@ public class DataLoader implements CommandLineRunner {
             String description = "This is environment " + i;
 
             topicRepository.save(new Topic(id, name, i, imageUrl, description, StatusEnum.ACTIVE));
+        }
+        for (int i = 100; i >= 1; i--) {
+            String testId = "test_" + i;
+            TestTypeEnum type = TEST_TYPES[random.nextInt(TEST_TYPES.length)];
+            String title = "Test " + type + i;
+            int serial = i; // Sử dụng i làm số thứ tự
+            int duration = 30; // Thời gian 30 phút cho mỗi bài test
+            StatusEnum status = StatusEnum.ACTIVE;
+
+            testRepository.save(new Test(testId, title, serial, duration, type, status));
         }
     }
 }
