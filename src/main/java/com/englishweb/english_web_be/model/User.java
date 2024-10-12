@@ -1,8 +1,6 @@
 package com.englishweb.english_web_be.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity(name = "`USER`")
 public class User {
@@ -14,8 +12,11 @@ public class User {
     String password;
     String avatar;
     String contentMotivation;
+    @Enumerated(EnumType.STRING)
     StatusEnum statusEnum;
+    @Enumerated(EnumType.STRING)
     RoleEnum roleEnum;
+    @Enumerated(EnumType.STRING)
     LevelEnum levelEnum;
     public User() {
     }

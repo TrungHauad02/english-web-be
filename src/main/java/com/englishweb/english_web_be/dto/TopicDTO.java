@@ -1,24 +1,19 @@
-package com.englishweb.english_web_be.model;
+package com.englishweb.english_web_be.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import com.englishweb.english_web_be.model.StatusEnum;
 
-@Entity
-public class Topic {
-    @Id
+public class TopicDTO {
     String id;
     String title;
     int serial;
     String image;
     String description;
-    @Enumerated(EnumType.STRING)
     StatusEnum status;
-    public Topic() {
+
+    public TopicDTO() {
     }
 
-    public Topic(String id, String title, int serial, String image, String description, StatusEnum status) {
+    public TopicDTO(String id, String title, int serial, String image, String description, StatusEnum status) {
         this.id = id;
         this.title = title;
         this.serial = serial;
