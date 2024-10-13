@@ -16,6 +16,11 @@ public class GrammarQuestion {
     @JoinColumn(name = "grammar_id")
     Grammar grammar;
 
+    @PrePersist
+    private void generateId() {
+        this.id = "Gram_que_" + System.currentTimeMillis();
+    }
+
     public GrammarQuestion() {
     }
 

@@ -16,6 +16,11 @@ public class TopicQuestion {
     @JoinColumn(name = "topic_id")
     Topic topic;
 
+    @PrePersist
+    private void generateId() {
+        this.id = "Topic_que_" + System.currentTimeMillis();
+    }
+
     public TopicQuestion() {
     }
 

@@ -1,10 +1,7 @@
 package com.englishweb.english_web_be.model;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Reading {
@@ -17,6 +14,12 @@ public class Reading {
     String image;
     @Enumerated(EnumType.STRING)
     StatusEnum status;
+
+    @PrePersist
+    private void generateId() {
+        this.id = "Read_" + System.currentTimeMillis();
+    }
+
     public Reading() {
     }
 

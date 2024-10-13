@@ -1,10 +1,7 @@
 package com.englishweb.english_web_be.model;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Topic {
@@ -16,6 +13,12 @@ public class Topic {
     String description;
     @Enumerated(EnumType.STRING)
     StatusEnum status;
+
+    @PrePersist
+    private void generateId() {
+        this.id = "Topic_" + System.currentTimeMillis();
+    }
+
     public Topic() {
     }
 
