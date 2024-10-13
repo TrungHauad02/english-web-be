@@ -1,4 +1,4 @@
-package com.englishweb.english_web_be.model;
+package com.englishweb.english_web_be.modelenum;
 
 public enum RoleEnum {
     ADMIN,

@@ -1,6 +1,9 @@
 package com.englishweb.english_web_be.fakedata;
 
 import com.englishweb.english_web_be.model.*;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
+import com.englishweb.english_web_be.modelenum.TestTypeEnum;
+import com.englishweb.english_web_be.modelenum.WordTypeEnum;
 import com.englishweb.english_web_be.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

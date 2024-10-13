@@ -1,5 +1,8 @@
 package com.englishweb.english_web_be.model;
 
+import com.englishweb.english_web_be.modelenum.LevelEnum;
+import com.englishweb.english_web_be.modelenum.RoleEnum;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 
 @Entity(name = "`USER`")
