@@ -17,7 +17,7 @@ public class TestController {
     public Page<Test> retrieveTestsByPage(@RequestParam int page, @RequestParam String type) {
         Pageable pageable = PageRequest.of(page, 10, Sort.by("serial"));
 
-        TestTypeEnum testType = TestTypeEnum.valueOf(type); // Chuyển đổi từ String sang Enum
+        TestTypeEnum testType = TestTypeEnum.valueOf(type);
         return repository.findAllByType(pageable, testType);
     }
     @PostMapping("/tests")
