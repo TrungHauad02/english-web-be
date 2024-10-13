@@ -1,28 +1,21 @@
-package com.englishweb.english_web_be.model;
+package com.englishweb.english_web_be.dto;
 
-import jakarta.persistence.*;
+import com.englishweb.english_web_be.model.StatusEnum;
 
-@Entity
-public class TopicAnswer {
-    @Id
+public class GrammarAnswerDTO {
     String id;
     String content;
     boolean isCorrect;
-    @Enumerated(EnumType.STRING)
     StatusEnum status;
-    @ManyToOne
-    @JoinColumn(name = "topic_question_id")
-    TopicQuestion question;
 
-    public TopicAnswer() {
+    public GrammarAnswerDTO() {
     }
 
-    public TopicAnswer(String id, String content, boolean isCorrect, StatusEnum status, TopicQuestion question) {
+    public GrammarAnswerDTO(String id, String content, boolean isCorrect, StatusEnum status) {
         this.id = id;
         this.content = content;
         this.isCorrect = isCorrect;
         this.status = status;
-        this.question = question;
     }
 
     public String getId() {
@@ -55,13 +48,5 @@ public class TopicAnswer {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
-    }
-
-    public TopicQuestion getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(TopicQuestion question) {
-        this.question = question;
     }
 }

@@ -5,7 +5,6 @@ import com.englishweb.english_web_be.model.TopicAnswer;
 import com.englishweb.english_web_be.repository.TopicAnswerRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,11 +19,11 @@ public class TopicAnswerService {
     public List<TopicAnswerDTO> findAllByQuestionId(String questionId) {
         List<TopicAnswer> list = repository.findAllByQuestion_Id(questionId);
         return list.stream()
-                .map(this::convertToDto)  // Convert each entity to DTO
+                .map(this::convertToDTO)  // Convert each entity to DTO
                 .collect(Collectors.toList());  // Collect as a list
     }
 
-    private TopicAnswerDTO convertToDto(TopicAnswer entity) {
+    private TopicAnswerDTO convertToDTO(TopicAnswer entity) {
         TopicAnswerDTO dto = new TopicAnswerDTO();
         dto.setId(entity.getId());
         dto.setContent(entity.getContent());

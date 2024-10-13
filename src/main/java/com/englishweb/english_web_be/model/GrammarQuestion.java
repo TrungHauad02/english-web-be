@@ -1,27 +1,30 @@
-package com.englishweb.english_web_be.dto;
+package com.englishweb.english_web_be.model;
 
-import com.englishweb.english_web_be.model.StatusEnum;
+import jakarta.persistence.*;
 
-import java.util.List;
-
-public class TopicQuestionDTO {
+@Entity
+public class GrammarQuestion {
+    @Id
     String id;
     String content;
     int serial;
     String explanation;
+    @Enumerated(EnumType.STRING)
     StatusEnum status;
-    List<TopicAnswerDTO> answers;
+    @ManyToOne
+    @JoinColumn(name = "grammar_id")
+    Grammar grammar;
 
-    public TopicQuestionDTO() {
+    public GrammarQuestion() {
     }
 
-    public TopicQuestionDTO(String id, String content, int serial, String explanation, StatusEnum status, List<TopicAnswerDTO> answers) {
+    public GrammarQuestion(String id, String content, int serial, String explanation, StatusEnum status, Grammar grammar) {
         this.id = id;
         this.content = content;
         this.serial = serial;
         this.explanation = explanation;
         this.status = status;
-        this.answers = answers;
+        this.grammar = grammar;
     }
 
     public String getId() {
@@ -64,12 +67,11 @@ public class TopicQuestionDTO {
         this.status = status;
     }
 
-
-    public List<TopicAnswerDTO> getAnswers() {
-        return answers;
+    public Grammar getGrammar() {
+        return grammar;
     }
 
-    public void setAnswers(List<TopicAnswerDTO> answers) {
-        this.answers = answers;
+    public void setGrammar(Grammar grammar) {
+        this.grammar = grammar;
     }
 }

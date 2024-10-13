@@ -23,18 +23,18 @@ public class TopicService {
     }
 
     public TopicDTO retrieveTopicById(String id){
-        return convertToDto(repository.findById(id).get());
+        return convertToDTO(repository.findById(id).get());
     }
 
     private Page<TopicDTO> convertToDtoPage(Page<Topic> topicPage) {
         List<TopicDTO> dtoList = topicPage.getContent().stream()
-                .map(this::convertToDto)
+                .map(this::convertToDTO)
                 .collect(Collectors.toList());
 
         return new PageImpl<>(dtoList, topicPage.getPageable(), topicPage.getTotalElements());
     }
 
-    private TopicDTO convertToDto(Topic topic){
+    private TopicDTO convertToDTO(Topic topic){
         TopicDTO dto = new TopicDTO();
         dto.setId(topic.getId());
         dto.setTitle(topic.getTitle());

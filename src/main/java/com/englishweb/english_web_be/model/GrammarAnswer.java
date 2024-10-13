@@ -3,7 +3,7 @@ package com.englishweb.english_web_be.model;
 import jakarta.persistence.*;
 
 @Entity
-public class TopicAnswer {
+public class GrammarAnswer {
     @Id
     String id;
     String content;
@@ -11,13 +11,13 @@ public class TopicAnswer {
     @Enumerated(EnumType.STRING)
     StatusEnum status;
     @ManyToOne
-    @JoinColumn(name = "topic_question_id")
-    TopicQuestion question;
+    @JoinColumn(name = "grammar_question_id")
+    GrammarQuestion question;
 
-    public TopicAnswer() {
+    public GrammarAnswer() {
     }
 
-    public TopicAnswer(String id, String content, boolean isCorrect, StatusEnum status, TopicQuestion question) {
+    public GrammarAnswer(String id, String content, boolean isCorrect, StatusEnum status, GrammarQuestion question) {
         this.id = id;
         this.content = content;
         this.isCorrect = isCorrect;
@@ -57,11 +57,11 @@ public class TopicAnswer {
         this.status = status;
     }
 
-    public TopicQuestion getQuestion() {
+    public GrammarQuestion getQuestion() {
         return question;
     }
 
-    public void setQuestion(TopicQuestion question) {
+    public void setQuestion(GrammarQuestion question) {
         this.question = question;
     }
 }

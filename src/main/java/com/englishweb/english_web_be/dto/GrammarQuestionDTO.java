@@ -4,18 +4,18 @@ import com.englishweb.english_web_be.model.StatusEnum;
 
 import java.util.List;
 
-public class TopicQuestionDTO {
+public class GrammarQuestionDTO {
     String id;
     String content;
     int serial;
     String explanation;
     StatusEnum status;
-    List<TopicAnswerDTO> answers;
+    List<GrammarAnswerDTO> answers;
 
-    public TopicQuestionDTO() {
+    public GrammarQuestionDTO() {
     }
 
-    public TopicQuestionDTO(String id, String content, int serial, String explanation, StatusEnum status, List<TopicAnswerDTO> answers) {
+    public GrammarQuestionDTO(String id, String content, int serial, String explanation, StatusEnum status, List<GrammarAnswerDTO> answers) {
         this.id = id;
         this.content = content;
         this.serial = serial;
@@ -64,12 +64,11 @@ public class TopicQuestionDTO {
         this.status = status;
     }
 
-
-    public List<TopicAnswerDTO> getAnswers() {
+    public List<GrammarAnswerDTO> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(List<TopicAnswerDTO> answers) {
+    public void setAnswers(List<GrammarAnswerDTO> answers) {
         this.answers = answers;
     }
 }

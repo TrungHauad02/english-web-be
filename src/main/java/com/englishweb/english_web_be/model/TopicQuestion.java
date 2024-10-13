@@ -1,9 +1,6 @@
 package com.englishweb.english_web_be.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class TopicQuestion {
@@ -12,6 +9,7 @@ public class TopicQuestion {
     String content;
     int serial;
     String explanation;
+    @Enumerated(EnumType.STRING)
     StatusEnum status;
     @ManyToOne
     @JoinColumn(name = "topic_id")

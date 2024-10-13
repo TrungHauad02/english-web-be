@@ -1,14 +1,7 @@
 package com.englishweb.english_web_be.fakedata;
 
-import com.englishweb.english_web_be.model.StatusEnum;
-import com.englishweb.english_web_be.model.Test;
-import com.englishweb.english_web_be.model.TestTypeEnum;
-import com.englishweb.english_web_be.model.Topic;
-import com.englishweb.english_web_be.model.Vocabulary;
-import com.englishweb.english_web_be.model.WordTypeEnum;
-import com.englishweb.english_web_be.repository.TestRepository;
-import com.englishweb.english_web_be.repository.TopicRepository;
-import com.englishweb.english_web_be.repository.VocabularyRepository;
+import com.englishweb.english_web_be.model.*;
+import com.englishweb.english_web_be.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -20,12 +13,16 @@ public class DataLoader implements CommandLineRunner {
     private final TopicRepository topicRepository;
     private final VocabularyRepository vocabularyRepository;
     private final TestRepository testRepository;
+    private final TopicQuestionRepository topicQuestionRepository;
+    private final TopicAnswerRepository topicAnswerRepository;
     private static final TestTypeEnum[] TEST_TYPES = TestTypeEnum.values();
     private final Random random = new Random();
-    public DataLoader(TopicRepository topicRepository, TestRepository testRepository, VocabularyRepository vocabularyRepository) {
+    public DataLoader(TopicRepository topicRepository, TestRepository testRepository, VocabularyRepository vocabularyRepository, TopicQuestionRepository topicQuestionRepository, TopicAnswerRepository topicAnswerRepository) {
         this.vocabularyRepository = vocabularyRepository;
         this.topicRepository = topicRepository;
         this.testRepository = testRepository;
+        this.topicQuestionRepository = topicQuestionRepository;
+        this.topicAnswerRepository = topicAnswerRepository;
     }
 
     @Override
@@ -46,6 +43,25 @@ public class DataLoader implements CommandLineRunner {
                 String image = "/environment.png";
                 WordTypeEnum wordType = WordTypeEnum.NOUN;
                 vocabularyRepository.save(new Vocabulary(vocabId, example, image, word, phonetic, meaning, wordType, StatusEnum.ACTIVE, topic));
+            }
+            for(int j = 0; j < 10; ++j){
+                TopicQuestion topicQuestion = new TopicQuestion();
+                topicQuestion.setId("topic_question_" + i + j);
+                topicQuestion.setContent("What is the answer of this question?");
+                topicQuestion.setExplanation("This is the explanation of this question");
+                topicQuestion.setSerial(j + 1);
+                topicQuestion.setStatus(StatusEnum.ACTIVE);
+                topicQuestion.setTopic(topic);
+                topicQuestionRepository.save(topicQuestion);
+                for(int k = 1; k <= 4; ++k){
+                    TopicAnswer topicAnswer = new TopicAnswer();
+                    topicAnswer.setId("topic_answer_" + i + j + k);
+                    topicAnswer.setContent("This is an answer");
+                    topicAnswer.setCorrect(true);
+                    topicAnswer.setStatus(StatusEnum.ACTIVE);
+                    topicAnswer.setQuestion(topicQuestion);
+                    topicAnswerRepository.save(topicAnswer);
+                }
             }
         }
         for (int i = 100; i >= 1; i--) {
