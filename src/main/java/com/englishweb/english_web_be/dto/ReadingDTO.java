@@ -1,37 +1,26 @@
-package com.englishweb.english_web_be.model;
+package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
-import jakarta.persistence.*;
 
-@Entity
-public class Grammar {
-    @Id
+public class ReadingDTO {
     String id;
     String title;
     int serial;
+    String description;
     String content;
     String image;
-    String example;
-    String file;
-    @Enumerated(EnumType.STRING)
     StatusEnum status;
 
-    @PrePersist
-    private void generateId() {
-        this.id = "Gram_" + System.currentTimeMillis();
+    public ReadingDTO() {
     }
 
-    public Grammar() {
-    }
-
-    public Grammar(String id, String title, int serial, String content, String image, String example, String file, StatusEnum status) {
+    public ReadingDTO(String id, String title, int serial, String description, String content, String image, StatusEnum status) {
         this.id = id;
         this.title = title;
         this.serial = serial;
+        this.description = description;
         this.content = content;
         this.image = image;
-        this.example = example;
-        this.file = file;
         this.status = status;
     }
 
@@ -59,6 +48,14 @@ public class Grammar {
         this.serial = serial;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getContent() {
         return content;
     }
@@ -73,22 +70,6 @@ public class Grammar {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public String getExample() {
-        return example;
-    }
-
-    public void setExample(String example) {
-        this.example = example;
-    }
-
-    public String getFile() {
-        return file;
-    }
-
-    public void setFile(String file) {
-        this.file = file;
     }
 
     public StatusEnum getStatus() {

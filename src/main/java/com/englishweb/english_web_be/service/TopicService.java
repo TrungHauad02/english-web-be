@@ -19,20 +19,14 @@ public class TopicService {
 
     public Page<TopicDTO> retrieveTopicsByPage(int page){
         Pageable pageable = PageRequest.of(page, 10, Sort.by("serial"));
-        return convertToDtoPage(repository.findAllTopics(pageable));
+        Page<Topic> entityPage = repository.findAllTopics(pageable);
+        return entityPage.map(this::convertToDTO);
     }
 
     public TopicDTO retrieveTopicById(String id){
         return convertToDTO(repository.findById(id).get());
     }
 
-    private Page<TopicDTO> convertToDtoPage(Page<Topic> topicPage) {
-        List<TopicDTO> dtoList = topicPage.getContent().stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-
-        return new PageImpl<>(dtoList, topicPage.getPageable(), topicPage.getTotalElements());
-    }
 
     private TopicDTO convertToDTO(Topic topic){
         TopicDTO dto = new TopicDTO();

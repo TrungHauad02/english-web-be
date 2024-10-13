@@ -21,16 +21,10 @@ public class VocabularyService {
 
     public Page<VocabularyDTO> retrieveVocabsInTopicByPage(int page, int pageSize, String topicId){
         Pageable pageable = PageRequest.of(page, pageSize);
-        Page<Vocabulary> vocabularies = repository.retrieveVocabsInTopicByPage(pageable, topicId);
-        return convertToDtoPage(vocabularies);
+        Page<Vocabulary> entityPage = repository.retrieveVocabsInTopicByPage(pageable, topicId);
+        return entityPage.map(this::convertToDTO);
     }
-    public Page<VocabularyDTO> convertToDtoPage(Page<Vocabulary> vocabPage) {
-        List<VocabularyDTO> dtoList = vocabPage.getContent().stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
 
-        return new PageImpl<>(dtoList, vocabPage.getPageable(), vocabPage.getTotalElements());
-    }
     public VocabularyDTO convertToDTO(Vocabulary vocab){
         VocabularyDTO dto = new VocabularyDTO();
         dto.setId(vocab.getId());

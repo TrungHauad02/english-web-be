@@ -21,6 +21,12 @@ public class User {
     RoleEnum roleEnum;
     @Enumerated(EnumType.STRING)
     LevelEnum levelEnum;
+
+    @PrePersist
+    private void generateId() {
+        this.id = "User_" + System.currentTimeMillis();
+    }
+
     public User() {
     }
 

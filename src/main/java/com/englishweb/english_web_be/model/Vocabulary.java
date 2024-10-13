@@ -20,6 +20,12 @@ public class Vocabulary {
     @ManyToOne
     @JoinColumn(name = "topic_id")
     private Topic topic;
+
+    @PrePersist
+    private void generateId() {
+        this.id = "Vocab_" + System.currentTimeMillis();
+    }
+
     public Vocabulary() {
     }
 
