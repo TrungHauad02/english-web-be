@@ -19,8 +19,8 @@ public class TopicService {
 
     public Page<TopicDTO> retrieveTopicsByPage(int page){
         Pageable pageable = PageRequest.of(page, 10, Sort.by("serial"));
-        Page<Topic> entityPages = repository.findAllTopics(pageable);
-        return entityPages.map(this::convertToDTO);
+        Page<Topic> entityPage = repository.findAllTopics(pageable);
+        return entityPage.map(this::convertToDTO);
     }
 
     public TopicDTO retrieveTopicById(String id){

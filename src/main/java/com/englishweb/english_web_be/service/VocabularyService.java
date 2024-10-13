@@ -21,8 +21,8 @@ public class VocabularyService {
 
     public Page<VocabularyDTO> retrieveVocabsInTopicByPage(int page, int pageSize, String topicId){
         Pageable pageable = PageRequest.of(page, pageSize);
-        Page<Vocabulary> entityPages = repository.retrieveVocabsInTopicByPage(pageable, topicId);
-        return entityPages.map(this::convertToDTO);
+        Page<Vocabulary> entityPage = repository.retrieveVocabsInTopicByPage(pageable, topicId);
+        return entityPage.map(this::convertToDTO);
     }
 
     public VocabularyDTO convertToDTO(Vocabulary vocab){
