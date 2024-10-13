@@ -1,7 +1,7 @@
 package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.model.Test;
-import com.englishweb.english_web_be.model.TestTypeEnum;
+import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 import com.englishweb.english_web_be.repository.TestRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

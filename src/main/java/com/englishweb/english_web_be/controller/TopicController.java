@@ -1,25 +1,25 @@
 package com.englishweb.english_web_be.controller;
 
-import com.englishweb.english_web_be.model.Topic;
-import com.englishweb.english_web_be.repository.TopicRepository;
+import com.englishweb.english_web_be.dto.TopicDTO;
+import com.englishweb.english_web_be.service.TopicService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 public class TopicController {
-    TopicRepository repository;
-    public TopicController(TopicRepository repository){this.repository = repository;}
-    @GetMapping("/topics")
-    public Page<Topic> retrieveTopicsByPage(@RequestParam int page){
-        Pageable pageable = PageRequest.of(page, 10, Sort.by("serial"));
-        return repository.findAllTopics(pageable);
+    TopicService service;
+
+    public TopicController(TopicService service) {
+        this.service = service;
     }
-    @PostMapping("/topics")
-    public Topic createTopic(@RequestBody Topic topic){
-        return repository.save(topic);
+
+    @GetMapping("/topics")
+    public Page<TopicDTO> retrieveTopicsByPage(@RequestParam int page){
+        return service.retrieveTopicsByPage(page);
+    }
+    @GetMapping("/topics/{id}")
+    public TopicDTO retrieveTopicById(@PathVariable String id){
+        return service.retrieveTopicById(id);
     }
 }

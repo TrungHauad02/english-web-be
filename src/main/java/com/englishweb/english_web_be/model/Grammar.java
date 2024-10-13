@@ -7,24 +7,29 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 
 @Entity
-public class Topic {
+public class Grammar {
     @Id
     String id;
     String title;
     int serial;
+    String content;
     String image;
-    String description;
+    String example;
+    String file;
     @Enumerated(EnumType.STRING)
     StatusEnum status;
-    public Topic() {
+
+    public Grammar() {
     }
 
-    public Topic(String id, String title, int serial, String image, String description, StatusEnum status) {
+    public Grammar(String id, String title, int serial, String content, String image, String example, String file, StatusEnum status) {
         this.id = id;
         this.title = title;
         this.serial = serial;
+        this.content = content;
         this.image = image;
-        this.description = description;
+        this.example = example;
+        this.file = file;
         this.status = status;
     }
 
@@ -52,6 +57,14 @@ public class Topic {
         this.serial = serial;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public String getImage() {
         return image;
     }
@@ -60,12 +73,20 @@ public class Topic {
         this.image = image;
     }
 
-    public String getDescription() {
-        return description;
+    public String getExample() {
+        return example;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setExample(String example) {
+        this.example = example;
+    }
+
+    public String getFile() {
+        return file;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
     }
 
     public StatusEnum getStatus() {

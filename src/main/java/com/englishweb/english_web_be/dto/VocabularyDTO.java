@@ -1,29 +1,22 @@
-package com.englishweb.english_web_be.model;
+package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.modelenum.WordTypeEnum;
-import jakarta.persistence.*;
 
-@Entity
-public class Vocabulary {
-    @Id
+public class VocabularyDTO {
     String id;
     String example;
     String image;
     String word;
     String phonetic;
     String meaning;
-    @Enumerated(EnumType.STRING)
     WordTypeEnum wordType;
-    @Enumerated(EnumType.STRING)
     StatusEnum status;
-    @ManyToOne
-    @JoinColumn(name = "topic_id")
-    private Topic topic;
-    public Vocabulary() {
+
+    public VocabularyDTO() {
     }
 
-    public Vocabulary(String id, String example, String image, String word, String phonetic, String meaning, WordTypeEnum wordType, StatusEnum status, Topic topic) {
+    public VocabularyDTO(String id, String example, String image, String word, String phonetic, String meaning, WordTypeEnum wordType, StatusEnum status) {
         this.id = id;
         this.example = example;
         this.image = image;
@@ -32,7 +25,6 @@ public class Vocabulary {
         this.meaning = meaning;
         this.wordType = wordType;
         this.status = status;
-        this.topic = topic;
     }
 
     public String getId() {
@@ -97,13 +89,5 @@ public class Vocabulary {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
-    }
-
-    public Topic getTopic() {
-        return topic;
-    }
-
-    public void setTopic(Topic topic) {
-        this.topic = topic;
     }
 }
