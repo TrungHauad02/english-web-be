@@ -1,8 +1,7 @@
 package com.englishweb.english_web_be.repository;
 
 import com.englishweb.english_web_be.model.Test;
-import com.englishweb.english_web_be.model.TestTypeEnum;
-import com.englishweb.english_web_be.model.Topic;
+import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

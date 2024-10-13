@@ -1,6 +1,8 @@
 package com.englishweb.english_web_be.model;
 
 
+import com.englishweb.english_web_be.modelenum.StatusEnum;
+import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
