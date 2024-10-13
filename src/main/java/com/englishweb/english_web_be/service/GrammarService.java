@@ -16,14 +16,14 @@ public class GrammarService {
 
     public Page<GrammarDTO> retrieveGrammarsByPage(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
-        Page<Grammar> entityPages = repository.findAllGrammars(pageable);
-        return entityPages.map(this::convertToDTO);
+        Page<Grammar> entityPage = repository.findAllGrammars(pageable);
+        return entityPage.map(this::convertToDTO);
     }
 
     public Page<GrammarDTO> retrieveGrammarsByPage(int page, int size, Sort sort){
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Grammar> entityPages = repository.findAllGrammars(pageable);
-        return entityPages.map(this::convertToDTO);
+        Page<Grammar> entityPage = repository.findAllGrammars(pageable);
+        return entityPage.map(this::convertToDTO);
     }
 
     private GrammarDTO convertToDTO(Grammar entity) {
