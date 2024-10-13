@@ -18,14 +18,14 @@ public class TopicQuestionService {
         this.topicAnswerService = topicAnswerService;
     }
 
-    public List<TopicQuestionDTO> getTopicQuestionByTopicId(String topicId) {
+    public List<TopicQuestionDTO> retrieveTopicQuestionByTopicId(String topicId) {
         List<TopicQuestion> list = repository.findAllByTopic_Id(topicId);
         return list.stream()
-                .map(this::convertToDto)
+                .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    private TopicQuestionDTO convertToDto(TopicQuestion topicQuestion) {
+    private TopicQuestionDTO convertToDTO(TopicQuestion topicQuestion) {
         TopicQuestionDTO dto = new TopicQuestionDTO();
         dto.setId(topicQuestion.getId());
         dto.setContent(topicQuestion.getContent());

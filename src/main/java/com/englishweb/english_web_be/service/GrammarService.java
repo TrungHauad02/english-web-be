@@ -6,9 +6,6 @@ import com.englishweb.english_web_be.repository.GrammarRepository;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 public class GrammarService {
     GrammarRepository repository;
@@ -20,16 +17,16 @@ public class GrammarService {
     public Page<GrammarDTO> retrieveTopicsByPage(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<Grammar> entityPage = repository.findAllGrammars(pageable);
-        return entityPage.map(this::convertToDto);
+        return entityPage.map(this::convertToDTO);
     }
 
     public Page<GrammarDTO> retrieveTopicsByPage(int page, int size, Sort sort){
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<Grammar> entityPage = repository.findAllGrammars(pageable);
-        return entityPage.map(this::convertToDto);
+        return entityPage.map(this::convertToDTO);
     }
 
-    private GrammarDTO convertToDto(Grammar entity) {
+    private GrammarDTO convertToDTO(Grammar entity) {
         GrammarDTO dto = new GrammarDTO();
         dto.setId(entity.getId());
         dto.setTitle(entity.getTitle());

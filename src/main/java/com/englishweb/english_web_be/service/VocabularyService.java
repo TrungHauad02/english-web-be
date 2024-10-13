@@ -8,7 +8,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,12 +26,12 @@ public class VocabularyService {
     }
     public Page<VocabularyDTO> convertToDtoPage(Page<Vocabulary> vocabPage) {
         List<VocabularyDTO> dtoList = vocabPage.getContent().stream()
-                .map(this::convertToDto)
+                .map(this::convertToDTO)
                 .collect(Collectors.toList());
 
         return new PageImpl<>(dtoList, vocabPage.getPageable(), vocabPage.getTotalElements());
     }
-    public VocabularyDTO convertToDto(Vocabulary vocab){
+    public VocabularyDTO convertToDTO(Vocabulary vocab){
         VocabularyDTO dto = new VocabularyDTO();
         dto.setId(vocab.getId());
         dto.setWord(vocab.getWord());
