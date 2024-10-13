@@ -1,0 +1,44 @@
+package com.englishweb.english_web_be.service;
+
+import com.englishweb.english_web_be.dto.GrammarDTO;
+import com.englishweb.english_web_be.model.Grammar;
+import com.englishweb.english_web_be.repository.GrammarRepository;
+import org.springframework.data.domain.*;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class GrammarService {
+    GrammarRepository repository;
+
+    public GrammarService(GrammarRepository repository) {
+        this.repository = repository;
+    }
+
+    public Page<GrammarDTO> retrieveTopicsByPage(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Grammar> entityPage = repository.findAllGrammars(pageable);
+        return entityPage.map(this::convertToDto);
+    }
+
+    public Page<GrammarDTO> retrieveTopicsByPage(int page, int size, Sort sort){
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Grammar> entityPage = repository.findAllGrammars(pageable);
+        return entityPage.map(this::convertToDto);
+    }
+
+    private GrammarDTO convertToDto(Grammar entity) {
+        GrammarDTO dto = new GrammarDTO();
+        dto.setId(entity.getId());
+        dto.setTitle(entity.getTitle());
+        dto.setContent(entity.getContent());
+        dto.setExample(entity.getExample());
+        dto.setFile(entity.getFile());
+        dto.setImage(entity.getImage());
+        dto.setSerial(entity.getSerial());
+        dto.setStatus(entity.getStatus());
+        return dto;
+    }
+}
