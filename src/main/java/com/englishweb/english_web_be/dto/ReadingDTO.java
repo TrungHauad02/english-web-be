@@ -1,7 +1,6 @@
 package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
-import jakarta.persistence.PrePersist;
 
 public class ReadingDTO {
     String id;
@@ -11,11 +10,6 @@ public class ReadingDTO {
     String content;
     String image;
     StatusEnum status;
-
-    @PrePersist
-    private void generateId() {
-        this.id = "READ_" + System.currentTimeMillis();
-    }
 
     public ReadingDTO() {
     }
