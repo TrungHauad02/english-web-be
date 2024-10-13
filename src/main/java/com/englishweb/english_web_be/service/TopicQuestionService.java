@@ -5,6 +5,9 @@ import com.englishweb.english_web_be.model.TopicQuestion;
 import com.englishweb.english_web_be.repository.TopicQuestionRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class TopicQuestionService {
     TopicQuestionRepository repository;
@@ -15,6 +18,13 @@ public class TopicQuestionService {
         this.topicAnswerService = topicAnswerService;
     }
 
+    public List<TopicQuestionDTO> getTopicQuestionByTopicId(String topicId) {
+        List<TopicQuestion> list = repository.findAllByTopic_Id(topicId);
+        return list.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     private TopicQuestionDTO convertToDto(TopicQuestion topicQuestion) {
         TopicQuestionDTO dto = new TopicQuestionDTO();
         dto.setId(topicQuestion.getId());
@@ -22,7 +32,6 @@ public class TopicQuestionService {
         dto.setSerial(topicQuestion.getSerial());
         dto.setExplanation(topicQuestion.getExplanation());
         dto.setStatus(topicQuestion.getStatus());
-        dto.setTopicId(topicQuestion.getTopic().getId());
         dto.setAnswers(topicAnswerService.findAllByQuestionId(topicQuestion.getId()));
         return dto;
     }

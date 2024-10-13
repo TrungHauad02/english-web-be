@@ -10,19 +10,17 @@ public class TopicQuestionDTO {
     int serial;
     String explanation;
     StatusEnum status;
-    String topicId;
     List<TopicAnswerDTO> answers;
 
     public TopicQuestionDTO() {
     }
 
-    public TopicQuestionDTO(String id, String content, int serial, String explanation, StatusEnum status, String topicId, List<TopicAnswerDTO> answers) {
+    public TopicQuestionDTO(String id, String content, int serial, String explanation, StatusEnum status, List<TopicAnswerDTO> answers) {
         this.id = id;
         this.content = content;
         this.serial = serial;
         this.explanation = explanation;
         this.status = status;
-        this.topicId = topicId;
         this.answers = answers;
     }
 
@@ -66,13 +64,6 @@ public class TopicQuestionDTO {
         this.status = status;
     }
 
-    public String getTopicId() {
-        return topicId;
-    }
-
-    public void setTopicId(String topicId) {
-        this.topicId = topicId;
-    }
 
     public List<TopicAnswerDTO> getAnswers() {
         return answers;
