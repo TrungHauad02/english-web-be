@@ -10,7 +10,7 @@ public class ListenPractice {
     String audioUrl;
     @Enumerated(EnumType.STRING)
     StatusEnum status;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "listening_id")
     Listening listening;
 
