@@ -6,13 +6,15 @@ import jakarta.persistence.*;
 @Entity
 public class SpeakingTopic {
     @Id
-    String id;
-    String topic;
-    int duration;
+    private String id;
+    @Column(nullable = false)
+    private String topic;
+    @Column(nullable = false)
+    private int duration;
     @Enumerated(EnumType.STRING)
-    StatusEnum status;
+    private StatusEnum status = StatusEnum.ACTIVE;
     @OneToOne
-    Speaking speaking;
+    private Speaking speaking;
 
     @PrePersist
     private void generateId() {

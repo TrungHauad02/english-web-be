@@ -6,15 +6,21 @@ import jakarta.persistence.*;
 @Entity
 public class Grammar {
     @Id
-    String id;
-    String title;
-    int serial;
-    String content;
-    String image;
-    String example;
-    String file;
+    private String id;
+    @Column(nullable = false)
+    private String title;
+    @Column(unique = true, nullable = false)
+    private int serial;
+    @Column(nullable = false)
+    private String content;
+    @Column(nullable = false)
+    private String image;
+    @Column(nullable = false)
+    private String example;
+    @Column(nullable = false)
+    private String file;
     @Enumerated(EnumType.STRING)
-    StatusEnum status;
+    private StatusEnum status = StatusEnum.ACTIVE;
 
     @PrePersist
     private void generateId() {

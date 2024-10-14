@@ -2,6 +2,7 @@ package com.englishweb.english_web_be.service;
 
 import com.englishweb.english_web_be.dto.GrammarDTO;
 import com.englishweb.english_web_be.model.Grammar;
+import com.englishweb.english_web_be.model.Topic;
 import com.englishweb.english_web_be.repository.GrammarRepository;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,8 @@ public class GrammarService {
     }
 
     public GrammarDTO retrieveGrammarById(String id){
+        if(repository.findById(id).isEmpty())
+            return null;
         Grammar entity = repository.findById(id).get();
         return convertToDTO(entity);
     }
@@ -37,12 +40,13 @@ public class GrammarService {
         return convertToDTO(entity);
     }
 
-    public GrammarDTO updateGrammar(GrammarDTO grammarDTO){
-        Grammar entity = repository.findById(grammarDTO.getId()).get();
+    public GrammarDTO updateGrammar(GrammarDTO dto){
+        if(repository.findById(dto.getId()).isEmpty())
+            return null;
+        Grammar entity = convertToEntity(dto);
+        entity.setId(dto.getId());
         entity = repository.save(entity);
-        GrammarDTO dto = convertToDTO(entity);
-        dto.setId(entity.getId());
-        return dto;
+        return convertToDTO(entity);
     }
 
     public boolean deleteGrammar(String id){

@@ -1,22 +1,24 @@
 package com.englishweb.english_web_be.model;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Writing {
     @Id
-    String id;
-    String title;
-    int serial;
-    String description;
-    String topic;
-    String image;
+    private String id;
+    @Column(nullable = false)
+    private String title;
+    @Column(nullable = false)
+    private int serial;
+    @Column(nullable = false)
+    private String description;
+    @Column(nullable = false)
+    private String topic;
+    @Column(nullable = false)
+    private String image;
     @Enumerated(EnumType.STRING)
-    StatusEnum status;
+    private StatusEnum status = StatusEnum.ACTIVE;
 
     public Writing() {
     }

@@ -16,23 +16,41 @@ public class GrammarController {
     }
 
     @GetMapping("/grammars")
-    public Page<GrammarDTO> retrieveGrammarsByPage(@RequestParam int page, @RequestParam int size){
-        return service.retrieveGrammarsByPage(page, size, Sort.by("Serial"));
+    public Page<GrammarDTO> retrieveGrammarsByPage(@RequestParam int page, @RequestParam int size, HttpServletResponse response){
+        if(size <= 0)
+        {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return null;
+        }
+        return service.retrieveGrammarsByPage(page, size, Sort.by("serial"));
     }
 
     @GetMapping("/grammars/{id}")
-    public GrammarDTO retrieveGrammarById(@PathVariable String id){
-        return service.retrieveGrammarById(id);
+    public GrammarDTO retrieveGrammarById(@PathVariable String id, HttpServletResponse response){
+        GrammarDTO dto = service.retrieveGrammarById(id);
+        if(dto == null){
+            dto = new GrammarDTO();
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return dto;
+        }
+        response.setStatus(HttpServletResponse.SC_OK);
+        return dto;
     }
 
     @PostMapping("/grammars")
-    public GrammarDTO createGrammar(@RequestBody GrammarDTO grammarDTO){
+        public GrammarDTO createGrammar(@RequestBody GrammarDTO grammarDTO){
         return service.createGrammar(grammarDTO);
     }
 
     @PutMapping("/grammars")
-    public GrammarDTO updateGrammar(@RequestBody GrammarDTO grammarDTO){
-        return service.updateGrammar(grammarDTO);
+    public GrammarDTO updateGrammar(@RequestBody GrammarDTO grammarDTO, HttpServletResponse response){
+        GrammarDTO dto = service.updateGrammar(grammarDTO);
+        if(dto == null){
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return null;
+        }
+        response.setStatus(HttpServletResponse.SC_OK);
+        return dto;
     }
 
     @DeleteMapping("/grammars/{id}")
