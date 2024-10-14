@@ -26,6 +26,45 @@ public class GrammarService {
         return entityPage.map(this::convertToDTO);
     }
 
+    public GrammarDTO retrieveGrammarById(String id){
+        Grammar entity = repository.findById(id).get();
+        return convertToDTO(entity);
+    }
+
+    public GrammarDTO createGrammar(GrammarDTO grammarDTO){
+        Grammar entity = convertToEntity(grammarDTO);
+        entity = repository.save(entity);
+        return convertToDTO(entity);
+    }
+
+    public GrammarDTO updateGrammar(GrammarDTO grammarDTO){
+        Grammar entity = repository.findById(grammarDTO.getId()).get();
+        entity = repository.save(entity);
+        GrammarDTO dto = convertToDTO(entity);
+        dto.setId(entity.getId());
+        return dto;
+    }
+
+    public boolean deleteGrammar(String id){
+        if(repository.existsById(id)){
+            repository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    private Grammar convertToEntity(GrammarDTO grammarDTO) {
+        Grammar entity = new Grammar();
+        entity.setContent(grammarDTO.getContent());
+        entity.setExample(grammarDTO.getExample());
+        entity.setFile(grammarDTO.getFile());
+        entity.setImage(grammarDTO.getImage());
+        entity.setTitle(grammarDTO.getTitle());
+        entity.setSerial(grammarDTO.getSerial());
+        entity.setStatus(grammarDTO.getStatus());
+        return entity;
+    }
+
     private GrammarDTO convertToDTO(Grammar entity) {
         GrammarDTO dto = new GrammarDTO();
         dto.setId(entity.getId());
