@@ -7,16 +7,21 @@ import jakarta.persistence.*;
 @Entity
 public class Vocabulary {
     @Id
-    String id;
-    String example;
-    String image;
-    String word;
-    String phonetic;
-    String meaning;
+    private String id;
+    @Column(nullable = false)
+    private String example;
+    @Column(nullable = false)
+    private String image;
+    @Column(nullable = false)
+    private String word;
+    @Column(nullable = false)
+    private String phonetic;
+    @Column(nullable = false)
+    private String meaning;
     @Enumerated(EnumType.STRING)
-    WordTypeEnum wordType;
+    private WordTypeEnum wordType = WordTypeEnum.NOUN;
     @Enumerated(EnumType.STRING)
-    StatusEnum status;
+    private StatusEnum status = StatusEnum.ACTIVE;
     @ManyToOne
     @JoinColumn(name = "topic_id")
     private Topic topic;

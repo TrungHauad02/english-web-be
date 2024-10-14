@@ -6,14 +6,16 @@ import jakarta.persistence.*;
 @Entity
 public class TopicAnswer {
     @Id
-    String id;
-    String content;
-    boolean isCorrect;
+    private String id;
+    @Column(nullable = false)
+    private String content;
+    @Column(nullable = false)
+    private boolean isCorrect;
     @Enumerated(EnumType.STRING)
-    StatusEnum status;
+    private StatusEnum status = StatusEnum.ACTIVE;
     @ManyToOne
     @JoinColumn(name = "topic_question_id")
-    TopicQuestion question;
+    private TopicQuestion question;
 
     @PrePersist
     private void generateId() {

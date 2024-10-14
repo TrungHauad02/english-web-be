@@ -6,13 +6,17 @@ import jakarta.persistence.*;
 @Entity
 public class Topic {
     @Id
-    String id;
-    String title;
-    int serial;
-    String image;
-    String description;
+    private String id;
+    @Column(nullable = false)
+    private String title;
+    @Column(nullable = false)
+    private int serial;
+    @Column(nullable = false)
+    private String image;
+    @Column(nullable = false)
+    private String description;
     @Enumerated(EnumType.STRING)
-    StatusEnum status;
+    private StatusEnum status = StatusEnum.ACTIVE;
 
     @PrePersist
     private void generateId() {

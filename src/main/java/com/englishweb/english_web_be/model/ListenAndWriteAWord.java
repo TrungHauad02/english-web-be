@@ -6,17 +6,22 @@ import jakarta.persistence.*;
 @Entity
 public class ListenAndWriteAWord {
     @Id
-    String id;
-    int serial;
-    String audioUrl;
-    String sentence;
-    int missingIndex;
-    String correctAnswer;
+    private String id;
+    @Column(nullable = false)
+    private int serial;
+    @Column(nullable = false)
+    private String audioUrl;
+    @Column(nullable = false)
+    private String sentence;
+    @Column(nullable = false)
+    private int missingIndex = 0;
+    @Column(nullable = false)
+    private String correctAnswer;
     @Enumerated(EnumType.STRING)
-    StatusEnum status;
+    private StatusEnum status = StatusEnum.ACTIVE;
     @ManyToOne
     @JoinColumn(name="listening_id")
-    Listening listening;
+    private Listening listening;
 
     @PrePersist
     private void generateId() {

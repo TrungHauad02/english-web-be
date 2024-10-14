@@ -8,19 +8,21 @@ import jakarta.persistence.*;
 @Entity(name = "`USER`")
 public class User {
     @Id
-    String id;
-    @Column(name = "name")
-    String name;
-    String email;
-    String password;
-    String avatar;
-    String contentMotivation;
+    private String id;
+    @Column(nullable = false)
+    private String name;
+    @Column(nullable = false)
+    private String email;
+    @Column(nullable = false)
+    private String password;
+    private String avatar;
+    private String contentMotivation;
     @Enumerated(EnumType.STRING)
-    StatusEnum statusEnum;
+    private StatusEnum statusEnum = StatusEnum.ACTIVE;
     @Enumerated(EnumType.STRING)
-    RoleEnum roleEnum;
+    private RoleEnum roleEnum = RoleEnum.STUDENT;
     @Enumerated(EnumType.STRING)
-    LevelEnum levelEnum;
+    private LevelEnum levelEnum;
 
     @PrePersist
     private void generateId() {

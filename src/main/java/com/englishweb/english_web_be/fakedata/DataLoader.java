@@ -90,43 +90,6 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        for (int i = 100; i >= 1; i--) {
-            String id = "topic_" + i;
-            String name = "Environment " + i;
-            String imageUrl = "/environment.png";
-            String description = "This is environment " + i;
-            Topic topic = new Topic(id, name, i, imageUrl, description, StatusEnum.ACTIVE);
-            topicRepository.save(topic);
-            for(int j = 40; j >= 1; --j){
-                String vocabId = "vocab_" + i + j;
-                String word = "environment";
-                String example = "This is an example for this vocab";
-                String meaning = "Môi trường";
-                String phonetic = "/environment/";
-                String image = "/environment.png";
-                WordTypeEnum wordType = WordTypeEnum.NOUN;
-                vocabularyRepository.save(new Vocabulary(vocabId, example, image, word, phonetic, meaning, wordType, StatusEnum.ACTIVE, topic));
-            }
-            for(int j = 0; j < 10; ++j){
-                TopicQuestion topicQuestion = new TopicQuestion();
-                topicQuestion.setId("topic_question_" + i + j);
-                topicQuestion.setContent("What is the answer of this question?");
-                topicQuestion.setExplanation("This is the explanation of this question");
-                topicQuestion.setSerial(j + 1);
-                topicQuestion.setStatus(StatusEnum.ACTIVE);
-                topicQuestion.setTopic(topic);
-                topicQuestionRepository.save(topicQuestion);
-                for(int k = 1; k <= 4; ++k){
-                    TopicAnswer topicAnswer = new TopicAnswer();
-                    topicAnswer.setId("topic_answer_" + i + j + k);
-                    topicAnswer.setContent("This is an answer");
-                    topicAnswer.setCorrect(true);
-                    topicAnswer.setStatus(StatusEnum.ACTIVE);
-                    topicAnswer.setQuestion(topicQuestion);
-                    topicAnswerRepository.save(topicAnswer);
-                }
-            }
-        }
         generateTestData();
     }
 }
