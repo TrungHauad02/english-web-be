@@ -4,31 +4,28 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 
 @Entity
-public class SpeakingConversation {
+public class SpeakingTopic {
     @Id
     String id;
-    String name;
-    int serial;
-    String content;
+    String topic;
+    int duration;
     @Enumerated(EnumType.STRING)
     StatusEnum status;
-    @ManyToOne
-    @JoinColumn(name = "speaking_id")
+    @OneToOne
     Speaking speaking;
 
     @PrePersist
     private void generateId() {
-        this.id = "Speak_con_" + System.currentTimeMillis();
+        this.id = "Speak_topic_" + System.currentTimeMillis();
     }
 
-    public SpeakingConversation() {
+    public SpeakingTopic() {
     }
 
-    public SpeakingConversation(String id, String name, int serial, String content, StatusEnum status, Speaking speaking) {
+    public SpeakingTopic(String id, String topic, int duration, StatusEnum status, Speaking speaking) {
         this.id = id;
-        this.name = name;
-        this.serial = serial;
-        this.content = content;
+        this.topic = topic;
+        this.duration = duration;
         this.status = status;
         this.speaking = speaking;
     }
@@ -41,28 +38,20 @@ public class SpeakingConversation {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTopic() {
+        return topic;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
-    public int getSerial() {
-        return serial;
+    public int getDuration() {
+        return duration;
     }
 
-    public void setSerial(int serial) {
-        this.serial = serial;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
     public StatusEnum getStatus() {
