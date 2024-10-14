@@ -17,8 +17,14 @@ public class TopicService {
         this.repository = repository;
     }
 
-    public Page<TopicDTO> retrieveTopicsByPage(int page){
-        Pageable pageable = PageRequest.of(page, 10, Sort.by("serial"));
+    public Page<TopicDTO> retrieveTopicsByPage(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Topic> entityPage = repository.findAllTopics(pageable);
+        return entityPage.map(this::convertToDTO);
+    }
+
+    public Page<TopicDTO> retrieveTopicsByPage(int page, int size, Sort sort){
+        Pageable pageable = PageRequest.of(page, size, sort);
         Page<Topic> entityPage = repository.findAllTopics(pageable);
         return entityPage.map(this::convertToDTO);
     }
