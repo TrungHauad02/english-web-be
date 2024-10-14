@@ -1,5 +1,6 @@
 package com.englishweb.english_web_be.model;
 
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
