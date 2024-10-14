@@ -15,10 +15,7 @@ public class Test {
     private String title;
     private int serial;
     private int duration; // Duration in minutes
-    @Enumerated(EnumType.STRING)
     private TestTypeEnum type;
-
-    @Enumerated(EnumType.STRING)
     private StatusEnum status;
 
 
