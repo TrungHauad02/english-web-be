@@ -2,7 +2,7 @@ package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 
-public class ListenAndWriteAWordDTO {
+public class ListenAndWriteAWordDTO implements BaseDTO {
     String id;
     int serial;
     String audioUrl;
@@ -24,10 +24,12 @@ public class ListenAndWriteAWordDTO {
         this.status = status;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }

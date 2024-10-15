@@ -3,51 +3,17 @@ package com.englishweb.english_web_be.service;
 import com.englishweb.english_web_be.dto.TopicDTO;
 import com.englishweb.english_web_be.model.Topic;
 import com.englishweb.english_web_be.repository.TopicRepository;
-import com.englishweb.english_web_be.util.ValidationUtils;
-import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TopicService {
-    TopicRepository repository;
+public class TopicService  extends BaseService<Topic, TopicDTO, TopicRepository>{
 
     public TopicService(TopicRepository repository) {
-        this.repository = repository;
+        super(repository);
     }
 
-    public Page<TopicDTO> retrieveTopicsByPage(int page, int size){
-        ValidationUtils.getInstance().validatePageRequestParam(page, size);
-        Pageable pageable = PageRequest.of(page, size, Sort.by("serial"));
-        Page<Topic> entityPage = repository.findAllTopics(pageable);
-        return entityPage.map(this::convertToDTO);
-    }
-
-    public TopicDTO retrieveTopicById(String id){
-        return convertToDTO(repository.findById(id).get());
-    }
-
-    public TopicDTO createTopic(TopicDTO dto){
-        Topic entity = convertToEntity(dto);
-        entity = repository.save(entity);
-        return convertToDTO(entity);
-    }
-
-    public TopicDTO updateTopic(TopicDTO dto){
-        Topic entity = convertToEntity(dto);
-        entity.setId(dto.getId());
-        entity = repository.save(entity);
-        return convertToDTO(entity);
-    }
-
-    public boolean deleteTopic(String id){
-        if(repository.existsById(id)){
-            repository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
-
-    private Topic convertToEntity(TopicDTO dto){
+    @Override
+    protected Topic convertToEntity(TopicDTO dto){
         Topic entity = new Topic();
         entity.setTitle(dto.getTitle());
         entity.setDescription(dto.getDescription());
@@ -57,7 +23,8 @@ public class TopicService {
         return entity;
     }
 
-    private TopicDTO convertToDTO(Topic topic){
+    @Override
+    protected TopicDTO convertToDTO(Topic topic){
         TopicDTO dto = new TopicDTO();
         dto.setId(topic.getId());
         dto.setTitle(topic.getTitle());

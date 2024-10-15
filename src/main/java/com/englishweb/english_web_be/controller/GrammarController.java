@@ -16,31 +16,34 @@ public class GrammarController {
         this.service = service;
     }
 
-    @GetMapping("/grammars")
-    public ResponseEntity<Page<GrammarDTO>> retrieveGrammarsByPage(@RequestParam int page, @RequestParam int size){
-        return new ResponseEntity<>(service.retrieveGrammarsByPage(page, size), HttpStatus.OK);
+    @GetMapping("/api/grammars")
+    public ResponseEntity<Page<GrammarDTO>> retrieveGrammarsByPage(@RequestParam int page,
+                                                                   @RequestParam int size,
+                                                                   @RequestParam(defaultValue = "serial") String sortBy,
+                                                                   @RequestParam(defaultValue = "asc") String sortDir){
+        return new ResponseEntity<>(service.findByPage(page, size, sortBy, sortDir, GrammarDTO.class), HttpStatus.OK);
     }
 
-    @GetMapping("/grammars/{id}")
+    @GetMapping("/api/grammars/{id}")
     public ResponseEntity<GrammarDTO> retrieveGrammarById(@PathVariable String id){
-        return new ResponseEntity<>(service.retrieveGrammarById(id), HttpStatus.OK);
+        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/grammars")
+    @PostMapping("/api/grammars")
     public ResponseEntity<GrammarDTO> createGrammar(@Valid @RequestBody GrammarDTO dto){
-        GrammarDTO createdGrammar = service.createGrammar(dto);
+        GrammarDTO createdGrammar = service.create(dto);
         return new ResponseEntity<>(createdGrammar, HttpStatus.CREATED);
     }
 
-    @PutMapping("/grammars")
+    @PutMapping("/api/grammars")
     public ResponseEntity<GrammarDTO> updateGrammar(@Valid @RequestBody GrammarDTO dto){
-        GrammarDTO updatedGrammar = service.updateGrammar(dto);
+        GrammarDTO updatedGrammar = service.update(dto);
         return ResponseEntity.ok(updatedGrammar);
     }
 
-    @DeleteMapping("/grammars/{id}")
+    @DeleteMapping("/api/grammars/{id}")
     public ResponseEntity<Void> deleteGrammarById(@PathVariable String id){
-        service.deleteGrammar(id);
+        service.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

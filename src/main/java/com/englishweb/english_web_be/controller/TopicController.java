@@ -4,6 +4,8 @@ import com.englishweb.english_web_be.dto.TopicDTO;
 import com.englishweb.english_web_be.service.TopicService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -15,12 +17,15 @@ public class TopicController {
         this.service = service;
     }
 
-    @GetMapping("/topics")
-    public Page<TopicDTO> retrieveTopicsByPage(@RequestParam int page, @RequestParam int size) {
-        return service.retrieveTopicsByPage(page, size);
+    @GetMapping("/api/topics")
+    public ResponseEntity<Page<TopicDTO>> retrieveTopicsByPage(@RequestParam int page,
+                                                               @RequestParam int size,
+                                                               @RequestParam(defaultValue = "serial") String sortBy,
+                                                               @RequestParam(defaultValue = "asc") String sortDir) {
+        return new ResponseEntity<>(service.findByPage(page, size, sortBy, sortDir, TopicDTO.class), HttpStatus.OK);
     }
-    @GetMapping("/topics/{id}")
-    public TopicDTO retrieveTopicById(@PathVariable String id){
-        return service.retrieveTopicById(id);
+    @GetMapping("/api/topics/{id}")
+    public ResponseEntity<TopicDTO> retrieveTopicById(@PathVariable String id){
+        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 }

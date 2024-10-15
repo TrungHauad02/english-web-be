@@ -4,7 +4,7 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 
 @Entity
-public class ListenAndWriteAWord {
+public class ListenAndWriteAWord implements BaseEntity {
     @Id
     private String id;
     @Column(nullable = false)
@@ -42,10 +42,12 @@ public class ListenAndWriteAWord {
         this.listening = listening;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }

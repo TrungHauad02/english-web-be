@@ -4,7 +4,7 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 
 import java.util.List;
 
-public class GrammarQuestionDTO {
+public class GrammarQuestionDTO implements BaseDTO {
     String id;
     String content;
     int serial;
@@ -24,10 +24,12 @@ public class GrammarQuestionDTO {
         this.answers = answers;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }

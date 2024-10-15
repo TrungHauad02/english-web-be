@@ -6,7 +6,7 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 
 @Entity(name = "`USER`")
-public class User {
+public class User implements BaseEntity {
     @Id
     private String id;
     @Column(nullable = false)
@@ -43,10 +43,13 @@ public class User {
         this.roleEnum = roleEnum;
         this.levelEnum = levelEnum;
     }
+
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }

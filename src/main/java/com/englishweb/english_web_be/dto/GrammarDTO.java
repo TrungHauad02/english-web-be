@@ -2,10 +2,9 @@ package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-public class GrammarDTO {
+public class GrammarDTO implements BaseDTO {
     String id;
     @NotBlank(message = "Title cannot be empty")
     String title;
@@ -35,10 +34,12 @@ public class GrammarDTO {
         this.status = status;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }

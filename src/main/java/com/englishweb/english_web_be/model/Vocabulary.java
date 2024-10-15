@@ -5,7 +5,7 @@ import com.englishweb.english_web_be.modelenum.WordTypeEnum;
 import jakarta.persistence.*;
 
 @Entity
-public class Vocabulary {
+public class Vocabulary implements BaseEntity {
     @Id
     private String id;
     @Column(nullable = false)
@@ -46,10 +46,12 @@ public class Vocabulary {
         this.topic = topic;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }
