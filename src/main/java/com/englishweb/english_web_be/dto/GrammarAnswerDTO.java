@@ -7,15 +7,17 @@ public class GrammarAnswerDTO implements BaseDTO {
     String content;
     boolean isCorrect;
     StatusEnum status;
+    String questionId;
 
     public GrammarAnswerDTO() {
     }
 
-    public GrammarAnswerDTO(String id, String content, boolean isCorrect, StatusEnum status) {
+    public GrammarAnswerDTO(String id, String content, boolean isCorrect, StatusEnum status, String questionId) {
         this.id = id;
         this.content = content;
         this.isCorrect = isCorrect;
         this.status = status;
+        this.questionId = questionId;
     }
 
     @Override
@@ -50,5 +52,13 @@ public class GrammarAnswerDTO implements BaseDTO {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public String getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(String questionId) {
+        this.questionId = questionId;
     }
 }
