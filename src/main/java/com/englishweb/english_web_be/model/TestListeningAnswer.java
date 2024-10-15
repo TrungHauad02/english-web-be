@@ -1,9 +1,11 @@
 package com.englishweb.english_web_be.model;
 
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
 
 @Entity
 public class TestListeningAnswer {
@@ -11,10 +13,11 @@ public class TestListeningAnswer {
     private String id;
     private String content;
     private Boolean isCorrect;
-    StatusEnum status;
+    private StatusEnum status;
+
     @ManyToOne
     @JoinColumn(name = "test_listening_question_id")
-    private TestListeningQuestion TestListeningQuestion;
+    private TestListeningQuestion testListeningQuestion;
 
     public TestListeningAnswer() {
     }
@@ -25,7 +28,6 @@ public class TestListeningAnswer {
         this.isCorrect = isCorrect;
         this.status = status;
     }
-
 
     public String getId() {
         return id;
@@ -52,11 +54,11 @@ public class TestListeningAnswer {
     }
 
     public TestListeningQuestion getTestListeningQuestion() {
-        return TestListeningQuestion;
+        return testListeningQuestion;
     }
 
     public void setTestListeningQuestion(TestListeningQuestion testListeningQuestion) {
-        TestListeningQuestion = testListeningQuestion;
+        this.testListeningQuestion = testListeningQuestion;
     }
 
     public StatusEnum getStatus() {

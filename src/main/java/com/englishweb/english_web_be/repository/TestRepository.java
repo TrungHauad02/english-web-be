@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface TestRepository extends JpaRepository<Test, String> {
-    @Query("SELECT t FROM Test t")
-    Page<Test> findAllTests(Pageable pageable);
+
     Page<Test> findAllByType(Pageable pageable, TestTypeEnum type);
 }

@@ -1,22 +1,30 @@
 package com.englishweb.english_web_be.dto;
 
-import java.util.List;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 
-public class TestListeningQuestionDTO {
+
+
+
+public class TestSpeakingQuestionDTO {
+
     private String id;
     private String content;
     private int serial;
-    private List<TestListeningAnswerDTO> answers;
+    private StatusEnum status;
 
-    public TestListeningQuestionDTO() {
-    }
 
-    public TestListeningQuestionDTO(String id, String content, int serial, List<TestListeningAnswerDTO> answers) {
+
+    public TestSpeakingQuestionDTO(String id, String content, int serial, StatusEnum status) {
         this.id = id;
         this.content = content;
         this.serial = serial;
-        this.answers = answers;
+        this.status = status;
     }
+
+    public TestSpeakingQuestionDTO() {
+
+    }
+
 
     public String getId() {
         return id;
@@ -42,21 +50,21 @@ public class TestListeningQuestionDTO {
         this.serial = serial;
     }
 
-    public List<TestListeningAnswerDTO> getAnswers() {
-        return answers;
+    public StatusEnum getStatus() {
+        return status;
     }
 
-    public void setAnswers(List<TestListeningAnswerDTO> answers) {
-        this.answers = answers;
+    public void setStatus(StatusEnum status) {
+        this.status = status;
     }
 
     @Override
     public String toString() {
-        return "TestListeningQuestionDTO{" +
+        return "TestSpeakingQuestionDTO{" +
                 "id='" + id + '\'' +
                 ", content='" + content + '\'' +
                 ", serial=" + serial +
-                ", answers=" + answers +
+                ", status=" + status +
                 '}';
     }
 }

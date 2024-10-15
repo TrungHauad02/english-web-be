@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-public class TestReadingQuestion {
+public class TestVocabularyQuestion {
     @Id
     private String id;
     private String content;
@@ -15,16 +15,16 @@ public class TestReadingQuestion {
     private StatusEnum status;
 
     @ManyToOne
-    @JoinColumn(name = "test_reading_id")
-    private TestReading testReading;
+    @JoinColumn(name = "test_id")
+    private Test test;
 
-    @OneToMany(mappedBy = "testReadingQuestion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<TestReadingAnswer> answers;
+    @OneToMany(mappedBy = "testVocabularyQuestion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TestVocabularyAnswer> answers;
 
-    public TestReadingQuestion() {
+    public TestVocabularyQuestion() {
     }
 
-    public TestReadingQuestion(String id, String content, int serial, String explantion, StatusEnum status) {
+    public TestVocabularyQuestion(String id, String content, int serial, String explantion, StatusEnum status) {
         this.id = id;
         this.content = content;
         this.serial = serial;
@@ -64,6 +64,14 @@ public class TestReadingQuestion {
         this.explantion = explantion;
     }
 
+    public Test getTest() {
+        return test;
+    }
+
+    public void setTest(Test test) {
+        this.test = test;
+    }
+
     public StatusEnum getStatus() {
         return status;
     }
@@ -72,19 +80,11 @@ public class TestReadingQuestion {
         this.status = status;
     }
 
-    public TestReading getTestReading() {
-        return testReading;
-    }
-
-    public void setTestReading(TestReading testReading) {
-        this.testReading = testReading;
-    }
-
-    public List<TestReadingAnswer> getAnswers() {
+    public List<TestVocabularyAnswer> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(List<TestReadingAnswer> answers) {
+    public void setAnswers(List<TestVocabularyAnswer> answers) {
         this.answers = answers;
     }
 }

@@ -7,26 +7,33 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class TestReadingAnswer {
+public class TestVocabularyAnswer {
     @Id
     private String id;
     private String content;
     private Boolean isCorrect;
-    private StatusEnum status;
+    StatusEnum status;
     @ManyToOne
-    @JoinColumn(name = "test_reading_question_id")
-    private TestReadingQuestion testReadingQuestion;
+    @JoinColumn(name = "test_vocabulary_question_id")
+    private TestVocabularyQuestion testVocabularyQuestion;
 
-    public TestReadingAnswer() {
+    public TestVocabularyAnswer() {
     }
 
-    public TestReadingAnswer(String id, String content, Boolean isCorrect, StatusEnum status) {
+    public TestVocabularyAnswer(String id, String content, Boolean isCorrect, StatusEnum status) {
         this.id = id;
         this.content = content;
         this.isCorrect = isCorrect;
         this.status = status;
     }
 
+    public TestVocabularyAnswer(String id, String content, Boolean isCorrect, StatusEnum status, com.englishweb.english_web_be.model.TestVocabularyQuestion testVocabularyQuestion) {
+        this.id = id;
+        this.content = content;
+        this.isCorrect = isCorrect;
+        this.status = status;
+        this.testVocabularyQuestion = testVocabularyQuestion;
+    }
 
     public String getId() {
         return id;
@@ -52,20 +59,19 @@ public class TestReadingAnswer {
         isCorrect = correct;
     }
 
-
-    public TestReadingQuestion getTestReadingQuestion() {
-        return testReadingQuestion;
-    }
-
-    public void setTestReadingQuestion(TestReadingQuestion testReadingQuestion) {
-        this.testReadingQuestion = testReadingQuestion;
-    }
-
     public StatusEnum getStatus() {
         return status;
     }
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public TestVocabularyQuestion getTestVocabularyQuestion() {
+        return testVocabularyQuestion;
+    }
+
+    public void setTestVocabularyQuestion(TestVocabularyQuestion testVocabularyQuestion) {
+        this.testVocabularyQuestion = testVocabularyQuestion;
     }
 }

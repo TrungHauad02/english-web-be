@@ -3,10 +3,11 @@ package com.englishweb.english_web_be.model;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 
+
 import java.util.List;
 
 @Entity
-public class TestListeningQuestion {
+public class TestSpeakingQuestion {
     @Id
     private String id;
     private String content;
@@ -14,30 +15,26 @@ public class TestListeningQuestion {
     private StatusEnum status;
 
     @ManyToOne
-    @JoinColumn(name = "test_listening_id")
-    private TestListening testListening;
+    @JoinColumn(name = "test_speaking_id")
+    private TestSpeaking testSpeaking;
+    public TestSpeakingQuestion() {
 
-    @OneToMany(mappedBy = "testListeningQuestion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<TestListeningAnswer> answersList;
-
-    public TestListeningQuestion() {
     }
 
-    public TestListeningQuestion(String id, int serial, String content, StatusEnum status) {
-        this.id = id;
-        this.serial = serial;
-        this.content = content;
-        this.status = status;
-    }
-
-    public TestListeningQuestion(String id, String content, int serial, StatusEnum status, List<TestListeningAnswer> answersList) {
+    public TestSpeakingQuestion(String id, String content, int serial, StatusEnum status) {
         this.id = id;
         this.content = content;
         this.serial = serial;
         this.status = status;
-        this.answersList = answersList;
     }
 
+    public TestSpeakingQuestion(String id, String content, int serial, StatusEnum status, TestSpeaking testSpeaking) {
+        this.id = id;
+        this.content = content;
+        this.serial = serial;
+        this.status = status;
+        this.testSpeaking = testSpeaking;
+    }
 
     public String getId() {
         return id;
@@ -71,19 +68,11 @@ public class TestListeningQuestion {
         this.status = status;
     }
 
-    public TestListening getTestListening() {
-        return testListening;
+    public TestSpeaking getTestSpeaking() {
+        return testSpeaking;
     }
 
-    public void setTestListening(TestListening testListening) {
-        this.testListening = testListening;
-    }
-
-    public List<TestListeningAnswer> getAnswersList() {
-        return answersList;
-    }
-
-    public void setAnswersList(List<TestListeningAnswer> answersList) {
-        this.answersList = answersList;
+    public void setTestSpeaking(TestSpeaking testSpeaking) {
+        this.testSpeaking = testSpeaking;
     }
 }

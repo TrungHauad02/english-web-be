@@ -1,32 +1,22 @@
-package com.englishweb.english_web_be.model;
+package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 
-@Entity
-public class TestReadingAnswer {
-    @Id
+public class TestVocabularyAnswerDTO {
     private String id;
     private String content;
     private Boolean isCorrect;
-    private StatusEnum status;
-    @ManyToOne
-    @JoinColumn(name = "test_reading_question_id")
-    private TestReadingQuestion testReadingQuestion;
+    StatusEnum status;
 
-    public TestReadingAnswer() {
+    public TestVocabularyAnswerDTO() {
     }
 
-    public TestReadingAnswer(String id, String content, Boolean isCorrect, StatusEnum status) {
+    public TestVocabularyAnswerDTO(String id, String content, Boolean isCorrect, StatusEnum status) {
         this.id = id;
         this.content = content;
         this.isCorrect = isCorrect;
         this.status = status;
     }
-
 
     public String getId() {
         return id;
@@ -52,20 +42,21 @@ public class TestReadingAnswer {
         isCorrect = correct;
     }
 
-
-    public TestReadingQuestion getTestReadingQuestion() {
-        return testReadingQuestion;
-    }
-
-    public void setTestReadingQuestion(TestReadingQuestion testReadingQuestion) {
-        this.testReadingQuestion = testReadingQuestion;
-    }
-
     public StatusEnum getStatus() {
         return status;
     }
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "TestVocabularyAnswerDTO{" +
+                "id='" + id + '\'' +
+                ", content='" + content + '\'' +
+                ", isCorrect=" + isCorrect +
+                ", status=" + status +
+                '}';
     }
 }

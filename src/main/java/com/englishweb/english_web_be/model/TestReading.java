@@ -1,5 +1,6 @@
 package com.englishweb.english_web_be.model;
 
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class TestReading {
     @JoinColumn(name = "test_id")
     private Test test;
 
-    @OneToMany(mappedBy = "TestReading", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "testReading", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TestReadingQuestion> questions;
 
 
@@ -31,6 +32,10 @@ public class TestReading {
         this.statusEnum = statusEnum;
     }
 
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public Test getTest() {
         return test;

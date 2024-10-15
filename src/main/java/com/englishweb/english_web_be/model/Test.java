@@ -3,10 +3,9 @@ package com.englishweb.english_web_be.model;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.modelenum.TestTypeEnum;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Test {
@@ -14,9 +13,31 @@ public class Test {
     private String id;
     private String title;
     private int serial;
-    private int duration; // Duration in minutes
+    private int duration;
     private TestTypeEnum type;
     private StatusEnum status;
+    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TestListening> testListenings;
+
+
+    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TestReading> testReadings;
+
+
+    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TestVocabularyQuestion> testVocabularyQuestions;
+
+
+    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TestGrammarQuestion> testGrammarQuestions;
+
+
+    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TestWriting> testWritings;
+
+    @OneToOne(mappedBy = "test", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private TestSpeaking testSpeaking;
+
 
 
     public Test() {
@@ -79,6 +100,54 @@ public class Test {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public List<TestListening> getTestListenings() {
+        return testListenings;
+    }
+
+    public void setTestListenings(List<TestListening> testListenings) {
+        this.testListenings = testListenings;
+    }
+
+    public List<TestReading> getTestReadings() {
+        return testReadings;
+    }
+
+    public void setTestReadings(List<TestReading> testReadings) {
+        this.testReadings = testReadings;
+    }
+
+    public List<TestVocabularyQuestion> getTestVocabularyQuestions() {
+        return testVocabularyQuestions;
+    }
+
+    public void setTestVocabularyQuestions(List<TestVocabularyQuestion> testVocabularyQuestions) {
+        this.testVocabularyQuestions = testVocabularyQuestions;
+    }
+
+    public List<TestGrammarQuestion> getTestGrammarQuestions() {
+        return testGrammarQuestions;
+    }
+
+    public void setTestGrammarQuestions(List<TestGrammarQuestion> testGrammarQuestions) {
+        this.testGrammarQuestions = testGrammarQuestions;
+    }
+
+    public List<TestWriting> getTestWritings() {
+        return testWritings;
+    }
+
+    public void setTestWritings(List<TestWriting> testWritings) {
+        this.testWritings = testWritings;
+    }
+
+    public TestSpeaking getTestSpeaking() {
+        return testSpeaking;
+    }
+
+    public void setTestSpeaking(TestSpeaking testSpeaking) {
+        this.testSpeaking = testSpeaking;
     }
 
     // Override toString() method for easy display
