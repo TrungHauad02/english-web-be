@@ -6,27 +6,33 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-
 @Entity
-public class TestListeningAnswer {
+public class TestVocabularyAnswer {
     @Id
     private String id;
     private String content;
     private Boolean isCorrect;
-    private StatusEnum status;
-
+    StatusEnum status;
     @ManyToOne
-    @JoinColumn(name = "test_listening_question_id")
-    private TestListeningQuestion testListeningQuestion;
+    @JoinColumn(name = "test_vocabulary_question_id")
+    private TestVocabularyQuestion testVocabularyQuestion;
 
-    public TestListeningAnswer() {
+    public TestVocabularyAnswer() {
     }
 
-    public TestListeningAnswer(String id, String content, Boolean isCorrect, StatusEnum status) {
+    public TestVocabularyAnswer(String id, String content, Boolean isCorrect, StatusEnum status) {
         this.id = id;
         this.content = content;
         this.isCorrect = isCorrect;
         this.status = status;
+    }
+
+    public TestVocabularyAnswer(String id, String content, Boolean isCorrect, StatusEnum status, com.englishweb.english_web_be.model.TestVocabularyQuestion testVocabularyQuestion) {
+        this.id = id;
+        this.content = content;
+        this.isCorrect = isCorrect;
+        this.status = status;
+        this.testVocabularyQuestion = testVocabularyQuestion;
     }
 
     public String getId() {
@@ -53,19 +59,19 @@ public class TestListeningAnswer {
         isCorrect = correct;
     }
 
-    public TestListeningQuestion getTestListeningQuestion() {
-        return testListeningQuestion;
-    }
-
-    public void setTestListeningQuestion(TestListeningQuestion testListeningQuestion) {
-        this.testListeningQuestion = testListeningQuestion;
-    }
-
     public StatusEnum getStatus() {
         return status;
     }
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public TestVocabularyQuestion getTestVocabularyQuestion() {
+        return testVocabularyQuestion;
+    }
+
+    public void setTestVocabularyQuestion(TestVocabularyQuestion testVocabularyQuestion) {
+        this.testVocabularyQuestion = testVocabularyQuestion;
     }
 }

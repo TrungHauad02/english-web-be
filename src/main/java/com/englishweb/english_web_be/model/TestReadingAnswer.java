@@ -6,28 +6,27 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-
 @Entity
-public class TestListeningAnswer {
+public class TestReadingAnswer {
     @Id
     private String id;
     private String content;
     private Boolean isCorrect;
     private StatusEnum status;
-
     @ManyToOne
-    @JoinColumn(name = "test_listening_question_id")
-    private TestListeningQuestion testListeningQuestion;
+    @JoinColumn(name = "test_reading_question_id")
+    private TestReadingQuestion testReadingQuestion;
 
-    public TestListeningAnswer() {
+    public TestReadingAnswer() {
     }
 
-    public TestListeningAnswer(String id, String content, Boolean isCorrect, StatusEnum status) {
+    public TestReadingAnswer(String id, String content, Boolean isCorrect, StatusEnum status) {
         this.id = id;
         this.content = content;
         this.isCorrect = isCorrect;
         this.status = status;
     }
+
 
     public String getId() {
         return id;
@@ -53,12 +52,13 @@ public class TestListeningAnswer {
         isCorrect = correct;
     }
 
-    public TestListeningQuestion getTestListeningQuestion() {
-        return testListeningQuestion;
+
+    public TestReadingQuestion getTestReadingQuestion() {
+        return testReadingQuestion;
     }
 
-    public void setTestListeningQuestion(TestListeningQuestion testListeningQuestion) {
-        this.testListeningQuestion = testListeningQuestion;
+    public void setTestReadingQuestion(TestReadingQuestion testReadingQuestion) {
+        this.testReadingQuestion = testReadingQuestion;
     }
 
     public StatusEnum getStatus() {

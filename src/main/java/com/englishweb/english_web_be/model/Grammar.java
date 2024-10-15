@@ -27,6 +27,11 @@ public class Grammar {
         this.id = "Gram_" + System.currentTimeMillis();
     }
 
+    @PrePersist
+    private void generateId() {
+        this.id = "Gram_" + System.currentTimeMillis();
+    }
+
     public Grammar() {
     }
 

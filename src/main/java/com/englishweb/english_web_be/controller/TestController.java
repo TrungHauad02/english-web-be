@@ -1,28 +1,25 @@
 package com.englishweb.english_web_be.controller;
 
-import com.englishweb.english_web_be.model.Test;
-import com.englishweb.english_web_be.modelenum.TestTypeEnum;
-import com.englishweb.english_web_be.repository.TestRepository;
+import com.englishweb.english_web_be.dto.*;
+
+import com.englishweb.english_web_be.service.TestService;
+
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 public class TestController {
-    TestRepository repository;
-    public TestController(TestRepository repository){this.repository = repository;}
+    TestService testService;
+
+
+    public TestController(TestService testService) {
+        this.testService = testService;
+    }
+
     @GetMapping("/tests")
-    public Page<Test> retrieveTestsByPage(@RequestParam int page, @RequestParam String type) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by("serial"));
-
-        TestTypeEnum testType = TestTypeEnum.valueOf(type);
-        return repository.findAllByType(pageable, testType);
+    public Page<TestDTO> retrieveTopicsByPage(@RequestParam int page, @RequestParam String type) {
+        return testService.retrieveTestsByPage(page, type);
     }
-    @PostMapping("/tests")
-    public Test creattest(@RequestBody Test test){
-        return repository.save(test);
-    }
-
 }

@@ -2,22 +2,16 @@ package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 
-public class TestListeningAnswerDTO {
+public class TestVocabularyAnswerDTO {
     private String id;
     private String content;
     private Boolean isCorrect;
-    private StatusEnum status;
+    StatusEnum status;
 
-    public TestListeningAnswerDTO() {
+    public TestVocabularyAnswerDTO() {
     }
 
-    public TestListeningAnswerDTO(String id, String content, Boolean isCorrect) {
-        this.id = id;
-        this.content = content;
-        this.isCorrect = isCorrect;
-    }
-
-    public TestListeningAnswerDTO(String id, String content, Boolean isCorrect, StatusEnum status) {
+    public TestVocabularyAnswerDTO(String id, String content, Boolean isCorrect, StatusEnum status) {
         this.id = id;
         this.content = content;
         this.isCorrect = isCorrect;
@@ -48,12 +42,21 @@ public class TestListeningAnswerDTO {
         isCorrect = correct;
     }
 
+    public StatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusEnum status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        return "TestListeningAnswerDTO{" +
+        return "TestVocabularyAnswerDTO{" +
                 "id='" + id + '\'' +
                 ", content='" + content + '\'' +
                 ", isCorrect=" + isCorrect +
+                ", status=" + status +
                 '}';
     }
 }

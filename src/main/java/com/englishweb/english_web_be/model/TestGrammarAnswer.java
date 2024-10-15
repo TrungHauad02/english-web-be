@@ -6,27 +6,33 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-
 @Entity
-public class TestListeningAnswer {
+public class TestGrammarAnswer {
     @Id
     private String id;
     private String content;
     private Boolean isCorrect;
-    private StatusEnum status;
-
+    StatusEnum status;
     @ManyToOne
-    @JoinColumn(name = "test_listening_question_id")
-    private TestListeningQuestion testListeningQuestion;
+    @JoinColumn(name = "test_grammar_question_id")
+    private TestGrammarQuestion testGrammarQuestion;
 
-    public TestListeningAnswer() {
+    public TestGrammarAnswer() {
     }
 
-    public TestListeningAnswer(String id, String content, Boolean isCorrect, StatusEnum status) {
+    public TestGrammarAnswer(String id, String content, Boolean isCorrect, StatusEnum status) {
         this.id = id;
         this.content = content;
         this.isCorrect = isCorrect;
         this.status = status;
+    }
+
+    public TestGrammarAnswer(String id, String content, Boolean isCorrect, StatusEnum status, com.englishweb.english_web_be.model.TestGrammarQuestion TestGrammarQuestion) {
+        this.id = id;
+        this.content = content;
+        this.isCorrect = isCorrect;
+        this.status = status;
+        TestGrammarQuestion = TestGrammarQuestion;
     }
 
     public String getId() {
@@ -53,19 +59,19 @@ public class TestListeningAnswer {
         isCorrect = correct;
     }
 
-    public TestListeningQuestion getTestListeningQuestion() {
-        return testListeningQuestion;
-    }
-
-    public void setTestListeningQuestion(TestListeningQuestion testListeningQuestion) {
-        this.testListeningQuestion = testListeningQuestion;
-    }
-
     public StatusEnum getStatus() {
         return status;
     }
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public TestGrammarQuestion getTestGrammarQuestion() {
+        return testGrammarQuestion;
+    }
+
+    public void setTestGrammarQuestion(TestGrammarQuestion testGrammarQuestion) {
+        this.testGrammarQuestion = testGrammarQuestion;
     }
 }

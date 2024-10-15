@@ -2,25 +2,41 @@ package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 
-public class TestListeningAnswerDTO {
+public class TestReadingAnswerDTO {
     private String id;
     private String content;
     private Boolean isCorrect;
     private StatusEnum status;
 
-    public TestListeningAnswerDTO() {
+    public TestReadingAnswerDTO() {
     }
 
-    public TestListeningAnswerDTO(String id, String content, Boolean isCorrect) {
+    public TestReadingAnswerDTO(String id, String content, Boolean isCorrect) {
         this.id = id;
         this.content = content;
         this.isCorrect = isCorrect;
     }
 
-    public TestListeningAnswerDTO(String id, String content, Boolean isCorrect, StatusEnum status) {
+    public TestReadingAnswerDTO(String id, String content, Boolean isCorrect, StatusEnum status) {
         this.id = id;
         this.content = content;
         this.isCorrect = isCorrect;
+        this.status = status;
+    }
+
+    public Boolean getIsCorrect() {
+        return isCorrect;
+    }
+
+    public void setIsCorrect(Boolean correct) {
+        isCorrect = correct;
+    }
+
+    public StatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusEnum status) {
         this.status = status;
     }
 
@@ -40,17 +56,10 @@ public class TestListeningAnswerDTO {
         this.content = content;
     }
 
-    public Boolean getIsCorrect() {
-        return isCorrect;
-    }
-
-    public void setIsCorrect(Boolean correct) {
-        isCorrect = correct;
-    }
 
     @Override
     public String toString() {
-        return "TestListeningAnswerDTO{" +
+        return "TestReadingAnswerDTO{" +
                 "id='" + id + '\'' +
                 ", content='" + content + '\'' +
                 ", isCorrect=" + isCorrect +

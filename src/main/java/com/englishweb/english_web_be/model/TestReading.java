@@ -6,40 +6,35 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-public class TestListening {
+public class TestReading {
     @Id
     private String id;
     private int serial;
     private String content;
-    private String transcript;
+    private String image;
     private StatusEnum statusEnum;
     @ManyToOne
     @JoinColumn(name = "test_id")
     private Test test;
 
-    @OneToMany(mappedBy = "testListening", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<TestListeningQuestion> questions;
+    @OneToMany(mappedBy = "testReading", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TestReadingQuestion> questions;
 
 
-    public TestListening() {
+    public TestReading() {
     }
 
-    public TestListening(String id, int serial, String content, String transcript, StatusEnum statusEnum) {
+    public TestReading(String id, int serial, String content, String image, StatusEnum statusEnum) {
         this.id = id;
         this.serial = serial;
         this.content = content;
-        this.transcript = transcript;
+        this.image = image;
         this.statusEnum = statusEnum;
     }
 
-    public TestListening(String id, int serial, String content, String transcript, StatusEnum statusEnum, List<TestListeningQuestion> questions) {
-        this.id = id;
-        this.serial = serial;
-        this.content = content;
-        this.transcript = transcript;
-        this.statusEnum = statusEnum;
 
-        this.questions=questions;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Test getTest() {
@@ -50,11 +45,11 @@ public class TestListening {
         this.test = test;
     }
 
-    public List<TestListeningQuestion> getQuestions() {
+    public List<TestReadingQuestion> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(List<TestListeningQuestion> questions) {
+    public void setQuestions(List<TestReadingQuestion> questions) {
         this.questions = questions;
     }
 
@@ -87,12 +82,12 @@ public class TestListening {
         return statusEnum;
     }
 
-    public String getTranscript() {
-        return transcript;
+    public String getImage() {
+        return image;
     }
 
-    public void setTranscript(String transcript) {
-        this.transcript = transcript;
+    public void setImaget(String image) {
+        this.image = image;
     }
 
     public void setStatusEnum(StatusEnum statusEnum) {

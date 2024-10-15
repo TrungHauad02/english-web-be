@@ -22,6 +22,11 @@ public class TopicAnswer {
         this.id = "Topic_ans_" + System.currentTimeMillis();
     }
 
+    @PrePersist
+    private void generateId() {
+        this.id = "Topic_ans_" + System.currentTimeMillis();
+    }
+
     public TopicAnswer() {
     }
 

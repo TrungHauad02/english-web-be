@@ -2,22 +2,30 @@ package com.englishweb.english_web_be.dto;
 
 import java.util.List;
 
-public class TestListeningDTO {
+public class TestReadingDTO {
     private String id;
     private int serial;
     private String content;
-    private String transcript;
-    private List<TestListeningQuestionDTO> questions;
+    private String image;
+    private List<TestReadingQuestionDTO> questions;
 
-    public TestListeningDTO() {
+    public TestReadingDTO() {
     }
 
-    public TestListeningDTO(String id, int serial, String content, String transcript, List<TestListeningQuestionDTO> questions) {
+    public TestReadingDTO(String id, int serial, String content,String image, List<TestReadingQuestionDTO> questions) {
         this.id = id;
         this.serial = serial;
         this.content = content;
-        this.transcript = transcript;
         this.questions = questions;
+        this.image = image;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getId() {
@@ -44,29 +52,20 @@ public class TestListeningDTO {
         this.content = content;
     }
 
-    public String getTranscript() {
-        return transcript;
-    }
-
-    public void setTranscript(String transcript) {
-        this.transcript = transcript;
-    }
-
-    public List<TestListeningQuestionDTO> getQuestions() {
+    public List<TestReadingQuestionDTO> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(List<TestListeningQuestionDTO> questions) {
+    public void setQuestions(List<TestReadingQuestionDTO> questions) {
         this.questions = questions;
     }
 
     @Override
     public String toString() {
-        return "TestListeningDTO{" +
+        return "TestReadingDTO{" +
                 "id='" + id + '\'' +
                 ", serial=" + serial +
                 ", content='" + content + '\'' +
-                ", transcript='" + transcript + '\'' +
                 ", questions=" + questions +
                 '}';
     }
