@@ -24,10 +24,6 @@ public class TopicQuestion {
         this.id = "Topic_que_" + System.currentTimeMillis();
     }
 
-    @PrePersist
-    private void generateId() {
-        this.id = "Topic_que_" + System.currentTimeMillis();
-    }
 
     public TopicQuestion() {
     }

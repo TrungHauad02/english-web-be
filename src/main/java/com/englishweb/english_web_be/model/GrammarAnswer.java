@@ -22,11 +22,6 @@ public class GrammarAnswer {
         this.id = "Gram_ans_" + System.currentTimeMillis();
     }
 
-    @PrePersist
-    private void generateId() {
-        this.id = "Gram_ans_" + System.currentTimeMillis();
-    }
-
     public GrammarAnswer() {
     }
 
