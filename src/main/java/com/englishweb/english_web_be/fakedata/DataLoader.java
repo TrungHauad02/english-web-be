@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@Component
+//@Component
 public class DataLoader implements CommandLineRunner {
 
     private final TopicRepository topicRepository;
@@ -35,14 +35,6 @@ public class DataLoader implements CommandLineRunner {
         this.vocabularyRepository = vocabularyRepository;
         this.topicQuestionRepository = topicQuestionRepository;
         this.topicAnswerRepository = topicAnswerRepository;
-    }
-
-
-
-    @Override
-    public void run(String... args) throws Exception {
-    generateTest();
-
     }
 
     public void generateTest() {
@@ -369,7 +361,7 @@ public class DataLoader implements CommandLineRunner {
     }
     @Override
     public void run(String... args) throws Exception {
-        generateTestData();
+        generateTest();
     }
 }
 
