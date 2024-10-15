@@ -4,7 +4,7 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 
 @Entity
-public class Reading {
+public class Writing {
     @Id
     private String id;
     @Column(nullable = false)
@@ -14,26 +14,21 @@ public class Reading {
     @Column(nullable = false)
     private String description;
     @Column(nullable = false)
-    private String content;
+    private String topic;
     @Column(nullable = false)
     private String image;
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
 
-    @PrePersist
-    private void generateId() {
-        this.id = "Read_" + System.currentTimeMillis();
+    public Writing() {
     }
 
-    public Reading() {
-    }
-
-    public Reading(String id, String title, int serial, String description, String content, String image, StatusEnum status) {
+    public Writing(String id, String title, int serial, String description, String topic, String image, StatusEnum status) {
         this.id = id;
         this.title = title;
         this.serial = serial;
         this.description = description;
-        this.content = content;
+        this.topic = topic;
         this.image = image;
         this.status = status;
     }
@@ -70,12 +65,12 @@ public class Reading {
         this.description = description;
     }
 
-    public String getContent() {
-        return content;
+    public String getTopic() {
+        return topic;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
     public String getImage() {

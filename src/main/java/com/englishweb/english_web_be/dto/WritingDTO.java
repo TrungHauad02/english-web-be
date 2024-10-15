@@ -1,39 +1,25 @@
-package com.englishweb.english_web_be.model;
+package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
-import jakarta.persistence.*;
 
-@Entity
-public class Reading {
-    @Id
-    private String id;
-    @Column(nullable = false)
-    private String title;
-    @Column(nullable = false)
-    private int serial;
-    @Column(nullable = false)
-    private String description;
-    @Column(nullable = false)
-    private String content;
-    @Column(nullable = false)
-    private String image;
-    @Enumerated(EnumType.STRING)
-    private StatusEnum status = StatusEnum.ACTIVE;
+public class WritingDTO {
+    String id;
+    String title;
+    int serial;
+    String description;
+    String topic;
+    String image;
+    StatusEnum status;
 
-    @PrePersist
-    private void generateId() {
-        this.id = "Read_" + System.currentTimeMillis();
+    public WritingDTO() {
     }
 
-    public Reading() {
-    }
-
-    public Reading(String id, String title, int serial, String description, String content, String image, StatusEnum status) {
+    public WritingDTO(String id, String title, int serial, String description, String topic, String image, StatusEnum status) {
         this.id = id;
         this.title = title;
         this.serial = serial;
         this.description = description;
-        this.content = content;
+        this.topic = topic;
         this.image = image;
         this.status = status;
     }
@@ -70,12 +56,12 @@ public class Reading {
         this.description = description;
     }
 
-    public String getContent() {
-        return content;
+    public String getTopic() {
+        return topic;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
     public String getImage() {

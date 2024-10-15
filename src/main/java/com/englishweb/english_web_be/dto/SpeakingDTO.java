@@ -1,39 +1,23 @@
-package com.englishweb.english_web_be.model;
+package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
-import jakarta.persistence.*;
 
-@Entity
-public class Reading {
-    @Id
-    private String id;
-    @Column(nullable = false)
-    private String title;
-    @Column(nullable = false)
-    private int serial;
-    @Column(nullable = false)
-    private String description;
-    @Column(nullable = false)
-    private String content;
-    @Column(nullable = false)
-    private String image;
-    @Enumerated(EnumType.STRING)
-    private StatusEnum status = StatusEnum.ACTIVE;
+public class SpeakingDTO {
+    String id;
+    String title;
+    int serial;
+    String description;
+    String image;
+    StatusEnum status;
 
-    @PrePersist
-    private void generateId() {
-        this.id = "Read_" + System.currentTimeMillis();
+    public SpeakingDTO() {
     }
 
-    public Reading() {
-    }
-
-    public Reading(String id, String title, int serial, String description, String content, String image, StatusEnum status) {
+    public SpeakingDTO(String id, String title, int serial, String description, String image, StatusEnum status) {
         this.id = id;
         this.title = title;
         this.serial = serial;
         this.description = description;
-        this.content = content;
         this.image = image;
         this.status = status;
     }
@@ -68,14 +52,6 @@ public class Reading {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 
     public String getImage() {

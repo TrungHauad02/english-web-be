@@ -4,7 +4,7 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 
 @Entity
-public class TopicAnswer {
+public class ListeningAnswer {
     @Id
     private String id;
     @Column(nullable = false)
@@ -14,23 +14,18 @@ public class TopicAnswer {
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
     @ManyToOne
-    @JoinColumn(name = "topic_question_id")
-    private TopicQuestion question;
+    @JoinColumn(name = "Listening_question_id")
+    private ListeningQuestion question;
 
     @PrePersist
     private void generateId() {
-        this.id = "Topic_ans_" + System.currentTimeMillis();
+        this.id = "Listen_Ans_" + System.currentTimeMillis();
     }
 
-    @PrePersist
-    private void generateId() {
-        this.id = "Topic_ans_" + System.currentTimeMillis();
+    public ListeningAnswer() {
     }
 
-    public TopicAnswer() {
-    }
-
-    public TopicAnswer(String id, String content, boolean isCorrect, StatusEnum status, TopicQuestion question) {
+    public ListeningAnswer(String id, String content, boolean isCorrect, StatusEnum status, ListeningQuestion question) {
         this.id = id;
         this.content = content;
         this.isCorrect = isCorrect;
@@ -70,11 +65,11 @@ public class TopicAnswer {
         this.status = status;
     }
 
-    public TopicQuestion getQuestion() {
+    public ListeningQuestion getQuestion() {
         return question;
     }
 
-    public void setQuestion(TopicQuestion question) {
+    public void setQuestion(ListeningQuestion question) {
         this.question = question;
     }
 }

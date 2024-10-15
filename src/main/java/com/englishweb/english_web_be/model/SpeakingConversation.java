@@ -4,38 +4,36 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 
 @Entity
-public class Reading {
+public class SpeakingConversation {
     @Id
     private String id;
     @Column(nullable = false)
-    private String title;
+    private String name;
     @Column(nullable = false)
     private int serial;
     @Column(nullable = false)
-    private String description;
-    @Column(nullable = false)
     private String content;
-    @Column(nullable = false)
-    private String image;
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
+    @ManyToOne
+    @JoinColumn(name = "speaking_id")
+    private Speaking speaking;
 
     @PrePersist
     private void generateId() {
-        this.id = "Read_" + System.currentTimeMillis();
+        this.id = "Speak_con_" + System.currentTimeMillis();
     }
 
-    public Reading() {
+    public SpeakingConversation() {
     }
 
-    public Reading(String id, String title, int serial, String description, String content, String image, StatusEnum status) {
+    public SpeakingConversation(String id, String name, int serial, String content, StatusEnum status, Speaking speaking) {
         this.id = id;
-        this.title = title;
+        this.name = name;
         this.serial = serial;
-        this.description = description;
         this.content = content;
-        this.image = image;
         this.status = status;
+        this.speaking = speaking;
     }
 
     public String getId() {
@@ -46,12 +44,12 @@ public class Reading {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getSerial() {
@@ -62,14 +60,6 @@ public class Reading {
         this.serial = serial;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getContent() {
         return content;
     }
@@ -78,19 +68,19 @@ public class Reading {
         this.content = content;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public StatusEnum getStatus() {
         return status;
     }
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public Speaking getSpeaking() {
+        return speaking;
+    }
+
+    public void setSpeaking(Speaking speaking) {
+        this.speaking = speaking;
     }
 }

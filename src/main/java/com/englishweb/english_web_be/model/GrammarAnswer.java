@@ -6,14 +6,21 @@ import jakarta.persistence.*;
 @Entity
 public class GrammarAnswer {
     @Id
-    String id;
-    String content;
-    boolean isCorrect;
+    private String id;
+    @Column(nullable = false)
+    private String content;
+    @Column(nullable = false)
+    private boolean isCorrect;
     @Enumerated(EnumType.STRING)
-    StatusEnum status;
+    private StatusEnum status = StatusEnum.ACTIVE;
     @ManyToOne
     @JoinColumn(name = "grammar_question_id")
-    GrammarQuestion question;
+    private GrammarQuestion question;
+
+    @PrePersist
+    private void generateId() {
+        this.id = "Gram_ans_" + System.currentTimeMillis();
+    }
 
     @PrePersist
     private void generateId() {

@@ -367,8 +367,11 @@ public class DataLoader implements CommandLineRunner {
 
         return grammarQuestions;
     }
+    @Override
+    public void run(String... args) throws Exception {
+        generateTestData();
     }
-
+}
 
 
 

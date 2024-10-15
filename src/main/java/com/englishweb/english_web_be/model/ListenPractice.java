@@ -6,13 +6,14 @@ import jakarta.persistence.*;
 @Entity
 public class ListenPractice {
     @Id
-    String id;
-    String audioUrl;
+    private String id;
+    @Column(nullable = false)
+    private String audioUrl;
     @Enumerated(EnumType.STRING)
-    StatusEnum status;
-    @ManyToOne
+    private StatusEnum status = StatusEnum.ACTIVE;
+    @OneToOne
     @JoinColumn(name = "listening_id")
-    Listening listening;
+    private Listening listening;
 
     @PrePersist
     private void generateId() {

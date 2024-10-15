@@ -4,7 +4,7 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 
 @Entity
-public class GrammarQuestion {
+public class ListeningQuestion {
     @Id
     private String id;
     @Column(nullable = false)
@@ -16,29 +16,23 @@ public class GrammarQuestion {
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
     @ManyToOne
-    @JoinColumn(name = "grammar_id")
-    private Grammar grammar;
+    private ListenPractice listenPractice;
 
     @PrePersist
     private void generateId() {
-        this.id = "Gram_que_" + System.currentTimeMillis();
+        this.id = "Listen_Que_" + System.currentTimeMillis();
     }
 
-    @PrePersist
-    private void generateId() {
-        this.id = "Gram_que_" + System.currentTimeMillis();
+    public ListeningQuestion() {
     }
 
-    public GrammarQuestion() {
-    }
-
-    public GrammarQuestion(String id, String content, int serial, String explanation, StatusEnum status, Grammar grammar) {
+    public ListeningQuestion(String id, String content, int serial, String explanation, StatusEnum status, ListenPractice listenPractice) {
         this.id = id;
         this.content = content;
         this.serial = serial;
         this.explanation = explanation;
         this.status = status;
-        this.grammar = grammar;
+        this.listenPractice = listenPractice;
     }
 
     public String getId() {
@@ -81,11 +75,11 @@ public class GrammarQuestion {
         this.status = status;
     }
 
-    public Grammar getGrammar() {
-        return grammar;
+    public ListenPractice getListenPractice() {
+        return listenPractice;
     }
 
-    public void setGrammar(Grammar grammar) {
-        this.grammar = grammar;
+    public void setListenPractice(ListenPractice listenPractice) {
+        this.listenPractice = listenPractice;
     }
 }

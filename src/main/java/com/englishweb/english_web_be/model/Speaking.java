@@ -4,45 +4,34 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 
 @Entity
-public class Grammar {
+public class Speaking {
     @Id
     private String id;
     @Column(nullable = false)
     private String title;
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private int serial;
     @Column(nullable = false)
-    private String content;
+    private String description;
     @Column(nullable = false)
     private String image;
-    @Column(nullable = false)
-    private String example;
-    @Column(nullable = false)
-    private String file;
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
 
     @PrePersist
     private void generateId() {
-        this.id = "Gram_" + System.currentTimeMillis();
+        this.id = "Speak_" + System.currentTimeMillis();
     }
 
-    @PrePersist
-    private void generateId() {
-        this.id = "Gram_" + System.currentTimeMillis();
+    public Speaking() {
     }
 
-    public Grammar() {
-    }
-
-    public Grammar(String id, String title, int serial, String content, String image, String example, String file, StatusEnum status) {
+    public Speaking(String id, String title, int serial, String description, String image, StatusEnum status) {
         this.id = id;
         this.title = title;
         this.serial = serial;
-        this.content = content;
+        this.description = description;
         this.image = image;
-        this.example = example;
-        this.file = file;
         this.status = status;
     }
 
@@ -70,12 +59,12 @@ public class Grammar {
         this.serial = serial;
     }
 
-    public String getContent() {
-        return content;
+    public String getDescription() {
+        return description;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getImage() {
@@ -84,22 +73,6 @@ public class Grammar {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public String getExample() {
-        return example;
-    }
-
-    public void setExample(String example) {
-        this.example = example;
-    }
-
-    public String getFile() {
-        return file;
-    }
-
-    public void setFile(String file) {
-        this.file = file;
     }
 
     public StatusEnum getStatus() {
