@@ -7,8 +7,17 @@ public class ListeningAnswerDTO implements BaseDTO {
     String content;
     boolean isCorrect;
     StatusEnum status;
+    String listeningQuestionId;
 
     public ListeningAnswerDTO() {
+    }
+
+    public ListeningAnswerDTO(String id, String content, boolean isCorrect, StatusEnum status, String listeningQuestionId) {
+        this.id = id;
+        this.content = content;
+        this.isCorrect = isCorrect;
+        this.status = status;
+        this.listeningQuestionId = listeningQuestionId;
     }
 
     public ListeningAnswerDTO(String id, String content, boolean isCorrect, StatusEnum status) {
@@ -50,5 +59,13 @@ public class ListeningAnswerDTO implements BaseDTO {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public String getListeningQuestionId() {
+        return listeningQuestionId;
+    }
+
+    public void setListeningQuestionId(String listeningQuestionId) {
+        this.listeningQuestionId = listeningQuestionId;
     }
 }

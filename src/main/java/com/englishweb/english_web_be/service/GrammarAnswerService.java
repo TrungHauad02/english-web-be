@@ -42,7 +42,7 @@ public class GrammarAnswerService extends BaseService<GrammarAnswer, GrammarAnsw
         entity.setCorrect(dto.isCorrect());
         entity.setContent(dto.getContent());
         entity.setStatus(dto.getStatus());
-        entity.setQuestion(grammarQuestionService.convertToEntity(grammarQuestionService.findById(dto.getId())));
+        entity.setQuestion(grammarQuestionService.convertToEntity(grammarQuestionService.findById(dto.getQuestionId())));
         return entity;
     }
 }

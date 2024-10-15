@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ListenPracticeService {
-    ListenPracticeRepository repository;
+public class ListenPracticeService extends BaseService<ListenPractice, ListenPracticeDTO, ListenPracticeRepository> {
 
-    public ListenPracticeService(ListenPracticeRepository repository) {
-        this.repository = repository;
+    private final ListeningService listeningService;
+
+    public ListenPracticeService(ListenPracticeRepository repository, ListeningService listeningService) {
+        super(repository);
+        this.listeningService = listeningService;
     }
 
     public List<ListenPracticeDTO> retrieveListenPracticeByListeningId(String listeningId) {
@@ -22,11 +24,23 @@ public class ListenPracticeService {
                 .toList();
     }
 
-    private ListenPracticeDTO convertToDTO(ListenPractice entity) {
+    @Override
+    protected ListenPracticeDTO convertToDTO(ListenPractice entity) {
         ListenPracticeDTO dto = new ListenPracticeDTO();
         dto.setId(entity.getId());
         dto.setAudioUrl(entity.getAudioUrl());
         dto.setStatus(entity.getStatus());
+        dto.setListeningId(entity.getListening().getId());
         return dto;
+    }
+
+    @Override
+    protected ListenPractice convertToEntity(ListenPracticeDTO dto) {
+        ListenPractice entity = new ListenPractice();
+        entity.setId(dto.getId());
+        entity.setAudioUrl(dto.getAudioUrl());
+        entity.setStatus(dto.getStatus());
+        entity.setListening(listeningService.convertToEntity(listeningService.findById(dto.getListeningId())));
+        return entity;
     }
 }
