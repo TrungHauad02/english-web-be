@@ -3,7 +3,7 @@ package com.englishweb.english_web_be.dto;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.modelenum.WordTypeEnum;
 
-public class VocabularyDTO {
+public class VocabularyDTO implements BaseDTO {
     String id;
     String example;
     String image;
@@ -27,10 +27,12 @@ public class VocabularyDTO {
         this.status = status;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }

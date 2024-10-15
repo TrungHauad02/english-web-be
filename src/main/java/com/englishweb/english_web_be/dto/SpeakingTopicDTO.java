@@ -2,7 +2,7 @@ package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 
-public class SpeakingTopicDTO {
+public class SpeakingTopicDTO implements BaseDTO {
     String id;
     String topic;
     int duration;
@@ -18,10 +18,12 @@ public class SpeakingTopicDTO {
         this.status = status;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }

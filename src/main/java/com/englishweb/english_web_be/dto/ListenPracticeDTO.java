@@ -2,7 +2,7 @@ package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 
-public class ListenPracticeDTO {
+public class ListenPracticeDTO implements BaseDTO {
     String id;
     String audioUrl;
     StatusEnum status;
@@ -16,10 +16,12 @@ public class ListenPracticeDTO {
         this.status = status;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }

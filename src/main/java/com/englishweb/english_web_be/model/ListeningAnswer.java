@@ -4,7 +4,7 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 
 @Entity
-public class ListeningAnswer {
+public class ListeningAnswer implements BaseEntity {
     @Id
     private String id;
     @Column(nullable = false)
@@ -33,10 +33,12 @@ public class ListeningAnswer {
         this.question = question;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }

@@ -21,29 +21,29 @@ public class GrammarController {
                                                                    @RequestParam int size,
                                                                    @RequestParam(defaultValue = "serial") String sortBy,
                                                                    @RequestParam(defaultValue = "asc") String sortDir){
-        return new ResponseEntity<>(service.retrieveGrammarsByPage(page, size, sortBy, sortDir), HttpStatus.OK);
+        return new ResponseEntity<>(service.findByPage(page, size, sortBy, sortDir, GrammarDTO.class), HttpStatus.OK);
     }
 
     @GetMapping("/api/grammars/{id}")
     public ResponseEntity<GrammarDTO> retrieveGrammarById(@PathVariable String id){
-        return new ResponseEntity<>(service.retrieveGrammarById(id), HttpStatus.FOUND);
+        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 
     @PostMapping("/api/grammars")
     public ResponseEntity<GrammarDTO> createGrammar(@Valid @RequestBody GrammarDTO dto){
-        GrammarDTO createdGrammar = service.createGrammar(dto);
+        GrammarDTO createdGrammar = service.create(dto);
         return new ResponseEntity<>(createdGrammar, HttpStatus.CREATED);
     }
 
     @PutMapping("/api/grammars")
     public ResponseEntity<GrammarDTO> updateGrammar(@Valid @RequestBody GrammarDTO dto){
-        GrammarDTO updatedGrammar = service.updateGrammar(dto);
+        GrammarDTO updatedGrammar = service.update(dto);
         return ResponseEntity.ok(updatedGrammar);
     }
 
     @DeleteMapping("/api/grammars/{id}")
     public ResponseEntity<Void> deleteGrammarById(@PathVariable String id){
-        service.deleteGrammar(id);
+        service.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

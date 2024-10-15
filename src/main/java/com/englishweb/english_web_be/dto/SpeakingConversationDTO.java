@@ -2,7 +2,7 @@ package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 
-public class SpeakingConversationDTO {
+public class SpeakingConversationDTO implements BaseDTO {
     String id;
     String name;
     int serial;
@@ -20,10 +20,12 @@ public class SpeakingConversationDTO {
         this.status = status;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }

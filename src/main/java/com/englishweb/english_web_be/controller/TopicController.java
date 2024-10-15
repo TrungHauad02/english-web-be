@@ -22,10 +22,10 @@ public class TopicController {
                                                                @RequestParam int size,
                                                                @RequestParam(defaultValue = "serial") String sortBy,
                                                                @RequestParam(defaultValue = "asc") String sortDir) {
-        return new ResponseEntity<>(service.retrieveTopicsByPage(page, size, sortBy, sortDir), HttpStatus.OK);
+        return new ResponseEntity<>(service.findByPage(page, size, sortBy, sortDir, TopicDTO.class), HttpStatus.OK);
     }
     @GetMapping("/api/topics/{id}")
     public ResponseEntity<TopicDTO> retrieveTopicById(@PathVariable String id){
-        return new ResponseEntity<>(service.retrieveTopicById(id), HttpStatus.FOUND);
+        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 }

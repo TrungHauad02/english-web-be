@@ -2,7 +2,7 @@ package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 
-public class GrammarAnswerDTO {
+public class GrammarAnswerDTO implements BaseDTO {
     String id;
     String content;
     boolean isCorrect;
@@ -18,10 +18,12 @@ public class GrammarAnswerDTO {
         this.status = status;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }
