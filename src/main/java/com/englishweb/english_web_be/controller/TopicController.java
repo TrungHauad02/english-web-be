@@ -17,7 +17,7 @@ public class TopicController {
 
     @GetMapping("/topics")
     public Page<TopicDTO> retrieveTopicsByPage(@RequestParam int page, @RequestParam int size) {
-        return service.retrieveTopicsByPage(page, size, Sort.by("serial"));
+        return service.retrieveTopicsByPage(page, size);
     }
     @GetMapping("/topics/{id}")
     public TopicDTO retrieveTopicById(@PathVariable String id){
