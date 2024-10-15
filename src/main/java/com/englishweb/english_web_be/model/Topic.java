@@ -4,7 +4,7 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 
 @Entity
-public class Topic {
+public class Topic implements BaseEntity {
     @Id
     private String id;
     @Column(nullable = false)
@@ -35,10 +35,12 @@ public class Topic {
         this.status = status;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }

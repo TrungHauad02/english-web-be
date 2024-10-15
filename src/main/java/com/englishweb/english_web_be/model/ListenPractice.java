@@ -4,7 +4,7 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 
 @Entity
-public class ListenPractice {
+public class ListenPractice implements BaseEntity {
     @Id
     private String id;
     @Column(nullable = false)
@@ -30,10 +30,12 @@ public class ListenPractice {
         this.listening = listening;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }
