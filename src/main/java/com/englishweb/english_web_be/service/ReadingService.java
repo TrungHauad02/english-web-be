@@ -6,6 +6,7 @@ import com.englishweb.english_web_be.repository.ReadingRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,20 +23,49 @@ public class ReadingService {
         return entityPages.map(this::convertToDTO);
     }
 
+    public Page<ReadingDTO> retrieveReadingsByPage(int page, int size, Sort sort){
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Reading> entityPages = repository.findAllReadings(pageable);
+        return entityPages.map(this::convertToDTO);
+    }
+
     public ReadingDTO retrieveReadingById(String id){
         return convertToDTO(repository.findById(id).get());
     }
 
-    public ReadingDTO addNewReading(ReadingDTO dto){
-        Reading reading = new Reading();
-        reading.setTitle(dto.getTitle());
-        reading.setDescription(dto.getDescription());
-        reading.setContent(dto.getContent());
-        reading.setSerial(dto.getSerial());
-        reading.setImage(reading.getImage());
-        reading.setStatus(dto.getStatus());
+    public ReadingDTO createReading(ReadingDTO dto){
+        Reading reading = convertToEntity(dto);
         repository.save(reading);
         return convertToDTO(reading);
+    }
+
+    public ReadingDTO updateReading(ReadingDTO dto){
+        if(repository.findById(dto.getId()).isEmpty()){
+            return null;
+        }
+        Reading entity = repository.findById(dto.getId()).get();
+        entity.setId(dto.getId());
+        repository.save(entity);
+        return convertToDTO(entity);
+    }
+
+    public boolean deleteReading(String id){
+        if(repository.findById(id).isEmpty()){
+            return false;
+        }
+        repository.deleteById(id);
+        return true;
+    }
+
+    private Reading convertToEntity(ReadingDTO dto){
+        Reading entity = new Reading();
+        entity.setTitle(dto.getTitle());
+        entity.setDescription(dto.getDescription());
+        entity.setContent(dto.getContent());
+        entity.setSerial(dto.getSerial());
+        entity.setImage(dto.getImage());
+        entity.setStatus(dto.getStatus());
+        return entity;
     }
 
     private ReadingDTO convertToDTO(Reading entity) {
