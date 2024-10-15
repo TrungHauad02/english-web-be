@@ -10,54 +10,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ReadingService {
-    ReadingRepository repository;
+public class ReadingService extends BaseService<Reading, ReadingDTO, ReadingRepository> {
 
     public ReadingService(ReadingRepository repository) {
-        this.repository = repository;
+        super(repository);
     }
 
-    public Page<ReadingDTO> retrieveReadingsByPage(int page, int size){
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Reading> entityPages = repository.findAllReadings(pageable);
-        return entityPages.map(this::convertToDTO);
-    }
-
-    public Page<ReadingDTO> retrieveReadingsByPage(int page, int size, Sort sort){
-        Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Reading> entityPages = repository.findAllReadings(pageable);
-        return entityPages.map(this::convertToDTO);
-    }
-
-    public ReadingDTO retrieveReadingById(String id){
-        return convertToDTO(repository.findById(id).get());
-    }
-
-    public ReadingDTO createReading(ReadingDTO dto){
-        Reading reading = convertToEntity(dto);
-        repository.save(reading);
-        return convertToDTO(reading);
-    }
-
-    public ReadingDTO updateReading(ReadingDTO dto){
-        if(repository.findById(dto.getId()).isEmpty()){
-            return null;
-        }
-        Reading entity = repository.findById(dto.getId()).get();
-        entity.setId(dto.getId());
-        repository.save(entity);
-        return convertToDTO(entity);
-    }
-
-    public boolean deleteReading(String id){
-        if(repository.findById(id).isEmpty()){
-            return false;
-        }
-        repository.deleteById(id);
-        return true;
-    }
-
-    private Reading convertToEntity(ReadingDTO dto){
+    @Override
+    protected Reading convertToEntity(ReadingDTO dto){
         Reading entity = new Reading();
         entity.setTitle(dto.getTitle());
         entity.setDescription(dto.getDescription());
@@ -68,7 +28,8 @@ public class ReadingService {
         return entity;
     }
 
-    private ReadingDTO convertToDTO(Reading entity) {
+    @Override
+    protected ReadingDTO convertToDTO(Reading entity) {
         ReadingDTO dto = new ReadingDTO();
         dto.setId(entity.getId());
         dto.setTitle(entity.getTitle());
