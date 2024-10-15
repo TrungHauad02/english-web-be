@@ -16,29 +16,32 @@ public class GrammarController {
         this.service = service;
     }
 
-    @GetMapping("/grammars")
-    public ResponseEntity<Page<GrammarDTO>> retrieveGrammarsByPage(@RequestParam int page, @RequestParam int size){
-        return new ResponseEntity<>(service.retrieveGrammarsByPage(page, size), HttpStatus.OK);
+    @GetMapping("/api/grammars")
+    public ResponseEntity<Page<GrammarDTO>> retrieveGrammarsByPage(@RequestParam int page,
+                                                                   @RequestParam int size,
+                                                                   @RequestParam(defaultValue = "serial") String sortBy,
+                                                                   @RequestParam(defaultValue = "asc") String sortDir){
+        return new ResponseEntity<>(service.retrieveGrammarsByPage(page, size, sortBy, sortDir), HttpStatus.OK);
     }
 
-    @GetMapping("/grammars/{id}")
+    @GetMapping("/api/grammars/{id}")
     public ResponseEntity<GrammarDTO> retrieveGrammarById(@PathVariable String id){
-        return new ResponseEntity<>(service.retrieveGrammarById(id), HttpStatus.OK);
+        return new ResponseEntity<>(service.retrieveGrammarById(id), HttpStatus.FOUND);
     }
 
-    @PostMapping("/grammars")
+    @PostMapping("/api/grammars")
     public ResponseEntity<GrammarDTO> createGrammar(@Valid @RequestBody GrammarDTO dto){
         GrammarDTO createdGrammar = service.createGrammar(dto);
         return new ResponseEntity<>(createdGrammar, HttpStatus.CREATED);
     }
 
-    @PutMapping("/grammars")
+    @PutMapping("/api/grammars")
     public ResponseEntity<GrammarDTO> updateGrammar(@Valid @RequestBody GrammarDTO dto){
         GrammarDTO updatedGrammar = service.updateGrammar(dto);
         return ResponseEntity.ok(updatedGrammar);
     }
 
-    @DeleteMapping("/grammars/{id}")
+    @DeleteMapping("/api/grammars/{id}")
     public ResponseEntity<Void> deleteGrammarById(@PathVariable String id){
         service.deleteGrammar(id);
         return ResponseEntity.noContent().build();

@@ -15,9 +15,12 @@ public class TopicService {
         this.repository = repository;
     }
 
-    public Page<TopicDTO> retrieveTopicsByPage(int page, int size){
-        ValidationUtils.getInstance().validatePageRequestParam(page, size);
-        Pageable pageable = PageRequest.of(page, size, Sort.by("serial"));
+    public Page<TopicDTO> retrieveTopicsByPage(int page, int size, String sortBy, String sortDir){
+        ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, TopicDTO.class);
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
         Page<Topic> entityPage = repository.findAllTopics(pageable);
         return entityPage.map(this::convertToDTO);
     }

@@ -15,9 +15,12 @@ public class GrammarService {
         this.repository = repository;
     }
 
-    public Page<GrammarDTO> retrieveGrammarsByPage(int page, int size){
-        ValidationUtils.getInstance().validatePageRequestParam(page, size);
-        Pageable pageable = PageRequest.of(page, size, Sort.by("serial"));
+    public Page<GrammarDTO> retrieveGrammarsByPage(int page, int size, String sortBy, String sortDir) {
+        ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, GrammarDTO.class);
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
         Page<Grammar> entityPage = repository.findAllGrammars(pageable);
         return entityPage.map(this::convertToDTO);
     }
