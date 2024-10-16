@@ -3,7 +3,6 @@ package com.englishweb.english_web_be.service;
 import com.englishweb.english_web_be.dto.ListeningAnswerDTO;
 import com.englishweb.english_web_be.dto.ListeningQuestionDTO;
 import com.englishweb.english_web_be.model.ListeningQuestion;
-import com.englishweb.english_web_be.repository.ListenPracticeRepository;
 import com.englishweb.english_web_be.repository.ListeningQuestionRepository;
 import com.englishweb.english_web_be.util.ValidationUtils;
 import org.springframework.context.annotation.Lazy;
@@ -22,7 +21,7 @@ public class ListeningQuestionService extends BaseService<ListeningQuestion, Lis
         this.listenPracticeService = listenPracticeService;
     }
 
-    public List<ListeningQuestionDTO> findListeningQuestionsByListenPracticeId(String listenPracticeId) {
+    public List<ListeningQuestionDTO> findByListenPracticeId(String listenPracticeId) {
         ValidationUtils.getInstance().validateExistId(listenPracticeService.repository, listenPracticeId);
         List<ListeningQuestion> entityList = repository.findAllByListenPractice_Id(listenPracticeId);
         return entityList.stream()
