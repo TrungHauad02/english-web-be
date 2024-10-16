@@ -1,6 +1,8 @@
 package com.englishweb.english_web_be.service;
 
+import com.englishweb.english_web_be.dto.SpeakingConversationDTO;
 import com.englishweb.english_web_be.dto.SpeakingDTO;
+import com.englishweb.english_web_be.dto.SpeakingTopicDTO;
 import com.englishweb.english_web_be.model.Speaking;
 import com.englishweb.english_web_be.repository.SpeakingRepository;
 import org.springframework.data.domain.Page;
@@ -9,11 +11,29 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SpeakingService extends BaseService<Speaking, SpeakingDTO, SpeakingRepository> {
 
-    public SpeakingService(SpeakingRepository repository) {
+    private final SpeakingConversationService speakingConversationService;
+    private final SpeakingTopicService speakingTopicService;
+
+    public SpeakingService(SpeakingRepository repository, SpeakingConversationService speakingConversationService, SpeakingTopicService speakingTopicService) {
         super(repository);
+        this.speakingConversationService = speakingConversationService;
+        this.speakingTopicService = speakingTopicService;
+    }
+
+    @Override
+    public void delete(String id){
+        List<SpeakingConversationDTO> speakingConversationDTOList = speakingConversationService.findSpeakingConversationBySpeakingId(id);
+        for (SpeakingConversationDTO speakingConversationDTO : speakingConversationDTOList) {
+            speakingConversationService.delete(speakingConversationDTO.getId());
+        }
+        SpeakingTopicDTO speakingTopicDTO = speakingTopicService.findBySpeakingId(id);
+        speakingTopicService.delete(speakingTopicDTO.getId());
+        super.delete(id);
     }
 
     @Override

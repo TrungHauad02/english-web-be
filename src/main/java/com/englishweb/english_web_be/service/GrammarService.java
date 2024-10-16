@@ -1,15 +1,30 @@
 package com.englishweb.english_web_be.service;
 
 import com.englishweb.english_web_be.dto.GrammarDTO;
+import com.englishweb.english_web_be.dto.GrammarQuestionDTO;
 import com.englishweb.english_web_be.model.Grammar;
 import com.englishweb.english_web_be.repository.GrammarRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class GrammarService extends BaseService<Grammar, GrammarDTO, GrammarRepository>{
 
-    public GrammarService(GrammarRepository repository) {
+    private final GrammarQuestionService grammarQuestionService;
+
+    public GrammarService(GrammarRepository repository, GrammarQuestionService grammarQuestionService) {
         super(repository);
+        this.grammarQuestionService = grammarQuestionService;
+    }
+
+    @Override
+    public void delete(String id){
+        List<GrammarQuestionDTO> questionDTOList = grammarQuestionService.findAllByGrammarId(id);
+        for(GrammarQuestionDTO questionDTO : questionDTOList){
+            grammarQuestionService.delete(questionDTO.getId());
+        }
+        super.delete(id);
     }
 
     @Override

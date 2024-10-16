@@ -19,7 +19,7 @@ public class GrammarController {
     @GetMapping("/api/grammars")
     public ResponseEntity<Page<GrammarDTO>> findByPage(@RequestParam int page,
                                                                @RequestParam int size,
-                                                               @RequestParam(defaultValue = "serial") String sortBy,
+                                                               @RequestParam(defaultValue = "id") String sortBy,
                                                                @RequestParam(defaultValue = "asc") String sortDir){
         return new ResponseEntity<>(service.findByPage(page, size, sortBy, sortDir, GrammarDTO.class), HttpStatus.OK);
     }

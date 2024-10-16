@@ -1,8 +1,12 @@
 package com.englishweb.english_web_be.service;
 
 import com.englishweb.english_web_be.dto.ListenPracticeDTO;
+import com.englishweb.english_web_be.dto.ListeningQuestionDTO;
 import com.englishweb.english_web_be.model.ListenPractice;
 import com.englishweb.english_web_be.repository.ListenPracticeRepository;
+import com.englishweb.english_web_be.repository.ListeningRepository;
+import com.englishweb.english_web_be.util.ValidationUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,17 +15,27 @@ import java.util.List;
 public class ListenPracticeService extends BaseService<ListenPractice, ListenPracticeDTO, ListenPracticeRepository> {
 
     private final ListeningService listeningService;
+    private final ListeningQuestionService listeningQuestionService;
 
-    public ListenPracticeService(ListenPracticeRepository repository, ListeningService listeningService) {
+    public ListenPracticeService(ListenPracticeRepository repository, @Lazy ListeningService listeningService, ListeningQuestionService listeningQuestionService) {
         super(repository);
         this.listeningService = listeningService;
+        this.listeningQuestionService = listeningQuestionService;
     }
 
-    public List<ListenPracticeDTO> retrieveListenPracticeByListeningId(String listeningId) {
-        List<ListenPractice> entityList = repository.findAllByListening_Id(listeningId);
-        return entityList.stream()
-                .map(this::convertToDTO)
-                .toList();
+    public ListenPracticeDTO findListenPracticeByListeningId(String listeningId) {
+        ValidationUtils.getInstance().validateExistId(listeningService.repository, listeningId);
+        ListenPractice entity = repository.findByListening_Id(listeningId);
+        return convertToDTO(entity);
+    }
+
+    @Override
+    public void delete(String id){
+        List<ListeningQuestionDTO> questionDTOList = listeningQuestionService.findListeningQuestionsByListenPracticeId(id);
+        super.delete(id);
+        for(ListeningQuestionDTO questionDTO : questionDTOList){
+            listeningQuestionService.delete(questionDTO.getId());
+        }
     }
 
     @Override

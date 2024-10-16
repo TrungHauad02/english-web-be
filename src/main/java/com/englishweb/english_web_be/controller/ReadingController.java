@@ -19,7 +19,7 @@ public class ReadingController {
     @GetMapping("/api/readings")
     public ResponseEntity<Page<ReadingDTO>> findByPage(@RequestParam int page,
                                                        @RequestParam int size,
-                                                       @RequestParam(defaultValue = "serial") String sortBy,
+                                                       @RequestParam(defaultValue = "id") String sortBy,
                                                        @RequestParam(defaultValue = "asc") String sortDir) {
         return new ResponseEntity<>(service.findByPage(page, size, sortBy, sortDir, ReadingDTO.class), HttpStatus.OK);
     }

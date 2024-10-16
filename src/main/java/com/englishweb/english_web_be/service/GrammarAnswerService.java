@@ -3,6 +3,7 @@ package com.englishweb.english_web_be.service;
 import com.englishweb.english_web_be.dto.GrammarAnswerDTO;
 import com.englishweb.english_web_be.model.GrammarAnswer;
 import com.englishweb.english_web_be.repository.GrammarAnswerRepository;
+import com.englishweb.english_web_be.util.ValidationUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ public class GrammarAnswerService extends BaseService<GrammarAnswer, GrammarAnsw
     }
 
     public List<GrammarAnswerDTO> findAllByQuestionId(String questionId) {
+        ValidationUtils.getInstance().validateExistId(grammarQuestionService.repository, questionId);
         List<GrammarAnswer> entityList = repository.findAllByQuestion_Id(questionId);
         return entityList.stream()
                 .map(this::convertToDTO)

@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface VocabularyRepository extends JpaRepository<Vocabulary, String> {
-    @Query("SELECT v FROM Vocabulary v WHERE v.topic.id = :topicId")
-    Page<Vocabulary> retrieveVocabsInTopicByPage(Pageable pageable,  @Param("topicId") String topicId);
+    Page<Vocabulary> findAllByTopic_Id(Pageable pageable, String topicId);
+    List<Vocabulary> findAllByTopic_Id(String topicId);
 }

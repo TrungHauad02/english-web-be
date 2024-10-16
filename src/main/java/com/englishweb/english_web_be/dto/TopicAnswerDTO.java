@@ -9,7 +9,7 @@ public class TopicAnswerDTO implements BaseDTO {
     @NotBlank(message = "Content cannot be empty")
     String content;
     @NotNull(message = "IsCorrect cannot be null")
-    boolean isCorrect;
+    boolean correct;
     StatusEnum status;
     @NotBlank(message = "Topic question id cannot be empty")
     String topicQuestionId;
@@ -17,10 +17,10 @@ public class TopicAnswerDTO implements BaseDTO {
     public TopicAnswerDTO() {
     }
 
-    public TopicAnswerDTO(String id, String content, boolean isCorrect, StatusEnum status, String topicQuestionId) {
+    public TopicAnswerDTO(String id, String content, boolean correct, StatusEnum status, String topicQuestionId) {
         this.id = id;
         this.content = content;
-        this.isCorrect = isCorrect;
+        this.correct = correct;
         this.status = status;
         this.topicQuestionId = topicQuestionId;
     }
@@ -29,10 +29,10 @@ public class TopicAnswerDTO implements BaseDTO {
         this.id = id;
     }
 
-    public TopicAnswerDTO(String id, String content, boolean isCorrect, StatusEnum status) {
+    public TopicAnswerDTO(String id, String content, boolean correct, StatusEnum status) {
         this.id = id;
         this.content = content;
-        this.isCorrect = isCorrect;
+        this.correct = correct;
         this.status = status;
     }
 
@@ -55,11 +55,11 @@ public class TopicAnswerDTO implements BaseDTO {
     }
 
     public boolean isCorrect() {
-        return isCorrect;
+        return correct;
     }
 
     public void setCorrect(boolean correct) {
-        isCorrect = correct;
+        this.correct = correct;
     }
 
     public StatusEnum getStatus() {

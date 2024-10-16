@@ -9,7 +9,7 @@ public class GrammarAnswerDTO implements BaseDTO {
     @NotBlank(message = "Content cannot be empty")
     String content;
     @NotNull(message = "Correct cannot be null")
-    boolean isCorrect;
+    boolean correct;
     StatusEnum status;
     @NotNull(message = "Question id cannot be null")
     String questionId;
@@ -17,10 +17,10 @@ public class GrammarAnswerDTO implements BaseDTO {
     public GrammarAnswerDTO() {
     }
 
-    public GrammarAnswerDTO(String id, String content, boolean isCorrect, StatusEnum status, String questionId) {
+    public GrammarAnswerDTO(String id, String content, boolean correct, StatusEnum status, String questionId) {
         this.id = id;
         this.content = content;
-        this.isCorrect = isCorrect;
+        this.correct = correct;
         this.status = status;
         this.questionId = questionId;
     }
@@ -44,11 +44,11 @@ public class GrammarAnswerDTO implements BaseDTO {
     }
 
     public boolean isCorrect() {
-        return isCorrect;
+        return correct;
     }
 
     public void setCorrect(boolean correct) {
-        isCorrect = correct;
+        this.correct = correct;
     }
 
     public StatusEnum getStatus() {

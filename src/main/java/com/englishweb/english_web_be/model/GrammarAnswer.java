@@ -10,7 +10,7 @@ public class GrammarAnswer implements BaseEntity {
     @Column(nullable = false)
     private String content;
     @Column(nullable = false)
-    private boolean isCorrect;
+    private boolean correct;
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
     @ManyToOne
@@ -25,10 +25,10 @@ public class GrammarAnswer implements BaseEntity {
     public GrammarAnswer() {
     }
 
-    public GrammarAnswer(String id, String content, boolean isCorrect, StatusEnum status, GrammarQuestion question) {
+    public GrammarAnswer(String id, String content, boolean correct, StatusEnum status, GrammarQuestion question) {
         this.id = id;
         this.content = content;
-        this.isCorrect = isCorrect;
+        this.correct = correct;
         this.status = status;
         this.question = question;
     }
@@ -52,11 +52,11 @@ public class GrammarAnswer implements BaseEntity {
     }
 
     public boolean isCorrect() {
-        return isCorrect;
+        return correct;
     }
 
     public void setCorrect(boolean correct) {
-        isCorrect = correct;
+        this.correct = correct;
     }
 
     public StatusEnum getStatus() {

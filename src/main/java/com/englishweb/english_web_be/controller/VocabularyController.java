@@ -20,7 +20,7 @@ public class VocabularyController {
     @GetMapping("/api/vocabulary")
     public ResponseEntity<Page<VocabularyDTO>> findByPage(@RequestParam int page,
                                                        @RequestParam int size,
-                                                       @RequestParam(defaultValue = "serial") String sortBy,
+                                                       @RequestParam(defaultValue = "id") String sortBy,
                                                        @RequestParam(defaultValue = "asc") String sortDir){
         return new ResponseEntity<>(service.findByPage(page, size, sortBy, sortDir, VocabularyDTO.class), HttpStatus.OK);
     }
@@ -28,7 +28,7 @@ public class VocabularyController {
     @GetMapping("/api/topics/{topicId}/vocabulary")
     public ResponseEntity<Page<VocabularyDTO>> findByPageAndTopicId(@RequestParam int page,
                                                           @RequestParam int size,
-                                                          @RequestParam(defaultValue = "serial") String sortBy,
+                                                          @RequestParam(defaultValue = "id") String sortBy,
                                                           @RequestParam(defaultValue = "asc") String sortDir,
                                                           @PathVariable String topicId){
         return new ResponseEntity<>(service.findByPageTopicId(page, size, sortBy, sortDir, VocabularyDTO.class, topicId), HttpStatus.OK);

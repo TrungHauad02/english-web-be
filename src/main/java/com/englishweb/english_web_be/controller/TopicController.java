@@ -19,7 +19,7 @@ public class TopicController {
     @GetMapping("/api/topics")
     public ResponseEntity<Page<TopicDTO>> findByPage(@RequestParam int page,
                                                                @RequestParam int size,
-                                                               @RequestParam(defaultValue = "serial") String sortBy,
+                                                               @RequestParam(defaultValue = "id") String sortBy,
                                                                @RequestParam(defaultValue = "asc") String sortDir) {
         return new ResponseEntity<>(service.findByPage(page, size, sortBy, sortDir, TopicDTO.class), HttpStatus.OK);
     }

@@ -3,6 +3,9 @@ package com.englishweb.english_web_be.service;
 import com.englishweb.english_web_be.dto.ListenAndWriteAWordDTO;
 import com.englishweb.english_web_be.model.ListenAndWriteAWord;
 import com.englishweb.english_web_be.repository.ListenAndWriteAWordRepository;
+import com.englishweb.english_web_be.repository.ListeningRepository;
+import com.englishweb.english_web_be.util.ValidationUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,12 +15,13 @@ public class ListenAndWriteAWordService extends BaseService<ListenAndWriteAWord,
 
     private final ListeningService listeningService;
 
-    public ListenAndWriteAWordService(ListenAndWriteAWordRepository repository, ListeningService listeningService) {
+    public ListenAndWriteAWordService(ListenAndWriteAWordRepository repository, @Lazy ListeningService listeningService) {
         super(repository);
         this.listeningService = listeningService;
     }
 
-    public List<ListenAndWriteAWordDTO> retrieveListenAndWriteAWordByListeningId(String listeningId) {
+    public List<ListenAndWriteAWordDTO> findByListeningId(String listeningId) {
+        ValidationUtils.getInstance().validateExistId(listeningService.repository, listeningId);
         List<ListenAndWriteAWord> entityList = repository.findAllByListening_Id(listeningId);
         return entityList.stream()
                 .map(this::convertToDTO)

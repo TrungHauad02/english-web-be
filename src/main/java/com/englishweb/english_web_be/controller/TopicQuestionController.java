@@ -19,8 +19,8 @@ public class TopicQuestionController {
     }
 
     @GetMapping("/api/topics-question")
-    public List<TopicQuestionDTO> findAllQuestionByTopicId(@RequestParam String topicId) {
-        return service.findTopicQuestionByTopicId(topicId);
+    public ResponseEntity<List<TopicQuestionDTO>> findAllQuestionByTopicId(@RequestParam String topicId) {
+        return new ResponseEntity<>(service.findTopicQuestionByTopicId(topicId), HttpStatus.OK);
     }
 
     @PostMapping("/api/topics-question")

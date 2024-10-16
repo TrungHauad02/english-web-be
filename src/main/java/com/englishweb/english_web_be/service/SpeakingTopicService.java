@@ -3,16 +3,22 @@ package com.englishweb.english_web_be.service;
 import com.englishweb.english_web_be.dto.SpeakingTopicDTO;
 import com.englishweb.english_web_be.model.SpeakingTopic;
 import com.englishweb.english_web_be.repository.SpeakingTopicRepository;
+import com.englishweb.english_web_be.util.ValidationUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SpeakingTopicService extends BaseService<SpeakingTopic, SpeakingTopicDTO, SpeakingTopicRepository> {
 
-    public SpeakingTopicService(SpeakingTopicRepository repository) {
+    private final SpeakingService speakingService;
+
+    public SpeakingTopicService(SpeakingTopicRepository repository, @Lazy SpeakingService speakingService) {
         super(repository);
+        this.speakingService = speakingService;
     }
 
     public SpeakingTopicDTO findBySpeakingId(String speakingId) {
+        ValidationUtils.getInstance().validateExistId(speakingService.repository, speakingId);
         SpeakingTopic speakingTopic = repository.findBySpeaking_Id(speakingId);
         return convertToDTO(speakingTopic);
     }
@@ -24,6 +30,7 @@ public class SpeakingTopicService extends BaseService<SpeakingTopic, SpeakingTop
         dto.setTopic(entity.getTopic());
         dto.setDuration(entity.getDuration());
         dto.setStatus(entity.getStatus());
+        dto.setSpeakingTopicId(entity.getSpeaking().getId());
         return dto;
     }
 
@@ -34,6 +41,7 @@ public class SpeakingTopicService extends BaseService<SpeakingTopic, SpeakingTop
         entity.setTopic(dto.getTopic());
         entity.setDuration(dto.getDuration());
         entity.setStatus(dto.getStatus());
+        entity.setSpeaking(speakingService.convertToEntity(speakingService.findById(dto.getSpeakingTopicId())));
         return entity;
     }
 }
