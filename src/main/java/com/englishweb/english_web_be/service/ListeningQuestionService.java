@@ -8,13 +8,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ListeningQuestionService {
-    ListeningQuestionRepository repository;
+public class ListeningQuestionService extends BaseService<ListeningQuestion, ListeningQuestionDTO, ListeningQuestionRepository> {
+    private final ListenPracticeService listenPracticeService;
     ListeningAnswerService answerService;
 
-    public ListeningQuestionService(ListeningQuestionRepository repository, ListeningAnswerService answerService) {
-        this.repository = repository;
+    public ListeningQuestionService(ListeningQuestionRepository repository, ListeningAnswerService answerService, ListeningService listeningService, ListenPracticeService listenPracticeService) {
+        super(repository);
         this.answerService = answerService;
+        this.listenPracticeService = listenPracticeService;
     }
 
     public List<ListeningQuestionDTO> retrieveListeningQuestionsByListenPracticeId(String listenPracticeId) {
@@ -24,7 +25,8 @@ public class ListeningQuestionService {
                 .toList();
     }
 
-    private ListeningQuestionDTO convertToDTO(ListeningQuestion entity) {
+    @Override
+    protected ListeningQuestionDTO convertToDTO(ListeningQuestion entity) {
         ListeningQuestionDTO dto = new ListeningQuestionDTO();
         dto.setId(entity.getId());
         dto.setContent(entity.getContent());
@@ -32,6 +34,19 @@ public class ListeningQuestionService {
         dto.setSerial(entity.getSerial());
         dto.setStatus(entity.getStatus());
         dto.setAnswers(answerService.retrieveListeningAnswersByQuestionId(entity.getId()));
+        dto.setListeningPracticeId(entity.getListenPractice().getId());
         return dto;
+    }
+
+    @Override
+    protected ListeningQuestion convertToEntity(ListeningQuestionDTO dto) {
+        ListeningQuestion entity = new ListeningQuestion();
+        entity.setId(dto.getId());
+        entity.setContent(dto.getContent());
+        entity.setExplanation(dto.getExplanation());
+        entity.setSerial(dto.getSerial());
+        entity.setStatus(dto.getStatus());
+        entity.setListenPractice(listenPracticeService.convertToEntity(listenPracticeService.findById(dto.getListeningPracticeId())));
+        return entity;
     }
 }

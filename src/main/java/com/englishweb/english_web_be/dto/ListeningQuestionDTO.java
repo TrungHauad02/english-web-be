@@ -11,8 +11,19 @@ public class ListeningQuestionDTO implements BaseDTO {
     String explanation;
     StatusEnum status;
     List<ListeningAnswerDTO> answers;
+    String listeningPracticeId;
 
     public ListeningQuestionDTO() {
+    }
+
+    public ListeningQuestionDTO(String id, String content, int serial, String explanation, StatusEnum status, List<ListeningAnswerDTO> answers, String listeningPracticeId) {
+        this.id = id;
+        this.content = content;
+        this.serial = serial;
+        this.explanation = explanation;
+        this.status = status;
+        this.answers = answers;
+        this.listeningPracticeId = listeningPracticeId;
     }
 
     public ListeningQuestionDTO(String id, String content, int serial, String explanation, StatusEnum status, List<ListeningAnswerDTO> answers) {
@@ -72,5 +83,13 @@ public class ListeningQuestionDTO implements BaseDTO {
 
     public void setAnswers(List<ListeningAnswerDTO> answers) {
         this.answers = answers;
+    }
+
+    public String getListeningPracticeId() {
+        return listeningPracticeId;
+    }
+
+    public void setListeningPracticeId(String listeningPracticeId) {
+        this.listeningPracticeId = listeningPracticeId;
     }
 }

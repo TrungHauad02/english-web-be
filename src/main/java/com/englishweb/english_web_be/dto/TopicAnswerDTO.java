@@ -7,8 +7,21 @@ public class TopicAnswerDTO implements BaseDTO {
     String content;
     boolean isCorrect;
     StatusEnum status;
+    String topicQuestionId;
 
     public TopicAnswerDTO() {
+    }
+
+    public TopicAnswerDTO(String id, String content, boolean isCorrect, StatusEnum status, String topicQuestionId) {
+        this.id = id;
+        this.content = content;
+        this.isCorrect = isCorrect;
+        this.status = status;
+        this.topicQuestionId = topicQuestionId;
+    }
+
+    public TopicAnswerDTO(String id) {
+        this.id = id;
     }
 
     public TopicAnswerDTO(String id, String content, boolean isCorrect, StatusEnum status) {
@@ -50,5 +63,13 @@ public class TopicAnswerDTO implements BaseDTO {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public String getTopicQuestionId() {
+        return topicQuestionId;
+    }
+
+    public void setTopicQuestionId(String topicQuestionId) {
+        this.topicQuestionId = topicQuestionId;
     }
 }

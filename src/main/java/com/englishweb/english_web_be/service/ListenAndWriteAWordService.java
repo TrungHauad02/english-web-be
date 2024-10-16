@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ListenAndWriteAWordService {
-    ListenAndWriteAWordRepository repository;
+public class ListenAndWriteAWordService extends BaseService<ListenAndWriteAWord, ListenAndWriteAWordDTO, ListenAndWriteAWordRepository> {
 
-    public ListenAndWriteAWordService(ListenAndWriteAWordRepository repository) {
-        this.repository = repository;
+    private final ListeningService listeningService;
+
+    public ListenAndWriteAWordService(ListenAndWriteAWordRepository repository, ListeningService listeningService) {
+        super(repository);
+        this.listeningService = listeningService;
     }
 
     public List<ListenAndWriteAWordDTO> retrieveListenAndWriteAWordByListeningId(String listeningId) {
@@ -22,7 +24,8 @@ public class ListenAndWriteAWordService {
                 .toList();
     }
 
-    private ListenAndWriteAWordDTO convertToDTO(ListenAndWriteAWord entity) {
+    @Override
+    protected ListenAndWriteAWordDTO convertToDTO(ListenAndWriteAWord entity) {
         ListenAndWriteAWordDTO dto = new ListenAndWriteAWordDTO();
         dto.setId(entity.getId());
         dto.setAudioUrl(entity.getAudioUrl());
@@ -31,6 +34,21 @@ public class ListenAndWriteAWordService {
         dto.setSentence(entity.getSentence());
         dto.setMissingIndex(entity.getMissingIndex());
         dto.setStatus(entity.getStatus());
+        dto.setListeningId(entity.getListening().getId());
         return dto;
+    }
+
+    @Override
+    protected ListenAndWriteAWord convertToEntity(ListenAndWriteAWordDTO dto) {
+        ListenAndWriteAWord entity = new ListenAndWriteAWord();
+        entity.setId(dto.getId());
+        entity.setAudioUrl(dto.getAudioUrl());
+        entity.setSerial(dto.getSerial());
+        entity.setCorrectAnswer(dto.getCorrectAnswer());
+        entity.setSentence(dto.getSentence());
+        entity.setMissingIndex(dto.getMissingIndex());
+        entity.setStatus(dto.getStatus());
+        entity.setListening(listeningService.convertToEntity(listeningService.findById(dto.getListeningId())));
+        return entity;
     }
 }

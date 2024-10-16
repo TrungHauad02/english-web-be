@@ -8,11 +8,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class SpeakingConversationService {
-    SpeakingConversationRepository repository;
+public class SpeakingConversationService extends BaseService<SpeakingConversation, SpeakingConversationDTO, SpeakingConversationRepository> {
+    private final SpeakingService speakingService;
 
-    public SpeakingConversationService(SpeakingConversationRepository repository) {
-        this.repository = repository;
+    public SpeakingConversationService(SpeakingConversationRepository repository, SpeakingService speakingService) {
+        super(repository);
+        this.speakingService = speakingService;
     }
 
     public List<SpeakingConversationDTO> retrieveSpeakingConversationBySpeakingId(String speakingId) {
@@ -22,13 +23,27 @@ public class SpeakingConversationService {
                 .toList();
     }
 
-    private SpeakingConversationDTO convertToDTO(SpeakingConversation entity) {
+    @Override
+    protected SpeakingConversationDTO convertToDTO(SpeakingConversation entity) {
         SpeakingConversationDTO dto = new SpeakingConversationDTO();
         dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setContent(entity.getContent());
         dto.setSerial(entity.getSerial());
         dto.setStatus(entity.getStatus());
+        dto.setSpeakingId(entity.getSpeaking().getId());
         return dto;
+    }
+
+    @Override
+    protected SpeakingConversation convertToEntity(SpeakingConversationDTO dto) {
+        SpeakingConversation entity = new SpeakingConversation();
+        entity.setId(dto.getId());
+        entity.setName(dto.getName());
+        entity.setContent(dto.getContent());
+        entity.setSerial(dto.getSerial());
+        entity.setStatus(dto.getStatus());
+        entity.setSpeaking(speakingService.convertToEntity(speakingService.findById(dto.getSpeakingId())));
+        return entity;
     }
 }

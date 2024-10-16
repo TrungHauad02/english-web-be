@@ -9,20 +9,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WritingService {
-    WritingRepository repository;
+public class WritingService extends BaseService<Writing, WritingDTO, WritingRepository>{
 
     public WritingService(WritingRepository repository) {
-        this.repository = repository;
+        super(repository);
     }
 
-    Page<WritingDTO> retrieveWritingsByPage(int page, int size){
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Writing> writingPage = repository.findAllWritings(pageable);
-        return writingPage.map(this::convertToDTO);
-    }
-
-    private WritingDTO convertToDTO(Writing entity) {
+    @Override
+    protected WritingDTO convertToDTO(Writing entity) {
         WritingDTO dto = new WritingDTO();
         dto.setId(entity.getId());
         dto.setDescription(entity.getDescription());
@@ -32,5 +26,18 @@ public class WritingService {
         dto.setStatus(entity.getStatus());
         dto.setTopic(entity.getTopic());
         return dto;
+    }
+
+    @Override
+    protected Writing convertToEntity(WritingDTO dto) {
+        Writing entity = new Writing();
+        entity.setId(dto.getId());
+        entity.setDescription(dto.getDescription());
+        entity.setImage(dto.getImage());
+        entity.setSerial(dto.getSerial());
+        entity.setTitle(dto.getTitle());
+        entity.setStatus(dto.getStatus());
+        entity.setTopic(dto.getTopic());
+        return entity;
     }
 }

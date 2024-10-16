@@ -31,14 +31,14 @@ public abstract class BaseService<Entity extends BaseEntity, DTO extends BaseDTO
     }
 
     public DTO create(DTO dto) {
-        return convertToDTO(repository.save(convertToEntity(dto)));
+        Entity entity = convertToEntity(dto);
+        entity.setId(null);
+        return convertToDTO(repository.save(entity));
     }
 
     public DTO update(DTO dto) {
         ValidationUtils.getInstance().validateExistId(repository, dto.getId());
-        Entity entity = convertToEntity(dto);
-        entity.setId(dto.getId());
-        return convertToDTO(repository.save(entity));
+        return convertToDTO(repository.save(convertToEntity(dto)));
     }
 
     public void delete(String id) {

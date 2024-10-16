@@ -10,8 +10,20 @@ public class ListenAndWriteAWordDTO implements BaseDTO {
     int missingIndex;
     String correctAnswer;
     StatusEnum status;
+    String listeningId;
 
     public ListenAndWriteAWordDTO() {
+    }
+
+    public ListenAndWriteAWordDTO(String id, int serial, String audioUrl, String sentence, int missingIndex, String correctAnswer, StatusEnum status, String listeningId) {
+        this.id = id;
+        this.serial = serial;
+        this.audioUrl = audioUrl;
+        this.sentence = sentence;
+        this.missingIndex = missingIndex;
+        this.correctAnswer = correctAnswer;
+        this.status = status;
+        this.listeningId = listeningId;
     }
 
     public ListenAndWriteAWordDTO(String id, int serial, String audioUrl, String sentence, int missingIndex, String correctAnswer, StatusEnum status) {
@@ -80,5 +92,13 @@ public class ListenAndWriteAWordDTO implements BaseDTO {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public String getListeningId() {
+        return listeningId;
+    }
+
+    public void setListeningId(String listeningId) {
+        this.listeningId = listeningId;
     }
 }

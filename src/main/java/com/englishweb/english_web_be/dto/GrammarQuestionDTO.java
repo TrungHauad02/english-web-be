@@ -11,8 +11,19 @@ public class GrammarQuestionDTO implements BaseDTO {
     String explanation;
     StatusEnum status;
     List<GrammarAnswerDTO> answers;
+    String grammarId;
 
     public GrammarQuestionDTO() {
+    }
+
+    public GrammarQuestionDTO(String id, String content, int serial, String explanation, StatusEnum status, List<GrammarAnswerDTO> answers, String grammarId) {
+        this.id = id;
+        this.content = content;
+        this.serial = serial;
+        this.explanation = explanation;
+        this.status = status;
+        this.answers = answers;
+        this.grammarId = grammarId;
     }
 
     public GrammarQuestionDTO(String id, String content, int serial, String explanation, StatusEnum status, List<GrammarAnswerDTO> answers) {
@@ -72,5 +83,13 @@ public class GrammarQuestionDTO implements BaseDTO {
 
     public void setAnswers(List<GrammarAnswerDTO> answers) {
         this.answers = answers;
+    }
+
+    public String getGrammarId() {
+        return grammarId;
+    }
+
+    public void setGrammarId(String grammarId) {
+        this.grammarId = grammarId;
     }
 }

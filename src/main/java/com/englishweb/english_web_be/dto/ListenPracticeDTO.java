@@ -6,8 +6,16 @@ public class ListenPracticeDTO implements BaseDTO {
     String id;
     String audioUrl;
     StatusEnum status;
+    String listeningId;
 
     public ListenPracticeDTO() {
+    }
+
+    public ListenPracticeDTO(String id, String audioUrl, StatusEnum status, String listeningId) {
+        this.id = id;
+        this.audioUrl = audioUrl;
+        this.status = status;
+        this.listeningId = listeningId;
     }
 
     public ListenPracticeDTO(String id, String audioUrl, StatusEnum status) {
@@ -40,5 +48,13 @@ public class ListenPracticeDTO implements BaseDTO {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public String getListeningId() {
+        return listeningId;
+    }
+
+    public void setListeningId(String listeningId) {
+        this.listeningId = listeningId;
     }
 }

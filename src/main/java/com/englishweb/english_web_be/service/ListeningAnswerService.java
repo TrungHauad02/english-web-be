@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ListeningAnswerService {
-    ListeningAnswerRepository repository;
+public class ListeningAnswerService extends BaseService<ListeningAnswer, ListeningAnswerDTO, ListeningAnswerRepository> {
 
-    public ListeningAnswerService(ListeningAnswerRepository repository) {
-        this.repository = repository;
+    private final ListeningQuestionService listeningQuestionService;
+
+    public ListeningAnswerService(ListeningAnswerRepository repository, ListeningQuestionService listeningQuestionService) {
+        super(repository);
+        this.listeningQuestionService = listeningQuestionService;
     }
 
     public List<ListeningAnswerDTO> retrieveListeningAnswersByQuestionId(String questionId) {
@@ -22,12 +24,25 @@ public class ListeningAnswerService {
                 .toList();
     }
 
-    private ListeningAnswerDTO convertToDTO(ListeningAnswer entity) {
+    @Override
+    protected ListeningAnswerDTO convertToDTO(ListeningAnswer entity) {
         ListeningAnswerDTO dto = new ListeningAnswerDTO();
         dto.setId(entity.getId());
         dto.setContent(entity.getContent());
         dto.setCorrect(entity.isCorrect());
         dto.setStatus(entity.getStatus());
+        dto.setListeningQuestionId(entity.getQuestion().getId());
         return dto;
+    }
+
+    @Override
+    protected ListeningAnswer convertToEntity(ListeningAnswerDTO dto) {
+        ListeningAnswer entity = new ListeningAnswer();
+        entity.setId(dto.getId());
+        entity.setContent(dto.getContent());
+        entity.setCorrect(dto.isCorrect());
+        entity.setStatus(dto.getStatus());
+        entity.setQuestion(listeningQuestionService.convertToEntity(listeningQuestionService.findById(dto.getListeningQuestionId())));
+        return entity;
     }
 }

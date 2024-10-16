@@ -11,8 +11,19 @@ public class TopicQuestionDTO implements BaseDTO {
     String explanation;
     StatusEnum status;
     List<TopicAnswerDTO> answers;
+    String topicId;
 
     public TopicQuestionDTO() {
+    }
+
+    public TopicQuestionDTO(String id, String content, int serial, String explanation, StatusEnum status, List<TopicAnswerDTO> answers, String topicId) {
+        this.id = id;
+        this.content = content;
+        this.serial = serial;
+        this.explanation = explanation;
+        this.status = status;
+        this.answers = answers;
+        this.topicId = topicId;
     }
 
     public TopicQuestionDTO(String id, String content, int serial, String explanation, StatusEnum status, List<TopicAnswerDTO> answers) {
@@ -73,5 +84,13 @@ public class TopicQuestionDTO implements BaseDTO {
 
     public void setAnswers(List<TopicAnswerDTO> answers) {
         this.answers = answers;
+    }
+
+    public String getTopicId() {
+        return topicId;
+    }
+
+    public void setTopicId(String topicId) {
+        this.topicId = topicId;
     }
 }

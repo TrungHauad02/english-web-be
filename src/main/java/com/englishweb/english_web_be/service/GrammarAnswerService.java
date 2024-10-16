@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class GrammarAnswerService {
-    GrammarAnswerRepository repository;
+public class GrammarAnswerService extends BaseService<GrammarAnswer, GrammarAnswerDTO, GrammarAnswerRepository> {
 
-    public GrammarAnswerService(GrammarAnswerRepository repository) {
-        this.repository = repository;
+    GrammarQuestionService grammarQuestionService;
+
+    public GrammarAnswerService(GrammarAnswerRepository repository, GrammarQuestionService grammarQuestionService) {
+        super(repository);
+        this.grammarQuestionService = grammarQuestionService;
     }
 
     public List<GrammarAnswerDTO> findAllByQuestionId(String questionId) {
@@ -22,12 +24,25 @@ public class GrammarAnswerService {
                 .toList();
     }
 
-    private GrammarAnswerDTO convertToDTO(GrammarAnswer entity) {
+    @Override
+    protected GrammarAnswerDTO convertToDTO(GrammarAnswer entity) {
         GrammarAnswerDTO dto = new GrammarAnswerDTO();
         dto.setId(entity.getId());
         dto.setCorrect(entity.isCorrect());
         dto.setContent(entity.getContent());
         dto.setStatus(entity.getStatus());
+        dto.setQuestionId(entity.getQuestion().getId());
         return dto;
+    }
+
+    @Override
+    protected GrammarAnswer convertToEntity(GrammarAnswerDTO dto) {
+        GrammarAnswer entity = new GrammarAnswer();
+        entity.setId(dto.getId());
+        entity.setCorrect(dto.isCorrect());
+        entity.setContent(dto.getContent());
+        entity.setStatus(dto.getStatus());
+        entity.setQuestion(grammarQuestionService.convertToEntity(grammarQuestionService.findById(dto.getQuestionId())));
+        return entity;
     }
 }
