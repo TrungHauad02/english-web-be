@@ -2,6 +2,7 @@ package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.dto.ListeningDTO;
 import com.englishweb.english_web_be.service.ListeningService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,13 +30,13 @@ public class ListeningController {
     }
 
     @PostMapping("/api/listening")
-    public ResponseEntity<ListeningDTO> save(@RequestBody ListeningDTO dto){
+    public ResponseEntity<ListeningDTO> save(@Valid @RequestBody ListeningDTO dto){
         ListeningDTO created = service.create(dto);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @PutMapping("/api/listening")
-    public ResponseEntity<ListeningDTO> update(@RequestBody ListeningDTO dto){
+    public ResponseEntity<ListeningDTO> update(@Valid @RequestBody ListeningDTO dto){
         ListeningDTO updated = service.update(dto);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
