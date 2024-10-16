@@ -3,6 +3,7 @@ package com.englishweb.english_web_be.service;
 import com.englishweb.english_web_be.dto.ListeningAnswerDTO;
 import com.englishweb.english_web_be.model.ListeningAnswer;
 import com.englishweb.english_web_be.repository.ListeningAnswerRepository;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public class ListeningAnswerService extends BaseService<ListeningAnswer, Listeni
 
     private final ListeningQuestionService listeningQuestionService;
 
-    public ListeningAnswerService(ListeningAnswerRepository repository, ListeningQuestionService listeningQuestionService) {
+    public ListeningAnswerService(ListeningAnswerRepository repository,@Lazy ListeningQuestionService listeningQuestionService) {
         super(repository);
         this.listeningQuestionService = listeningQuestionService;
     }

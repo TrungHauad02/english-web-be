@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class TopicQuestionService extends BaseService<TopicQuestion, TopicQuestionDTO, TopicQuestionRepository> {
     private final TopicService topicService;
-    TopicAnswerService topicAnswerService;
+    private final TopicAnswerService topicAnswerService;
 
     public TopicQuestionService(TopicQuestionRepository repository, TopicAnswerService topicAnswerService, TopicService topicService) {
         super(repository);
