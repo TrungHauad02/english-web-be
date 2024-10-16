@@ -3,6 +3,8 @@ package com.englishweb.english_web_be.service;
 import com.englishweb.english_web_be.dto.ListeningAnswerDTO;
 import com.englishweb.english_web_be.model.ListeningAnswer;
 import com.englishweb.english_web_be.repository.ListeningAnswerRepository;
+import com.englishweb.english_web_be.util.ValidationUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,12 +14,13 @@ public class ListeningAnswerService extends BaseService<ListeningAnswer, Listeni
 
     private final ListeningQuestionService listeningQuestionService;
 
-    public ListeningAnswerService(ListeningAnswerRepository repository, ListeningQuestionService listeningQuestionService) {
+    public ListeningAnswerService(ListeningAnswerRepository repository,@Lazy ListeningQuestionService listeningQuestionService) {
         super(repository);
         this.listeningQuestionService = listeningQuestionService;
     }
 
-    public List<ListeningAnswerDTO> retrieveListeningAnswersByQuestionId(String questionId) {
+    public List<ListeningAnswerDTO> findListeningAnswersByQuestionId(String questionId) {
+        ValidationUtils.getInstance().validateExistId(listeningQuestionService.repository, questionId);
         List<ListeningAnswer> enityList = repository.findAllByQuestion_Id(questionId);
         return enityList.stream()
                 .map(this::convertToDTO)

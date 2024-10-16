@@ -1,8 +1,12 @@
 package com.englishweb.english_web_be.service;
 
+import com.englishweb.english_web_be.dto.ListeningAnswerDTO;
 import com.englishweb.english_web_be.dto.ListeningQuestionDTO;
 import com.englishweb.english_web_be.model.ListeningQuestion;
+import com.englishweb.english_web_be.repository.ListenPracticeRepository;
 import com.englishweb.english_web_be.repository.ListeningQuestionRepository;
+import com.englishweb.english_web_be.util.ValidationUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,17 +16,27 @@ public class ListeningQuestionService extends BaseService<ListeningQuestion, Lis
     private final ListenPracticeService listenPracticeService;
     ListeningAnswerService answerService;
 
-    public ListeningQuestionService(ListeningQuestionRepository repository, ListeningAnswerService answerService, ListeningService listeningService, ListenPracticeService listenPracticeService) {
+    public ListeningQuestionService(ListeningQuestionRepository repository, ListeningAnswerService answerService, @Lazy ListenPracticeService listenPracticeService) {
         super(repository);
         this.answerService = answerService;
         this.listenPracticeService = listenPracticeService;
     }
 
-    public List<ListeningQuestionDTO> retrieveListeningQuestionsByListenPracticeId(String listenPracticeId) {
+    public List<ListeningQuestionDTO> findListeningQuestionsByListenPracticeId(String listenPracticeId) {
+        ValidationUtils.getInstance().validateExistId(listenPracticeService.repository, listenPracticeId);
         List<ListeningQuestion> entityList = repository.findAllByListenPractice_Id(listenPracticeId);
         return entityList.stream()
                 .map(this::convertToDTO)
                 .toList();
+    }
+
+    @Override
+    public void delete(String id){
+        List<ListeningAnswerDTO> answerDTOList = answerService.findListeningAnswersByQuestionId(id);
+        for(ListeningAnswerDTO answerDTO : answerDTOList){
+            answerService.delete(answerDTO.getId());
+        }
+        super.delete(id);
     }
 
     @Override
@@ -33,7 +47,7 @@ public class ListeningQuestionService extends BaseService<ListeningQuestion, Lis
         dto.setExplanation(entity.getExplanation());
         dto.setSerial(entity.getSerial());
         dto.setStatus(entity.getStatus());
-        dto.setAnswers(answerService.retrieveListeningAnswersByQuestionId(entity.getId()));
+        dto.setAnswers(answerService.findListeningAnswersByQuestionId(entity.getId()));
         dto.setListeningPracticeId(entity.getListenPractice().getId());
         return dto;
     }

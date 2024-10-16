@@ -1,14 +1,28 @@
 package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
 
 public class SpeakingTopicDTO implements BaseDTO {
     String id;
+    @NotBlank(message = "Topic cannot be empty")
     String topic;
+    @PositiveOrZero(message = "Duration number must be equal or greater than 0")
     int duration;
     StatusEnum status;
+    @NotBlank(message = "Speaking topic id cannot be empty")
+    String speakingTopicId;
 
     public SpeakingTopicDTO() {
+    }
+
+    public SpeakingTopicDTO(String id, String topic, int duration, StatusEnum status, String speakingTopicId) {
+        this.id = id;
+        this.topic = topic;
+        this.duration = duration;
+        this.status = status;
+        this.speakingTopicId = speakingTopicId;
     }
 
     public SpeakingTopicDTO(String id, String topic, int duration, StatusEnum status) {
@@ -50,5 +64,13 @@ public class SpeakingTopicDTO implements BaseDTO {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public String getSpeakingTopicId() {
+        return speakingTopicId;
+    }
+
+    public void setSpeakingTopicId(String speakingTopicId) {
+        this.speakingTopicId = speakingTopicId;
     }
 }

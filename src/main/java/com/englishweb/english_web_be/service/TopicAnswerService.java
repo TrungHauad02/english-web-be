@@ -3,6 +3,8 @@ package com.englishweb.english_web_be.service;
 import com.englishweb.english_web_be.dto.TopicAnswerDTO;
 import com.englishweb.english_web_be.model.TopicAnswer;
 import com.englishweb.english_web_be.repository.TopicAnswerRepository;
+import com.englishweb.english_web_be.util.ValidationUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,12 +13,13 @@ import java.util.List;
 public class TopicAnswerService extends BaseService<TopicAnswer, TopicAnswerDTO, TopicAnswerRepository>{
     private final TopicQuestionService topicQuestionService;
 
-    public TopicAnswerService(TopicAnswerRepository repository, TopicQuestionService topicQuestionService) {
+    public TopicAnswerService(TopicAnswerRepository repository, @Lazy TopicQuestionService topicQuestionService) {
         super(repository);
         this.topicQuestionService = topicQuestionService;
     }
 
     public List<TopicAnswerDTO> findAllByQuestionId(String questionId) {
+        ValidationUtils.getInstance().validateExistId(topicQuestionService.repository, questionId);
         List<TopicAnswer> list = repository.findAllByQuestion_Id(questionId);
         return list.stream()
                 .map(this::convertToDTO)

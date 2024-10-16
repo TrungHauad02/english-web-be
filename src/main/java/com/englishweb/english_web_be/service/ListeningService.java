@@ -1,15 +1,35 @@
 package com.englishweb.english_web_be.service;
 
+import com.englishweb.english_web_be.dto.ListenAndWriteAWordDTO;
+import com.englishweb.english_web_be.dto.ListenPracticeDTO;
 import com.englishweb.english_web_be.dto.ListeningDTO;
 import com.englishweb.english_web_be.model.Listening;
 import com.englishweb.english_web_be.repository.ListeningRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ListeningService extends BaseService<Listening, ListeningDTO, ListeningRepository> {
 
-    public ListeningService(ListeningRepository repository) {
+    private final ListenPracticeService listenPracticeService;
+    private final ListenAndWriteAWordService listenAndWriteAWordService;
+
+    public ListeningService(ListeningRepository repository, ListenPracticeService listenPracticeService, ListenAndWriteAWordService listenAndWriteAWordService) {
         super(repository);
+        this.listenPracticeService = listenPracticeService;
+        this.listenAndWriteAWordService = listenAndWriteAWordService;
+    }
+
+    @Override
+    public void delete(String id){
+        ListenPracticeDTO listenPracticeDTO = listenPracticeService.findListenPracticeByListeningId(id);
+        listenPracticeService.delete(listenPracticeDTO.getId());
+        List<ListenAndWriteAWordDTO> listenAndWriteAWordDTOList = listenAndWriteAWordService.findByListeningId(id);
+        for (ListenAndWriteAWordDTO listenAndWriteAWordDTO : listenAndWriteAWordDTOList) {
+            listenAndWriteAWordService.delete(listenAndWriteAWordDTO.getId());
+        }
+        super.delete(id);
     }
 
     @Override

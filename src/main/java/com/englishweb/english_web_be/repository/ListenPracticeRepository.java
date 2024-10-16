@@ -9,4 +9,6 @@ import java.util.List;
 public interface ListenPracticeRepository extends JpaRepository<ListenPractice, String> {
     @Query("Select l from ListenPractice l")
     List<ListenPractice> findAllByListening_Id(String listeningId);
+
+    ListenPractice findByListening_Id(String listeningId);
 }
