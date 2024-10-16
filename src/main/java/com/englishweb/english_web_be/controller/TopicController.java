@@ -4,11 +4,9 @@ import com.englishweb.english_web_be.dto.TopicDTO;
 import com.englishweb.english_web_be.service.TopicService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 @RestController
 public class TopicController {
@@ -36,5 +34,16 @@ public class TopicController {
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
+    @PutMapping("/api/topics")
+    public ResponseEntity<TopicDTO> update(@Valid @RequestBody TopicDTO topicDTO){
+        TopicDTO updated = service.update(topicDTO);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
+    }
 
+    @DeleteMapping("/api/topics/{id}")
+    public ResponseEntity<String> delete(@PathVariable String id){
+        service.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
+

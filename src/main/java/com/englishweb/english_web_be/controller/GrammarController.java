@@ -38,12 +38,12 @@ public class GrammarController {
     @PutMapping("/api/grammars")
     public ResponseEntity<GrammarDTO> update(@Valid @RequestBody GrammarDTO dto){
         GrammarDTO updated = service.update(dto);
-        return ResponseEntity.ok(updated);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
     @DeleteMapping("/api/grammars/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable String id){
         service.delete(id);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
