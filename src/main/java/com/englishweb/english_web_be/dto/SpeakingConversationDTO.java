@@ -8,16 +8,18 @@ public class SpeakingConversationDTO implements BaseDTO {
     int serial;
     String content;
     StatusEnum status;
+    String speakingId;
 
     public SpeakingConversationDTO() {
     }
 
-    public SpeakingConversationDTO(String id, String name, int serial, String content, StatusEnum status) {
+    public SpeakingConversationDTO(String id, String name, int serial, String content, StatusEnum status, String speakingId) {
         this.id = id;
         this.name = name;
         this.serial = serial;
         this.content = content;
         this.status = status;
+        this.speakingId = speakingId;
     }
 
     @Override
@@ -60,5 +62,13 @@ public class SpeakingConversationDTO implements BaseDTO {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public String getSpeakingId() {
+        return speakingId;
+    }
+
+    public void setSpeakingId(String speakingId) {
+        this.speakingId = speakingId;
     }
 }

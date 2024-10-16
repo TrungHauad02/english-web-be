@@ -12,8 +12,21 @@ public class VocabularyDTO implements BaseDTO {
     String meaning;
     WordTypeEnum wordType;
     StatusEnum status;
+    String topicId;
 
     public VocabularyDTO() {
+    }
+
+    public VocabularyDTO(String id, String example, String image, String word, String phonetic, String meaning, WordTypeEnum wordType, StatusEnum status, String topicId) {
+        this.id = id;
+        this.example = example;
+        this.image = image;
+        this.word = word;
+        this.phonetic = phonetic;
+        this.meaning = meaning;
+        this.wordType = wordType;
+        this.status = status;
+        this.topicId = topicId;
     }
 
     public VocabularyDTO(String id, String example, String image, String word, String phonetic, String meaning, WordTypeEnum wordType, StatusEnum status) {
@@ -91,5 +104,13 @@ public class VocabularyDTO implements BaseDTO {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public String getTopicId() {
+        return topicId;
+    }
+
+    public void setTopicId(String topicId) {
+        this.topicId = topicId;
     }
 }

@@ -21,8 +21,5 @@ public class VocabularyController {
         this.service = service;
     }
 
-    @GetMapping("/topics/vocabulary")
-    public Page<VocabularyDTO> retrieveVocabsInTopicByPage(@RequestParam int page,@RequestParam int pageSize, @RequestParam String topicId){
-        return service.retrieveVocabsInTopicByPage(page, pageSize, topicId);
-    }
+
 }

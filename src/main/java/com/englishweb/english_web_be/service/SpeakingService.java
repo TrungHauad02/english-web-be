@@ -10,26 +10,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SpeakingService {
-    SpeakingRepository repository;
+public class SpeakingService extends BaseService<Speaking, SpeakingDTO, SpeakingRepository> {
 
     public SpeakingService(SpeakingRepository repository) {
-        this.repository = repository;
+        super(repository);
     }
 
-    public Page<SpeakingDTO> retrieveSpeakingsByPage(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Speaking> speakings = repository.findAllSpeakings(pageable);
-        return speakings.map(this::convertToDTO);
-    }
-
-    public Page<SpeakingDTO> retrieveSpeakingsByPage(int page, int size, Sort sort) {
-        Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Speaking> speakings = repository.findAllSpeakings(pageable);
-        return speakings.map(this::convertToDTO);
-    }
-
-    private SpeakingDTO convertToDTO(Speaking entity) {
+    @Override
+    protected SpeakingDTO convertToDTO(Speaking entity) {
         SpeakingDTO dto = new SpeakingDTO();
         dto.setId(entity.getId());
         dto.setTitle(entity.getTitle());
@@ -38,5 +26,17 @@ public class SpeakingService {
         dto.setSerial(entity.getSerial());
         dto.setStatus(entity.getStatus());
         return dto;
+    }
+
+    @Override
+    protected Speaking convertToEntity(SpeakingDTO dto) {
+        Speaking entity = new Speaking();
+        entity.setId(dto.getId());
+        entity.setTitle(dto.getTitle());
+        entity.setDescription(dto.getDescription());
+        entity.setImage(dto.getImage());
+        entity.setSerial(dto.getSerial());
+        entity.setStatus(dto.getStatus());
+        return entity;
     }
 }

@@ -13,17 +13,6 @@ public class TopicService  extends BaseService<Topic, TopicDTO, TopicRepository>
     }
 
     @Override
-    protected Topic convertToEntity(TopicDTO dto){
-        Topic entity = new Topic();
-        entity.setTitle(dto.getTitle());
-        entity.setDescription(dto.getDescription());
-        entity.setImage(dto.getImage());
-        entity.setSerial(dto.getSerial());
-        entity.setStatus(dto.getStatus());
-        return entity;
-    }
-
-    @Override
     protected TopicDTO convertToDTO(Topic topic){
         TopicDTO dto = new TopicDTO();
         dto.setId(topic.getId());
@@ -33,5 +22,17 @@ public class TopicService  extends BaseService<Topic, TopicDTO, TopicRepository>
         dto.setSerial(topic.getSerial());
         dto.setStatus(topic.getStatus());
         return dto;
+    }
+
+    @Override
+    protected Topic convertToEntity(TopicDTO dto){
+        Topic entity = new Topic();
+        entity.setId(dto.getId());
+        entity.setTitle(dto.getTitle());
+        entity.setDescription(dto.getDescription());
+        entity.setImage(dto.getImage());
+        entity.setSerial(dto.getSerial());
+        entity.setStatus(dto.getStatus());
+        return entity;
     }
 }

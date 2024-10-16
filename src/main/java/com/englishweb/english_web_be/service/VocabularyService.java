@@ -13,28 +13,41 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class VocabularyService {
-    VocabularyRepository repository;
-    public VocabularyService(VocabularyRepository repository){
-        this.repository = repository;
+public class VocabularyService extends BaseService<Vocabulary, VocabularyDTO, VocabularyRepository>{
+    private final TopicService topicService;
+
+    public VocabularyService(VocabularyRepository repository, TopicService topicService){
+        super(repository);
+        this.topicService = topicService;
     }
 
-    public Page<VocabularyDTO> retrieveVocabsInTopicByPage(int page, int pageSize, String topicId){
-        Pageable pageable = PageRequest.of(page, pageSize);
-        Page<Vocabulary> entityPage = repository.retrieveVocabsInTopicByPage(pageable, topicId);
-        return entityPage.map(this::convertToDTO);
-    }
-
-    public VocabularyDTO convertToDTO(Vocabulary vocab){
+    @Override
+    protected VocabularyDTO convertToDTO(Vocabulary entity){
         VocabularyDTO dto = new VocabularyDTO();
-        dto.setId(vocab.getId());
-        dto.setWord(vocab.getWord());
-        dto.setMeaning(vocab.getMeaning());
-        dto.setWordType(vocab.getWordType());
-        dto.setPhonetic(vocab.getPhonetic());
-        dto.setStatus(vocab.getStatus());
-        dto.setImage(vocab.getImage());
-        dto.setExample(vocab.getExample());
+        dto.setId(entity.getId());
+        dto.setWord(entity.getWord());
+        dto.setMeaning(entity.getMeaning());
+        dto.setWordType(entity.getWordType());
+        dto.setPhonetic(entity.getPhonetic());
+        dto.setStatus(entity.getStatus());
+        dto.setImage(entity.getImage());
+        dto.setExample(entity.getExample());
+        dto.setTopicId(entity.getTopic().getId());
         return dto;
+    }
+
+    @Override
+    protected Vocabulary convertToEntity(VocabularyDTO dto){
+        Vocabulary entity = new Vocabulary();
+        entity.setId(dto.getId());
+        entity.setWord(dto.getWord());
+        entity.setMeaning(dto.getMeaning());
+        entity.setWordType(dto.getWordType());
+        entity.setPhonetic(dto.getPhonetic());
+        entity.setStatus(dto.getStatus());
+        entity.setImage(dto.getImage());
+        entity.setExample(dto.getExample());
+        entity.setTopic(topicService.convertToEntity(topicService.findById(dto.getTopicId())));
+        return entity;
     }
 }

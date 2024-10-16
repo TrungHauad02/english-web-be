@@ -9,13 +9,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class TopicQuestionService {
-    TopicQuestionRepository repository;
+public class TopicQuestionService extends BaseService<TopicQuestion, TopicQuestionDTO, TopicQuestionRepository> {
+    private final TopicService topicService;
     TopicAnswerService topicAnswerService;
 
-    public TopicQuestionService(TopicQuestionRepository repository, TopicAnswerService topicAnswerService) {
-        this.repository = repository;
+    public TopicQuestionService(TopicQuestionRepository repository, TopicAnswerService topicAnswerService, TopicService topicService) {
+        super(repository);
         this.topicAnswerService = topicAnswerService;
+        this.topicService = topicService;
     }
 
     public List<TopicQuestionDTO> retrieveTopicQuestionByTopicId(String topicId) {
@@ -25,14 +26,28 @@ public class TopicQuestionService {
                 .collect(Collectors.toList());
     }
 
-    private TopicQuestionDTO convertToDTO(TopicQuestion topicQuestion) {
+    @Override
+    protected TopicQuestionDTO convertToDTO(TopicQuestion entity) {
         TopicQuestionDTO dto = new TopicQuestionDTO();
-        dto.setId(topicQuestion.getId());
-        dto.setContent(topicQuestion.getContent());
-        dto.setSerial(topicQuestion.getSerial());
-        dto.setExplanation(topicQuestion.getExplanation());
-        dto.setStatus(topicQuestion.getStatus());
-        dto.setAnswers(topicAnswerService.findAllByQuestionId(topicQuestion.getId()));
+        dto.setId(entity.getId());
+        dto.setContent(entity.getContent());
+        dto.setSerial(entity.getSerial());
+        dto.setExplanation(entity.getExplanation());
+        dto.setStatus(entity.getStatus());
+        dto.setAnswers(topicAnswerService.findAllByQuestionId(entity.getId()));
+        dto.setTopicId(entity.getTopic().getId());
         return dto;
+    }
+
+    @Override
+    protected TopicQuestion convertToEntity(TopicQuestionDTO dto) {
+        TopicQuestion entity = new TopicQuestion();
+        entity.setId(dto.getId());
+        entity.setContent(dto.getContent());
+        entity.setSerial(dto.getSerial());
+        entity.setExplanation(dto.getExplanation());
+        entity.setStatus(dto.getStatus());
+        entity.setTopic(topicService.convertToEntity(topicService.findById(dto.getTopicId())));
+        return entity;
     }
 }

@@ -13,19 +13,6 @@ public class GrammarService extends BaseService<Grammar, GrammarDTO, GrammarRepo
     }
 
     @Override
-    protected Grammar convertToEntity(GrammarDTO grammarDTO) {
-        Grammar entity = new Grammar();
-        entity.setContent(grammarDTO.getContent());
-        entity.setExample(grammarDTO.getExample());
-        entity.setFile(grammarDTO.getFile());
-        entity.setImage(grammarDTO.getImage());
-        entity.setTitle(grammarDTO.getTitle());
-        entity.setSerial(grammarDTO.getSerial());
-        entity.setStatus(grammarDTO.getStatus());
-        return entity;
-    }
-
-    @Override
     protected GrammarDTO convertToDTO(Grammar entity) {
         GrammarDTO dto = new GrammarDTO();
         dto.setId(entity.getId());
@@ -37,5 +24,19 @@ public class GrammarService extends BaseService<Grammar, GrammarDTO, GrammarRepo
         dto.setSerial(entity.getSerial());
         dto.setStatus(entity.getStatus());
         return dto;
+    }
+
+    @Override
+    protected Grammar convertToEntity(GrammarDTO dto) {
+        Grammar entity = new Grammar();
+        entity.setId(dto.getId());
+        entity.setContent(dto.getContent());
+        entity.setExample(dto.getExample());
+        entity.setFile(dto.getFile());
+        entity.setImage(dto.getImage());
+        entity.setTitle(dto.getTitle());
+        entity.setSerial(dto.getSerial());
+        entity.setStatus(dto.getStatus());
+        return entity;
     }
 }

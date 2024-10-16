@@ -3,10 +3,6 @@ package com.englishweb.english_web_be.service;
 import com.englishweb.english_web_be.dto.ReadingDTO;
 import com.englishweb.english_web_be.model.Reading;
 import com.englishweb.english_web_be.repository.ReadingRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +15,7 @@ public class ReadingService extends BaseService<Reading, ReadingDTO, ReadingRepo
     @Override
     protected Reading convertToEntity(ReadingDTO dto){
         Reading entity = new Reading();
+        entity.setId(dto.getId());
         entity.setTitle(dto.getTitle());
         entity.setDescription(dto.getDescription());
         entity.setContent(dto.getContent());
