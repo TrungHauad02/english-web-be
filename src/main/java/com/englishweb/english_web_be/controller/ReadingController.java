@@ -14,28 +14,5 @@ public class ReadingController {
         this.service = service;
     }
 
-    @GetMapping("/readings")
-    public Page<ReadingDTO> retrieveReadingByPage(@RequestParam int page, @RequestParam int size) {
-        return service.retrieveReadingsByPage(page, size, Sort.by("serial"));
-    }
 
-    @GetMapping("/readings/{id}")
-    public ReadingDTO retrieveReadingById(@PathVariable String id) {
-        return service.retrieveReadingById(id);
-    }
-
-    @PostMapping("/readings")
-    public ReadingDTO createReading(@RequestBody ReadingDTO dto) {
-        return service.createReading(dto);
-    }
-
-    @PutMapping("/readings")
-    public ReadingDTO updateReading(@RequestBody ReadingDTO dto) {
-        return service.updateReading(dto);
-    }
-
-    @DeleteMapping("/reading/{id}")
-    public void deleteReading(@PathVariable String id) {
-        service.deleteReading(id);
-    }
 }

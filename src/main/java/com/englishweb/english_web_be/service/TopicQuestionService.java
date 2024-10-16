@@ -6,7 +6,6 @@ import com.englishweb.english_web_be.repository.TopicQuestionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TopicQuestionService extends BaseService<TopicQuestion, TopicQuestionDTO, TopicQuestionRepository> {
@@ -19,11 +18,11 @@ public class TopicQuestionService extends BaseService<TopicQuestion, TopicQuesti
         this.topicService = topicService;
     }
 
-    public List<TopicQuestionDTO> retrieveTopicQuestionByTopicId(String topicId) {
+    public List<TopicQuestionDTO> findTopicQuestionByTopicId(String topicId) {
         List<TopicQuestion> list = repository.findAllByTopic_Id(topicId);
         return list.stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

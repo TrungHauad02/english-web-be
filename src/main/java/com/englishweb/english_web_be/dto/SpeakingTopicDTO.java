@@ -1,10 +1,14 @@
 package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
 
 public class SpeakingTopicDTO implements BaseDTO {
     String id;
+    @NotBlank(message = "Topic cannot be empty")
     String topic;
+    @PositiveOrZero(message = "Duration number must be equal or greater than 0")
     int duration;
     StatusEnum status;
 
