@@ -15,19 +15,19 @@ public class GrammarAnswerController {
         this.service = service;
     }
 
-    @PostMapping("/api/topics-answer")
+    @PostMapping("/api/grammar-answer")
     public ResponseEntity<GrammarAnswerDTO> create(@Valid @RequestBody GrammarAnswerDTO dto) {
         GrammarAnswerDTO created = service.create(dto);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/topics-answer")
+    @PutMapping("/api/grammar-answer")
     public ResponseEntity<GrammarAnswerDTO> update(@Valid @RequestBody GrammarAnswerDTO dto){
         GrammarAnswerDTO updated = service.update(dto);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
-    @DeleteMapping("/api/topics-answer/{id}")
+    @DeleteMapping("/api/grammar-answer/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
