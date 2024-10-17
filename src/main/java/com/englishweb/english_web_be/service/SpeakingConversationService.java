@@ -3,7 +3,6 @@ package com.englishweb.english_web_be.service;
 import com.englishweb.english_web_be.dto.SpeakingConversationDTO;
 import com.englishweb.english_web_be.model.SpeakingConversation;
 import com.englishweb.english_web_be.repository.SpeakingConversationRepository;
-import com.englishweb.english_web_be.repository.SpeakingRepository;
 import com.englishweb.english_web_be.util.ValidationUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ public class SpeakingConversationService extends BaseService<SpeakingConversatio
         this.speakingService = speakingService;
     }
 
-    public List<SpeakingConversationDTO> findSpeakingConversationBySpeakingId(String speakingId) {
+    public List<SpeakingConversationDTO> findBySpeakingId(String speakingId) {
         ValidationUtils.getInstance().validateExistId(speakingService.repository, speakingId);
         List<SpeakingConversation> entityList = repository.findAllBySpeaking_Id(speakingId);
         return entityList.stream()

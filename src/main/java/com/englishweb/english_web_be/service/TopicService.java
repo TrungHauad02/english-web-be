@@ -23,7 +23,7 @@ public class TopicService  extends BaseService<Topic, TopicDTO, TopicRepository>
 
     @Override
     public void delete(String id){
-        List<TopicQuestionDTO> topicQuestionDTOList = topicQuestionService.findTopicQuestionByTopicId(id);
+        List<TopicQuestionDTO> topicQuestionDTOList = topicQuestionService.findAllByTopicId(id);
         for (TopicQuestionDTO topicQuestion : topicQuestionDTOList) {
             topicQuestionService.delete(topicQuestion.getId());
         }

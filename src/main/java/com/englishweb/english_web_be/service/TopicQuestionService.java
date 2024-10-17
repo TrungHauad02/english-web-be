@@ -21,7 +21,7 @@ public class TopicQuestionService extends BaseService<TopicQuestion, TopicQuesti
         this.topicService = topicService;
     }
 
-    public List<TopicQuestionDTO> findTopicQuestionByTopicId(String topicId) {
+    public List<TopicQuestionDTO> findAllByTopicId(String topicId) {
         ValidationUtils.getInstance().validateExistId(topicService.repository, topicId);
         List<TopicQuestion> list = repository.findAllByTopic_Id(topicId);
         return list.stream()

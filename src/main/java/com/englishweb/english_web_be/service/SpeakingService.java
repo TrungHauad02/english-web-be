@@ -5,10 +5,6 @@ import com.englishweb.english_web_be.dto.SpeakingDTO;
 import com.englishweb.english_web_be.dto.SpeakingTopicDTO;
 import com.englishweb.english_web_be.model.Speaking;
 import com.englishweb.english_web_be.repository.SpeakingRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +23,7 @@ public class SpeakingService extends BaseService<Speaking, SpeakingDTO, Speaking
 
     @Override
     public void delete(String id){
-        List<SpeakingConversationDTO> speakingConversationDTOList = speakingConversationService.findSpeakingConversationBySpeakingId(id);
+        List<SpeakingConversationDTO> speakingConversationDTOList = speakingConversationService.findBySpeakingId(id);
         for (SpeakingConversationDTO speakingConversationDTO : speakingConversationDTOList) {
             speakingConversationService.delete(speakingConversationDTO.getId());
         }

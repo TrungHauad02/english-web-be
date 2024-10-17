@@ -4,7 +4,6 @@ import com.englishweb.english_web_be.dto.ListenPracticeDTO;
 import com.englishweb.english_web_be.dto.ListeningQuestionDTO;
 import com.englishweb.english_web_be.model.ListenPractice;
 import com.englishweb.english_web_be.repository.ListenPracticeRepository;
-import com.englishweb.english_web_be.repository.ListeningRepository;
 import com.englishweb.english_web_be.util.ValidationUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,7 @@ public class ListenPracticeService extends BaseService<ListenPractice, ListenPra
         this.listeningQuestionService = listeningQuestionService;
     }
 
-    public ListenPracticeDTO findListenPracticeByListeningId(String listeningId) {
+    public ListenPracticeDTO findByListeningId(String listeningId) {
         ValidationUtils.getInstance().validateExistId(listeningService.repository, listeningId);
         ListenPractice entity = repository.findByListening_Id(listeningId);
         return convertToDTO(entity);
@@ -31,7 +30,7 @@ public class ListenPracticeService extends BaseService<ListenPractice, ListenPra
 
     @Override
     public void delete(String id){
-        List<ListeningQuestionDTO> questionDTOList = listeningQuestionService.findListeningQuestionsByListenPracticeId(id);
+        List<ListeningQuestionDTO> questionDTOList = listeningQuestionService.findByListenPracticeId(id);
         super.delete(id);
         for(ListeningQuestionDTO questionDTO : questionDTOList){
             listeningQuestionService.delete(questionDTO.getId());

@@ -20,7 +20,7 @@ public class TopicQuestionController {
 
     @GetMapping("/api/topics-question")
     public ResponseEntity<List<TopicQuestionDTO>> findAllQuestionByTopicId(@RequestParam String topicId) {
-        return new ResponseEntity<>(service.findTopicQuestionByTopicId(topicId), HttpStatus.OK);
+        return new ResponseEntity<>(service.findAllByTopicId(topicId), HttpStatus.OK);
     }
 
     @PostMapping("/api/topics-question")
@@ -36,7 +36,7 @@ public class TopicQuestionController {
     }
 
     @DeleteMapping("/api/topics-question/{id}")
-    public ResponseEntity<TopicQuestionDTO> delete(@PathVariable String id){
+    public ResponseEntity<Void> delete(@PathVariable String id){
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

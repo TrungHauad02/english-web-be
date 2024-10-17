@@ -23,7 +23,7 @@ public class ListeningService extends BaseService<Listening, ListeningDTO, Liste
 
     @Override
     public void delete(String id){
-        ListenPracticeDTO listenPracticeDTO = listenPracticeService.findListenPracticeByListeningId(id);
+        ListenPracticeDTO listenPracticeDTO = listenPracticeService.findByListeningId(id);
         listenPracticeService.delete(listenPracticeDTO.getId());
         List<ListenAndWriteAWordDTO> listenAndWriteAWordDTOList = listenAndWriteAWordService.findByListeningId(id);
         for (ListenAndWriteAWordDTO listenAndWriteAWordDTO : listenAndWriteAWordDTOList) {
