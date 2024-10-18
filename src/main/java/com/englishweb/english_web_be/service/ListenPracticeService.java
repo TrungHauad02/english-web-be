@@ -23,7 +23,7 @@ public class ListenPracticeService extends BaseService<ListenPractice, ListenPra
     }
 
     public ListenPracticeDTO findByListeningId(String listeningId) {
-        ValidationUtils.getInstance().validateExistId(listeningService.repository, listeningId);
+        listeningService.isExist(listeningId);
         ListenPractice entity = repository.findByListening_Id(listeningId);
         return convertToDTO(entity);
     }

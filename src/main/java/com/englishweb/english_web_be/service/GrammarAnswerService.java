@@ -20,7 +20,7 @@ public class GrammarAnswerService extends BaseService<GrammarAnswer, GrammarAnsw
     }
 
     public List<GrammarAnswerDTO> findAllByQuestionId(String questionId) {
-        ValidationUtils.getInstance().validateExistId(grammarQuestionService.repository, questionId);
+        grammarQuestionService.isExist(questionId);
         List<GrammarAnswer> entityList = repository.findAllByQuestion_Id(questionId);
         return entityList.stream()
                 .map(this::convertToDTO)

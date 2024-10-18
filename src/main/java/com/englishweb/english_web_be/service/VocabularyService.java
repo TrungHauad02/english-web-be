@@ -10,7 +10,6 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class VocabularyService extends BaseService<Vocabulary, VocabularyDTO, VocabularyRepository>{
@@ -33,7 +32,7 @@ public class VocabularyService extends BaseService<Vocabulary, VocabularyDTO, Vo
     }
 
     public List<VocabularyDTO> findByTopicId(String topicId){
-        ValidationUtils.getInstance().validateExistId(topicService.repository, topicId);
+        topicService.isExist(topicId);
         return repository.findAllByTopic_Id(topicId).stream()
                 .map(this::convertToDTO)
                 .toList();

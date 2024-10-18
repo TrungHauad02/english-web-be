@@ -26,7 +26,7 @@ public class TopicController {
     @GetMapping("/api/topics/{id}")
     public ResponseEntity<TopicDTO> findById(@PathVariable String id){
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
-    }
+    }   
 
     @PostMapping("/api/topics")
     public ResponseEntity<TopicDTO> create(@Valid @RequestBody TopicDTO topicDTO){

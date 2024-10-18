@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class VocabularyController {
 
@@ -32,6 +34,11 @@ public class VocabularyController {
                                                           @RequestParam(defaultValue = "asc") String sortDir,
                                                           @PathVariable String topicId){
         return new ResponseEntity<>(service.findByPageTopicId(page, size, sortBy, sortDir, VocabularyDTO.class, topicId), HttpStatus.OK);
+    }
+
+    @GetMapping("/api/vocabulary/topics/{topicId}")
+    public ResponseEntity<List<VocabularyDTO>> findByTopicId(@PathVariable String topicId){
+        return new ResponseEntity<>(service.findByTopicId(topicId), HttpStatus.OK);
     }
 
     @GetMapping("/api/vocabulary/{id}")

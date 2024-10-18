@@ -18,7 +18,7 @@ public class SpeakingTopicService extends BaseService<SpeakingTopic, SpeakingTop
     }
 
     public SpeakingTopicDTO findBySpeakingId(String speakingId) {
-        ValidationUtils.getInstance().validateExistId(speakingService.repository, speakingId);
+        speakingService.isExist(speakingId);
         SpeakingTopic speakingTopic = repository.findBySpeaking_Id(speakingId);
         return convertToDTO(speakingTopic);
     }

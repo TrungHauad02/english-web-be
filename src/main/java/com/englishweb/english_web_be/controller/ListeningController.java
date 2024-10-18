@@ -16,7 +16,7 @@ public class ListeningController {
         this.service = service;
     }
 
-    @GetMapping("/api/listening")
+    @GetMapping("/api/listenings")
     public ResponseEntity<Page<ListeningDTO>> findByPage(@RequestParam int page,
                                                          @RequestParam int size,
                                                          @RequestParam(defaultValue = "id") String sortBy,
@@ -24,24 +24,24 @@ public class ListeningController {
         return new ResponseEntity<>(service.findByPage(page, size, sortBy, sortDir,ListeningDTO.class), HttpStatus.OK);
     }
 
-    @GetMapping("/api/listening/{id}")
+    @GetMapping("/api/listenings/{id}")
     public ResponseEntity<ListeningDTO> findById(@PathVariable String id){
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/api/listening")
+    @PostMapping("/api/listenings")
     public ResponseEntity<ListeningDTO> save(@Valid @RequestBody ListeningDTO dto){
         ListeningDTO created = service.create(dto);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/listening")
+    @PutMapping("/api/listenings")
     public ResponseEntity<ListeningDTO> update(@Valid @RequestBody ListeningDTO dto){
         ListeningDTO updated = service.update(dto);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
-    @DeleteMapping("/api/listening/{id}")
+    @DeleteMapping("/api/listenings/{id}")
     public ResponseEntity<ListeningDTO> delete(@PathVariable String id){
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

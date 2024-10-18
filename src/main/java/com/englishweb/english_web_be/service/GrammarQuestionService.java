@@ -24,7 +24,7 @@ public class GrammarQuestionService extends BaseService<GrammarQuestion, Grammar
     }
 
     public List<GrammarQuestionDTO> findAllByGrammarId(String grammarId) {
-        ValidationUtils.getInstance().validateExistId(grammarService.repository, grammarId);
+        grammarService.isExist(grammarId);
         List<GrammarQuestion> entityList = repository.findAllByGrammar_Id(grammarId);
         return entityList.stream()
                 .map(this::convertToDTO)
