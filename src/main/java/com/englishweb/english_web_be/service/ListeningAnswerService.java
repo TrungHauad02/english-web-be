@@ -20,7 +20,7 @@ public class ListeningAnswerService extends BaseService<ListeningAnswer, Listeni
     }
 
     public List<ListeningAnswerDTO> findListeningAnswersByQuestionId(String questionId) {
-        ValidationUtils.getInstance().validateExistId(listeningQuestionService.repository, questionId);
+        listeningQuestionService.isExist(questionId);
         List<ListeningAnswer> enityList = repository.findAllByQuestion_Id(questionId);
         return enityList.stream()
                 .map(this::convertToDTO)

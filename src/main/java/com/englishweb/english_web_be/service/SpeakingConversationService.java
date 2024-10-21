@@ -19,7 +19,7 @@ public class SpeakingConversationService extends BaseService<SpeakingConversatio
     }
 
     public List<SpeakingConversationDTO> findBySpeakingId(String speakingId) {
-        ValidationUtils.getInstance().validateExistId(speakingService.repository, speakingId);
+        speakingService.isExist(speakingId);
         List<SpeakingConversation> entityList = repository.findAllBySpeaking_Id(speakingId);
         return entityList.stream()
                 .map(this::convertToDTO)

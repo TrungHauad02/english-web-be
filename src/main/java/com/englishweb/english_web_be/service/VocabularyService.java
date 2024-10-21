@@ -2,7 +2,6 @@ package com.englishweb.english_web_be.service;
 
 import com.englishweb.english_web_be.dto.VocabularyDTO;
 import com.englishweb.english_web_be.model.Vocabulary;
-import com.englishweb.english_web_be.repository.TopicRepository;
 import com.englishweb.english_web_be.repository.VocabularyRepository;
 import com.englishweb.english_web_be.util.ValidationUtils;
 import org.springframework.context.annotation.Lazy;
@@ -10,7 +9,6 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class VocabularyService extends BaseService<Vocabulary, VocabularyDTO, VocabularyRepository>{
@@ -23,7 +21,7 @@ public class VocabularyService extends BaseService<Vocabulary, VocabularyDTO, Vo
 
     public Page<VocabularyDTO> findByPageTopicId(int page, int size, String sortBy, String sortDir, Class<VocabularyDTO> dtoClass, String topicId){
         ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, dtoClass);
-        ValidationUtils.getInstance().validateExistId(topicService.repository, topicId);
+        topicService.isExist(topicId);
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
@@ -33,7 +31,7 @@ public class VocabularyService extends BaseService<Vocabulary, VocabularyDTO, Vo
     }
 
     public List<VocabularyDTO> findByTopicId(String topicId){
-        ValidationUtils.getInstance().validateExistId(topicService.repository, topicId);
+        topicService.isExist(topicId);
         return repository.findAllByTopic_Id(topicId).stream()
                 .map(this::convertToDTO)
                 .toList();

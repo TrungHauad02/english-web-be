@@ -21,7 +21,7 @@ public class ListenAndWriteAWordService extends BaseService<ListenAndWriteAWord,
     }
 
     public List<ListenAndWriteAWordDTO> findByListeningId(String listeningId) {
-        ValidationUtils.getInstance().validateExistId(listeningService.repository, listeningId);
+        listeningService.isExist(listeningId);
         List<ListenAndWriteAWord> entityList = repository.findAllByListening_Id(listeningId);
         return entityList.stream()
                 .map(this::convertToDTO)

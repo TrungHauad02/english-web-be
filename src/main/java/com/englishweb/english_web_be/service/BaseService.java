@@ -26,7 +26,7 @@ public abstract class BaseService<Entity extends BaseEntity, DTO extends BaseDTO
     }
 
     public DTO findById(String id) {
-        ValidationUtils.getInstance().validateExistId(repository, id);
+        isExist(id);
         return convertToDTO(repository.findById(id).get());
     }
 
@@ -37,13 +37,17 @@ public abstract class BaseService<Entity extends BaseEntity, DTO extends BaseDTO
     }
 
     public DTO update(DTO dto) {
-        ValidationUtils.getInstance().validateExistId(repository, dto.getId());
+        isExist(dto.getId());
         return convertToDTO(repository.save(convertToEntity(dto)));
     }
 
     public void delete(String id) {
-        ValidationUtils.getInstance().validateExistId(repository, id);
+        isExist(id);
         repository.deleteById(id);
+    }
+
+    public void isExist(String id) {
+        ValidationUtils.getInstance().validateExistId(repository, id);
     }
 
     protected abstract Entity convertToEntity(DTO dto);

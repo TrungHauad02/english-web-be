@@ -22,7 +22,7 @@ public class ListeningQuestionService extends BaseService<ListeningQuestion, Lis
     }
 
     public List<ListeningQuestionDTO> findByListenPracticeId(String listenPracticeId) {
-        ValidationUtils.getInstance().validateExistId(listenPracticeService.repository, listenPracticeId);
+        listenPracticeService.isExist(listenPracticeId);
         List<ListeningQuestion> entityList = repository.findAllByListenPractice_Id(listenPracticeId);
         return entityList.stream()
                 .map(this::convertToDTO)

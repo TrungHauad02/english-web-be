@@ -22,7 +22,7 @@ public class TopicQuestionService extends BaseService<TopicQuestion, TopicQuesti
     }
 
     public List<TopicQuestionDTO> findAllByTopicId(String topicId) {
-        ValidationUtils.getInstance().validateExistId(topicService.repository, topicId);
+        topicService.isExist(topicId);
         List<TopicQuestion> list = repository.findAllByTopic_Id(topicId);
         return list.stream()
                 .map(this::convertToDTO)
