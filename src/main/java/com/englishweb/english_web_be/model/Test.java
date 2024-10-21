@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-public class Test {
+public class Test implements BaseEntity {
     @Id
     private String id;
     private String title;
@@ -43,7 +43,7 @@ public class Test {
     public Test() {
     }
 
-    // Constructor
+
     public Test(String id, String title, int serial, int duration, TestTypeEnum type, StatusEnum status) {
         this.id = id;
         this.title = title;
@@ -53,7 +53,31 @@ public class Test {
         this.status = status;
     }
 
-    // Getters and Setters
+    public Test(String id, String title, int serial, int duration, TestTypeEnum type, StatusEnum status, List<TestListening> testListenings, List<TestReading> testReadings, List<TestVocabularyQuestion> testVocabularyQuestions, List<TestGrammarQuestion> testGrammarQuestions, List<TestWriting> testWritings, TestSpeaking testSpeaking) {
+        this.id = id;
+        this.title = title;
+        this.serial = serial;
+        this.duration = duration;
+        this.type = type;
+        this.status = status;
+        this.testListenings = testListenings;
+        this.testReadings = testReadings;
+        this.testVocabularyQuestions = testVocabularyQuestions;
+        this.testGrammarQuestions = testGrammarQuestions;
+        this.testWritings = testWritings;
+        this.testSpeaking = testSpeaking;
+    }
+
+    public Test(String id, String title, int serial, int duration, TestTypeEnum type, StatusEnum status, List<TestListening> testListenings) {
+        this.id = id;
+        this.title = title;
+        this.serial = serial;
+        this.duration = duration;
+        this.type = type;
+        this.status = status;
+        this.testListenings = testListenings;
+    }
+
     public String getId() {
         return id;
     }
@@ -150,7 +174,6 @@ public class Test {
         this.testSpeaking = testSpeaking;
     }
 
-    // Override toString() method for easy display
     @Override
     public String toString() {
         return "Test{" +
@@ -160,6 +183,12 @@ public class Test {
                 ", duration=" + duration +
                 ", type=" + type +
                 ", status=" + status +
+                ", testListenings=" + testListenings.toString() +
+                ", testReadings=" + testReadings.toString()  +
+                ", testVocabularyQuestions=" + testVocabularyQuestions.toString() +
+                ", testGrammarQuestions=" + testGrammarQuestions.toString() +
+                ", testWritings=" + testWritings.toString() +
+                ", testSpeaking=" + testSpeaking.toString() +
                 '}';
     }
 }

@@ -4,7 +4,7 @@ import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 
 import java.util.List;
 
-public class TestDTO {
+public class TestDTO implements BaseDTO {
     private String id;
     private String title;
     private int serial;

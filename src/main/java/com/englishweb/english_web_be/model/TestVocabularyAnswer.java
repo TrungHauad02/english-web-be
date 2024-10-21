@@ -7,7 +7,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class TestVocabularyAnswer {
+public class TestVocabularyAnswer implements BaseEntity {
     @Id
     private String id;
     private String content;

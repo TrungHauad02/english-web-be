@@ -38,7 +38,6 @@ public class TestListening {
         this.content = content;
         this.transcript = transcript;
         this.statusEnum = statusEnum;
-
         this.questions=questions;
     }
 
@@ -83,7 +82,7 @@ public class TestListening {
         this.content = content;
     }
 
-    public StatusEnum getStatusEnum() {
+    public StatusEnum getStatus() {
         return statusEnum;
     }
 
@@ -97,5 +96,17 @@ public class TestListening {
 
     public void setStatusEnum(StatusEnum statusEnum) {
         this.statusEnum = statusEnum;
+    }
+
+    @Override
+    public String toString() {
+        return "TestListening{" +
+                "id='" + id + '\'' +
+                ", serial=" + serial +
+                ", content='" + content + '\'' +
+                ", transcript='" + transcript + '\'' +
+                ", statusEnum=" + statusEnum ;
+
+
     }
 }

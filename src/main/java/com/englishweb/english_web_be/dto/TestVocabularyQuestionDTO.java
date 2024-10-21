@@ -5,14 +5,14 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 
 import java.util.List;
 
-public class TestVocabularyQuestionDTO
-{
+public class TestVocabularyQuestionDTO implements BaseDTO {
     private String id;
     private String content;
     private int serial;
     private String explantion;
     private StatusEnum status;
     private List<TestVocabularyAnswerDTO> answers;
+    private String testId;
 
     public TestVocabularyQuestionDTO() {
     }
@@ -24,6 +24,16 @@ public class TestVocabularyQuestionDTO
         this.explantion = explantion;
         this.status = status;
         this.answers = answers;
+    }
+
+    public TestVocabularyQuestionDTO(String id, String content, int serial, String explantion, List<TestVocabularyAnswerDTO> answers, StatusEnum status, String testId) {
+        this.id = id;
+        this.content = content;
+        this.serial = serial;
+        this.explantion = explantion;
+        this.answers = answers;
+        this.status = status;
+        this.testId = testId;
     }
 
     public String getId() {
@@ -72,6 +82,14 @@ public class TestVocabularyQuestionDTO
 
     public void setAnswers(List<TestVocabularyAnswerDTO> answers) {
         this.answers = answers;
+    }
+
+    public String getTestId() {
+        return testId;
+    }
+
+    public void setTestId(String testId) {
+        this.testId = testId;
     }
 
     @Override

@@ -13,6 +13,7 @@ public class TestGrammarQuestionDTO
     private String explantion;
     private StatusEnum status;
     private List<TestGrammarAnswerDTO> answers;
+    private String testId;
 
     public TestGrammarQuestionDTO() {
     }
@@ -24,6 +25,16 @@ public class TestGrammarQuestionDTO
         this.explantion = explantion;
         this.status = status;
         this.answers = answers;
+    }
+
+    public TestGrammarQuestionDTO(String id, String content, int serial, String explantion, StatusEnum status, List<TestGrammarAnswerDTO> answers, String testId) {
+        this.id = id;
+        this.content = content;
+        this.serial = serial;
+        this.explantion = explantion;
+        this.status = status;
+        this.answers = answers;
+        this.testId = testId;
     }
 
     public String getId() {
@@ -72,6 +83,14 @@ public class TestGrammarQuestionDTO
 
     public void setAnswers(List<TestGrammarAnswerDTO> answers) {
         this.answers = answers;
+    }
+
+    public String getTestId() {
+        return testId;
+    }
+
+    public void setTestId(String testId) {
+        this.testId = testId;
     }
 
     @Override

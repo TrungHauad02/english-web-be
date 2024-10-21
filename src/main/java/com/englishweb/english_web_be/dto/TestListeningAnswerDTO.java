@@ -7,6 +7,7 @@ public class TestListeningAnswerDTO {
     private String content;
     private Boolean isCorrect;
     private StatusEnum status;
+    private String testQuestionListeningId;
 
     public TestListeningAnswerDTO() {
     }
@@ -15,6 +16,14 @@ public class TestListeningAnswerDTO {
         this.id = id;
         this.content = content;
         this.isCorrect = isCorrect;
+    }
+
+    public TestListeningAnswerDTO(String id, String content, Boolean isCorrect, StatusEnum status, String testQuestionListeningId) {
+        this.id = id;
+        this.content = content;
+        this.isCorrect = isCorrect;
+        this.status = status;
+        this.testQuestionListeningId = testQuestionListeningId;
     }
 
     public TestListeningAnswerDTO(String id, String content, Boolean isCorrect, StatusEnum status) {
@@ -46,6 +55,22 @@ public class TestListeningAnswerDTO {
 
     public void setIsCorrect(Boolean correct) {
         isCorrect = correct;
+    }
+
+    public StatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusEnum status) {
+        this.status = status;
+    }
+
+    public String getTestQuestionListeningId() {
+        return testQuestionListeningId;
+    }
+
+    public void setTestQuestionListeningId(String testQuestionListeningId) {
+        this.testQuestionListeningId = testQuestionListeningId;
     }
 
     @Override

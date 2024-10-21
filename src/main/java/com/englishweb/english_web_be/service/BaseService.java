@@ -38,7 +38,11 @@ public abstract class BaseService<Entity extends BaseEntity, DTO extends BaseDTO
         ValidationUtils.getInstance().validateExistId(repository, dto.getId());
         Entity entity = convertToEntity(dto);
         entity.setId(dto.getId());
-        return convertToDTO(repository.save(entity));
+        System.out.println("Du lieu dto:" + dto.toString());
+        System.out.println("Du lieu entity id:" + entity.getId());
+        System.out.println("Du lieu entity:" + entity.toString());
+
+        return convertToDTO(  repository.save(entity));
     }
 
     public void delete(String id) {

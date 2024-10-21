@@ -32,6 +32,15 @@ public class TestGrammarQuestion {
         this.status = status;
     }
 
+    public TestGrammarQuestion(String id, String content, int serial, String explantion, StatusEnum status, List<TestGrammarAnswer> answers) {
+        this.id = id;
+        this.content = content;
+        this.serial = serial;
+        this.explantion = explantion;
+        this.status = status;
+        this.answers = answers;
+    }
+
     public String getId() {
         return id;
     }

@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-public class TestVocabularyQuestion {
+public class TestVocabularyQuestion implements BaseEntity {
     @Id
     private String id;
     private String content;
@@ -30,6 +30,15 @@ public class TestVocabularyQuestion {
         this.serial = serial;
         this.explantion = explantion;
         this.status = status;
+    }
+
+    public TestVocabularyQuestion(String id, String content, int serial, String explantion, StatusEnum status, List<TestVocabularyAnswer> answers) {
+        this.id = id;
+        this.content = content;
+        this.serial = serial;
+        this.explantion = explantion;
+        this.status = status;
+        this.answers = answers;
     }
 
     public String getId() {

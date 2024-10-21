@@ -11,6 +11,7 @@ public class TestSpeakingDTO {
     private String title;
     private StatusEnum statusEnum;
     private List<TestSpeakingQuestionDTO> questions;
+    private String testId;
 
     public TestSpeakingDTO() {
     }
@@ -20,6 +21,14 @@ public class TestSpeakingDTO {
         this.title = title;
         this.statusEnum = statusEnum;
         this.questions = questions;
+    }
+
+    public TestSpeakingDTO(String id, String title, StatusEnum statusEnum, List<TestSpeakingQuestionDTO> questions, String testId) {
+        this.id = id;
+        this.title = title;
+        this.statusEnum = statusEnum;
+        this.questions = questions;
+        this.testId = testId;
     }
 
     public String getId() {
@@ -52,6 +61,14 @@ public class TestSpeakingDTO {
 
     public void setQuestions(List<TestSpeakingQuestionDTO> questions) {
         this.questions = questions;
+    }
+
+    public String getTestId() {
+        return testId;
+    }
+
+    public void setTestId(String testId) {
+        this.testId = testId;
     }
 
     @Override

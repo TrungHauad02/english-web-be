@@ -8,7 +8,7 @@ public class TestWritingDTO {
     private int serial;
     private String content;
     private StatusEnum statusEnum;
-
+    private String testId;
 
     public TestWritingDTO() {
     }
@@ -20,6 +20,13 @@ public class TestWritingDTO {
         this.statusEnum = statusEnum;
     }
 
+    public TestWritingDTO(String id, int serial, String content, StatusEnum statusEnum, String testId) {
+        this.id = id;
+        this.serial = serial;
+        this.content = content;
+        this.statusEnum = statusEnum;
+        this.testId = testId;
+    }
 
     public String getId() {
         return id;
@@ -51,6 +58,14 @@ public class TestWritingDTO {
 
     public void setStatusEnum(StatusEnum statusEnum) {
         this.statusEnum = statusEnum;
+    }
+
+    public String getTestId() {
+        return testId;
+    }
+
+    public void setTestId(String testId) {
+        this.testId = testId;
     }
 
     @Override

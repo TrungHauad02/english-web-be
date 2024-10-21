@@ -27,11 +27,10 @@ public class TestSpeaking {
         this.statusEnum = statusEnum;
     }
 
-    public TestSpeaking(String id, String title, StatusEnum statusEnum, Test test, List<TestSpeakingQuestion> questions) {
+    public TestSpeaking(String id, String title, StatusEnum statusEnum, List<TestSpeakingQuestion> questions) {
         this.id = id;
         this.title = title;
         this.statusEnum = statusEnum;
-        this.test = test;
         this.questions = questions;
     }
 
