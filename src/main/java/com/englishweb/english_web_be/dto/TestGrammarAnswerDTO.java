@@ -6,9 +6,18 @@ public class TestGrammarAnswerDTO {
     private String id;
     private String content;
     private Boolean isCorrect;
-    StatusEnum status;
+    private StatusEnum status;
+    private String testQuestionGrammarId;
 
     public TestGrammarAnswerDTO() {
+    }
+
+    public TestGrammarAnswerDTO(String id, String content, Boolean isCorrect, StatusEnum status, String testQuestionGrammarId) {
+        this.id = id;
+        this.content = content;
+        this.isCorrect = isCorrect;
+        this.status = status;
+        this.testQuestionGrammarId = testQuestionGrammarId;
     }
 
     public TestGrammarAnswerDTO(String id, String content, Boolean isCorrect, StatusEnum status) {
@@ -48,6 +57,14 @@ public class TestGrammarAnswerDTO {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public String getTestQuestionGrammarId() {
+        return testQuestionGrammarId;
+    }
+
+    public void setTestQuestionGrammarId(String testQuestionGrammarId) {
+        this.testQuestionGrammarId = testQuestionGrammarId;
     }
 
     @Override

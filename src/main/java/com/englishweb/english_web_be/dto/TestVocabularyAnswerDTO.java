@@ -2,11 +2,12 @@ package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 
-public class TestVocabularyAnswerDTO {
+public class TestVocabularyAnswerDTO implements BaseDTO {
     private String id;
     private String content;
     private Boolean isCorrect;
-    StatusEnum status;
+    private StatusEnum status;
+    private String testIdQuestionVocabulary;
 
     public TestVocabularyAnswerDTO() {
     }
@@ -16,6 +17,14 @@ public class TestVocabularyAnswerDTO {
         this.content = content;
         this.isCorrect = isCorrect;
         this.status = status;
+    }
+
+    public TestVocabularyAnswerDTO(String id, String content, Boolean isCorrect, StatusEnum status, String testIdQuestionVocabulary) {
+        this.id = id;
+        this.content = content;
+        this.isCorrect = isCorrect;
+        this.status = status;
+        this.testIdQuestionVocabulary = testIdQuestionVocabulary;
     }
 
     public String getId() {
@@ -48,6 +57,14 @@ public class TestVocabularyAnswerDTO {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public String getTestIdQuestionVocabulary() {
+        return testIdQuestionVocabulary;
+    }
+
+    public void setTestIdQuestionVocabulary(String testIdQuestionVocabulary) {
+        this.testIdQuestionVocabulary = testIdQuestionVocabulary;
     }
 
     @Override

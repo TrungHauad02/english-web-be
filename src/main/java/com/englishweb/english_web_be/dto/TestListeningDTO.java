@@ -1,5 +1,7 @@
 package com.englishweb.english_web_be.dto;
 
+import com.englishweb.english_web_be.modelenum.StatusEnum;
+
 import java.util.List;
 
 public class TestListeningDTO {
@@ -7,17 +9,30 @@ public class TestListeningDTO {
     private int serial;
     private String content;
     private String transcript;
+    private StatusEnum status;
     private List<TestListeningQuestionDTO> questions;
+    private String testId;
 
     public TestListeningDTO() {
     }
 
-    public TestListeningDTO(String id, int serial, String content, String transcript, List<TestListeningQuestionDTO> questions) {
+    public TestListeningDTO(String id, int serial, String content, String transcript, StatusEnum status, List<TestListeningQuestionDTO> questions) {
         this.id = id;
         this.serial = serial;
         this.content = content;
         this.transcript = transcript;
         this.questions = questions;
+        this.status = status;
+    }
+
+    public TestListeningDTO(String id, int serial, String content, String transcript, StatusEnum status, List<TestListeningQuestionDTO> questions, String testId) {
+        this.id = id;
+        this.serial = serial;
+        this.content = content;
+        this.transcript = transcript;
+        this.status = status;
+        this.questions = questions;
+        this.testId = testId;
     }
 
     public String getId() {
@@ -52,12 +67,28 @@ public class TestListeningDTO {
         this.transcript = transcript;
     }
 
+    public StatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusEnum status) {
+        this.status = status;
+    }
+
     public List<TestListeningQuestionDTO> getQuestions() {
         return questions;
     }
 
     public void setQuestions(List<TestListeningQuestionDTO> questions) {
         this.questions = questions;
+    }
+
+    public String getTestId() {
+        return testId;
+    }
+
+    public void setTestId(String testId) {
+        this.testId = testId;
     }
 
     @Override

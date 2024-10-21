@@ -12,7 +12,7 @@ public class TestReading {
     private int serial;
     private String content;
     private String image;
-    private StatusEnum statusEnum;
+    private StatusEnum status;
     @ManyToOne
     @JoinColumn(name = "test_id")
     private Test test;
@@ -29,9 +29,17 @@ public class TestReading {
         this.serial = serial;
         this.content = content;
         this.image = image;
-        this.statusEnum = statusEnum;
+        this.status = statusEnum;
     }
 
+    public TestReading(String id, int serial, String content, String image, StatusEnum statusEnum, List<TestReadingQuestion> questions) {
+        this.id = id;
+        this.serial = serial;
+        this.content = content;
+        this.image = image;
+        this.status = statusEnum;
+        this.questions = questions;
+    }
 
     public void setImage(String image) {
         this.image = image;
@@ -78,19 +86,15 @@ public class TestReading {
         this.content = content;
     }
 
-    public StatusEnum getStatusEnum() {
-        return statusEnum;
+    public StatusEnum getStatus() {
+        return status;
     }
 
     public String getImage() {
         return image;
     }
 
-    public void setImaget(String image) {
-        this.image = image;
-    }
-
-    public void setStatusEnum(StatusEnum statusEnum) {
-        this.statusEnum = statusEnum;
+    public void setStatus(StatusEnum statusEnum) {
+        this.status = statusEnum;
     }
 }

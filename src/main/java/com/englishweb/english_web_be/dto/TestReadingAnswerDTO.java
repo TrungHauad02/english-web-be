@@ -7,6 +7,7 @@ public class TestReadingAnswerDTO {
     private String content;
     private Boolean isCorrect;
     private StatusEnum status;
+    private String testQuestionReadingId;
 
     public TestReadingAnswerDTO() {
     }
@@ -15,6 +16,14 @@ public class TestReadingAnswerDTO {
         this.id = id;
         this.content = content;
         this.isCorrect = isCorrect;
+    }
+
+    public TestReadingAnswerDTO(String id, String content, Boolean isCorrect, StatusEnum status, String testQuestionReadingId) {
+        this.id = id;
+        this.content = content;
+        this.isCorrect = isCorrect;
+        this.status = status;
+        this.testQuestionReadingId = testQuestionReadingId;
     }
 
     public TestReadingAnswerDTO(String id, String content, Boolean isCorrect, StatusEnum status) {
@@ -56,6 +65,13 @@ public class TestReadingAnswerDTO {
         this.content = content;
     }
 
+    public String getTestQuestionReadingId() {
+        return testQuestionReadingId;
+    }
+
+    public void setTestQuestionReadingId(String testQuestionReadingId) {
+        this.testQuestionReadingId = testQuestionReadingId;
+    }
 
     @Override
     public String toString() {

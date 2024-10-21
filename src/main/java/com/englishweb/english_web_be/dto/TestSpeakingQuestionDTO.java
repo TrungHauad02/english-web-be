@@ -11,6 +11,7 @@ public class TestSpeakingQuestionDTO {
     private String content;
     private int serial;
     private StatusEnum status;
+    private String testSpeakingId;
 
 
 
@@ -19,6 +20,14 @@ public class TestSpeakingQuestionDTO {
         this.content = content;
         this.serial = serial;
         this.status = status;
+    }
+
+    public TestSpeakingQuestionDTO(String id, String content, int serial, StatusEnum status, String testSpeakingId) {
+        this.id = id;
+        this.content = content;
+        this.serial = serial;
+        this.status = status;
+        this.testSpeakingId = testSpeakingId;
     }
 
     public TestSpeakingQuestionDTO() {
@@ -56,6 +65,14 @@ public class TestSpeakingQuestionDTO {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public String getTestSpeakingId() {
+        return testSpeakingId;
+    }
+
+    public void setTestSpeakingId(String testSpeakingId) {
+        this.testSpeakingId = testSpeakingId;
     }
 
     @Override
