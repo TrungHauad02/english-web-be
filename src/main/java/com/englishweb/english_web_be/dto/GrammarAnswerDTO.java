@@ -1,21 +1,28 @@
 package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class GrammarAnswerDTO implements BaseDTO {
     String id;
+    @NotBlank(message = "Content cannot be empty")
     String content;
-    boolean isCorrect;
+    @NotNull(message = "Correct cannot be null")
+    boolean correct;
     StatusEnum status;
+    @NotNull(message = "Question id cannot be null")
+    String questionId;
 
     public GrammarAnswerDTO() {
     }
 
-    public GrammarAnswerDTO(String id, String content, boolean isCorrect, StatusEnum status) {
+    public GrammarAnswerDTO(String id, String content, boolean correct, StatusEnum status, String questionId) {
         this.id = id;
         this.content = content;
-        this.isCorrect = isCorrect;
+        this.correct = correct;
         this.status = status;
+        this.questionId = questionId;
     }
 
     @Override
@@ -37,11 +44,11 @@ public class GrammarAnswerDTO implements BaseDTO {
     }
 
     public boolean isCorrect() {
-        return isCorrect;
+        return correct;
     }
 
     public void setCorrect(boolean correct) {
-        isCorrect = correct;
+        this.correct = correct;
     }
 
     public StatusEnum getStatus() {
@@ -50,5 +57,13 @@ public class GrammarAnswerDTO implements BaseDTO {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public String getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(String questionId) {
+        this.questionId = questionId;
     }
 }

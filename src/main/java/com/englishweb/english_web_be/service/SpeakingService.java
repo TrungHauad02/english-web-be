@@ -1,35 +1,39 @@
 package com.englishweb.english_web_be.service;
 
+import com.englishweb.english_web_be.dto.SpeakingConversationDTO;
 import com.englishweb.english_web_be.dto.SpeakingDTO;
+import com.englishweb.english_web_be.dto.SpeakingTopicDTO;
 import com.englishweb.english_web_be.model.Speaking;
 import com.englishweb.english_web_be.repository.SpeakingRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class SpeakingService {
-    SpeakingRepository repository;
+public class SpeakingService extends BaseService<Speaking, SpeakingDTO, SpeakingRepository> {
 
-    public SpeakingService(SpeakingRepository repository) {
-        this.repository = repository;
+    private final SpeakingConversationService speakingConversationService;
+    private final SpeakingTopicService speakingTopicService;
+
+    public SpeakingService(SpeakingRepository repository, SpeakingConversationService speakingConversationService, SpeakingTopicService speakingTopicService) {
+        super(repository);
+        this.speakingConversationService = speakingConversationService;
+        this.speakingTopicService = speakingTopicService;
     }
 
-    public Page<SpeakingDTO> retrieveSpeakingsByPage(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Speaking> speakings = repository.findAllSpeakings(pageable);
-        return speakings.map(this::convertToDTO);
+    @Override
+    public void delete(String id){
+        List<SpeakingConversationDTO> speakingConversationDTOList = speakingConversationService.findBySpeakingId(id);
+        for (SpeakingConversationDTO speakingConversationDTO : speakingConversationDTOList) {
+            speakingConversationService.delete(speakingConversationDTO.getId());
+        }
+        SpeakingTopicDTO speakingTopicDTO = speakingTopicService.findBySpeakingId(id);
+        speakingTopicService.delete(speakingTopicDTO.getId());
+        super.delete(id);
     }
 
-    public Page<SpeakingDTO> retrieveSpeakingsByPage(int page, int size, Sort sort) {
-        Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Speaking> speakings = repository.findAllSpeakings(pageable);
-        return speakings.map(this::convertToDTO);
-    }
-
-    private SpeakingDTO convertToDTO(Speaking entity) {
+    @Override
+    protected SpeakingDTO convertToDTO(Speaking entity) {
         SpeakingDTO dto = new SpeakingDTO();
         dto.setId(entity.getId());
         dto.setTitle(entity.getTitle());
@@ -38,5 +42,17 @@ public class SpeakingService {
         dto.setSerial(entity.getSerial());
         dto.setStatus(entity.getStatus());
         return dto;
+    }
+
+    @Override
+    protected Speaking convertToEntity(SpeakingDTO dto) {
+        Speaking entity = new Speaking();
+        entity.setId(dto.getId());
+        entity.setTitle(dto.getTitle());
+        entity.setDescription(dto.getDescription());
+        entity.setImage(dto.getImage());
+        entity.setSerial(dto.getSerial());
+        entity.setStatus(dto.getStatus());
+        return entity;
     }
 }

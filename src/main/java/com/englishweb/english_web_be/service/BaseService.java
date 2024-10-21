@@ -26,28 +26,28 @@ public abstract class BaseService<Entity extends BaseEntity, DTO extends BaseDTO
     }
 
     public DTO findById(String id) {
-        ValidationUtils.getInstance().validateExistId(repository, id);
+        isExist(id);
         return convertToDTO(repository.findById(id).get());
     }
 
     public DTO create(DTO dto) {
-        return convertToDTO(repository.save(convertToEntity(dto)));
+        Entity entity = convertToEntity(dto);
+        entity.setId(null);
+        return convertToDTO(repository.save(entity));
     }
 
     public DTO update(DTO dto) {
-        ValidationUtils.getInstance().validateExistId(repository, dto.getId());
-        Entity entity = convertToEntity(dto);
-        entity.setId(dto.getId());
-        System.out.println("Du lieu dto:" + dto.toString());
-        System.out.println("Du lieu entity id:" + entity.getId());
-        System.out.println("Du lieu entity:" + entity.toString());
-
-        return convertToDTO(  repository.save(entity));
+        isExist(dto.getId());
+        return convertToDTO(repository.save(convertToEntity(dto)));
     }
 
     public void delete(String id) {
-        ValidationUtils.getInstance().validateExistId(repository, id);
+        isExist(id);
         repository.deleteById(id);
+    }
+
+    public void isExist(String id) {
+        ValidationUtils.getInstance().validateExistId(repository, id);
     }
 
     protected abstract Entity convertToEntity(DTO dto);

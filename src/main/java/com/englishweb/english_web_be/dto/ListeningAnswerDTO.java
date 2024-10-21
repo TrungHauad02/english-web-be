@@ -1,20 +1,34 @@
 package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class ListeningAnswerDTO implements BaseDTO {
     String id;
+    @NotBlank(message = "Content cannot be empty")
     String content;
-    boolean isCorrect;
+    @NotNull(message = "IsCorrect cannot be null")
+    boolean correct;
     StatusEnum status;
+    @NotBlank(message = "Listening question id cannot be empty")
+    String listeningQuestionId;
 
     public ListeningAnswerDTO() {
     }
 
-    public ListeningAnswerDTO(String id, String content, boolean isCorrect, StatusEnum status) {
+    public ListeningAnswerDTO(String id, String content, boolean correct, StatusEnum status, String listeningQuestionId) {
         this.id = id;
         this.content = content;
-        this.isCorrect = isCorrect;
+        this.correct = correct;
+        this.status = status;
+        this.listeningQuestionId = listeningQuestionId;
+    }
+
+    public ListeningAnswerDTO(String id, String content, boolean correct, StatusEnum status) {
+        this.id = id;
+        this.content = content;
+        this.correct = correct;
         this.status = status;
     }
 
@@ -37,11 +51,11 @@ public class ListeningAnswerDTO implements BaseDTO {
     }
 
     public boolean isCorrect() {
-        return isCorrect;
+        return correct;
     }
 
     public void setCorrect(boolean correct) {
-        isCorrect = correct;
+        this.correct = correct;
     }
 
     public StatusEnum getStatus() {
@@ -50,5 +64,13 @@ public class ListeningAnswerDTO implements BaseDTO {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public String getListeningQuestionId() {
+        return listeningQuestionId;
+    }
+
+    public void setListeningQuestionId(String listeningQuestionId) {
+        this.listeningQuestionId = listeningQuestionId;
     }
 }

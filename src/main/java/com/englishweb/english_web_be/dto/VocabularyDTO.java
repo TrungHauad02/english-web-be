@@ -2,18 +2,39 @@ package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.modelenum.WordTypeEnum;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class VocabularyDTO implements BaseDTO {
     String id;
+    @NotBlank(message = "Example cannot be empty")
     String example;
+    @NotBlank(message = "Image cannot be empty")
     String image;
+    @NotBlank(message = "Word cannot be empty")
     String word;
+    @NotBlank(message = "Phonetic cannot be empty")
     String phonetic;
+    @NotBlank(message = "Meaning cannot be empty")
     String meaning;
     WordTypeEnum wordType;
     StatusEnum status;
+    @NotBlank(message = "Topic id cannot be empty")
+    String topicId;
 
     public VocabularyDTO() {
+    }
+
+    public VocabularyDTO(String id, String example, String image, String word, String phonetic, String meaning, WordTypeEnum wordType, StatusEnum status, String topicId) {
+        this.id = id;
+        this.example = example;
+        this.image = image;
+        this.word = word;
+        this.phonetic = phonetic;
+        this.meaning = meaning;
+        this.wordType = wordType;
+        this.status = status;
+        this.topicId = topicId;
     }
 
     public VocabularyDTO(String id, String example, String image, String word, String phonetic, String meaning, WordTypeEnum wordType, StatusEnum status) {
@@ -91,5 +112,13 @@ public class VocabularyDTO implements BaseDTO {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public String getTopicId() {
+        return topicId;
+    }
+
+    public void setTopicId(String topicId) {
+        this.topicId = topicId;
     }
 }

@@ -1,17 +1,38 @@
 package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 public class ListenAndWriteAWordDTO implements BaseDTO {
     String id;
+    @Positive(message = "Serial number must be greater than 0")
     int serial;
+    @NotBlank(message = "Audio url cannot be empty")
     String audioUrl;
+    @NotBlank(message = "Sentence cannot be empty")
     String sentence;
+    @PositiveOrZero(message = "Serial number must be equal or greater than 0")
     int missingIndex;
+    @NotBlank(message = "Correct answer cannot be empty")
     String correctAnswer;
     StatusEnum status;
+    @NotBlank(message = "Listening id cannot be empty")
+    String listeningId;
 
     public ListenAndWriteAWordDTO() {
+    }
+
+    public ListenAndWriteAWordDTO(String id, int serial, String audioUrl, String sentence, int missingIndex, String correctAnswer, StatusEnum status, String listeningId) {
+        this.id = id;
+        this.serial = serial;
+        this.audioUrl = audioUrl;
+        this.sentence = sentence;
+        this.missingIndex = missingIndex;
+        this.correctAnswer = correctAnswer;
+        this.status = status;
+        this.listeningId = listeningId;
     }
 
     public ListenAndWriteAWordDTO(String id, int serial, String audioUrl, String sentence, int missingIndex, String correctAnswer, StatusEnum status) {
@@ -80,5 +101,13 @@ public class ListenAndWriteAWordDTO implements BaseDTO {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public String getListeningId() {
+        return listeningId;
+    }
+
+    public void setListeningId(String listeningId) {
+        this.listeningId = listeningId;
     }
 }

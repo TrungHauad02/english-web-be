@@ -1,38 +1,65 @@
 package com.englishweb.english_web_be.service;
 
+import com.englishweb.english_web_be.dto.TopicAnswerDTO;
 import com.englishweb.english_web_be.dto.TopicQuestionDTO;
 import com.englishweb.english_web_be.model.TopicQuestion;
 import com.englishweb.english_web_be.repository.TopicQuestionRepository;
+import com.englishweb.english_web_be.util.ValidationUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
-public class TopicQuestionService {
-    TopicQuestionRepository repository;
-    TopicAnswerService topicAnswerService;
+public class TopicQuestionService extends BaseService<TopicQuestion, TopicQuestionDTO, TopicQuestionRepository> {
+    private final TopicService topicService;
+    private final TopicAnswerService topicAnswerService;
 
-    public TopicQuestionService(TopicQuestionRepository repository, TopicAnswerService topicAnswerService) {
-        this.repository = repository;
+    public TopicQuestionService(TopicQuestionRepository repository, TopicAnswerService topicAnswerService, @Lazy TopicService topicService) {
+        super(repository);
         this.topicAnswerService = topicAnswerService;
+        this.topicService = topicService;
     }
 
-    public List<TopicQuestionDTO> retrieveTopicQuestionByTopicId(String topicId) {
+    public List<TopicQuestionDTO> findAllByTopicId(String topicId) {
+        topicService.isExist(topicId);
         List<TopicQuestion> list = repository.findAllByTopic_Id(topicId);
         return list.stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
-    private TopicQuestionDTO convertToDTO(TopicQuestion topicQuestion) {
+    @Override
+    public void delete(String id){
+        List<TopicAnswerDTO> answerDTOList = topicAnswerService.findAllByQuestionId(id);
+        for(TopicAnswerDTO answerDTO : answerDTOList){
+            topicAnswerService.delete(answerDTO.getId());
+        }
+        super.delete(id);
+    }
+
+    @Override
+    protected TopicQuestionDTO convertToDTO(TopicQuestion entity) {
         TopicQuestionDTO dto = new TopicQuestionDTO();
-        dto.setId(topicQuestion.getId());
-        dto.setContent(topicQuestion.getContent());
-        dto.setSerial(topicQuestion.getSerial());
-        dto.setExplanation(topicQuestion.getExplanation());
-        dto.setStatus(topicQuestion.getStatus());
-        dto.setAnswers(topicAnswerService.findAllByQuestionId(topicQuestion.getId()));
+        dto.setId(entity.getId());
+        dto.setContent(entity.getContent());
+        dto.setSerial(entity.getSerial());
+        dto.setExplanation(entity.getExplanation());
+        dto.setStatus(entity.getStatus());
+        dto.setAnswers(topicAnswerService.findAllByQuestionId(entity.getId()));
+        dto.setTopicId(entity.getTopic().getId());
         return dto;
+    }
+
+    @Override
+    protected TopicQuestion convertToEntity(TopicQuestionDTO dto) {
+        TopicQuestion entity = new TopicQuestion();
+        entity.setId(dto.getId());
+        entity.setContent(dto.getContent());
+        entity.setSerial(dto.getSerial());
+        entity.setExplanation(dto.getExplanation());
+        entity.setStatus(dto.getStatus());
+        entity.setTopic(topicService.convertToEntity(topicService.findById(dto.getTopicId())));
+        return entity;
     }
 }

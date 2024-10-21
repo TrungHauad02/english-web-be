@@ -1,35 +1,39 @@
 package com.englishweb.english_web_be.service;
 
+import com.englishweb.english_web_be.dto.ListenAndWriteAWordDTO;
+import com.englishweb.english_web_be.dto.ListenPracticeDTO;
 import com.englishweb.english_web_be.dto.ListeningDTO;
 import com.englishweb.english_web_be.model.Listening;
 import com.englishweb.english_web_be.repository.ListeningRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class ListeningService {
-    ListeningRepository repository;
+public class ListeningService extends BaseService<Listening, ListeningDTO, ListeningRepository> {
 
-    public ListeningService(ListeningRepository repository) {
-        this.repository = repository;
+    private final ListenPracticeService listenPracticeService;
+    private final ListenAndWriteAWordService listenAndWriteAWordService;
+
+    public ListeningService(ListeningRepository repository, ListenPracticeService listenPracticeService, ListenAndWriteAWordService listenAndWriteAWordService) {
+        super(repository);
+        this.listenPracticeService = listenPracticeService;
+        this.listenAndWriteAWordService = listenAndWriteAWordService;
     }
 
-    Page<ListeningDTO> retrieveListeningsByPage(int page, int size){
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Listening> entityPage = repository.findAllListening(pageable);
-        return entityPage.map(this::convertToDTO);
+    @Override
+    public void delete(String id){
+        ListenPracticeDTO listenPracticeDTO = listenPracticeService.findByListeningId(id);
+        listenPracticeService.delete(listenPracticeDTO.getId());
+        List<ListenAndWriteAWordDTO> listenAndWriteAWordDTOList = listenAndWriteAWordService.findByListeningId(id);
+        for (ListenAndWriteAWordDTO listenAndWriteAWordDTO : listenAndWriteAWordDTOList) {
+            listenAndWriteAWordService.delete(listenAndWriteAWordDTO.getId());
+        }
+        super.delete(id);
     }
 
-    Page<ListeningDTO> retrieveListeningsByPage(int page, int size, Sort sort){
-        Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Listening> entityPage = repository.findAllListening(pageable);
-        return entityPage.map(this::convertToDTO);
-    }
-
-    private ListeningDTO convertToDTO(Listening entity){
+    @Override
+    protected ListeningDTO convertToDTO(Listening entity){
         ListeningDTO dto = new ListeningDTO();
         dto.setId(entity.getId());
         dto.setSerial(entity.getSerial());
@@ -38,5 +42,17 @@ public class ListeningService {
         dto.setTitle(entity.getTitle());
         dto.setStatus(entity.getStatus());
         return dto;
+    }
+
+    @Override
+    protected Listening convertToEntity(ListeningDTO dto){
+        Listening entity = new Listening();
+        entity.setId(dto.getId());
+        entity.setSerial(dto.getSerial());
+        entity.setImage(dto.getImage());
+        entity.setDescription(dto.getDescription());
+        entity.setTitle(dto.getTitle());
+        entity.setStatus(dto.getStatus());
+        return entity;
     }
 }
