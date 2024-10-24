@@ -23,19 +23,21 @@ public class TestController {
         this.testService = testService;
     }
 
-    @GetMapping("/tests")
+    @GetMapping("/api/tests")
     public Page<TestDTO> retrieveTestsByPage(@RequestParam int page, @RequestParam String type) {
-
         return testService.retrieveTestsByPage(page, type);
     }
 
-    @GetMapping("/testsall")
+    @GetMapping("/api/testsall")
     public List<TestDTO> retrieveTestsBytype(@RequestParam String type) {
         return (List<TestDTO>) testService.retrieveTestsallBytype(type);
     }
+
+
+
     @GetMapping("/api/tests/{id}")
     public ResponseEntity<TestDTO> retrieveTopicById(@PathVariable String id){
-        System.out.println("tanaaaaa"+id);
+
         return new ResponseEntity<>(testService.findById(id), HttpStatus.OK);
     }
 

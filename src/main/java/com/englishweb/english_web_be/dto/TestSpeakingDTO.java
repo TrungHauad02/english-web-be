@@ -6,7 +6,7 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 
 import java.util.List;
 
-public class TestSpeakingDTO {
+public class TestSpeakingDTO implements BaseDTO {
     private String id;
     private String title;
     private StatusEnum statusEnum;

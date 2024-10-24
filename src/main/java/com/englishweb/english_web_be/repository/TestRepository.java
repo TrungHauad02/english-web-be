@@ -12,6 +12,7 @@ import java.util.List;
 public interface TestRepository extends JpaRepository<Test, String> {
 
     Page<Test> findAllByType(Pageable pageable, TestTypeEnum type);
+
     List<Test> findAllByType(TestTypeEnum type);
 
 

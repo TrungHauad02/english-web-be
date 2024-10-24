@@ -3,7 +3,7 @@ package com.englishweb.english_web_be.dto;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 
 
-public class TestWritingDTO {
+public class TestWritingDTO implements BaseDTO {
     private String id;
     private int serial;
     private String content;

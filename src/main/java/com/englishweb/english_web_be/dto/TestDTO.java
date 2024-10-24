@@ -1,4 +1,5 @@
 package com.englishweb.english_web_be.dto;
+import com.englishweb.english_web_be.model.TestMixingQuestion;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 
@@ -17,6 +18,7 @@ public class TestDTO implements BaseDTO {
     private List<TestGrammarQuestionDTO> testGrammarQuestions;
     private List<TestWritingDTO> testWritings;
     private TestSpeakingDTO testSpeaking;
+    private List<TestMixingQuestionDTO> testMixingQuestions;
 
     public TestDTO() {
     }
@@ -29,9 +31,6 @@ public class TestDTO implements BaseDTO {
         this.type = type;
         this.status = status;
     }
-
-
-
     public TestDTO(String id, String title, int serial, int duration, TestTypeEnum type, StatusEnum status, List<TestListeningDTO> testListenings) {
         this.id = id;
         this.title = title;
@@ -153,6 +152,14 @@ public class TestDTO implements BaseDTO {
 
     public void setTestSpeaking(TestSpeakingDTO testSpeaking) {
         this.testSpeaking = testSpeaking;
+    }
+
+    public List<TestMixingQuestionDTO> getTestMixingQuestions() {
+        return testMixingQuestions;
+    }
+
+    public void setTestMixingQuestions(List<TestMixingQuestionDTO> testMixingQuestions) {
+        this.testMixingQuestions = testMixingQuestions;
     }
 
     @Override

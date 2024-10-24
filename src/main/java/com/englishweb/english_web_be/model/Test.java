@@ -11,11 +11,22 @@ import java.util.List;
 public class Test implements BaseEntity {
     @Id
     private String id;
+    @Column(nullable = false)
     private String title;
+    @Column(nullable = false)
     private int serial;
+    @Column(nullable = false)
     private int duration;
+    @Column(nullable = false)
     private TestTypeEnum type;
-    private StatusEnum status;
+    @Enumerated(EnumType.STRING)
+    private StatusEnum status = StatusEnum.ACTIVE;
+
+    @PrePersist
+    private void generateId() {
+        this.id = "Test_" + System.nanoTime();
+    }
+
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TestListening> testListenings;
 
@@ -34,6 +45,10 @@ public class Test implements BaseEntity {
 
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TestWriting> testWritings;
+
+
+    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TestMixingQuestion> testMixingQuestions;
 
     @OneToOne(mappedBy = "test", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private TestSpeaking testSpeaking;
@@ -172,6 +187,14 @@ public class Test implements BaseEntity {
 
     public void setTestSpeaking(TestSpeaking testSpeaking) {
         this.testSpeaking = testSpeaking;
+    }
+
+    public List<TestMixingQuestion> getTestMixingQuestions() {
+        return testMixingQuestions;
+    }
+
+    public void setTestMixingQuestions(List<TestMixingQuestion> testMixingQuestions) {
+        this.testMixingQuestions = testMixingQuestions;
     }
 
     @Override
