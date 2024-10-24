@@ -17,25 +17,25 @@ public class ListeningQuestionController {
         this.service = service;
     }
 
-    @GetMapping("/api/listeningQuestion")
+    @GetMapping("/api/listening-question")
     public ResponseEntity<List<ListeningQuestionDTO>> findByPracticeIdId(@RequestParam String practiceId) {
         List<ListeningQuestionDTO> dtoList = service.findByListenPracticeId(practiceId);
         return new ResponseEntity<>(dtoList, HttpStatus.OK);
     }
 
-    @PostMapping("/api/listeningQuestion")
+    @PostMapping("/api/listening-question")
     public ResponseEntity<ListeningQuestionDTO> save(@Valid @RequestBody ListeningQuestionDTO dto) {
         ListeningQuestionDTO created = service.create(dto);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/listeningQuestion")
+    @PutMapping("/api/listening-question")
     public ResponseEntity<ListeningQuestionDTO> update(@Valid @RequestBody ListeningQuestionDTO dto) {
         ListeningQuestionDTO updated = service.update(dto);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
-    @DeleteMapping("/api/listeningQuestion/{id}")
+    @DeleteMapping("/api/listening-question/{id}")
     public ResponseEntity<ListeningQuestionDTO> delete(@PathVariable String id) {
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
