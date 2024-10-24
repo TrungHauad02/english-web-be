@@ -38,6 +38,7 @@ public class GrammarService extends BaseService<Grammar, GrammarDTO, GrammarRepo
         dto.setImage(entity.getImage());
         dto.setSerial(entity.getSerial());
         dto.setStatus(entity.getStatus());
+        dto.setDescription(entity.getDescription());
         return dto;
     }
 
@@ -52,6 +53,7 @@ public class GrammarService extends BaseService<Grammar, GrammarDTO, GrammarRepo
         entity.setTitle(dto.getTitle());
         entity.setSerial(dto.getSerial());
         entity.setStatus(dto.getStatus());
+        entity.setDescription(dto.getDescription());
         return entity;
     }
 }

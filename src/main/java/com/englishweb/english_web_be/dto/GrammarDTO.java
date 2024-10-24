@@ -12,6 +12,8 @@ public class GrammarDTO implements BaseDTO {
     int serial;
     @NotBlank(message = "Content cannot be empty")
     String content;
+    @NotBlank(message = "Description cannot be empty")
+    String description;
     @NotBlank(message = "Image cannot be empty")
     String image;
     @NotBlank(message = "Example cannot be empty")
@@ -21,6 +23,18 @@ public class GrammarDTO implements BaseDTO {
     StatusEnum status;
 
     public GrammarDTO() {
+    }
+
+    public GrammarDTO(String id, String title, int serial, String content, String description, String image, String example, String file, StatusEnum status) {
+        this.id = id;
+        this.title = title;
+        this.serial = serial;
+        this.content = content;
+        this.description = description;
+        this.image = image;
+        this.example = example;
+        this.file = file;
+        this.status = status;
     }
 
     public GrammarDTO(String id, String title, int serial, String content, String image, String example, String file, StatusEnum status) {
@@ -98,5 +112,13 @@ public class GrammarDTO implements BaseDTO {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
