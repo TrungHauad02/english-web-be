@@ -5,7 +5,7 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 
 
 
-public class TestSpeakingQuestionDTO {
+public class TestSpeakingQuestionDTO implements BaseDTO {
 
     private String id;
     private String content;

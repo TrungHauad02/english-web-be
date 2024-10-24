@@ -2,7 +2,7 @@ package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 
-public class TestReadingAnswerDTO {
+public class TestReadingAnswerDTO implements BaseDTO {
     private String id;
     private String content;
     private Boolean isCorrect;

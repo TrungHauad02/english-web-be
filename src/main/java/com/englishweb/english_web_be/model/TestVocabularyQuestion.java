@@ -9,10 +9,19 @@ import java.util.List;
 public class TestVocabularyQuestion implements BaseEntity {
     @Id
     private String id;
+    @Column(nullable = false)
     private String content;
+    @Column(nullable = false)
     private int serial;
-    private String explantion;
-    private StatusEnum status;
+    @Column(nullable = false)
+    private String explanation;
+    @Enumerated(EnumType.STRING)
+    private StatusEnum status=StatusEnum.ACTIVE;
+
+    @PrePersist
+    private void generateId() {
+        this.id = "TestVocabularyQuestion_" + System.nanoTime();
+    }
 
     @ManyToOne
     @JoinColumn(name = "test_id")
@@ -21,25 +30,18 @@ public class TestVocabularyQuestion implements BaseEntity {
     @OneToMany(mappedBy = "testVocabularyQuestion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TestVocabularyAnswer> answers;
 
+
     public TestVocabularyQuestion() {
     }
 
-    public TestVocabularyQuestion(String id, String content, int serial, String explantion, StatusEnum status) {
+    public TestVocabularyQuestion(String id, String content, int serial, String explanation, StatusEnum status) {
         this.id = id;
         this.content = content;
         this.serial = serial;
-        this.explantion = explantion;
+        this.explanation = explanation;
         this.status = status;
     }
 
-    public TestVocabularyQuestion(String id, String content, int serial, String explantion, StatusEnum status, List<TestVocabularyAnswer> answers) {
-        this.id = id;
-        this.content = content;
-        this.serial = serial;
-        this.explantion = explantion;
-        this.status = status;
-        this.answers = answers;
-    }
 
     public String getId() {
         return id;
@@ -65,12 +67,12 @@ public class TestVocabularyQuestion implements BaseEntity {
         this.serial = serial;
     }
 
-    public String getExplantion() {
-        return explantion;
+    public String getExplanation() {
+        return explanation;
     }
 
-    public void setExplantion(String explantion) {
-        this.explantion = explantion;
+    public void setExplanation(String explantion) {
+        this.explanation = explantion;
     }
 
     public Test getTest() {

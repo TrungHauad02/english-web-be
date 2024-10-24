@@ -9,7 +9,7 @@ public class TestVocabularyQuestionDTO implements BaseDTO {
     private String id;
     private String content;
     private int serial;
-    private String explantion;
+    private String explanation;
     private StatusEnum status;
     private List<TestVocabularyAnswerDTO> answers;
     private String testId;
@@ -17,24 +17,15 @@ public class TestVocabularyQuestionDTO implements BaseDTO {
     public TestVocabularyQuestionDTO() {
     }
 
-    public TestVocabularyQuestionDTO(String id, String content, int serial, String explantion, StatusEnum status, List<TestVocabularyAnswerDTO> answers) {
+    public TestVocabularyQuestionDTO(String id, String content, int serial, String explanation, StatusEnum status, List<TestVocabularyAnswerDTO> answers) {
         this.id = id;
         this.content = content;
         this.serial = serial;
-        this.explantion = explantion;
+        this.explanation = explanation;
         this.status = status;
         this.answers = answers;
     }
 
-    public TestVocabularyQuestionDTO(String id, String content, int serial, String explantion, List<TestVocabularyAnswerDTO> answers, StatusEnum status, String testId) {
-        this.id = id;
-        this.content = content;
-        this.serial = serial;
-        this.explantion = explantion;
-        this.answers = answers;
-        this.status = status;
-        this.testId = testId;
-    }
 
     public String getId() {
         return id;
@@ -51,13 +42,12 @@ public class TestVocabularyQuestionDTO implements BaseDTO {
     public void setContent(String content) {
         this.content = content;
     }
-
-    public String getExplantion() {
-        return explantion;
+    public String getExplanation() {
+        return explanation;
     }
 
-    public void setExplantion(String explantion) {
-        this.explantion = explantion;
+    public void setExplanation(String explantion) {
+        this.explanation = explantion;
     }
 
     public int getSerial() {
@@ -98,7 +88,7 @@ public class TestVocabularyQuestionDTO implements BaseDTO {
                 "id='" + id + '\'' +
                 ", content='" + content + '\'' +
                 ", serial=" + serial +
-                ", explantion='" + explantion + '\'' +
+                ", explantion='" + explanation + '\'' +
                 ", status=" + status +
                 ", answers=" + answers +
                 '}';

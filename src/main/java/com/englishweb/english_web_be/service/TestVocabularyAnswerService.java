@@ -5,23 +5,26 @@ import com.englishweb.english_web_be.model.TestVocabularyAnswer;
 import com.englishweb.english_web_be.model.TestVocabularyQuestion;
 import com.englishweb.english_web_be.repository.TestVocabularyAnswerRepository;
 import com.englishweb.english_web_be.repository.TestVocabularyQuestionRepository;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
+@Service
 public class TestVocabularyAnswerService extends BaseService<TestVocabularyAnswer, TestVocabularyAnswerDTO, TestVocabularyAnswerRepository> {
     private final TestVocabularyQuestionService testVocabularyQuestionService;
 
 
-    public TestVocabularyAnswerService(TestVocabularyAnswerRepository repository, TestVocabularyQuestionService testVocabularyQuestionService) {
+    public TestVocabularyAnswerService(TestVocabularyAnswerRepository repository,   @Lazy TestVocabularyQuestionService testVocabularyQuestionService) {
         super(repository);
         this.testVocabularyQuestionService = testVocabularyQuestionService;
     }
 
 
     public List<TestVocabularyAnswerDTO> findAllByQuestionId(String questionId) {
-
-
-        List<TestVocabularyAnswer> list = repository.findAllByQuestion_Id(questionId);
+        testVocabularyQuestionService.isExist(questionId);
+        List<TestVocabularyAnswer> list = repository.findAllByTestVocabularyQuestion_Id(questionId);
 
         return list.stream()
                 .map(this::convertToDTO)

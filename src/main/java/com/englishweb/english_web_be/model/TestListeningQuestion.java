@@ -6,12 +6,20 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-public class TestListeningQuestion {
+public class TestListeningQuestion implements BaseEntity {
     @Id
     private String id;
+    @Column(nullable = false)
     private String content;
+    @Column(nullable = false)
     private int serial;
-    private StatusEnum status;
+    @Enumerated(EnumType.STRING)
+    private StatusEnum status=StatusEnum.ACTIVE;
+
+    @PrePersist
+    private void generateId() {
+        this.id = "TestListeningQuestion_" + System.nanoTime();
+    }
 
     @ManyToOne
     @JoinColumn(name = "test_listening_id")
@@ -19,6 +27,7 @@ public class TestListeningQuestion {
 
     @OneToMany(mappedBy = "testListeningQuestion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TestListeningAnswer> answersList;
+
 
     public TestListeningQuestion() {
     }

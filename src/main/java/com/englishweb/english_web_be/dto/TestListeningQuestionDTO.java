@@ -4,7 +4,7 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 
 import java.util.List;
 
-public class TestListeningQuestionDTO {
+public class TestListeningQuestionDTO implements BaseDTO {
     private String id;
     private String content;
     private int serial;

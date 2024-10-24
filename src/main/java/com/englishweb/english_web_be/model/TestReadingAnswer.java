@@ -1,18 +1,25 @@
 package com.englishweb.english_web_be.model;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
-public class TestReadingAnswer {
+public class TestReadingAnswer implements BaseEntity {
     @Id
     private String id;
+    @Column(nullable = false)
     private String content;
+    @Column(nullable = false)
     private Boolean isCorrect;
-    private StatusEnum status;
+    @Enumerated(EnumType.STRING)
+    private StatusEnum status=StatusEnum.ACTIVE;
+
+    @PrePersist
+    private void generateId() {
+        this.id = "TestReadingAnswer_" + System.nanoTime();
+    }
+
+
     @ManyToOne
     @JoinColumn(name = "test_reading_question_id")
     private TestReadingQuestion testReadingQuestion;

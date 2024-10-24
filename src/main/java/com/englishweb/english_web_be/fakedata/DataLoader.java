@@ -2,6 +2,7 @@ package com.englishweb.english_web_be.fakedata;
 
 import com.englishweb.english_web_be.model.*;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
+import com.englishweb.english_web_be.modelenum.TestMixingTypeEnum;
 import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 import com.englishweb.english_web_be.repository.*;
 import org.springframework.boot.CommandLineRunner;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-//@Component
+@Component
 public class DataLoader implements CommandLineRunner {
 
     private final TopicRepository topicRepository;
@@ -79,6 +80,7 @@ public class DataLoader implements CommandLineRunner {
                     List<TestWriting> mixedWritings = generateTestDataWriting(test, i,type);
                     TestSpeaking mixedSpeaking = generateTestDataSpeaking(test, i,type);
 
+                    test.setTestMixingQuestions(generataTestMixing(test,i,type));
                     test.setTestReadings(mixedReadings);
                     test.setTestListenings(mixedListenings);
                     test.setTestVocabularyQuestions(mixedVocabQuestions);
@@ -106,7 +108,6 @@ public class DataLoader implements CommandLineRunner {
             TestListening testListening = new TestListening(testListeningId, j, content, transcript, statusEnum);
             testListening.setTest(test); // Liên kết TestListening với Test sau khi Test đã được lưu
 
-            // Tạo các câu hỏi cho TestListening
             List<TestListeningQuestion> questions = new ArrayList<>();
             for (int k = 1; k <= 3; k++) {
                 String questionId = "question_" + i + "_" + j + "_" + k;
@@ -292,15 +293,13 @@ public class DataLoader implements CommandLineRunner {
 
             List<TestVocabularyAnswer> answers = new ArrayList<>();
             for (int h = 1; h <= 4; h++) {
-                String answerId = "vocab_answer_" + j + "_" + h;
+                String answerId = "vocab_answer_" + questionId + "_" + h;
                 String answerContent = "Answer " + h + " for vocabulary question " + i;
                 boolean isCorrect = (h == 1);
                 StatusEnum answerStatus = StatusEnum.ACTIVE;
 
-                // Tạo đối tượng TestVocabularyAnswer
                 TestVocabularyAnswer answer = new TestVocabularyAnswer(answerId, answerContent, isCorrect, answerStatus);
                 answer.setTestVocabularyQuestion(question); // Liên kết câu trả lời với câu hỏi
-
                 answers.add(answer);
             }
 
@@ -339,7 +338,7 @@ public class DataLoader implements CommandLineRunner {
 
             List<TestGrammarAnswer> answers = new ArrayList<>();
             for (int h = 1; h <= 4; h++) {
-                String answerId = "vocab_answer_" + j + "_" + h;
+                String answerId = "vocab_answer_" + questionId + "_" + h;
                 String answerContent = "Answer " + h + " for vocabulary question " + i;
                 boolean isCorrect = (h == 1);
                 StatusEnum answerStatus = StatusEnum.ACTIVE;
@@ -358,6 +357,65 @@ public class DataLoader implements CommandLineRunner {
         }
 
         return grammarQuestions;
+    }
+
+
+    public List<TestMixingQuestion> generataTestMixing(Test test, int i, TestTypeEnum type) {
+        // Tạo danh sách câu hỏi từ vựng cho bài kiểm tra
+        List<TestMixingQuestion> mixingQuestions = new ArrayList<>();
+
+        // Tạo các câu hỏi từ vựng (giả sử có 5 câu hỏi từ vựng)
+        for (int j = 1; j <= 10; j++) {
+            String questionId = "grammar_question_" + i + "_" + j;
+            String questionContent = "Vocabulary question content " + j;
+            String explanation = "Explanation for vocabulary question " + j;
+            TestMixingTypeEnum  testMixingTypeEnum;
+            if(j<5)
+            {
+                testMixingTypeEnum  = TestMixingTypeEnum.VOCABULARY;
+            }
+            else
+            {
+                testMixingTypeEnum  = TestMixingTypeEnum.GRAMMAR;
+            }
+
+            StatusEnum status = StatusEnum.ACTIVE;
+            int serial ;
+            if(type==TestTypeEnum.MIXING) {
+                serial = serialtestmixed;
+                serialtestmixed++;
+            }
+            else
+            {
+                serial = j;
+            }
+
+            // Tạo đối tượng TestVocabularyQuestion
+            TestMixingQuestion question = new TestMixingQuestion(questionId, questionContent, serial, explanation,testMixingTypeEnum ,status);
+            question.setTest(test); // Liên kết câu hỏi từ vựng với bài kiểm tra
+
+
+            List<TestMixingAnswer> answers = new ArrayList<>();
+            for (int h = 1; h <= 4; h++) {
+                String answerId = "vocab_answer_" + questionId + "_" + h;
+                String answerContent = "Answer " + h + " for vocabulary question " + i;
+                boolean isCorrect = (h == 1);
+                StatusEnum answerStatus = StatusEnum.ACTIVE;
+
+                // Tạo đối tượng TestVocabularyAnswer
+                TestMixingAnswer answer = new TestMixingAnswer(answerId, answerContent, isCorrect, answerStatus);
+                answer.setTestMixingQuestion(question); // Liên kết câu trả lời với câu hỏi
+
+                answers.add(answer);
+            }
+
+            question.setAnswers(answers);
+
+
+            mixingQuestions.add(question);
+        }
+
+        return mixingQuestions;
     }
     @Override
     public void run(String... args) throws Exception {

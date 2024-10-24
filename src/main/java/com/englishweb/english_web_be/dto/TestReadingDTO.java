@@ -5,7 +5,7 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import java.util.List;
 import java.util.Stack;
 
-public class TestReadingDTO {
+public class TestReadingDTO implements BaseDTO {
     private String id;
     private int serial;
     private String content;

@@ -5,12 +5,11 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 
 import java.util.List;
 
-public class TestGrammarQuestionDTO
-{
+public class TestGrammarQuestionDTO implements BaseDTO {
     private String id;
     private String content;
     private int serial;
-    private String explantion;
+    private String explanation;
     private StatusEnum status;
     private List<TestGrammarAnswerDTO> answers;
     private String testId;
@@ -18,24 +17,15 @@ public class TestGrammarQuestionDTO
     public TestGrammarQuestionDTO() {
     }
 
-    public TestGrammarQuestionDTO(String id, String content, int serial, String explantion, StatusEnum status, List<TestGrammarAnswerDTO> answers) {
+    public TestGrammarQuestionDTO(String id, String content, int serial, String explanation, StatusEnum status, List<TestGrammarAnswerDTO> answers) {
         this.id = id;
         this.content = content;
         this.serial = serial;
-        this.explantion = explantion;
+        this.explanation = explanation;
         this.status = status;
         this.answers = answers;
     }
 
-    public TestGrammarQuestionDTO(String id, String content, int serial, String explantion, StatusEnum status, List<TestGrammarAnswerDTO> answers, String testId) {
-        this.id = id;
-        this.content = content;
-        this.serial = serial;
-        this.explantion = explantion;
-        this.status = status;
-        this.answers = answers;
-        this.testId = testId;
-    }
 
     public String getId() {
         return id;
@@ -53,12 +43,12 @@ public class TestGrammarQuestionDTO
         this.content = content;
     }
 
-    public String getExplantion() {
-        return explantion;
+    public String getExplanation() {
+        return explanation;
     }
 
-    public void setExplantion(String explantion) {
-        this.explantion = explantion;
+    public void setExplanation(String explanation) {
+        this.explanation = explanation;
     }
 
     public int getSerial() {
@@ -99,7 +89,7 @@ public class TestGrammarQuestionDTO
                 "id='" + id + '\'' +
                 ", content='" + content + '\'' +
                 ", serial=" + serial +
-                ", explantion='" + explantion + '\'' +
+                ", explantion='" + explanation + '\'' +
                 ", status=" + status +
                 ", answers=" + answers +
                 '}';

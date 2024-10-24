@@ -6,13 +6,25 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-public class TestListening {
+public class TestListening implements BaseEntity {
     @Id
     private String id;
+    @Column(nullable = false)
     private int serial;
+    @Column(nullable = false)
     private String content;
+    @Column(nullable = false)
     private String transcript;
-    private StatusEnum statusEnum;
+    @Enumerated(EnumType.STRING)
+    private StatusEnum statusEnum=StatusEnum.ACTIVE;
+
+    @PrePersist
+    private void generateId() {
+        this.id = "TestListening_" + System.nanoTime();
+    }
+
+
+
     @ManyToOne
     @JoinColumn(name = "test_id")
     private Test test;
