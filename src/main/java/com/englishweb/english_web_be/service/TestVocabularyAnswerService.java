@@ -23,7 +23,9 @@ public class TestVocabularyAnswerService extends BaseService<TestVocabularyAnswe
 
 
     public List<TestVocabularyAnswerDTO> findAllByQuestionId(String questionId) {
+
         testVocabularyQuestionService.isExist(questionId);
+
         List<TestVocabularyAnswer> list = repository.findAllByTestVocabularyQuestion_Id(questionId);
 
         return list.stream()
