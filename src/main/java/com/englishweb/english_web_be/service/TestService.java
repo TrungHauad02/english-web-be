@@ -82,7 +82,7 @@ public class TestService extends BaseService<Test,TestDTO,TestRepository> {
         dto.setTestListenings(testListeningService.findAllByTestId(entity.getId()));
         dto.setTestWritings(testWritingService.findAllByTestId(entity.getId()));
         dto.setTestReadings(testReadingService.findAllByTestId(entity.getId()));
-        dto.setTestSpeaking(testSpeakingService.findAllByTest_Id(entity.getId()));
+        dto.setTestSpeakings(testSpeakingService.findAllByTest_Id(entity.getId()));
         dto.setTestMixingQuestions(testMixingQuestionService.findAllByTestId(entity.getId()));
 
         return dto;

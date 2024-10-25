@@ -25,13 +25,17 @@ public class TestSpeakingService extends BaseService<TestSpeaking, TestSpeakingD
         this.testSpeakingQuestionService = testSpeakingQuestionService;
     }
 
-    public TestSpeakingDTO findAllByTest_Id(String test_id) {
+    public List<TestSpeakingDTO> findAllByTest_Id(String test_id) {
         testService.isExist(test_id);
-        TestSpeaking testSpeaking = repository.findByTest_Id(test_id);
-        if(testSpeaking == null) {
+        List<TestSpeaking> list = repository.findAllByTest_Id(test_id);
+
+        if (list.isEmpty()) {
             return null;
         }
-        return this.convertToDTO(testSpeaking);
+
+        return list.stream()
+                .map(this::convertToDTO)
+                .toList();
     }
 
     @Override

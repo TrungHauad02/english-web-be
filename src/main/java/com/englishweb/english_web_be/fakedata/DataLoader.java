@@ -62,8 +62,8 @@ public class DataLoader implements CommandLineRunner {
                     break;
 
                 case SPEAKING:
-                    TestSpeaking testSpeaking = generateTestDataSpeaking(test, i,type);
-                    test.setTestSpeaking(testSpeaking);
+                    List<TestSpeaking> testSpeakings = generateTestDataSpeaking(test, i,type);
+                    test.setTestSpeakings(testSpeakings);
                     break;
 
                 case WRITING:
@@ -78,14 +78,14 @@ public class DataLoader implements CommandLineRunner {
                     List<TestReading> mixedReadings = generateTestDataReading(test, i,type);
                     List<TestListening> mixedListenings = generateTestDataListening(test, i,type);
                     List<TestWriting> mixedWritings = generateTestDataWriting(test, i,type);
-                    TestSpeaking mixedSpeaking = generateTestDataSpeaking(test, i,type);
+                    List<TestSpeaking> mixedSpeaking = generateTestDataSpeaking(test, i,type);
 
                     test.setTestMixingQuestions(generataTestMixing(test,i,type));
                     test.setTestReadings(mixedReadings);
                     test.setTestListenings(mixedListenings);
                     test.setTestVocabularyQuestions(mixedVocabQuestions);
                     test.setTestGrammarQuestions(mixedGrammarQuestions);
-                    test.setTestSpeaking(mixedSpeaking);
+                    test.setTestSpeakings(mixedSpeaking);
                     test.setTestWritings(mixedWritings);
                     break;
 
@@ -204,13 +204,16 @@ public class DataLoader implements CommandLineRunner {
 
 
 
-    public TestSpeaking generateTestDataSpeaking(Test test, int i, TestTypeEnum type) {
+    public List<TestSpeaking> generateTestDataSpeaking(Test test, int i, TestTypeEnum type) {
 
-            String testSpeakingId = "speaking_" + i;
-            TestSpeaking testSpeaking = new TestSpeaking(testSpeakingId, "Speaking Title " + i, StatusEnum.ACTIVE);
+        List<TestSpeaking> testSpeakings = new ArrayList<>();
+
+        for (int k = 1; k <= 5; k++)
+        {
+
+            String testSpeakingId = "speaking_" + i+k;
+            TestSpeaking testSpeaking = new TestSpeaking(testSpeakingId, "Speaking Title " + k, StatusEnum.ACTIVE);
             testSpeaking.setTest(test); // Liên kết TestSpeaking với Test
-
-            // Tạo các câu hỏi cho TestSpeaking
             List<TestSpeakingQuestion> questions = new ArrayList<>();
             for (int j = 1; j <= 5; j++) {
                 String questionId = "speaking_question_" + i + "_" + j;
@@ -222,7 +225,7 @@ public class DataLoader implements CommandLineRunner {
                 }
                 else
                 {
-                    serialQuestion =j;
+                    serialQuestion =(k-1)*5+j;
                 }
                 StatusEnum questionStatus = StatusEnum.ACTIVE;
 
@@ -231,13 +234,15 @@ public class DataLoader implements CommandLineRunner {
                 question.setTestSpeaking(testSpeaking); // Liên kết câu hỏi với TestSpeaking
 
                 questions.add(question);
+
             }
-
-            // Thiết lập danh sách câu hỏi cho TestSpeaking
             testSpeaking.setQuestions(questions);
+            testSpeakings.add(testSpeaking);
 
-            // Lưu đối tượng Test và TestSpeaking
-            return testSpeaking;
+        }
+
+
+            return testSpeakings;
     }
     public List<TestWriting> generateTestDataWriting(Test test, int i, TestTypeEnum type){
 

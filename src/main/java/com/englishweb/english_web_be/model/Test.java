@@ -50,8 +50,8 @@ public class Test implements BaseEntity {
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TestMixingQuestion> testMixingQuestions;
 
-    @OneToOne(mappedBy = "test", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private TestSpeaking testSpeaking;
+    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TestSpeaking> testSpeakings;
 
 
 
@@ -68,7 +68,7 @@ public class Test implements BaseEntity {
         this.status = status;
     }
 
-    public Test(String id, String title, int serial, int duration, TestTypeEnum type, StatusEnum status, List<TestListening> testListenings, List<TestReading> testReadings, List<TestVocabularyQuestion> testVocabularyQuestions, List<TestGrammarQuestion> testGrammarQuestions, List<TestWriting> testWritings, TestSpeaking testSpeaking) {
+    public Test(String id, String title, int serial, int duration, TestTypeEnum type, StatusEnum status, List<TestListening> testListenings, List<TestReading> testReadings, List<TestVocabularyQuestion> testVocabularyQuestions, List<TestGrammarQuestion> testGrammarQuestions, List<TestWriting> testWritings, List<TestSpeaking> testSpeakings) {
         this.id = id;
         this.title = title;
         this.serial = serial;
@@ -80,7 +80,7 @@ public class Test implements BaseEntity {
         this.testVocabularyQuestions = testVocabularyQuestions;
         this.testGrammarQuestions = testGrammarQuestions;
         this.testWritings = testWritings;
-        this.testSpeaking = testSpeaking;
+        this.testSpeakings = testSpeakings;
     }
 
     public Test(String id, String title, int serial, int duration, TestTypeEnum type, StatusEnum status, List<TestListening> testListenings) {
@@ -181,20 +181,20 @@ public class Test implements BaseEntity {
         this.testWritings = testWritings;
     }
 
-    public TestSpeaking getTestSpeaking() {
-        return testSpeaking;
-    }
-
-    public void setTestSpeaking(TestSpeaking testSpeaking) {
-        this.testSpeaking = testSpeaking;
-    }
-
     public List<TestMixingQuestion> getTestMixingQuestions() {
         return testMixingQuestions;
     }
 
     public void setTestMixingQuestions(List<TestMixingQuestion> testMixingQuestions) {
         this.testMixingQuestions = testMixingQuestions;
+    }
+
+    public List<TestSpeaking> getTestSpeakings() {
+        return testSpeakings;
+    }
+
+    public void setTestSpeakings(List<TestSpeaking> testSpeakings) {
+        this.testSpeakings = testSpeakings;
     }
 
     @Override
@@ -211,7 +211,7 @@ public class Test implements BaseEntity {
                 ", testVocabularyQuestions=" + testVocabularyQuestions.toString() +
                 ", testGrammarQuestions=" + testGrammarQuestions.toString() +
                 ", testWritings=" + testWritings.toString() +
-                ", testSpeaking=" + testSpeaking.toString() +
+                ", testSpeaking=" + testSpeakings.toString() +
                 '}';
     }
 }
