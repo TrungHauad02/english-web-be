@@ -3,7 +3,6 @@ package com.englishweb.english_web_be.service;
 import com.englishweb.english_web_be.dto.ListeningAnswerDTO;
 import com.englishweb.english_web_be.model.ListeningAnswer;
 import com.englishweb.english_web_be.repository.ListeningAnswerRepository;
-import com.englishweb.english_web_be.util.ValidationUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +33,7 @@ public class ListeningAnswerService extends BaseService<ListeningAnswer, Listeni
         dto.setContent(entity.getContent());
         dto.setCorrect(entity.isCorrect());
         dto.setStatus(entity.getStatus());
-        dto.setListeningQuestionId(entity.getQuestion().getId());
+        dto.setQuestionId(entity.getQuestion().getId());
         return dto;
     }
 
@@ -45,7 +44,7 @@ public class ListeningAnswerService extends BaseService<ListeningAnswer, Listeni
         entity.setContent(dto.getContent());
         entity.setCorrect(dto.isCorrect());
         entity.setStatus(dto.getStatus());
-        entity.setQuestion(listeningQuestionService.convertToEntity(listeningQuestionService.findById(dto.getListeningQuestionId())));
+        entity.setQuestion(listeningQuestionService.convertToEntity(listeningQuestionService.findById(dto.getQuestionId())));
         return entity;
     }
 }

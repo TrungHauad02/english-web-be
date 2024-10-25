@@ -35,10 +35,9 @@ public class SpeakingController {
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/speakings")
-    public ResponseEntity<SpeakingDTO> update(@Valid @RequestBody SpeakingDTO dto){
-        SpeakingDTO updated = service.update(dto);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+    @PutMapping("/api/speakings/{id}")
+    public ResponseEntity<SpeakingDTO> update(@Valid @RequestBody SpeakingDTO dto, @PathVariable String id) {
+        return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/speakings/{id}")

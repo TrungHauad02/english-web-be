@@ -12,7 +12,9 @@ public class Grammar implements BaseEntity {
     @Column(unique = true, nullable = false)
     private int serial;
     @Column(nullable = false)
-    private String content;
+    private String content;;
+    @Column(nullable = false)
+    private String description;
     @Column(nullable = false)
     private String image;
     @Column(nullable = false)
@@ -30,11 +32,12 @@ public class Grammar implements BaseEntity {
     public Grammar() {
     }
 
-    public Grammar(String id, String title, int serial, String content, String image, String example, String file, StatusEnum status) {
+    public Grammar(String id, String title, int serial, String content, String description, String image, String example, String file, StatusEnum status) {
         this.id = id;
         this.title = title;
         this.serial = serial;
         this.content = content;
+        this.description = description;
         this.image = image;
         this.example = example;
         this.file = file;
@@ -105,5 +108,13 @@ public class Grammar implements BaseEntity {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

@@ -27,14 +27,12 @@ public class SpeakingTopicController {
 
     @PostMapping("/api/speakingTopic")
     public ResponseEntity<SpeakingTopicDTO> create(@Valid @RequestBody SpeakingTopicDTO dto) {
-        SpeakingTopicDTO created = service.create(dto);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/speakingTopic")
-    public ResponseEntity<SpeakingTopicDTO> update(@Valid @RequestBody SpeakingTopicDTO dto) {
-        SpeakingTopicDTO updated = service.update(dto);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+    @PutMapping("/api/speakingTopic/{id}")
+    public ResponseEntity<SpeakingTopicDTO> update(@Valid @RequestBody SpeakingTopicDTO dto, @PathVariable String id) {
+        return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/speakingTopic/{id}")

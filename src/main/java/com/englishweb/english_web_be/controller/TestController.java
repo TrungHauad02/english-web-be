@@ -49,9 +49,9 @@ public class TestController {
         return new ResponseEntity<>(createdTest, HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/tests")
-    public ResponseEntity<TestDTO> updateTest(@Valid @RequestBody TestDTO dto){
-        TestDTO updatedTest = testService.update(dto);
+    @PutMapping("/api/tests/{id}")
+    public ResponseEntity<TestDTO> updateTest(@Valid @RequestBody TestDTO dto, @PathVariable String id){
+        TestDTO updatedTest = testService.update(dto, id);
 
         return ResponseEntity.ok(updatedTest);
     }

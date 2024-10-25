@@ -17,14 +17,12 @@ public class ListeningAnswerController {
 
     @PostMapping("/api/listening-answer")
     public ResponseEntity<ListeningAnswerDTO> create(@Valid @RequestBody ListeningAnswerDTO dto) {
-        ListeningAnswerDTO created = service.create(dto);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/listening-answer")
-    public ResponseEntity<ListeningAnswerDTO> update(@Valid @RequestBody ListeningAnswerDTO dto) {
-        ListeningAnswerDTO updated = service.update(dto);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+    @PutMapping("/api/listening-answer/{id}")
+    public ResponseEntity<ListeningAnswerDTO> update(@Valid @RequestBody ListeningAnswerDTO dto, @PathVariable String id) {
+        return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/listening-answer/{id}")

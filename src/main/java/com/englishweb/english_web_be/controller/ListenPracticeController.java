@@ -27,14 +27,12 @@ public class ListenPracticeController {
 
     @PostMapping("/api/listenPractice")
     public ResponseEntity<ListenPracticeDTO> create(@Valid @RequestBody ListenPracticeDTO dto) {
-        ListenPracticeDTO created = service.create(dto);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/listenPractice")
-    public ResponseEntity<ListenPracticeDTO> update(@Valid @RequestBody ListenPracticeDTO dto) {
-        ListenPracticeDTO updated = service.update(dto);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+    @PutMapping("/api/listenPractice/{id}")
+    public ResponseEntity<ListenPracticeDTO> update(@Valid @RequestBody ListenPracticeDTO dto, @PathVariable String id) {
+        return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/listenPractice/{id}")

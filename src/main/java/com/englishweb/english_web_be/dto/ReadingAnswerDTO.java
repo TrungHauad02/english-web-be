@@ -4,36 +4,25 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public class TopicAnswerDTO implements BaseDTO {
+public class ReadingAnswerDTO implements BaseDTO {
     String id;
     @NotBlank(message = "Content cannot be empty")
     String content;
-    @NotNull(message = "IsCorrect cannot be null")
+    @NotNull(message = "Correct cannot be null")
     boolean correct;
     StatusEnum status;
-    @NotBlank(message = "Topic question id cannot be empty")
+    @NotNull(message = "Question id cannot be null")
     String questionId;
 
-    public TopicAnswerDTO() {
+    public ReadingAnswerDTO() {
     }
 
-    public TopicAnswerDTO(String id, String content, boolean correct, StatusEnum status, String questionId) {
+    public ReadingAnswerDTO(String id, String content, boolean correct, StatusEnum status, String questionId) {
         this.id = id;
         this.content = content;
         this.correct = correct;
         this.status = status;
         this.questionId = questionId;
-    }
-
-    public TopicAnswerDTO(String id) {
-        this.id = id;
-    }
-
-    public TopicAnswerDTO(String id, String content, boolean correct, StatusEnum status) {
-        this.id = id;
-        this.content = content;
-        this.correct = correct;
-        this.status = status;
     }
 
     @Override
