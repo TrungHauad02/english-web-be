@@ -17,7 +17,7 @@ public class TestDTO implements BaseDTO {
     private List<TestVocabularyQuestionDTO> testVocabularyQuestions;
     private List<TestGrammarQuestionDTO> testGrammarQuestions;
     private List<TestWritingDTO> testWritings;
-    private TestSpeakingDTO testSpeaking;
+    private List<TestSpeakingDTO>  testSpeakings;
     private List<TestMixingQuestionDTO> testMixingQuestions;
 
     public TestDTO() {
@@ -41,23 +41,7 @@ public class TestDTO implements BaseDTO {
         this.testListenings = testListenings;
     }
 
-    public TestDTO(String id, String title, int serial, int duration, TestTypeEnum type, StatusEnum status, List<TestListeningDTO> testListenings, List<TestReadingDTO> testReadings, TestSpeakingDTO testSpeaking, List<TestWritingDTO> testWritings, List<TestVocabularyQuestionDTO> testVocabularyQuestions, List<TestGrammarQuestionDTO> testGrammarQuestions) {
 
-            this.id = id;
-            this.title = title;
-            this.serial = serial;
-            this.duration = duration;
-            this.type = type;
-            this.status = status;
-            this.testListenings = testListenings;
-            this.testReadings = testReadings;
-            this.testVocabularyQuestions = testVocabularyQuestions;
-            this.testGrammarQuestions = testGrammarQuestions;
-            this.testWritings = testWritings;
-            this.testSpeaking = testSpeaking;
-    }
-
-    // Getters and Setters
     public String getId() {
         return id;
     }
@@ -146,12 +130,12 @@ public class TestDTO implements BaseDTO {
         this.testWritings = testWritings;
     }
 
-    public TestSpeakingDTO getTestSpeaking() {
-        return testSpeaking;
+    public List<TestSpeakingDTO> getTestSpeakings() {
+        return testSpeakings;
     }
 
-    public void setTestSpeaking(TestSpeakingDTO testSpeaking) {
-        this.testSpeaking = testSpeaking;
+    public void setTestSpeakings(List<TestSpeakingDTO> testSpeakings) {
+        this.testSpeakings = testSpeakings;
     }
 
     public List<TestMixingQuestionDTO> getTestMixingQuestions() {
@@ -176,7 +160,7 @@ public class TestDTO implements BaseDTO {
                 ", testVocabularyQuestions=" + (testVocabularyQuestions != null ? testVocabularyQuestions.toString() : "null") +
                 ", testGrammarQuestions=" + (testGrammarQuestions != null ? testGrammarQuestions.toString() : "null") +
                 ", testWritings=" + (testWritings != null ? testWritings.toString() : "null") +
-                ", testSpeaking=" + (testSpeaking != null ? testSpeaking.toString() : "null") +
+                ", testSpeaking=" + (testSpeakings != null ? testListenings.toString() : "null") +
                 '}';
     }
 

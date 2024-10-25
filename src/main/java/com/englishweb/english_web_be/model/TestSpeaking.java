@@ -20,7 +20,7 @@ public class TestSpeaking implements BaseEntity {
     }
 
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "test_id")
     private Test test;
     @OneToMany(mappedBy = "testSpeaking", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
