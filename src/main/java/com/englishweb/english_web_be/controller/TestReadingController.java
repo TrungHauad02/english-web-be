@@ -22,14 +22,12 @@ public class TestReadingController {
 
     @PostMapping("/api/testreading")
     public ResponseEntity<TestReadingDTO> createReading(@Valid @RequestBody TestReadingDTO dto) {
-        TestReadingDTO createdReading = testReadingService.create(dto);
-        return new ResponseEntity<>(createdReading, HttpStatus.CREATED);
+        return new ResponseEntity<>(testReadingService.create(dto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/testreading")
-    public ResponseEntity<TestReadingDTO> updateReading(@Valid @RequestBody TestReadingDTO dto) {
-        TestReadingDTO updatedReading = testReadingService.update(dto);
-        return ResponseEntity.ok(updatedReading);
+    @PutMapping("/api/testreading/{id}")
+    public ResponseEntity<TestReadingDTO> updateReading(@Valid @RequestBody TestReadingDTO dto, @PathVariable String id) {
+        return ResponseEntity.ok( testReadingService.update(dto, id));
     }
 
     @DeleteMapping("/api/testreading/{id}")

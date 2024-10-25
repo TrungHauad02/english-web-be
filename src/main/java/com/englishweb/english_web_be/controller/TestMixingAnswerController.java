@@ -9,11 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class TestMixingAnswercontroller {
+public class TestMixingAnswerController {
     private final TestMixingAnswerService testMixingAnswerService;
 
 
-    public TestMixingAnswercontroller(TestMixingAnswerService testMixingAnswerService) {
+    public TestMixingAnswerController(TestMixingAnswerService testMixingAnswerService) {
         this.testMixingAnswerService = testMixingAnswerService;
     }
 
@@ -25,15 +25,13 @@ public class TestMixingAnswercontroller {
 
     @PostMapping("/api/testmixinganswer")
     public ResponseEntity<TestMixingAnswerDTO> createAnswer(@Valid @RequestBody TestMixingAnswerDTO dto) {
-        TestMixingAnswerDTO createdAnswer = testMixingAnswerService.create(dto);
-        return new ResponseEntity<>(createdAnswer, HttpStatus.CREATED);
+        return new ResponseEntity<>(testMixingAnswerService.create(dto), HttpStatus.CREATED);
     }
 
 
-    @PutMapping("/api/testmixinganswer")
-    public ResponseEntity<TestMixingAnswerDTO> updateAnswer(@Valid @RequestBody TestMixingAnswerDTO dto) {
-        TestMixingAnswerDTO updatedAnswer = testMixingAnswerService.update(dto);
-        return ResponseEntity.ok(updatedAnswer);
+    @PutMapping("/api/testmixinganswer/{id}")
+    public ResponseEntity<TestMixingAnswerDTO> updateAnswer(@Valid @RequestBody TestMixingAnswerDTO dto, @PathVariable String id) {
+        return ResponseEntity.ok(testMixingAnswerService.update(dto, id));
     }
 
     @DeleteMapping("/api/testmixinganswer/{id}")

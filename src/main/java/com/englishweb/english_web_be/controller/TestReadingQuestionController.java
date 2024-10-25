@@ -26,10 +26,9 @@ public class TestReadingQuestionController {
         return new ResponseEntity<>(createdQuestion, HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/testreadingquestion")
-    public ResponseEntity<TestReadingQuestionDTO> updateQuestion(@Valid @RequestBody TestReadingQuestionDTO dto) {
-        TestReadingQuestionDTO updatedQuestion = testReadingQuestionService.update(dto);
-        return ResponseEntity.ok(updatedQuestion);
+    @PutMapping("/api/testreadingquestion/{id}")
+    public ResponseEntity<TestReadingQuestionDTO> updateQuestion(@Valid @RequestBody TestReadingQuestionDTO dto, @PathVariable String id) {
+        return ResponseEntity.ok(testReadingQuestionService.update(dto, id));
     }
 
     @DeleteMapping("/api/testreadingquestion/{id}")

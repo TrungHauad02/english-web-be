@@ -23,14 +23,12 @@ public class TestMixingQuestionController {
 
     @PostMapping("/api/testmixingquestion")
     public ResponseEntity<TestMixingQuestionDTO> createQuestion(@Valid @RequestBody TestMixingQuestionDTO dto) {
-        TestMixingQuestionDTO createdQuestion = testMixingQuestionService.create(dto);
-        return new ResponseEntity<>(createdQuestion, HttpStatus.CREATED);
+        return new ResponseEntity<>(testMixingQuestionService.create(dto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/testmixingquestion")
-    public ResponseEntity<TestMixingQuestionDTO> updateQuestion(@Valid @RequestBody TestMixingQuestionDTO dto) {
-        TestMixingQuestionDTO updatedQuestion = testMixingQuestionService.update(dto);
-        return ResponseEntity.ok(updatedQuestion);
+    @PutMapping("/api/testmixingquestion/{id}")
+    public ResponseEntity<TestMixingQuestionDTO> updateQuestion(@Valid @RequestBody TestMixingQuestionDTO dto, @PathVariable String id) {
+        return ResponseEntity.ok(testMixingQuestionService.update(dto, id));
     }
 
     @DeleteMapping("/api/testmixingquestion/{id}")

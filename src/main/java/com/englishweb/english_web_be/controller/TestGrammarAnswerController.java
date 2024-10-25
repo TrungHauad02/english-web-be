@@ -24,15 +24,13 @@ public class TestGrammarAnswerController {
 
     @PostMapping("/api/testgrammaranswer")
     public ResponseEntity<TestGrammarAnswerDTO> createAnswer(@Valid @RequestBody TestGrammarAnswerDTO dto) {
-        TestGrammarAnswerDTO createdAnswer = testGrammarAnswerService.create(dto);
-        return new ResponseEntity<>(createdAnswer, HttpStatus.CREATED);
+        return new ResponseEntity<>(testGrammarAnswerService.create(dto), HttpStatus.CREATED);
     }
 
 
-    @PutMapping("/api/testgrammaranswer")
-    public ResponseEntity<TestGrammarAnswerDTO> updateAnswer(@Valid @RequestBody TestGrammarAnswerDTO dto) {
-        TestGrammarAnswerDTO updatedAnswer = testGrammarAnswerService.update(dto);
-        return ResponseEntity.ok(updatedAnswer);
+    @PutMapping("/api/testgrammaranswer/{id}")
+    public ResponseEntity<TestGrammarAnswerDTO> updateAnswer(@Valid @RequestBody TestGrammarAnswerDTO dto, @PathVariable String id) {
+        return ResponseEntity.ok(testGrammarAnswerService.update(dto, id));
     }
 
     @DeleteMapping("/api/testgrammaranswer/{id}")

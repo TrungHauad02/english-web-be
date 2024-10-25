@@ -26,16 +26,12 @@ public class TestVocabularyQuestionController {
 
     @PostMapping("/api/testvocabularyquestion")
     public ResponseEntity<TestVocabularyQuestionDTO> createTest(@Valid @RequestBody TestVocabularyQuestionDTO dto){
-        TestVocabularyQuestionDTO createdTest = testVocabularyQuestionService.create(dto);
-
-        return new ResponseEntity<>(createdTest, HttpStatus.CREATED);
+        return new ResponseEntity<>(testVocabularyQuestionService.create(dto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/testvocabularyquestion")
-    public ResponseEntity<TestVocabularyQuestionDTO> updateTest(@Valid @RequestBody TestVocabularyQuestionDTO dto){
-        TestVocabularyQuestionDTO updatedTest = testVocabularyQuestionService.update(dto);
-
-        return ResponseEntity.ok(updatedTest);
+    @PutMapping("/api/testvocabularyquestion/{id}")
+    public ResponseEntity<TestVocabularyQuestionDTO> updateTest(@Valid @RequestBody TestVocabularyQuestionDTO dto, @PathVariable String id){
+        return ResponseEntity.ok(testVocabularyQuestionService.update(dto, id));
     }
 
     @DeleteMapping("/api/testvocabularyquestion/{id}")
