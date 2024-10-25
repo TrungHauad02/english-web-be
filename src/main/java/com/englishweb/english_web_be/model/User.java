@@ -5,7 +5,8 @@ import com.englishweb.english_web_be.modelenum.RoleEnum;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 
-@Entity(name = "`USER`")
+@Entity
+@Table(name = "USERS")
 public class User implements BaseEntity {
     @Id
     private String id;
@@ -26,7 +27,11 @@ public class User implements BaseEntity {
 
     @PrePersist
     private void generateId() {
-        this.id = "User_" + System.currentTimeMillis();
+        if (this.roleEnum == RoleEnum.TEACHER) {
+            this.id = "Teacher_" + System.currentTimeMillis();
+        } else if (this.roleEnum == RoleEnum.STUDENT) {
+            this.id = "Student_" + System.currentTimeMillis();
+        }
     }
 
     public User() {
