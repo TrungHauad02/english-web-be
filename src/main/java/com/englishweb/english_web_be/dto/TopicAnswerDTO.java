@@ -12,17 +12,17 @@ public class TopicAnswerDTO implements BaseDTO {
     boolean correct;
     StatusEnum status;
     @NotBlank(message = "Topic question id cannot be empty")
-    String topicQuestionId;
+    String questionId;
 
     public TopicAnswerDTO() {
     }
 
-    public TopicAnswerDTO(String id, String content, boolean correct, StatusEnum status, String topicQuestionId) {
+    public TopicAnswerDTO(String id, String content, boolean correct, StatusEnum status, String questionId) {
         this.id = id;
         this.content = content;
         this.correct = correct;
         this.status = status;
-        this.topicQuestionId = topicQuestionId;
+        this.questionId = questionId;
     }
 
     public TopicAnswerDTO(String id) {
@@ -70,11 +70,11 @@ public class TopicAnswerDTO implements BaseDTO {
         this.status = status;
     }
 
-    public String getTopicQuestionId() {
-        return topicQuestionId;
+    public String getQuestionId() {
+        return questionId;
     }
 
-    public void setTopicQuestionId(String topicQuestionId) {
-        this.topicQuestionId = topicQuestionId;
+    public void setQuestionId(String questionId) {
+        this.questionId = questionId;
     }
 }

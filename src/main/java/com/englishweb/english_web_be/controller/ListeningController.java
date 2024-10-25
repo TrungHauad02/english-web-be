@@ -31,14 +31,12 @@ public class ListeningController {
 
     @PostMapping("/api/listenings")
     public ResponseEntity<ListeningDTO> save(@Valid @RequestBody ListeningDTO dto){
-        ListeningDTO created = service.create(dto);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/listenings")
-    public ResponseEntity<ListeningDTO> update(@Valid @RequestBody ListeningDTO dto){
-        ListeningDTO updated = service.update(dto);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+    @PutMapping("/api/listenings/{id}")
+    public ResponseEntity<ListeningDTO> update(@Valid @RequestBody ListeningDTO dto, @PathVariable String id){
+        return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/listenings/{id}")

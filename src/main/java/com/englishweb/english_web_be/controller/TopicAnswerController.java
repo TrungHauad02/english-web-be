@@ -18,14 +18,12 @@ public class TopicAnswerController {
 
     @PostMapping("/api/topics-answer")
     public ResponseEntity<TopicAnswerDTO> create(@Valid @RequestBody TopicAnswerDTO dto) {
-        TopicAnswerDTO created = service.create(dto);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/topics-answer")
-    public ResponseEntity<TopicAnswerDTO> update(@Valid @RequestBody TopicAnswerDTO dto){
-        TopicAnswerDTO updated = service.update(dto);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+    @PutMapping("/api/topics-answer/{id}")
+    public ResponseEntity<TopicAnswerDTO> update(@Valid @RequestBody TopicAnswerDTO dto, @PathVariable String id) {
+        return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/topics-answer/{id}")

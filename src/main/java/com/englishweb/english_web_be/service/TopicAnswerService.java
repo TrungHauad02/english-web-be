@@ -3,7 +3,6 @@ package com.englishweb.english_web_be.service;
 import com.englishweb.english_web_be.dto.TopicAnswerDTO;
 import com.englishweb.english_web_be.model.TopicAnswer;
 import com.englishweb.english_web_be.repository.TopicAnswerRepository;
-import com.englishweb.english_web_be.util.ValidationUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +32,7 @@ public class TopicAnswerService extends BaseService<TopicAnswer, TopicAnswerDTO,
         dto.setContent(entity.getContent());
         dto.setCorrect(entity.isCorrect());
         dto.setStatus(entity.getStatus());
-        dto.setTopicQuestionId(entity.getQuestion().getId());
+        dto.setQuestionId(entity.getQuestion().getId());
         return dto;
     }
 
@@ -44,7 +43,7 @@ public class TopicAnswerService extends BaseService<TopicAnswer, TopicAnswerDTO,
         entity.setContent(dto.getContent());
         entity.setCorrect(dto.isCorrect());
         entity.setStatus(dto.getStatus());
-        entity.setQuestion(topicQuestionService.convertToEntity(topicQuestionService.findById(dto.getTopicQuestionId())));
+        entity.setQuestion(topicQuestionService.convertToEntity(topicQuestionService.findById(dto.getQuestionId())));
         return entity;
     }
 }

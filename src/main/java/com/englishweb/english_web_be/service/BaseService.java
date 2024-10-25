@@ -36,8 +36,9 @@ public abstract class BaseService<Entity extends BaseEntity, DTO extends BaseDTO
         return convertToDTO(repository.save(entity));
     }
 
-    public DTO update(DTO dto) {
-        isExist(dto.getId());
+    public DTO update(DTO dto, String id) {
+        isExist(id);
+        dto.setId(id);
         return convertToDTO(repository.save(convertToEntity(dto)));
     }
 

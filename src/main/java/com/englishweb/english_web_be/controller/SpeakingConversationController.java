@@ -32,9 +32,9 @@ public class SpeakingConversationController {
         return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/speakingConversation")
-    public ResponseEntity<SpeakingConversationDTO> update(@Valid @RequestBody SpeakingConversationDTO dto) {
-        return new ResponseEntity<>(service.update(dto), HttpStatus.OK);
+    @PutMapping("/api/speakingConversation/{id}")
+    public ResponseEntity<SpeakingConversationDTO> update(@Valid @RequestBody SpeakingConversationDTO dto, @PathVariable String id) {
+        return new ResponseEntity<>(service.update(dto,id), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/speakingConversation/{id}")

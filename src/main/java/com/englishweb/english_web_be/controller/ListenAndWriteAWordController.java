@@ -18,21 +18,18 @@ public class ListenAndWriteAWordController {
     }
 
     @GetMapping("/api/listenAndWriteAWord")
-    public ResponseEntity<List<ListenAndWriteAWordDTO>> getByListeningId(String listeningId) {
-        List<ListenAndWriteAWordDTO> dtoList = service.findByListeningId(listeningId);
-        return new ResponseEntity<>(dtoList, HttpStatus.OK);
+    public ResponseEntity<List<ListenAndWriteAWordDTO>> getByListeningId(@RequestParam String listeningId) {
+        return new ResponseEntity<>(service.findByListeningId(listeningId), HttpStatus.OK);
     }
 
     @PostMapping("/api/listenAndWriteAWord")
     public ResponseEntity<ListenAndWriteAWordDTO> create(@Valid @RequestBody ListenAndWriteAWordDTO dto) {
-        ListenAndWriteAWordDTO created = service.create(dto);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/listenAndWriteAWord")
-    public ResponseEntity<ListenAndWriteAWordDTO> update(@Valid @RequestBody ListenAndWriteAWordDTO dto) {
-        ListenAndWriteAWordDTO updated = service.update(dto);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+    @PutMapping("/api/listenAndWriteAWord/{id}")
+    public ResponseEntity<ListenAndWriteAWordDTO> update(@Valid @RequestBody ListenAndWriteAWordDTO dto, @PathVariable String id) {
+        return new ResponseEntity<>(service.update(dto,id), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/listenAndWriteAWord/{id}")

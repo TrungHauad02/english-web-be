@@ -21,9 +21,9 @@ public class ReadingAnswerController {
         return new ResponseEntity<>(service.create(dto), HttpStatus.OK);
     }
 
-    @PutMapping("/api/reading-answer")
-    public ResponseEntity<ReadingAnswerDTO> update(@Valid @RequestBody ReadingAnswerDTO dto) {
-        return new ResponseEntity<>(service.update(dto), HttpStatus.OK);
+    @PutMapping("/api/reading-answer/{id}")
+    public ResponseEntity<ReadingAnswerDTO> update(@Valid @RequestBody ReadingAnswerDTO dto, @PathVariable String id) {
+        return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/reading-answer/{id}")

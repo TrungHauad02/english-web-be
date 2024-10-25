@@ -31,14 +31,12 @@ public class GrammarController {
 
     @PostMapping("/api/grammars")
     public ResponseEntity<GrammarDTO> create(@Valid @RequestBody GrammarDTO dto){
-        GrammarDTO created = service.create(dto);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/grammars")
-    public ResponseEntity<GrammarDTO> update(@Valid @RequestBody GrammarDTO dto){
-        GrammarDTO updated = service.update(dto);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+    @PutMapping("/api/grammars/{id}")
+    public ResponseEntity<GrammarDTO> update(@Valid @RequestBody GrammarDTO dto, @PathVariable String id){
+        return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/grammars/{id}")
