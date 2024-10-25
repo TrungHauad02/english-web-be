@@ -24,14 +24,12 @@ public class TestWritingController {
 
     @PostMapping("/api/testwriting")
     public ResponseEntity<TestWritingDTO> createWriting(@Valid @RequestBody TestWritingDTO dto) {
-        TestWritingDTO createdWriting = testWritingService.create(dto);
-        return new ResponseEntity<>(createdWriting, HttpStatus.CREATED);
+        return new ResponseEntity<>(testWritingService.create(dto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/testwriting")
-    public ResponseEntity<TestWritingDTO> updateWriting(@Valid @RequestBody TestWritingDTO dto) {
-        TestWritingDTO updatedWriting = testWritingService.update(dto);
-        return ResponseEntity.ok(updatedWriting);
+    @PutMapping("/api/testwriting/{id}")
+    public ResponseEntity<TestWritingDTO> updateWriting(@Valid @RequestBody TestWritingDTO dto, @PathVariable String id) {
+        return ResponseEntity.ok(testWritingService.update(dto, id));
     }
     @DeleteMapping("/api/testwriting/{id}")
     public ResponseEntity<Void> deleteWritingById(@PathVariable String id) {

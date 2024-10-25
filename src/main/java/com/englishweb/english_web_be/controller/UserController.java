@@ -49,10 +49,9 @@ public class UserController {
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @PutMapping("/api/users")
-    public ResponseEntity<UserDTO> update(@Valid @RequestBody UserDTO userDTO) {
-        UserDTO updatedUser = userService.update(userDTO);
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    @PutMapping("/api/users/{id}")
+    public ResponseEntity<UserDTO> update(@Valid @RequestBody UserDTO userDTO, @PathVariable String id) {
+        return new ResponseEntity<>(userService.update(userDTO, id), HttpStatus.OK);
     }
 
 }
