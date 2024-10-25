@@ -24,14 +24,12 @@ public class GrammarQuestionController {
 
     @PostMapping("/api/grammar-question")
     public ResponseEntity<GrammarQuestionDTO> create(@Valid @RequestBody GrammarQuestionDTO dto){
-        GrammarQuestionDTO created = service.create(dto);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/grammar-question")
-    public ResponseEntity<GrammarQuestionDTO> update(@Valid @RequestBody GrammarQuestionDTO dto){
-        GrammarQuestionDTO updated = service.update(dto);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+    @PutMapping("/api/grammar-question/{id}")
+    public ResponseEntity<GrammarQuestionDTO> update(@Valid @RequestBody GrammarQuestionDTO dto, @PathVariable String id){
+        return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/grammar-question/{id}")

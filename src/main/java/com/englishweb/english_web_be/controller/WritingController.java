@@ -32,14 +32,12 @@ public class WritingController {
 
     @PostMapping("/api/writings")
     public ResponseEntity<WritingDTO> create(@Valid @RequestBody WritingDTO dto){
-        WritingDTO created = service.create(dto);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/writings")
-    public ResponseEntity<WritingDTO> update(@Valid @RequestBody WritingDTO dto){
-        WritingDTO updated = service.update(dto);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+    @PutMapping("/api/writings/{id}")
+    public ResponseEntity<WritingDTO> update(@Valid @RequestBody WritingDTO dto, @PathVariable String id) {
+        return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/writings/{id}")

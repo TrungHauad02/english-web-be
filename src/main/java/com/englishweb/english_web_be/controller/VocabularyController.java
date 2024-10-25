@@ -40,14 +40,12 @@ public class VocabularyController {
 
     @PostMapping("/api/vocabulary")
     public ResponseEntity<VocabularyDTO> create(@Valid @RequestBody VocabularyDTO dto){
-        VocabularyDTO created = service.create(dto);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/vocabulary")
-    public ResponseEntity<VocabularyDTO> update(@Valid @RequestBody VocabularyDTO dto){
-        VocabularyDTO updated = service.update(dto);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+    @PutMapping("/api/vocabulary/{id}")
+    public ResponseEntity<VocabularyDTO> update(@Valid @RequestBody VocabularyDTO dto, @PathVariable String id){
+        return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/vocabulary/{id}")

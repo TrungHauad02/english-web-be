@@ -30,14 +30,12 @@ public class TopicController {
 
     @PostMapping("/api/topics")
     public ResponseEntity<TopicDTO> create(@Valid @RequestBody TopicDTO topicDTO){
-        TopicDTO created = service.create(topicDTO);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        return new ResponseEntity<>(service.create(topicDTO), HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/topics")
-    public ResponseEntity<TopicDTO> update(@Valid @RequestBody TopicDTO topicDTO){
-        TopicDTO updated = service.update(topicDTO);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+    @PutMapping("/api/topics/{id}")
+    public ResponseEntity<TopicDTO> update(@Valid @RequestBody TopicDTO topicDTO, @PathVariable String id){
+        return new ResponseEntity<>(service.update(topicDTO, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/topics/{id}")

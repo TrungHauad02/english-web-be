@@ -12,17 +12,17 @@ public class ListeningAnswerDTO implements BaseDTO {
     boolean correct;
     StatusEnum status;
     @NotBlank(message = "Listening question id cannot be empty")
-    String listeningQuestionId;
+    String questionId;
 
     public ListeningAnswerDTO() {
     }
 
-    public ListeningAnswerDTO(String id, String content, boolean correct, StatusEnum status, String listeningQuestionId) {
+    public ListeningAnswerDTO(String id, String content, boolean correct, StatusEnum status, String questionId) {
         this.id = id;
         this.content = content;
         this.correct = correct;
         this.status = status;
-        this.listeningQuestionId = listeningQuestionId;
+        this.questionId = questionId;
     }
 
     public ListeningAnswerDTO(String id, String content, boolean correct, StatusEnum status) {
@@ -66,11 +66,11 @@ public class ListeningAnswerDTO implements BaseDTO {
         this.status = status;
     }
 
-    public String getListeningQuestionId() {
-        return listeningQuestionId;
+    public String getQuestionId() {
+        return questionId;
     }
 
-    public void setListeningQuestionId(String listeningQuestionId) {
-        this.listeningQuestionId = listeningQuestionId;
+    public void setQuestionId(String questionId) {
+        this.questionId = questionId;
     }
 }

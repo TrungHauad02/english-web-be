@@ -31,14 +31,12 @@ public class ReadingController {
 
     @PostMapping("/api/readings")
     public ResponseEntity<ReadingDTO> create(@Valid @RequestBody ReadingDTO dto){
-        ReadingDTO created = service.create(dto);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/readings")
-    public ResponseEntity<ReadingDTO> update(@Valid @RequestBody ReadingDTO dto){
-        ReadingDTO updated = service.update(dto);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+    @PutMapping("/api/readings/{id}")
+    public ResponseEntity<ReadingDTO> update(@Valid @RequestBody ReadingDTO dto, @PathVariable String id) {
+        return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/readings/{id}")
