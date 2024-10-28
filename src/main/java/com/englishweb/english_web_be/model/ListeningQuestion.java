@@ -16,7 +16,7 @@ public class ListeningQuestion implements BaseEntity {
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
     @ManyToOne
-    private ListenPractice listenPractice;
+    private Listening listening;
 
     @PrePersist
     private void generateId() {
@@ -26,13 +26,13 @@ public class ListeningQuestion implements BaseEntity {
     public ListeningQuestion() {
     }
 
-    public ListeningQuestion(String id, String content, int serial, String explanation, StatusEnum status, ListenPractice listenPractice) {
+    public ListeningQuestion(String id, String content, int serial, String explanation, StatusEnum status, Listening listening) {
         this.id = id;
         this.content = content;
         this.serial = serial;
         this.explanation = explanation;
         this.status = status;
-        this.listenPractice = listenPractice;
+        this.listening = listening;
     }
 
     @Override
@@ -77,11 +77,11 @@ public class ListeningQuestion implements BaseEntity {
         this.status = status;
     }
 
-    public ListenPractice getListenPractice() {
-        return listenPractice;
+    public Listening getListening() {
+        return listening;
     }
 
-    public void setListenPractice(ListenPractice listenPractice) {
-        this.listenPractice = listenPractice;
+    public void setListening(Listening listening) {
+        this.listening = listening;
     }
 }

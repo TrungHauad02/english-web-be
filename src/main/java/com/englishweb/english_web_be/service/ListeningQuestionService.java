@@ -12,18 +12,18 @@ import java.util.List;
 
 @Service
 public class ListeningQuestionService extends BaseService<ListeningQuestion, ListeningQuestionDTO, ListeningQuestionRepository> {
-    private final ListenPracticeService listenPracticeService;
+    private final ListeningService listeningService;
     ListeningAnswerService answerService;
 
-    public ListeningQuestionService(ListeningQuestionRepository repository, ListeningAnswerService answerService, @Lazy ListenPracticeService listenPracticeService) {
+    public ListeningQuestionService(ListeningQuestionRepository repository, ListeningAnswerService answerService, @Lazy ListeningService listeningService) {
         super(repository);
         this.answerService = answerService;
-        this.listenPracticeService = listenPracticeService;
+        this.listeningService = listeningService;
     }
 
-    public List<ListeningQuestionDTO> findByListenPracticeId(String listenPracticeId) {
-        listenPracticeService.isExist(listenPracticeId);
-        List<ListeningQuestion> entityList = repository.findAllByListenPractice_Id(listenPracticeId);
+    public List<ListeningQuestionDTO> findByListeningId(String listeningId) {
+        listeningService.isExist(listeningId);
+        List<ListeningQuestion> entityList = repository.findAllByListening_Id(listeningId);
         return entityList.stream()
                 .map(this::convertToDTO)
                 .toList();
@@ -31,6 +31,7 @@ public class ListeningQuestionService extends BaseService<ListeningQuestion, Lis
 
     @Override
     public void delete(String id){
+        isExist(id);
         List<ListeningAnswerDTO> answerDTOList = answerService.findListeningAnswersByQuestionId(id);
         for(ListeningAnswerDTO answerDTO : answerDTOList){
             answerService.delete(answerDTO.getId());
@@ -47,7 +48,7 @@ public class ListeningQuestionService extends BaseService<ListeningQuestion, Lis
         dto.setSerial(entity.getSerial());
         dto.setStatus(entity.getStatus());
         dto.setAnswers(answerService.findListeningAnswersByQuestionId(entity.getId()));
-        dto.setListeningPracticeId(entity.getListenPractice().getId());
+        dto.setListeningId(entity.getListening().getId());
         return dto;
     }
 
@@ -59,7 +60,7 @@ public class ListeningQuestionService extends BaseService<ListeningQuestion, Lis
         entity.setExplanation(dto.getExplanation());
         entity.setSerial(dto.getSerial());
         entity.setStatus(dto.getStatus());
-        entity.setListenPractice(listenPracticeService.convertToEntity(listenPracticeService.findById(dto.getListeningPracticeId())));
+        entity.setListening(listeningService.convertToEntity(listeningService.findById(dto.getListeningId())));
         return entity;
     }
 }
