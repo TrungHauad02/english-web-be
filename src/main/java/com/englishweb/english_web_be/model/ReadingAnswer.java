@@ -12,6 +12,7 @@ public class ReadingAnswer implements BaseEntity{
     @Column(nullable = false)
     private boolean correct;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private StatusEnum status;
     @ManyToOne
     @JoinColumn(name = "Reading_question_id")

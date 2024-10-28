@@ -22,7 +22,6 @@ public class ListeningDTO implements BaseDTO {
     }
 
     public ListeningDTO(String id, String title, int serial, String description, String image, String audioUrl, StatusEnum status) {
-
         this.id = id;
         this.title = title;
         this.serial = serial;
