@@ -37,7 +37,7 @@ public class ReadingQuestionService extends BaseService<ReadingQuestion, Reading
         dto.setStatus(entity.getStatus());
         dto.setReadingId(entity.getReading().getId());
         dto.setAnswers(readingAnswerService.findAllByQuestionId(entity.getId()));
-        return null;
+        return dto;
     }
 
     @Override

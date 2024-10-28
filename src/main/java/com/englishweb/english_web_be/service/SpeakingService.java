@@ -2,7 +2,6 @@ package com.englishweb.english_web_be.service;
 
 import com.englishweb.english_web_be.dto.SpeakingConversationDTO;
 import com.englishweb.english_web_be.dto.SpeakingDTO;
-import com.englishweb.english_web_be.dto.SpeakingTopicDTO;
 import com.englishweb.english_web_be.model.Speaking;
 import com.englishweb.english_web_be.repository.SpeakingRepository;
 import org.springframework.stereotype.Service;
@@ -13,12 +12,10 @@ import java.util.List;
 public class SpeakingService extends BaseService<Speaking, SpeakingDTO, SpeakingRepository> {
 
     private final SpeakingConversationService speakingConversationService;
-    private final SpeakingTopicService speakingTopicService;
 
-    public SpeakingService(SpeakingRepository repository, SpeakingConversationService speakingConversationService, SpeakingTopicService speakingTopicService) {
+    public SpeakingService(SpeakingRepository repository, SpeakingConversationService speakingConversationService) {
         super(repository);
         this.speakingConversationService = speakingConversationService;
-        this.speakingTopicService = speakingTopicService;
     }
 
     @Override
@@ -27,8 +24,6 @@ public class SpeakingService extends BaseService<Speaking, SpeakingDTO, Speaking
         for (SpeakingConversationDTO speakingConversationDTO : speakingConversationDTOList) {
             speakingConversationService.delete(speakingConversationDTO.getId());
         }
-        SpeakingTopicDTO speakingTopicDTO = speakingTopicService.findBySpeakingId(id);
-        speakingTopicService.delete(speakingTopicDTO.getId());
         super.delete(id);
     }
 
@@ -41,6 +36,8 @@ public class SpeakingService extends BaseService<Speaking, SpeakingDTO, Speaking
         dto.setImage(entity.getImage());
         dto.setSerial(entity.getSerial());
         dto.setStatus(entity.getStatus());
+        dto.setTopic(entity.getTopic());
+        dto.setDuration(entity.getDuration());
         return dto;
     }
 
@@ -53,6 +50,8 @@ public class SpeakingService extends BaseService<Speaking, SpeakingDTO, Speaking
         entity.setImage(dto.getImage());
         entity.setSerial(dto.getSerial());
         entity.setStatus(dto.getStatus());
+        entity.setTopic(dto.getTopic());
+        entity.setDuration(dto.getDuration());
         return entity;
     }
 }

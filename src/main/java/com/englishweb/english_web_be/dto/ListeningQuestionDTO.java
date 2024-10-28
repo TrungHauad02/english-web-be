@@ -16,29 +16,20 @@ public class ListeningQuestionDTO implements BaseDTO {
     String explanation;
     StatusEnum status;
     List<ListeningAnswerDTO> answers;
-    @NotBlank(message = "Listening practice id cannot be empty")
-    String listeningPracticeId;
+    @NotBlank(message = "Listening id cannot be empty")
+    String listeningId;
 
     public ListeningQuestionDTO() {
     }
 
-    public ListeningQuestionDTO(String id, String content, int serial, String explanation, StatusEnum status, List<ListeningAnswerDTO> answers, String listeningPracticeId) {
+    public ListeningQuestionDTO(String id, String content, int serial, String explanation, StatusEnum status, List<ListeningAnswerDTO> answers, String listeningId) {
         this.id = id;
         this.content = content;
         this.serial = serial;
         this.explanation = explanation;
         this.status = status;
         this.answers = answers;
-        this.listeningPracticeId = listeningPracticeId;
-    }
-
-    public ListeningQuestionDTO(String id, String content, int serial, String explanation, StatusEnum status, List<ListeningAnswerDTO> answers) {
-        this.id = id;
-        this.content = content;
-        this.serial = serial;
-        this.explanation = explanation;
-        this.status = status;
-        this.answers = answers;
+        this.listeningId = listeningId;
     }
 
     @Override
@@ -91,11 +82,11 @@ public class ListeningQuestionDTO implements BaseDTO {
         this.answers = answers;
     }
 
-    public String getListeningPracticeId() {
-        return listeningPracticeId;
+    public @NotBlank(message = "Listening id cannot be empty") String getListeningId() {
+        return listeningId;
     }
 
-    public void setListeningPracticeId(String listeningPracticeId) {
-        this.listeningPracticeId = listeningPracticeId;
+    public void setListeningId(@NotBlank(message = "Listening id cannot be empty") String listeningId) {
+        this.listeningId = listeningId;
     }
 }

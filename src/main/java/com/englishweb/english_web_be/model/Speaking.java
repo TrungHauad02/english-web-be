@@ -15,6 +15,10 @@ public class Speaking implements BaseEntity {
     private String description;
     @Column(nullable = false)
     private String image;
+    @Column(nullable = false)
+    private String topic;
+    @Column(nullable = false)
+    private int duration;
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
 
@@ -26,12 +30,14 @@ public class Speaking implements BaseEntity {
     public Speaking() {
     }
 
-    public Speaking(String id, String title, int serial, String description, String image, StatusEnum status) {
+    public Speaking(String id, String title, int serial, String description, String image, String topic, int duration, StatusEnum status) {
         this.id = id;
         this.title = title;
         this.serial = serial;
         this.description = description;
         this.image = image;
+        this.topic = topic;
+        this.duration = duration;
         this.status = status;
     }
 
@@ -83,5 +89,21 @@ public class Speaking implements BaseEntity {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }
