@@ -14,17 +14,23 @@ public class SpeakingDTO implements BaseDTO {
     String description;
     @NotBlank(message = "Image cannot be empty")
     String image;
+    @NotBlank(message = "Topic cannot be empty")
+    String topic;
+    @Positive(message = "Duration number must be greater than 0")
+    int duration;
     StatusEnum status;
 
     public SpeakingDTO() {
     }
 
-    public SpeakingDTO(String id, String title, int serial, String description, String image, StatusEnum status) {
+    public SpeakingDTO(String id, String title, int serial, String description, String image, String topic, int duration, StatusEnum status) {
         this.id = id;
         this.title = title;
         this.serial = serial;
         this.description = description;
         this.image = image;
+        this.topic = topic;
+        this.duration = duration;
         this.status = status;
     }
 
@@ -76,5 +82,22 @@ public class SpeakingDTO implements BaseDTO {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public @NotBlank(message = "Topic cannot be empty") String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(@NotBlank(message = "Topic cannot be empty") String topic) {
+        this.topic = topic;
+    }
+
+    @Positive(message = "Duration number must be greater than 0")
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(@Positive(message = "Duration number must be greater than 0") int duration) {
+        this.duration = duration;
     }
 }

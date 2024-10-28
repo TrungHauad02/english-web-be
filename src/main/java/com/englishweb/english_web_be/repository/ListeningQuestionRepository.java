@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ListeningQuestionRepository extends JpaRepository<ListeningQuestion, String> {
-    List<ListeningQuestion> findAllByListenPractice_Id(String practiceId);
+    List<ListeningQuestion> findAllByListening_Id(String listeningId);
 }
