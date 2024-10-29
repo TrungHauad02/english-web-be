@@ -19,7 +19,7 @@ import com.englishweb.english_web_be.service.UserService;
 import jakarta.validation.Valid;
 
 @RestController
-public class UserController {   
+public class UserController {
     @Autowired
     UserService userService;
 
@@ -45,13 +45,23 @@ public class UserController {
     }
 
     @DeleteMapping("/api/users/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
-        userService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<UserDTO> delete(@PathVariable String id) {
+        return new ResponseEntity<>(userService.deleteUser(id), HttpStatus.OK);
     }
+
     @PutMapping("/api/users/{id}")
     public ResponseEntity<UserDTO> update(@Valid @RequestBody UserDTO userDTO, @PathVariable String id) {
         return new ResponseEntity<>(userService.update(userDTO, id), HttpStatus.OK);
+    }
+
+    @PostMapping("/api/student/signup")
+    public ResponseEntity<UserDTO> signupStudent(@Valid @RequestBody UserDTO userDTO) {
+        return  new ResponseEntity<>(userService.signUpStudent(userDTO), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/api/teacher/signup")
+    public ResponseEntity<UserDTO> signupTeacher(@Valid @RequestBody UserDTO userDTO) {
+        return  new ResponseEntity<>(userService.signUpTeacher(userDTO), HttpStatus.CREATED);
     }
 
 }

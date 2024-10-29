@@ -5,9 +5,12 @@ import com.englishweb.english_web_be.modelenum.RoleEnum;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.validation.constraints.NotBlank;
 
-public class UserDTO implements BaseDTO{
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
+
+public class UserDTO implements BaseDTO {
     String id;
-    @NotBlank(message = "Name cannot be empty")
     String name;
     @NotBlank(message = "Email cannot be empty")
     String email;
@@ -18,10 +21,12 @@ public class UserDTO implements BaseDTO{
     StatusEnum status;
     RoleEnum role;
     LevelEnum level;
+    LocalDate startDate;
+    LocalDate endDate;
 
     public UserDTO() {}
 
-    public UserDTO(String id, String name, String email, String password, String avatar, String contentMotivation, StatusEnum status, RoleEnum role, LevelEnum level) {
+    public UserDTO(String id, String name, String email, String password, String avatar, String contentMotivation, StatusEnum status, RoleEnum role, LevelEnum level, LocalDate startDate, LocalDate endDate) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -31,7 +36,10 @@ public class UserDTO implements BaseDTO{
         this.status = status;
         this.role = role;
         this.level = level;
+        this.startDate = LocalDate.now();
+        this.endDate = endDate;
     }
+
 
     @Override
     public String getId() {
@@ -106,4 +114,12 @@ public class UserDTO implements BaseDTO{
     public void setLevel(LevelEnum level) {
         this.level = level;
     }
+
+    public LocalDate getStartDate() { return startDate;}
+
+    public void setStartDate() { this.startDate = LocalDate.now();}
+
+    public LocalDate getEndDate() { return endDate;}
+
+    public void setEndDate(LocalDate endDate) { this.endDate = endDate;}
 }
