@@ -13,7 +13,7 @@ public class ListenAndWriteAWordDTO implements BaseDTO {
     String audioUrl;
     @NotBlank(message = "Sentence cannot be empty")
     String sentence;
-    @PositiveOrZero(message = "Serial number must be equal or greater than 0")
+    @PositiveOrZero(message = "Missing index must be equal or greater than 0")
     int missingIndex;
     @NotBlank(message = "Correct answer cannot be empty")
     String correctAnswer;
