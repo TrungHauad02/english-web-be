@@ -12,8 +12,8 @@ public class ReadingDTO implements BaseDTO {
     int serial;
     @NotBlank(message = "Description cannot be empty")
     String description;
-    @NotBlank(message = "Content cannot be empty")
-    String content;
+    @NotBlank(message = "File cannot be empty")
+    String file;
     @NotBlank(message = "Image cannot be empty")
     String image;
     StatusEnum status;
@@ -21,12 +21,12 @@ public class ReadingDTO implements BaseDTO {
     public ReadingDTO() {
     }
 
-    public ReadingDTO(String id, String title, int serial, String description, String content, String image, StatusEnum status) {
+    public ReadingDTO(String id, String title, int serial, String description, String file, String image, StatusEnum status) {
         this.id = id;
         this.title = title;
         this.serial = serial;
         this.description = description;
-        this.content = content;
+        this.file = file;
         this.image = image;
         this.status = status;
     }
@@ -65,12 +65,12 @@ public class ReadingDTO implements BaseDTO {
         this.description = description;
     }
 
-    public String getContent() {
-        return content;
+    public @NotBlank(message = "File cannot be empty") String getFile() {
+        return file;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setFile(@NotBlank(message = "File cannot be empty") String file) {
+        this.file = file;
     }
 
     public String getImage() {
