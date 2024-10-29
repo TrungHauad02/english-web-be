@@ -52,5 +52,6 @@ public abstract class BaseService<Entity extends BaseEntity, DTO extends BaseDTO
     }
 
     protected abstract Entity convertToEntity(DTO dto);
+
     protected abstract DTO convertToDTO(Entity entity);
 }

@@ -5,6 +5,10 @@ import com.englishweb.english_web_be.modelenum.RoleEnum;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Entity
 @Table(name = "USERS")
 public class User implements BaseEntity {
@@ -24,6 +28,8 @@ public class User implements BaseEntity {
     private RoleEnum roleEnum = RoleEnum.STUDENT;
     @Enumerated(EnumType.STRING)
     private LevelEnum levelEnum;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     @PrePersist
     private void generateId() {
@@ -37,7 +43,7 @@ public class User implements BaseEntity {
     public User() {
     }
 
-    public User(String id, String name, String email, String password, String avatar, String contentMotivation, StatusEnum statusEnum, RoleEnum roleEnum, LevelEnum levelEnum) {
+    public User(String id, String name, String email, String password, String avatar, String contentMotivation, StatusEnum statusEnum, RoleEnum roleEnum, LevelEnum levelEnum, LocalDate startDate, LocalDate endDate) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -47,6 +53,8 @@ public class User implements BaseEntity {
         this.statusEnum = statusEnum;
         this.roleEnum = roleEnum;
         this.levelEnum = levelEnum;
+        this.startDate = LocalDate.now();
+        this.endDate = endDate;
     }
 
     @Override
@@ -122,4 +130,12 @@ public class User implements BaseEntity {
     public void setLevelEnum(LevelEnum levelEnum) {
         this.levelEnum = levelEnum;
     }
+
+    public LocalDate getStartDate() {return startDate;}
+
+    public void setStartDate(LocalDate startDate) {this.startDate = startDate;}
+
+    public LocalDate getEndDate() {return endDate;}
+
+    public void setEndDate(LocalDate endDate) {this.endDate = endDate;}
 }
