@@ -1,8 +1,8 @@
 package com.englishweb.english_web_be.service;
 
 import com.englishweb.english_web_be.dto.ListenAndWriteAWordDTO;
-import com.englishweb.english_web_be.dto.ListenPracticeDTO;
 import com.englishweb.english_web_be.dto.ListeningDTO;
+import com.englishweb.english_web_be.dto.ListeningQuestionDTO;
 import com.englishweb.english_web_be.model.Listening;
 import com.englishweb.english_web_be.repository.ListeningRepository;
 import org.springframework.stereotype.Service;
@@ -12,19 +12,22 @@ import java.util.List;
 @Service
 public class ListeningService extends BaseService<Listening, ListeningDTO, ListeningRepository> {
 
-    private final ListenPracticeService listenPracticeService;
     private final ListenAndWriteAWordService listenAndWriteAWordService;
+    private final ListeningQuestionService listeningQuestionService;
 
-    public ListeningService(ListeningRepository repository, ListenPracticeService listenPracticeService, ListenAndWriteAWordService listenAndWriteAWordService) {
+    public ListeningService(ListeningRepository repository, ListenAndWriteAWordService listenAndWriteAWordService, ListeningQuestionService listeningQuestionService) {
         super(repository);
-        this.listenPracticeService = listenPracticeService;
         this.listenAndWriteAWordService = listenAndWriteAWordService;
+        this.listeningQuestionService = listeningQuestionService;
     }
 
     @Override
     public void delete(String id){
-        ListenPracticeDTO listenPracticeDTO = listenPracticeService.findByListeningId(id);
-        listenPracticeService.delete(listenPracticeDTO.getId());
+        isExist(id);
+        List<ListeningQuestionDTO> questionDTOList = listeningQuestionService.findByListeningId(id);
+        for (ListeningQuestionDTO questionDTO : questionDTOList) {
+            listeningQuestionService.delete(questionDTO.getId());
+        }
         List<ListenAndWriteAWordDTO> listenAndWriteAWordDTOList = listenAndWriteAWordService.findByListeningId(id);
         for (ListenAndWriteAWordDTO listenAndWriteAWordDTO : listenAndWriteAWordDTOList) {
             listenAndWriteAWordService.delete(listenAndWriteAWordDTO.getId());
@@ -41,6 +44,7 @@ public class ListeningService extends BaseService<Listening, ListeningDTO, Liste
         dto.setDescription(entity.getDescription());
         dto.setTitle(entity.getTitle());
         dto.setStatus(entity.getStatus());
+        dto.setAudioUrl(entity.getAudioUrl());
         return dto;
     }
 
@@ -53,6 +57,7 @@ public class ListeningService extends BaseService<Listening, ListeningDTO, Liste
         entity.setDescription(dto.getDescription());
         entity.setTitle(dto.getTitle());
         entity.setStatus(dto.getStatus());
+        entity.setAudioUrl(dto.getAudioUrl());
         return entity;
     }
 }

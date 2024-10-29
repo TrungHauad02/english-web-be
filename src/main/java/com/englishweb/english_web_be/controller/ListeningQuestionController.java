@@ -18,8 +18,8 @@ public class ListeningQuestionController {
     }
 
     @GetMapping("/api/listening-question")
-    public ResponseEntity<List<ListeningQuestionDTO>> findByPracticeIdId(@RequestParam String practiceId) {
-        return new ResponseEntity<>(service.findByListenPracticeId(practiceId), HttpStatus.OK);
+    public ResponseEntity<List<ListeningQuestionDTO>> findByListeningId(@RequestParam String listeningId) {
+        return new ResponseEntity<>(service.findByListeningId(listeningId), HttpStatus.OK);
     }
 
     @PostMapping("/api/listening-question")

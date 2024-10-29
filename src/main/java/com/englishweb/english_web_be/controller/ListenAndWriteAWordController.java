@@ -17,6 +17,11 @@ public class ListenAndWriteAWordController {
         this.service = service;
     }
 
+    @GetMapping("/api/listenAndWriteAWord/{id}")
+    public ResponseEntity<ListenAndWriteAWordDTO> getById(@PathVariable String id) {
+        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+    }
+
     @GetMapping("/api/listenAndWriteAWord")
     public ResponseEntity<List<ListenAndWriteAWordDTO>> getByListeningId(@RequestParam String listeningId) {
         return new ResponseEntity<>(service.findByListeningId(listeningId), HttpStatus.OK);

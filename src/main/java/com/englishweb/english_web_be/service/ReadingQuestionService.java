@@ -1,5 +1,6 @@
 package com.englishweb.english_web_be.service;
 
+import com.englishweb.english_web_be.dto.ReadingAnswerDTO;
 import com.englishweb.english_web_be.dto.ReadingQuestionDTO;
 import com.englishweb.english_web_be.model.ReadingQuestion;
 import com.englishweb.english_web_be.repository.ReadingQuestionRepository;
@@ -28,6 +29,16 @@ public class ReadingQuestionService extends BaseService<ReadingQuestion, Reading
     }
 
     @Override
+    public void delete(String id){
+        isExist(id);
+        List<ReadingAnswerDTO> answerDTOList = readingAnswerService.findAllByQuestionId(id);
+        for(ReadingAnswerDTO answerDTO : answerDTOList){
+            readingAnswerService.delete(answerDTO.getId());
+        }
+        super.delete(id);
+    }
+
+    @Override
     public ReadingQuestionDTO convertToDTO(ReadingQuestion entity) {
         ReadingQuestionDTO dto = new ReadingQuestionDTO();
         dto.setId(entity.getId());
@@ -37,7 +48,7 @@ public class ReadingQuestionService extends BaseService<ReadingQuestion, Reading
         dto.setStatus(entity.getStatus());
         dto.setReadingId(entity.getReading().getId());
         dto.setAnswers(readingAnswerService.findAllByQuestionId(entity.getId()));
-        return null;
+        return dto;
     }
 
     @Override

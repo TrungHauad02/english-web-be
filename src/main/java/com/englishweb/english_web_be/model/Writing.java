@@ -20,6 +20,11 @@ public class Writing implements BaseEntity {
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
 
+    @PrePersist
+    private void generateId() {
+        this.id = "Write_" + System.currentTimeMillis();
+    }
+
     public Writing() {
     }
 

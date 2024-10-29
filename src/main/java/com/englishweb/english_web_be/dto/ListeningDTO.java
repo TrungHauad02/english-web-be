@@ -14,17 +14,20 @@ public class ListeningDTO implements BaseDTO {
     String description;
     @NotBlank(message = "Image cannot be empty")
     String image;
+    @NotBlank(message = "Audio url cannot be empty")
+    String audioUrl;
     StatusEnum status;
 
     public ListeningDTO() {
     }
 
-    public ListeningDTO(String id, String title, int serial, String description, String image, StatusEnum status) {
+    public ListeningDTO(String id, String title, int serial, String description, String image, String audioUrl, StatusEnum status) {
         this.id = id;
         this.title = title;
         this.serial = serial;
         this.description = description;
         this.image = image;
+        this.audioUrl = audioUrl;
         this.status = status;
     }
 
@@ -76,5 +79,13 @@ public class ListeningDTO implements BaseDTO {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public String getAudioUrl() {
+        return audioUrl;
+    }
+
+    public void setAudioUrl(String audioUrl) {
+        this.audioUrl = audioUrl;
     }
 }

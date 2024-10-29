@@ -14,6 +14,7 @@ public class ReadingQuestion implements BaseEntity{
     @Column(nullable = false)
     private String explanation;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private StatusEnum status;
     @ManyToOne
     @JoinColumn(name = "reading_id")

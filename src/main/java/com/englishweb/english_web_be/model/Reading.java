@@ -14,7 +14,7 @@ public class Reading implements BaseEntity {
     @Column(nullable = false)
     private String description;
     @Column(nullable = false)
-    private String content;
+    private String file;
     @Column(nullable = false)
     private String image;
     @Enumerated(EnumType.STRING)
@@ -28,12 +28,12 @@ public class Reading implements BaseEntity {
     public Reading() {
     }
 
-    public Reading(String id, String title, int serial, String description, String content, String image, StatusEnum status) {
+    public Reading(String id, String title, int serial, String description, String file, String image, StatusEnum status) {
         this.id = id;
         this.title = title;
         this.serial = serial;
         this.description = description;
-        this.content = content;
+        this.file = file;
         this.image = image;
         this.status = status;
     }
@@ -72,12 +72,12 @@ public class Reading implements BaseEntity {
         this.description = description;
     }
 
-    public String getContent() {
-        return content;
+    public String getFile() {
+        return file;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setFile(String file) {
+        this.file = file;
     }
 
     public String getImage() {

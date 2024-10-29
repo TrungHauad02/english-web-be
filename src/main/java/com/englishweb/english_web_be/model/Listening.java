@@ -15,6 +15,8 @@ public class Listening implements BaseEntity {
     private String description;
     @Column(nullable = false)
     private String image;
+    @Column(nullable = false)
+    private String audioUrl;
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
 
@@ -26,12 +28,13 @@ public class Listening implements BaseEntity {
     public Listening() {
     }
 
-    public Listening(String id, String title, int serial, String description, String image, StatusEnum status) {
+    public Listening(String id, String title, int serial, String description, String image, String audioUrl, StatusEnum status) {
         this.id = id;
         this.title = title;
         this.serial = serial;
         this.description = description;
         this.image = image;
+        this.audioUrl = audioUrl;
         this.status = status;
     }
 
@@ -83,5 +86,13 @@ public class Listening implements BaseEntity {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public String getAudioUrl() {
+        return audioUrl;
+    }
+
+    public void setAudioUrl(String audioUrl) {
+        this.audioUrl = audioUrl;
     }
 }

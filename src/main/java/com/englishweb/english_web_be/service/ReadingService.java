@@ -18,7 +18,7 @@ public class ReadingService extends BaseService<Reading, ReadingDTO, ReadingRepo
         entity.setId(dto.getId());
         entity.setTitle(dto.getTitle());
         entity.setDescription(dto.getDescription());
-        entity.setContent(dto.getContent());
+        entity.setFile(dto.getFile());
         entity.setSerial(dto.getSerial());
         entity.setImage(dto.getImage());
         entity.setStatus(dto.getStatus());
@@ -31,7 +31,7 @@ public class ReadingService extends BaseService<Reading, ReadingDTO, ReadingRepo
         dto.setId(entity.getId());
         dto.setTitle(entity.getTitle());
         dto.setDescription(entity.getDescription());
-        dto.setContent(entity.getContent());
+        dto.setFile(entity.getFile());
         dto.setSerial(entity.getSerial());
         dto.setImage(entity.getImage());
         dto.setStatus(entity.getStatus());
