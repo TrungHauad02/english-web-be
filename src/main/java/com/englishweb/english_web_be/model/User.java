@@ -34,9 +34,9 @@ public class User implements BaseEntity {
     @PrePersist
     private void generateId() {
         if (this.roleEnum == RoleEnum.TEACHER) {
-            this.id = "Teacher_" + System.currentTimeMillis();
+            this.id = "Teacher_" + System.nanoTime();
         } else if (this.roleEnum == RoleEnum.STUDENT) {
-            this.id = "Student_" + System.currentTimeMillis();
+            this.id = "Student_" + System.nanoTime();
         }
     }
 

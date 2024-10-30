@@ -21,7 +21,7 @@ public class GrammarQuestion implements BaseEntity {
 
     @PrePersist
     private void generateId() {
-        this.id = "Gram_que_" + System.currentTimeMillis();
+        this.id = "Gram_que_" + System.nanoTime();
     }
 
     public GrammarQuestion() {

@@ -19,7 +19,7 @@ public class TopicAnswer implements BaseEntity {
 
     @PrePersist
     private void generateId() {
-        this.id = "Topic_ans_" + System.currentTimeMillis();
+        this.id = "Topic_ans_" + System.nanoTime();
     }
 
     public TopicAnswer() {
