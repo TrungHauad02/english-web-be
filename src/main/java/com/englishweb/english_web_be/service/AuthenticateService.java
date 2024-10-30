@@ -18,12 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Optional;
+import java.util.StringJoiner;
 
 @Service
 public class AuthenticateService extends BaseService<User, UserDTO, UserRepository> {
@@ -69,20 +69,21 @@ public class AuthenticateService extends BaseService<User, UserDTO, UserReposito
             throw new RuntimeException("Email or password is invalid. Please check again.");
         }
 
-        var token = generateToken(dto.getEmail());
+        var token = generateToken(user);
         return new Authenticate(isAuthenticated, token);
     }
 
-    private String generateToken(String email) {
+    private String generateToken(User user) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(email)
+                .subject(user.getEmail())
                 .issuer("EnglishWebApplication.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(
                         Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
                 ))
+                .claim("scope", buildScope(user))
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -94,6 +95,17 @@ public class AuthenticateService extends BaseService<User, UserDTO, UserReposito
             log.error("Cannot create token", e);
             throw new RuntimeException(e);
         }
+    }
+
+    private String buildScope(User user) {
+        StringJoiner stringJoiner = new StringJoiner(" ");
+
+        // Kiểm tra nếu roleEnum không null thì thêm vào StringJoiner
+        if (user.getRoleEnum() != null) {
+            stringJoiner.add(user.getRoleEnum().name()); // Lấy tên của RoleEnum và thêm vào chuỗi
+        }
+
+        return stringJoiner.toString();
     }
 
     public UserDTO signIn(UserDTO dto) {

@@ -2,6 +2,11 @@ package com.englishweb.english_web_be.service;
 
 import com.englishweb.english_web_be.modelenum.RoleEnum;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,17 +19,23 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+
 public class UserService extends BaseService<User, UserDTO, UserRepository> {
-    public UserService(UserRepository repository) {
+    UserRepository repository;
+    PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
         super(repository);
+        this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public UserDTO signUpStudent(UserDTO dto) {
+    public UserDTO createstudent(UserDTO dto) {
         if (repository.findByEmail(dto.getEmail()).isPresent()) {
             throw new RuntimeException("Email already exists. Please use another email.");
         }
 
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         dto.setStatus(StatusEnum.ACTIVE);
@@ -32,12 +43,11 @@ public class UserService extends BaseService<User, UserDTO, UserRepository> {
         return create(dto);
     }
 
-    public UserDTO signUpTeacher(UserDTO dto) {
+    public UserDTO createTeacher(UserDTO dto) {
         if (repository.findByEmail(dto.getEmail()).isPresent()) {
             throw new RuntimeException("Email already exists. Please use another email.");
         }
 
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         dto.setStatus(StatusEnum.ACTIVE);

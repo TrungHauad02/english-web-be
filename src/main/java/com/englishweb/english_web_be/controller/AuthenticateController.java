@@ -6,7 +6,6 @@ import com.englishweb.english_web_be.security.IntrospecRequest;
 import com.englishweb.english_web_be.security.IntrospecResponse;
 import com.englishweb.english_web_be.service.AuthenticateService;
 import com.nimbusds.jose.JOSEException;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,16 +31,15 @@ public class AuthenticateController {
 //        return new ResponseEntity<>(authenticatedUser, HttpStatus.OK);
 //    }
 
-    // Endpoint cho đăng nhập
-    @PostMapping("/api/token")
+    @PostMapping("/api/users/token")
     public ResponseEntity<Authenticate> authenticate(@RequestBody UserDTO userDTO) {
-        Authenticate result = authenticateService.authenticate(userDTO); // Trả về đối tượng Authenticate có trạng thái và token
+        Authenticate result = authenticateService.authenticate(userDTO);
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/api/introspec")
+    @PostMapping("/api/users/introspec")
     public ResponseEntity<IntrospecResponse> authenticate(@RequestBody IntrospecRequest request) throws ParseException, JOSEException {
-        IntrospecResponse result = authenticateService.introspec(request); // Trả về đối tượng IntrospecResponse với trạng thái và thông báo
+        IntrospecResponse result = authenticateService.introspec(request);
         return ResponseEntity.ok(result);
     }
 }
