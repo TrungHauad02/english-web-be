@@ -19,7 +19,7 @@ public class GrammarAnswer implements BaseEntity {
 
     @PrePersist
     private void generateId() {
-        this.id = "Gram_ans_" + System.currentTimeMillis();
+        this.id = "Gram_ans_" + System.nanoTime();
     }
 
     public GrammarAnswer() {

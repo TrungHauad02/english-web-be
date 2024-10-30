@@ -21,7 +21,7 @@ public class TopicQuestion implements BaseEntity {
 
     @PrePersist
     private void generateId() {
-        this.id = "Topic_que_" + System.currentTimeMillis();
+        this.id = "Topic_que_" + System.nanoTime();
     }
 
 

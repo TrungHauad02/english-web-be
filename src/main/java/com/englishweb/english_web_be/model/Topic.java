@@ -20,7 +20,7 @@ public class Topic implements BaseEntity {
 
     @PrePersist
     private void generateId() {
-        this.id = "Topic_" + System.currentTimeMillis();
+        this.id = "Topic_" + System.nanoTime();
     }
 
     public Topic() {

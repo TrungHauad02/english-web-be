@@ -22,7 +22,7 @@ public class Writing implements BaseEntity {
 
     @PrePersist
     private void generateId() {
-        this.id = "Write_" + System.currentTimeMillis();
+        this.id = "Write_" + System.nanoTime();
     }
 
     public Writing() {

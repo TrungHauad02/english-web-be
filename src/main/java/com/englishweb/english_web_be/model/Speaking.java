@@ -24,7 +24,7 @@ public class Speaking implements BaseEntity {
 
     @PrePersist
     private void generateId() {
-        this.id = "Speak_" + System.currentTimeMillis();
+        this.id = "Speak_" + System.nanoTime();
     }
 
     public Speaking() {

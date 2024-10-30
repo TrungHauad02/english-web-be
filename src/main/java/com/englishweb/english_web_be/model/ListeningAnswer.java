@@ -19,7 +19,7 @@ public class ListeningAnswer implements BaseEntity {
 
     @PrePersist
     private void generateId() {
-        this.id = "Listen_Ans_" + System.currentTimeMillis();
+        this.id = "Listen_Ans_" + System.nanoTime();
     }
 
     public ListeningAnswer() {

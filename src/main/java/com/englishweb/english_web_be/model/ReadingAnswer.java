@@ -20,7 +20,7 @@ public class ReadingAnswer implements BaseEntity{
 
     @PrePersist
     private void generateId() {
-        this.id = "Read_ans_" + System.currentTimeMillis();
+        this.id = "Read_ans_" + System.nanoTime();
     }
 
     public ReadingAnswer() {
