@@ -28,7 +28,7 @@ public class Vocabulary implements BaseEntity {
 
     @PrePersist
     private void generateId() {
-        this.id = "Vocab_" + System.currentTimeMillis();
+        this.id = "Vocab_" + System.nanoTime();
     }
 
     public Vocabulary() {

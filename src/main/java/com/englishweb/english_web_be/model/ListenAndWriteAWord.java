@@ -25,7 +25,7 @@ public class ListenAndWriteAWord implements BaseEntity {
 
     @PrePersist
     private void generateId() {
-        this.id = "Listen_Word_" + System.currentTimeMillis();
+        this.id = "Listen_Word_" + System.nanoTime();
     }
 
     public ListenAndWriteAWord() {
