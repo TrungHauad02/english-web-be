@@ -1,9 +1,12 @@
 package com.englishweb.english_web_be.controller;
 
+import com.nimbusds.jose.proc.SecurityContext;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +21,7 @@ import com.englishweb.english_web_be.service.UserService;
 
 import jakarta.validation.Valid;
 
+@Slf4j
 @RestController
 public class UserController {
     @Autowired
@@ -30,6 +34,9 @@ public class UserController {
                                                      @RequestParam int size,
                                                      @RequestParam(defaultValue = "id") String sortBy,
                                                      @RequestParam(defaultValue = "asc") String sortDir) {
+        var authenticate = SecurityContextHolder.getContext().getAuthentication();
+        log.info("email: {}", authenticate.getName());
+        log.info("Role: {}", authenticate.getAuthorities().toString());
         return new ResponseEntity<>(userService.findByPage(page, size, sortBy, sortDir, UserDTO.class), HttpStatus.OK);
     }
 
@@ -54,14 +61,14 @@ public class UserController {
         return new ResponseEntity<>(userService.update(userDTO, id), HttpStatus.OK);
     }
 
-    @PostMapping("/api/student/signup")
-    public ResponseEntity<UserDTO> signupStudent(@Valid @RequestBody UserDTO userDTO) {
-        return  new ResponseEntity<>(userService.signUpStudent(userDTO), HttpStatus.CREATED);
+    @PostMapping("/api/users/student/signup")
+    public ResponseEntity<UserDTO> createStudent(@Valid @RequestBody UserDTO userDTO) {
+        return new ResponseEntity<>(userService.createstudent(userDTO), HttpStatus.CREATED);
     }
 
-    @PostMapping("/api/teacher/signup")
-    public ResponseEntity<UserDTO> signupTeacher(@Valid @RequestBody UserDTO userDTO) {
-        return  new ResponseEntity<>(userService.signUpTeacher(userDTO), HttpStatus.CREATED);
+    @PostMapping("/api/users/teacher/signup")
+    public ResponseEntity<UserDTO> createTeacher(@Valid @RequestBody UserDTO userDTO) {
+        return new ResponseEntity<>(userService.createTeacher(userDTO), HttpStatus.CREATED);
     }
 
 }
