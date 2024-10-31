@@ -1,9 +1,7 @@
 package com.englishweb.english_web_be.service;
 
 import com.englishweb.english_web_be.dto.TestListeningDTO;
-import com.englishweb.english_web_be.dto.TestReadingDTO;
 import com.englishweb.english_web_be.model.TestListening;
-import com.englishweb.english_web_be.model.TestReading;
 import com.englishweb.english_web_be.repository.TestListeningRepository;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -44,7 +42,7 @@ public class TestListeningService extends BaseService<TestListening, TestListeni
         entity.setId(dto.getId());
         entity.setContent(dto.getContent());
         entity.setSerial(dto.getSerial());
-        entity.setStatusEnum(dto.getStatus());
+        entity.setStatus(dto.getStatus());
         entity.setTranscript(dto.getTranscript());
         entity.setTest(testService.convertToEntity(testService.findById(dto.getTestId())));
         return entity;
