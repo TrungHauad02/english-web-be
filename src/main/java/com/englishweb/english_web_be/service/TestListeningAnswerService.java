@@ -1,57 +1,10 @@
 package com.englishweb.english_web_be.service;
 
 import com.englishweb.english_web_be.dto.TestListeningAnswerDTO;
-import com.englishweb.english_web_be.dto.TestReadingAnswerDTO;
-import com.englishweb.english_web_be.model.TestListeningAnswer;
-import com.englishweb.english_web_be.model.TestReadingAnswer;
-import com.englishweb.english_web_be.repository.TestListeningAnswerRepository;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+public interface TestListeningAnswerService extends BaseService<TestListeningAnswerDTO> {
 
-@Service
-public class TestListeningAnswerService extends BaseService<TestListeningAnswer, TestListeningAnswerDTO, TestListeningAnswerRepository> {
-
-    private final TestListeningQuestionService testListeningQuestionService;
-
-    public TestListeningAnswerService(TestListeningAnswerRepository repository,   @Lazy TestListeningQuestionService testListeningQuestionService) {
-        super(repository);
-        this.testListeningQuestionService = testListeningQuestionService;
-    }
-
-
-    public List<TestListeningAnswerDTO> findAllByQuestionId(String questionId) {
-        testListeningQuestionService.isExist(questionId);
-        List<TestListeningAnswer> list = repository.findAllByTestListeningQuestion_Id(questionId);
-
-        return list.stream()
-                .map(this::convertToDTO)
-                .toList();
-    }
-
-    @Override
-    protected TestListeningAnswer convertToEntity(TestListeningAnswerDTO dto) {
-        TestListeningAnswer entity = new TestListeningAnswer();
-        entity.setId(dto.getId());
-        entity.setContent(dto.getContent());
-        entity.setIsCorrect(dto.getIsCorrect());
-        entity.setStatus(dto.getStatus());
-        entity.setTestListeningQuestion(testListeningQuestionService.convertToEntity(testListeningQuestionService.findById(dto.getTestQuestionListeningId())));
-
-        return entity;
-    }
-
-    @Override
-    protected TestListeningAnswerDTO convertToDTO(TestListeningAnswer entity) {
-        TestListeningAnswerDTO dto = new TestListeningAnswerDTO();
-        dto.setId(entity.getId());
-        dto.setContent(entity.getContent());
-        dto.setIsCorrect(entity.getIsCorrect());
-        dto.setStatus(entity.getStatus());
-        dto.setTestQuestionListeningId(entity.getTestListeningQuestion().getId());
-
-        return dto;
-    }
+    List<TestListeningAnswerDTO> findAllByQuestionId(String questionId);
 }

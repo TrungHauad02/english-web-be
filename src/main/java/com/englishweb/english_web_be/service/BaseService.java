@@ -1,57 +1,18 @@
 package com.englishweb.english_web_be.service;
 
-import com.englishweb.english_web_be.dto.BaseDTO;
-import com.englishweb.english_web_be.model.BaseEntity;
-import com.englishweb.english_web_be.util.ValidationUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public abstract class BaseService<Entity extends BaseEntity, DTO extends BaseDTO, R extends JpaRepository<Entity, String>> {
-    protected R repository;
-    public BaseService(R repository) {
-        this.repository = repository;
-    }
+public interface BaseService <DTO> {
 
-    public Page<DTO> findByPage(int page, int size, String sortBy, String sortDir, Class<DTO> dtoClass) {
-        ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, dtoClass);
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
-                ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Entity> entityPage = repository.findAll(pageable);
-        return entityPage.map(this::convertToDTO);
-    }
+    Page<DTO> findByPage(int page, int size, String sortBy, String sortDir, Class<DTO> dtoClass);
 
-    public DTO findById(String id) {
-        isExist(id);
-        return convertToDTO(repository.findById(id).get());
-    }
+    DTO findById(String id);
 
-    public DTO create(DTO dto) {
-        Entity entity = convertToEntity(dto);
-        entity.setId(null);
-        return convertToDTO(repository.save(entity));
-    }
+    DTO create(DTO dto);
 
-    public DTO update(DTO dto, String id) {
-        isExist(id);
-        dto.setId(id);
-        return convertToDTO(repository.save(convertToEntity(dto)));
-    }
+    DTO update(DTO dto, String id);
 
-    public void delete(String id) {
-        isExist(id);
-        repository.deleteById(id);
-    }
+    void delete(String id);
 
-    public void isExist(String id) {
-        ValidationUtils.getInstance().validateExistId(repository, id);
-    }
-
-    protected abstract Entity convertToEntity(DTO dto);
-
-    protected abstract DTO convertToDTO(Entity entity);
+    void isExist(String id);
 }
