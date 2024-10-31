@@ -39,7 +39,7 @@ public class TopicController {
     }
 
     @DeleteMapping("/api/topics/{id}")
-    public ResponseEntity<String> delete(@PathVariable String id){
+    public ResponseEntity<Void> delete(@PathVariable String id){
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
