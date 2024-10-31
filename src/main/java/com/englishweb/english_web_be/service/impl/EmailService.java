@@ -1,4 +1,4 @@
-package com.englishweb.english_web_be.service;
+package com.englishweb.english_web_be.service.impl;
 
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
