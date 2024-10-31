@@ -6,8 +6,14 @@ import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 import jakarta.persistence.*;
 
 import java.util.List;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Test implements BaseEntity {
     @Id
     private String id;
@@ -54,11 +60,6 @@ public class Test implements BaseEntity {
     private List<TestSpeaking> testSpeakings;
 
 
-
-    public Test() {
-    }
-
-
     public Test(String id, String title, int serial, int duration, TestTypeEnum type, StatusEnum status) {
         this.id = id;
         this.title = title;
@@ -91,110 +92,6 @@ public class Test implements BaseEntity {
         this.type = type;
         this.status = status;
         this.testListenings = testListenings;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public int getSerial() {
-        return serial;
-    }
-
-    public void setSerial(int serial) {
-        this.serial = serial;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    public TestTypeEnum getType() {
-        return type;
-    }
-
-    public void setType(TestTypeEnum type) {
-        this.type = type;
-    }
-
-    public StatusEnum getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusEnum status) {
-        this.status = status;
-    }
-
-    public List<TestListening> getTestListenings() {
-        return testListenings;
-    }
-
-    public void setTestListenings(List<TestListening> testListenings) {
-        this.testListenings = testListenings;
-    }
-
-    public List<TestReading> getTestReadings() {
-        return testReadings;
-    }
-
-    public void setTestReadings(List<TestReading> testReadings) {
-        this.testReadings = testReadings;
-    }
-
-    public List<TestVocabularyQuestion> getTestVocabularyQuestions() {
-        return testVocabularyQuestions;
-    }
-
-    public void setTestVocabularyQuestions(List<TestVocabularyQuestion> testVocabularyQuestions) {
-        this.testVocabularyQuestions = testVocabularyQuestions;
-    }
-
-    public List<TestGrammarQuestion> getTestGrammarQuestions() {
-        return testGrammarQuestions;
-    }
-
-    public void setTestGrammarQuestions(List<TestGrammarQuestion> testGrammarQuestions) {
-        this.testGrammarQuestions = testGrammarQuestions;
-    }
-
-    public List<TestWriting> getTestWritings() {
-        return testWritings;
-    }
-
-    public void setTestWritings(List<TestWriting> testWritings) {
-        this.testWritings = testWritings;
-    }
-
-    public List<TestMixingQuestion> getTestMixingQuestions() {
-        return testMixingQuestions;
-    }
-
-    public void setTestMixingQuestions(List<TestMixingQuestion> testMixingQuestions) {
-        this.testMixingQuestions = testMixingQuestions;
-    }
-
-    public List<TestSpeaking> getTestSpeakings() {
-        return testSpeakings;
-    }
-
-    public void setTestSpeakings(List<TestSpeaking> testSpeakings) {
-        this.testSpeakings = testSpeakings;
     }
 
     @Override
