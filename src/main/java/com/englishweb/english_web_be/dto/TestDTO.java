@@ -14,8 +14,6 @@ public class TestDTO implements BaseDTO {
     private StatusEnum status;
     private List<TestListeningDTO> testListenings;
     private List<TestReadingDTO> testReadings;
-    private List<TestVocabularyQuestionDTO> testVocabularyQuestions;
-    private List<TestGrammarQuestionDTO> testGrammarQuestions;
     private List<TestWritingDTO> testWritings;
     private List<TestSpeakingDTO>  testSpeakings;
     private List<TestMixingQuestionDTO> testMixingQuestions;
@@ -106,22 +104,6 @@ public class TestDTO implements BaseDTO {
         this.testReadings = testReadings;
     }
 
-    public List<TestVocabularyQuestionDTO> getTestVocabularyQuestions() {
-        return testVocabularyQuestions;
-    }
-
-    public void setTestVocabularyQuestions(List<TestVocabularyQuestionDTO> testVocabularyQuestions) {
-        this.testVocabularyQuestions = testVocabularyQuestions;
-    }
-
-    public List<TestGrammarQuestionDTO> getTestGrammarQuestions() {
-        return testGrammarQuestions;
-    }
-
-    public void setTestGrammarQuestions(List<TestGrammarQuestionDTO> testGrammarQuestions) {
-        this.testGrammarQuestions = testGrammarQuestions;
-    }
-
     public List<TestWritingDTO> getTestWritings() {
         return testWritings;
     }
@@ -157,8 +139,6 @@ public class TestDTO implements BaseDTO {
                 ", status=" + status +
                 ", testListenings=" + (testListenings != null ? testListenings.toString() : "null") +
                 ", testReadings=" + (testReadings != null ? testReadings.toString() : "null") +
-                ", testVocabularyQuestions=" + (testVocabularyQuestions != null ? testVocabularyQuestions.toString() : "null") +
-                ", testGrammarQuestions=" + (testGrammarQuestions != null ? testGrammarQuestions.toString() : "null") +
                 ", testWritings=" + (testWritings != null ? testWritings.toString() : "null") +
                 ", testSpeaking=" + (testSpeakings != null ? testListenings.toString() : "null") +
                 '}';

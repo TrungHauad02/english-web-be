@@ -73,18 +73,16 @@ public class DataLoader implements CommandLineRunner {
 
                 case MIXING:
                     serialtestmixed=1;
-                    List<TestVocabularyQuestion> mixedVocabQuestions = generateTestDataVocabulary(test, i,type);
-                    List<TestGrammarQuestion> mixedGrammarQuestions = generateTestDataGrammar(test, i,type);
+                    test.setTestMixingQuestions(generataTestMixing(test,i,type));
                     List<TestReading> mixedReadings = generateTestDataReading(test, i,type);
                     List<TestListening> mixedListenings = generateTestDataListening(test, i,type);
-                    List<TestWriting> mixedWritings = generateTestDataWriting(test, i,type);
                     List<TestSpeaking> mixedSpeaking = generateTestDataSpeaking(test, i,type);
+                    List<TestWriting> mixedWritings = generateTestDataWriting(test, i,type);
 
-                    test.setTestMixingQuestions(generataTestMixing(test,i,type));
+
+
                     test.setTestReadings(mixedReadings);
                     test.setTestListenings(mixedListenings);
-                    test.setTestVocabularyQuestions(mixedVocabQuestions);
-                    test.setTestGrammarQuestions(mixedGrammarQuestions);
                     test.setTestSpeakings(mixedSpeaking);
                     test.setTestWritings(mixedWritings);
                     break;
@@ -92,7 +90,6 @@ public class DataLoader implements CommandLineRunner {
                 default:
                     throw new IllegalStateException("Unexpected value: " + type);
             }
-
             testRepository.save(test);
         }
     }
@@ -212,7 +209,7 @@ public class DataLoader implements CommandLineRunner {
         {
 
             String testSpeakingId = "speaking_" + i+k;
-            TestSpeaking testSpeaking = new TestSpeaking(testSpeakingId, "Speaking Title " + k, StatusEnum.ACTIVE);
+            TestSpeaking testSpeaking = new TestSpeaking(testSpeakingId, "Speaking Title " + k,k, StatusEnum.ACTIVE);
             testSpeaking.setTest(test); // Liên kết TestSpeaking với Test
             List<TestSpeakingQuestion> questions = new ArrayList<>();
             for (int j = 1; j <= 5; j++) {
@@ -271,99 +268,6 @@ public class DataLoader implements CommandLineRunner {
             return testWritings;
 
         }
-    public List<TestVocabularyQuestion> generateTestDataVocabulary(Test test, int i, TestTypeEnum type) {
-        // Tạo danh sách câu hỏi từ vựng cho bài kiểm tra
-        List<TestVocabularyQuestion> vocabularyQuestions = new ArrayList<>();
-
-        // Tạo các câu hỏi từ vựng (giả sử có 5 câu hỏi từ vựng)
-        for (int j = 1; j <= 5; j++) {
-            String questionId = "vocab_question_" + i + "_" + j;
-            String questionContent = "Vocabulary question content " + j;
-            String explanation = "Explanation for vocabulary question " + j;
-            StatusEnum status = StatusEnum.ACTIVE;
-            int serial ;
-            if(type==TestTypeEnum.MIXING) {
-                serial = serialtestmixed;
-                serialtestmixed++;
-            }
-            else
-            {
-                serial = j;
-            }
-
-            // Tạo đối tượng TestVocabularyQuestion
-            TestVocabularyQuestion question = new TestVocabularyQuestion(questionId, questionContent, serial, explanation, status);
-            question.setTest(test); // Liên kết câu hỏi từ vựng với bài kiểm tra
-
-
-            List<TestVocabularyAnswer> answers = new ArrayList<>();
-            for (int h = 1; h <= 4; h++) {
-                String answerId = "vocab_answer_" + questionId + "_" + h;
-                String answerContent = "Answer " + h + " for vocabulary question " + i;
-                boolean isCorrect = (h == 1);
-                StatusEnum answerStatus = StatusEnum.ACTIVE;
-
-                TestVocabularyAnswer answer = new TestVocabularyAnswer(answerId, answerContent, isCorrect, answerStatus);
-                answer.setTestVocabularyQuestion(question); // Liên kết câu trả lời với câu hỏi
-                answers.add(answer);
-            }
-
-            question.setAnswers(answers);
-
-
-            vocabularyQuestions.add(question);
-        }
-
-        return vocabularyQuestions;
-    }
-    public List<TestGrammarQuestion> generateTestDataGrammar(Test test, int i, TestTypeEnum type) {
-        // Tạo danh sách câu hỏi từ vựng cho bài kiểm tra
-        List<TestGrammarQuestion> grammarQuestions = new ArrayList<>();
-
-        // Tạo các câu hỏi từ vựng (giả sử có 5 câu hỏi từ vựng)
-        for (int j = 1; j <= 5; j++) {
-            String questionId = "grammar_question_" + i + "_" + j;
-            String questionContent = "Vocabulary question content " + j;
-            String explanation = "Explanation for vocabulary question " + j;
-            StatusEnum status = StatusEnum.ACTIVE;
-            int serial ;
-            if(type==TestTypeEnum.MIXING) {
-                serial = serialtestmixed;
-                serialtestmixed++;
-            }
-            else
-            {
-                serial = j;
-            }
-
-            // Tạo đối tượng TestVocabularyQuestion
-            TestGrammarQuestion question = new TestGrammarQuestion(questionId, questionContent, serial, explanation, status);
-            question.setTest(test); // Liên kết câu hỏi từ vựng với bài kiểm tra
-
-
-            List<TestGrammarAnswer> answers = new ArrayList<>();
-            for (int h = 1; h <= 4; h++) {
-                String answerId = "vocab_answer_" + questionId + "_" + h;
-                String answerContent = "Answer " + h + " for vocabulary question " + i;
-                boolean isCorrect = (h == 1);
-                StatusEnum answerStatus = StatusEnum.ACTIVE;
-
-                // Tạo đối tượng TestVocabularyAnswer
-                TestGrammarAnswer answer = new TestGrammarAnswer(answerId, answerContent, isCorrect, answerStatus);
-                answer.setTestGrammarQuestion(question); // Liên kết câu trả lời với câu hỏi
-
-                answers.add(answer);
-            }
-
-            question.setAnswers(answers);
-
-
-            grammarQuestions.add(question);
-        }
-
-        return grammarQuestions;
-    }
-
 
     public List<TestMixingQuestion> generataTestMixing(Test test, int i, TestTypeEnum type) {
         // Tạo danh sách câu hỏi từ vựng cho bài kiểm tra

@@ -11,6 +11,8 @@ public class TestSpeaking implements BaseEntity {
     private String id;
     @Column(nullable = false)
     private String title;
+    @Column(nullable = false)
+    private int serial;
     @Enumerated(EnumType.STRING)
     private StatusEnum statusEnum=StatusEnum.ACTIVE;
 
@@ -30,9 +32,10 @@ public class TestSpeaking implements BaseEntity {
     public TestSpeaking() {
     }
 
-    public TestSpeaking(String id, String title, StatusEnum statusEnum) {
+    public TestSpeaking(String id, String title, int serial, StatusEnum statusEnum) {
         this.id = id;
         this.title = title;
+        this.serial = serial;
         this.statusEnum = statusEnum;
     }
 
@@ -73,6 +76,14 @@ public class TestSpeaking implements BaseEntity {
 
     public void setTest(Test test) {
         this.test = test;
+    }
+
+    public int getSerial() {
+        return serial;
+    }
+
+    public void setSerial(int serial) {
+        this.serial = serial;
     }
 
     public List<TestSpeakingQuestion> getQuestions() {

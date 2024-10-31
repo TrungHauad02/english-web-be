@@ -3,7 +3,14 @@ package com.englishweb.english_web_be.model;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 
+import lombok.*;
+
 @Entity
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TopicAnswer implements BaseEntity {
     @Id
     private String id;
@@ -19,59 +26,6 @@ public class TopicAnswer implements BaseEntity {
 
     @PrePersist
     private void generateId() {
-        this.id = "Topic_ans_" + System.currentTimeMillis();
-    }
-
-    public TopicAnswer() {
-    }
-
-    public TopicAnswer(String id, String content, boolean correct, StatusEnum status, TopicQuestion question) {
-        this.id = id;
-        this.content = content;
-        this.correct = correct;
-        this.status = status;
-        this.question = question;
-    }
-
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public boolean isCorrect() {
-        return correct;
-    }
-
-    public void setCorrect(boolean correct) {
-        this.correct = correct;
-    }
-
-    public StatusEnum getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusEnum status) {
-        this.status = status;
-    }
-
-    public TopicQuestion getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(TopicQuestion question) {
-        this.question = question;
+        this.id = "Topic_ans_" + System.nanoTime();
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ListeningAnswerController {
-    ListeningAnswerService  service;
+    ListeningAnswerService service;
 
     public ListeningAnswerController(ListeningAnswerService service) {
         this.service = service;

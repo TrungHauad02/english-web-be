@@ -14,7 +14,7 @@ public class TestWriting implements BaseEntity {
     @Column(nullable = false)
     private String content;
     @Enumerated(EnumType.STRING)
-    private StatusEnum statusEnum;
+    private StatusEnum status;
     @PrePersist
     private void generateId() {
         this.id = "TestWriting_" + System.nanoTime();
@@ -28,20 +28,13 @@ public class TestWriting implements BaseEntity {
     public TestWriting() {
     }
 
-    public TestWriting(String id, int serial, String content, StatusEnum statusEnum) {
+    public TestWriting(String id, int serial, String content, StatusEnum status) {
         this.id = id;
         this.serial = serial;
         this.content = content;
-        this.statusEnum = statusEnum;
+        this.status = status;
     }
 
-    public TestWriting(String id, int serial, String content, StatusEnum statusEnum, Test test) {
-        this.id = id;
-        this.serial = serial;
-        this.content = content;
-        this.statusEnum = statusEnum;
-        this.test = test;
-    }
 
     public String getId() {
         return id;
@@ -67,12 +60,12 @@ public class TestWriting implements BaseEntity {
         this.content = content;
     }
 
-    public StatusEnum getStatusEnum() {
-        return statusEnum;
+    public StatusEnum getStatus() {
+        return status;
     }
 
-    public void setStatusEnum(StatusEnum statusEnum) {
-        this.statusEnum = statusEnum;
+    public void setStatus(StatusEnum status) {
+        this.status = status;
     }
 
     public Test getTest() {
