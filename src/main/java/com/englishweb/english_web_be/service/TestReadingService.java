@@ -1,6 +1,7 @@
 package com.englishweb.english_web_be.service;
 
 import com.englishweb.english_web_be.dto.ReadingDTO;
+import com.englishweb.english_web_be.dto.TestListeningQuestionDTO;
 import com.englishweb.english_web_be.dto.TestReadingDTO;
 
 import com.englishweb.english_web_be.dto.TestReadingQuestionDTO;
@@ -59,6 +60,17 @@ public class TestReadingService extends BaseService<TestReading, TestReadingDTO,
         dto.setQuestions(testReadingQuestionService.findAllByTestReading_Id(entity.getId()));
         dto.setTestId(entity.getTest().getId());
         return dto;
+    }
+    @Override
+    public void delete(String id) {
+
+        List<TestReadingQuestionDTO> questions = testReadingQuestionService.findAllByTestReading_Id(id);
+        if (questions != null) {
+            for (TestReadingQuestionDTO question : questions) {
+                testReadingQuestionService.delete(question.getId());
+            }
+        }
+        super.delete(id);
     }
 }
 

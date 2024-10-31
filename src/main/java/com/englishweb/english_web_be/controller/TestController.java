@@ -42,21 +42,21 @@ public class TestController {
     }
 
 
-    @PostMapping("/api/tests")
+    @PostMapping("/api/test")
     public ResponseEntity<TestDTO> createTest(@Valid @RequestBody TestDTO dto){
         TestDTO createdTest = testService.create(dto);
 
         return new ResponseEntity<>(createdTest, HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/tests/{id}")
+    @PutMapping("/api/test/{id}")
     public ResponseEntity<TestDTO> updateTest(@Valid @RequestBody TestDTO dto, @PathVariable String id){
         TestDTO updatedTest = testService.update(dto, id);
 
         return ResponseEntity.ok(updatedTest);
     }
 
-    @DeleteMapping("/api/tests/{id}")
+    @DeleteMapping("/api/test/{id}")
     public ResponseEntity<Void> deleteTestById(@PathVariable String id){
         testService.delete(id);
         return ResponseEntity.noContent().build();

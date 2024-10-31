@@ -9,27 +9,14 @@ import java.util.List;
 public class TestSpeakingDTO implements BaseDTO {
     private String id;
     private String title;
-    private StatusEnum statusEnum;
+    private int serial;
+    private StatusEnum status;
     private List<TestSpeakingQuestionDTO> questions;
     private String testId;
 
     public TestSpeakingDTO() {
     }
 
-    public TestSpeakingDTO(String id, String title, StatusEnum statusEnum, List<TestSpeakingQuestionDTO> questions) {
-        this.id = id;
-        this.title = title;
-        this.statusEnum = statusEnum;
-        this.questions = questions;
-    }
-
-    public TestSpeakingDTO(String id, String title, StatusEnum statusEnum, List<TestSpeakingQuestionDTO> questions, String testId) {
-        this.id = id;
-        this.title = title;
-        this.statusEnum = statusEnum;
-        this.questions = questions;
-        this.testId = testId;
-    }
 
     public String getId() {
         return id;
@@ -47,12 +34,12 @@ public class TestSpeakingDTO implements BaseDTO {
         this.title = title;
     }
 
-    public StatusEnum getStatusEnum() {
-        return statusEnum;
+    public StatusEnum getStatus() {
+        return status;
     }
 
-    public void setStatusEnum(StatusEnum statusEnum) {
-        this.statusEnum = statusEnum;
+    public void setStatus(StatusEnum status) {
+        this.status = status;
     }
 
     public List<TestSpeakingQuestionDTO> getQuestions() {
@@ -71,12 +58,20 @@ public class TestSpeakingDTO implements BaseDTO {
         this.testId = testId;
     }
 
+    public int getSerial() {
+        return serial;
+    }
+
+    public void setSerial(int serial) {
+        this.serial = serial;
+    }
+
     @Override
     public String toString() {
         return "TestSpeakingDTO{" +
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
-                ", statusEnum=" + statusEnum +
+                ", statusEnum=" + status +
                 ", questions=" + questions +
                 '}';
     }

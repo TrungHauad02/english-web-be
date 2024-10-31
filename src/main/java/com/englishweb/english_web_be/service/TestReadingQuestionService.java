@@ -1,5 +1,6 @@
 package com.englishweb.english_web_be.service;
 
+import com.englishweb.english_web_be.dto.TestMixingAnswerDTO;
 import com.englishweb.english_web_be.dto.TestReadingAnswerDTO;
 import com.englishweb.english_web_be.dto.TestReadingQuestionDTO;
 import com.englishweb.english_web_be.model.TestReadingAnswer;
@@ -59,4 +60,16 @@ public class TestReadingQuestionService extends BaseService<TestReadingQuestion,
         dto.setAnswers(testReadingAnswerService.findAllByQuestionId(entity.getId()));
         return dto;
     }
+    @Override
+    public void delete(String id) {
+
+        List<TestReadingAnswerDTO> answers = testReadingAnswerService.findAllByQuestionId(id);
+        if (answers != null) {
+            for (TestReadingAnswerDTO answer : answers) {
+                testReadingAnswerService.delete(answer.getId());
+            }
+        }
+        super.delete(id);
+    }
+
 }

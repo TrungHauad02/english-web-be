@@ -1,5 +1,7 @@
 package com.englishweb.english_web_be.service;
 
+import com.englishweb.english_web_be.dto.TestListeningAnswerDTO;
+import com.englishweb.english_web_be.dto.TestMixingAnswerDTO;
 import com.englishweb.english_web_be.dto.TestMixingQuestionDTO;
 import com.englishweb.english_web_be.model.TestMixingQuestion;
 import com.englishweb.english_web_be.repository.TestMixingQuestionRepository;
@@ -60,5 +62,16 @@ public class TestMixingQuestionService extends BaseService<TestMixingQuestion, T
         dto.setTestId(entity.getTest().getId());
         dto.setAnswers(testMixingAnswerService.findAllByQuestionId(entity.getId()));
         return dto;
+    }
+    @Override
+    public void delete(String id) {
+
+        List<TestMixingAnswerDTO> answers = testMixingAnswerService.findAllByQuestionId(id);
+        if (answers != null) {
+            for (TestMixingAnswerDTO answer : answers) {
+                testMixingAnswerService.delete(answer.getId());
+            }
+        }
+        super.delete(id);
     }
 }

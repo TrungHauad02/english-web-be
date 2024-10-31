@@ -1,9 +1,7 @@
 package com.englishweb.english_web_be.service;
 
 import com.englishweb.english_web_be.dto.TestSpeakingQuestionDTO;
-import com.englishweb.english_web_be.dto.TestVocabularyQuestionDTO;
 import com.englishweb.english_web_be.model.TestSpeakingQuestion;
-import com.englishweb.english_web_be.model.TestVocabularyQuestion;
 import com.englishweb.english_web_be.repository.TestSpeakingQuestionRepository;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;

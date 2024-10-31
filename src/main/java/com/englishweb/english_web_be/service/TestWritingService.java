@@ -40,7 +40,7 @@ public class TestWritingService extends BaseService<TestWriting, TestWritingDTO,
         entity.setId(dto.getId());
         entity.setContent(dto.getContent());
         entity.setSerial(dto.getSerial());
-        entity.setStatusEnum(dto.getStatusEnum());
+        entity.setStatus(dto.getStatus());
         entity.setTest(testService.convertToEntity(testService.findById(dto.getTestId())));
         return entity;
     }
@@ -52,7 +52,7 @@ public class TestWritingService extends BaseService<TestWriting, TestWritingDTO,
         dto.setId(entity.getId());
         dto.setSerial(entity.getSerial());
         dto.setContent(entity.getContent());
-        dto.setStatusEnum(entity.getStatusEnum());
+        dto.setStatus(entity.getStatus());
         dto.setTestId(entity.getTest().getId());
         return dto;
     }
