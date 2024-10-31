@@ -45,7 +45,7 @@ public class TestListeningService extends BaseService<TestListening, TestListeni
         entity.setId(dto.getId());
         entity.setContent(dto.getContent());
         entity.setSerial(dto.getSerial());
-        entity.setStatusEnum(dto.getStatus());
+        entity.setStatus(dto.getStatus());
         entity.setTranscript(dto.getTranscript());
         entity.setTest(testService.convertToEntity(testService.findById(dto.getTestId())));
         return entity;
