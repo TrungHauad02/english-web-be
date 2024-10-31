@@ -53,8 +53,6 @@ public class AuthenticateService extends BaseService<User, UserDTO, UserReposito
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
-    @Autowired
-    UserRepository repository;
     public Authenticate authenticate(UserDTO dto) {
         Optional<User> userOptional = repository.findByEmail(dto.getEmail());
 
@@ -67,6 +65,10 @@ public class AuthenticateService extends BaseService<User, UserDTO, UserReposito
 
         if (!isAuthenticated) {
             throw new RuntimeException("Email or password is invalid. Please check again.");
+        }
+
+        if (user.getStatusEnum() != StatusEnum.ACTIVE) {
+            throw new RuntimeException("Account is not active. Please contact support.");
         }
 
         var token = generateToken(user);

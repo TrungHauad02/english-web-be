@@ -1,5 +1,6 @@
 package com.englishweb.english_web_be.controller;
 
+import com.englishweb.english_web_be.dto.VerificationDTO;
 import com.nimbusds.jose.proc.SecurityContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,11 @@ public class UserController {
         return new ResponseEntity<>(userService.deleteUser(id), HttpStatus.OK);
     }
 
+    @GetMapping("/api/myInfor")
+    public ResponseEntity<UserDTO> getInfor(){
+        return new ResponseEntity<>(userService.getInfor(),HttpStatus.OK);
+    }
+
     @PutMapping("/api/users/{id}")
     public ResponseEntity<UserDTO> update(@Valid @RequestBody UserDTO userDTO, @PathVariable String id) {
         return new ResponseEntity<>(userService.update(userDTO, id), HttpStatus.OK);
@@ -63,12 +69,30 @@ public class UserController {
 
     @PostMapping("/api/users/student/signup")
     public ResponseEntity<UserDTO> createStudent(@Valid @RequestBody UserDTO userDTO) {
-        return new ResponseEntity<>(userService.createstudent(userDTO), HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.create(userDTO), HttpStatus.CREATED);
     }
 
     @PostMapping("/api/users/teacher/signup")
     public ResponseEntity<UserDTO> createTeacher(@Valid @RequestBody UserDTO userDTO) {
         return new ResponseEntity<>(userService.createTeacher(userDTO), HttpStatus.CREATED);
+    }
+
+    // Bước 1: Yêu cầu OTP qua email
+    @PostMapping("/api/users/forgot-password/request-otp")
+    public ResponseEntity<String> requestOtp(@RequestBody UserDTO userDTO) {
+        try {
+            userService.sendOtpToEmail(userDTO);
+            return ResponseEntity.ok("OTP has been sent to your email.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+
+    // Bước 3: Đặt lại mật khẩu
+    @PostMapping("/api/users/forgot-password/reset")
+    public ResponseEntity<UserDTO> updatePass(@Valid @RequestBody UserDTO userDTO, @PathVariable String id) {
+        return new ResponseEntity<>(userService.update(userDTO, id), HttpStatus.OK);
     }
 
 }

@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -22,10 +23,17 @@ import javax.crypto.spec.SecretKeySpec;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
-    public final String[] PUBLIC_ENDPOINTS = {"/api/users/student/signup",
-            "/api/users/teacher/signup", "/api/users/token", "/api/users/introspec"
+    public final String[] PUBLIC_ENDPOINTS = {
+            "/api/users/student/signup",
+            "/api/users/teacher/signup",
+            "/api/users/token",
+            "/api/users/introspec",
+            "/api/users/forgot-password/request-otp",
+            "/api/users/forgot-password/verify-otp",
+            "/api/users/forgot-password/reset"
     };
 
     @Value("${jwt.signerkey}")
@@ -34,15 +42,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(requests ->
-                requests.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers("/api/**").permitAll() // Cho phép tất cả các phương thức với mọi đường dẫn dưới "/api/**"
-                        .requestMatchers(HttpMethod.GET, "/api/users").hasRole(RoleEnum.ADMIN.name())
+                requests.requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+//                        .requestMatchers("/**").permitAll() // Cho phép tất cả các phương thức với mọi đường dẫn dưới "/api/**"
+                        .requestMatchers(HttpMethod.GET, "/api/users").hasRole(RoleEnum.ADMIN.name())  //Phan quyen theo endpoint
                         .anyRequest().authenticated());
+
+//        httpSecurity.headers(headers -> headers.frameOptions(Customizer.withDefaults()).disable());
+//        httpSecurity.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
+
+        httpSecurity.csrf(AbstractHttpConfigurer::disable) // Vô hiệu hóa CSRF cho các API công khai
+                .cors(Customizer.withDefaults());
 
         httpSecurity.oauth2ResourceServer(oauth2 ->
                 oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())
                         .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+
         );
+
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.cors(Customizer.withDefaults());

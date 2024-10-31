@@ -3,18 +3,12 @@ package com.englishweb.english_web_be.dto;
 import com.englishweb.english_web_be.modelenum.LevelEnum;
 import com.englishweb.english_web_be.modelenum.RoleEnum;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
-import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
-
 public class UserDTO implements BaseDTO {
     String id;
     String name;
-    @NotBlank(message = "Email cannot be empty")
     String email;
-    @NotBlank(message = "Password cannot be empty")
     String password;
     String avatar;
     String contentMotivation;
