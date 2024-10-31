@@ -1,5 +1,6 @@
 package com.englishweb.english_web_be.controller;
 
+import com.englishweb.english_web_be.modelenum.RoleEnum;
 import com.englishweb.english_web_be.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,22 @@ public class UserController {
         return new ResponseEntity<>(userService.findByPage(page, size, sortBy, sortDir, UserDTO.class), HttpStatus.OK);
     }
 
+    @GetMapping("/api/users/teachers")
+    public ResponseEntity<Page<UserDTO>> findTeachersByPage(@RequestParam int page,
+                                                            @RequestParam int size,
+                                                            @RequestParam(defaultValue = "id") String sortBy,
+                                                            @RequestParam(defaultValue = "asc") String sortDir) {
+        return new ResponseEntity<>(userService.findByRole(page, size, sortBy, sortDir, RoleEnum.TEACHER, UserDTO.class), HttpStatus.OK);
+    }
+
+    @GetMapping("/api/users/students")
+    public ResponseEntity<Page<UserDTO>> findStudentsByPage(@RequestParam int page,
+                                                            @RequestParam int size,
+                                                            @RequestParam(defaultValue = "id") String sortBy,
+                                                            @RequestParam(defaultValue = "asc") String sortDir) {
+        return new ResponseEntity<>(userService.findByRole(page, size, sortBy, sortDir, RoleEnum.STUDENT, UserDTO.class), HttpStatus.OK);
+    }
+
     @GetMapping("/api/users/{id}")
     public ResponseEntity<UserDTO> findById(@PathVariable String id) {
         return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
@@ -68,6 +85,11 @@ public class UserController {
     @PostMapping("/api/users/teacher/signup")
     public ResponseEntity<UserDTO> createTeacher(@Valid @RequestBody UserDTO userDTO) {
         return new ResponseEntity<>(userService.createTeacher(userDTO), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/api/users/myinfor")
+    public ResponseEntity<UserDTO> myInfor() {
+        return new ResponseEntity<>(userService.getInfor(), HttpStatus.OK);
     }
 
 }
