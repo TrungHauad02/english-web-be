@@ -35,9 +35,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(requests ->
                 requests.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers("/api/**").permitAll() // Cho phép tất cả các phương thức với mọi đường dẫn dưới "/api/**"
+                        .requestMatchers("/**").permitAll() // Cho phép tất cả các phương thức với mọi đường dẫn dưới "/api/**"
                         .requestMatchers(HttpMethod.GET, "/api/users").hasRole(RoleEnum.ADMIN.name())
                         .anyRequest().authenticated());
+
+        httpSecurity.headers(headers -> headers.frameOptions(Customizer.withDefaults()).disable());
+        httpSecurity.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
 
         httpSecurity.oauth2ResourceServer(oauth2 ->
                 oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())

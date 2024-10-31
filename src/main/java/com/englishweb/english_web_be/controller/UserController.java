@@ -1,6 +1,6 @@
 package com.englishweb.english_web_be.controller;
 
-import com.nimbusds.jose.proc.SecurityContext;
+import com.englishweb.english_web_be.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.englishweb.english_web_be.dto.UserDTO;
-import com.englishweb.english_web_be.service.UserService;
 
 import jakarta.validation.Valid;
 
@@ -63,7 +62,7 @@ public class UserController {
 
     @PostMapping("/api/users/student/signup")
     public ResponseEntity<UserDTO> createStudent(@Valid @RequestBody UserDTO userDTO) {
-        return new ResponseEntity<>(userService.createstudent(userDTO), HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.createStudent(userDTO), HttpStatus.CREATED);
     }
 
     @PostMapping("/api/users/teacher/signup")

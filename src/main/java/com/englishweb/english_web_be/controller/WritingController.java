@@ -1,6 +1,5 @@
 package com.englishweb.english_web_be.controller;
 
-import com.englishweb.english_web_be.dto.ReadingDTO;
 import com.englishweb.english_web_be.dto.WritingDTO;
 import com.englishweb.english_web_be.service.WritingService;
 import jakarta.validation.Valid;

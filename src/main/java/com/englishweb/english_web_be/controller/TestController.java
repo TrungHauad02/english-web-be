@@ -1,12 +1,9 @@
 package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.dto.*;
-
 import com.englishweb.english_web_be.service.TestService;
-
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +27,7 @@ public class TestController {
 
     @GetMapping("/api/testsall")
     public List<TestDTO> retrieveTestsBytype(@RequestParam String type) {
-        return (List<TestDTO>) testService.retrieveTestsallBytype(type);
+        return (List<TestDTO>) testService.retrieveTestsAllByType(type);
     }
 
 
