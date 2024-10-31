@@ -1,6 +1,8 @@
 package com.englishweb.english_web_be.service;
 
+import com.englishweb.english_web_be.dto.TestReadingQuestionDTO;
 import com.englishweb.english_web_be.dto.TestSpeakingDTO;
+import com.englishweb.english_web_be.dto.TestSpeakingQuestionDTO;
 import com.englishweb.english_web_be.dto.TestWritingDTO;
 import com.englishweb.english_web_be.model.Test;
 import com.englishweb.english_web_be.model.TestSpeaking;
@@ -43,7 +45,8 @@ public class TestSpeakingService extends BaseService<TestSpeaking, TestSpeakingD
         TestSpeaking entity = new TestSpeaking();
         entity.setId(dto.getId());
         entity.setTitle(dto.getTitle());
-        entity.setStatusEnum(dto.getStatusEnum());
+        entity.setSerial(dto.getSerial());
+        entity.setStatusEnum(dto.getStatus());
         entity.setTest(testService.convertToEntity(testService.findById(dto.getTestId())));
 
 
@@ -55,9 +58,20 @@ public class TestSpeakingService extends BaseService<TestSpeaking, TestSpeakingD
         TestSpeakingDTO dto = new TestSpeakingDTO();
         dto.setId(entity.getId());
         dto.setTitle(entity.getTitle());
-        dto.setStatusEnum(entity.getStatusEnum());
+        dto.setStatus(entity.getStatusEnum());
         dto.setTestId(entity.getTest().getId());
+        dto.setSerial(entity.getSerial());
         dto.setQuestions(testSpeakingQuestionService.findAllByTestSpeaking_Id(entity.getId()));
         return dto;
+    }
+    public void delete(String id) {
+
+        List<TestSpeakingQuestionDTO> questions = testSpeakingQuestionService.findAllByTestSpeaking_Id(id);
+        if (questions != null) {
+            for (TestSpeakingQuestionDTO question : questions) {
+                testSpeakingQuestionService.delete(question.getId());
+            }
+        }
+        super.delete(id);
     }
 }

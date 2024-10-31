@@ -7,26 +7,13 @@ public class TestWritingDTO implements BaseDTO {
     private String id;
     private int serial;
     private String content;
-    private StatusEnum statusEnum;
+    private StatusEnum status;
     private String testId;
 
     public TestWritingDTO() {
     }
 
-    public TestWritingDTO(String id, int serial, String content, StatusEnum statusEnum) {
-        this.id = id;
-        this.serial = serial;
-        this.content = content;
-        this.statusEnum = statusEnum;
-    }
 
-    public TestWritingDTO(String id, int serial, String content, StatusEnum statusEnum, String testId) {
-        this.id = id;
-        this.serial = serial;
-        this.content = content;
-        this.statusEnum = statusEnum;
-        this.testId = testId;
-    }
 
     public String getId() {
         return id;
@@ -52,12 +39,12 @@ public class TestWritingDTO implements BaseDTO {
         this.content = content;
     }
 
-    public StatusEnum getStatusEnum() {
-        return statusEnum;
+    public StatusEnum getStatus() {
+        return status;
     }
 
-    public void setStatusEnum(StatusEnum statusEnum) {
-        this.statusEnum = statusEnum;
+    public void setStatus(StatusEnum status) {
+        this.status = status;
     }
 
     public String getTestId() {
@@ -74,7 +61,7 @@ public class TestWritingDTO implements BaseDTO {
                 "id='" + id + '\'' +
                 ", serial=" + serial +
                 ", content='" + content + '\'' +
-                ", statusEnum=" + statusEnum +
+                ", statusEnum=" + status +
                 '}';
     }
 }
