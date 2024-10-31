@@ -31,8 +31,6 @@ public class GrammarQuestionServiceImpl extends BaseServiceImpl<GrammarQuestion,
     }
 
     public List<GrammarQuestionDTO> findAllByGrammarIdAndStatus(String grammarId, StatusEnum status) {
-        if(status == null)
-            return findAllByGrammarId(grammarId);
         grammarService.isExist(grammarId);
         List<GrammarQuestion> entityList = repository.findAllByGrammar_IdAndStatus(grammarId, status);
         return entityList.stream()

@@ -7,7 +7,5 @@ import java.util.List;
 
 public interface GrammarQuestionService extends BaseService<GrammarQuestionDTO> {
 
-    List<GrammarQuestionDTO> findAllByGrammarId(String grammarId);
-
     List<GrammarQuestionDTO> findAllByGrammarIdAndStatus(String grammarId, StatusEnum status);
 }

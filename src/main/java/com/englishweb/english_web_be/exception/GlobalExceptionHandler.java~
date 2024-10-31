@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    // Xử lý lỗi sai dữ liệu đầu vào kiểu enum
+    // Xử lý lỗi sai dữ liệu đầu vào
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponse> handleEnumTypeMismatch(MethodArgumentTypeMismatchException ex) {
         String parameterName = ex.getName();

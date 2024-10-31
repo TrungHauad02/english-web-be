@@ -28,7 +28,7 @@ public class GrammarQuestionController {
             description = "Send a request via this API to get grammar questions by grammar id and status")
     @GetMapping
     public ResponseEntity<List<GrammarQuestionDTO>> findByGrammarId(@RequestParam String grammarId,
-                                                                    @RequestParam(required = false) StatusEnum status) {
+                                                                    @RequestParam(required = false) @Valid StatusEnum status) {
         return new ResponseEntity<>(service.findAllByGrammarIdAndStatus(grammarId, status), HttpStatus.OK);
     }
 
