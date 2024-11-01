@@ -2,6 +2,7 @@ package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.modelenum.RoleEnum;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
+import com.englishweb.english_web_be.service.EmailService;
 import com.englishweb.english_web_be.service.UserService;
 import com.englishweb.english_web_be.util.ValidationUtils;
 import lombok.AccessLevel;
