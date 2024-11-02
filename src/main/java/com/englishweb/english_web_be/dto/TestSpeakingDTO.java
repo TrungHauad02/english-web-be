@@ -5,6 +5,10 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 
 
 import java.util.List;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,10 +20,15 @@ import lombok.Setter;
 @AllArgsConstructor
 public class TestSpeakingDTO implements BaseDTO {
     private String id;
+    @NotBlank(message = "Tiêu đề không được để trống")
     private String title;
+    @Positive(message = "Serial phải là số dương")
     private int serial;
+    @NotNull(message = "Trạng thái không được để trống")
     private StatusEnum status;
+    @NotNull(message = "Danh sách câu hỏi không được để trống")
     private List<TestSpeakingQuestionDTO> questions;
+    @NotBlank(message = "Test ID không được để trống")
     private String testId;
 
     @Override

@@ -28,9 +28,9 @@ public class ApplicationInitConfig {
         return args -> {
             if(userRepository.findByEmail("hungat418@gmail.com").isEmpty()){
                 User user = new User(
-                        "unique-id",                                        // Thay thế "unique-id" bằng một ID hợp lệ
+                        "admin-id",                                        // Thay thế "unique-id" bằng một ID hợp lệ
                         "Hung",                                                // Tên người dùng
-                        "hungat418@gmail.com",                                 // Email
+                        "21110487@student.hcmute.edu.vn",                                 // Email
                         passwordEncoder.encode("admin"),            // Mật khẩu đã mã hóa
                         null,                                                  // URL ảnh đại diện nếu có
                         null,                                                  // Nội dung động lực
