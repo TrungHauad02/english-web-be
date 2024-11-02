@@ -19,7 +19,9 @@ public class ReadingAnswerServiceImpl extends BaseServiceImpl<ReadingAnswer, Rea
 
     private final ReadingQuestionServiceImpl readingQuestionService;
 
-    public ReadingAnswerServiceImpl(ReadingAnswerRepository repository, @Lazy ReadingQuestionServiceImpl readingQuestionService, ReadingAnswerMapper mapper) {
+    public ReadingAnswerServiceImpl(ReadingAnswerRepository repository,
+                                    @Lazy ReadingQuestionServiceImpl readingQuestionService,
+                                    @Lazy ReadingAnswerMapper mapper) {
         super(repository, mapper);
         this.readingQuestionService = readingQuestionService;
     }

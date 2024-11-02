@@ -79,7 +79,7 @@ public class ReadingQuestionServiceImpl extends BaseServiceImpl<ReadingQuestion,
         entity.setSerial(dto.getSerial());
         entity.setExplanation(dto.getExplanation());
         entity.setStatus(dto.getStatus());
-        entity.setReading(readingService.convertToEntity(readingService.findById(dto.getReadingId())));
+        entity.setReading(readingService.convertToEntity(readingService.findDTOById(dto.getReadingId())));
         return entity;
     }
 }

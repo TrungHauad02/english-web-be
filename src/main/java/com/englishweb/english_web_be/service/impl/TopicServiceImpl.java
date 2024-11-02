@@ -9,6 +9,7 @@ import com.englishweb.english_web_be.mapper.TopicMapper;
 import com.englishweb.english_web_be.model.Topic;
 import com.englishweb.english_web_be.repository.TopicRepository;
 import com.englishweb.english_web_be.service.TopicService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +20,10 @@ public class TopicServiceImpl extends BaseServiceImpl<Topic, TopicDTO, TopicRequ
     private final TopicQuestionServiceImpl topicQuestionService;
     private final VocabularyServiceImpl vocabularyService;
 
-    public TopicServiceImpl(TopicRepository repository, TopicQuestionServiceImpl topicQuestionService, VocabularyServiceImpl vocabularyService, TopicMapper mapper) {
+    public TopicServiceImpl(TopicRepository repository,
+                            TopicQuestionServiceImpl topicQuestionService,
+                            VocabularyServiceImpl vocabularyService,
+                            @Lazy TopicMapper mapper) {
         super(repository, mapper);
         this.topicQuestionService = topicQuestionService;
         this.vocabularyService = vocabularyService;

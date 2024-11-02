@@ -7,12 +7,13 @@ import com.englishweb.english_web_be.mapper.WritingMapper;
 import com.englishweb.english_web_be.model.Writing;
 import com.englishweb.english_web_be.repository.WritingRepository;
 import com.englishweb.english_web_be.service.WritingService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 @Service
 public class WritingServiceImpl extends BaseServiceImpl<Writing, WritingDTO, WritingRequestDTO, WritingResponseDTO, WritingMapper, WritingRepository> implements WritingService {
 
-    public WritingServiceImpl(WritingRepository repository, WritingMapper mapper) {
+    public WritingServiceImpl(WritingRepository repository, @Lazy WritingMapper mapper) {
         super(repository, mapper);
     }
 

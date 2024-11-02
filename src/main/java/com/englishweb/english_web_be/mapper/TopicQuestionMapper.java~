@@ -12,7 +12,7 @@ public class TopicQuestionMapper implements BaseMapper<TopicQuestionDTO, TopicQu
     }
 
     @Override
-    public TopicQuestionResponseDTO mapToResponseDTO(TopicQuestionDTO topicQuestionDTO) {
+    public TopicQuestionResponseDTO mapToResponseDTO(TopicQuestionDTO dto) {
         return null;
     }
 }

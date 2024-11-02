@@ -19,7 +19,9 @@ public class VocabularyServiceImpl extends BaseServiceImpl<Vocabulary, Vocabular
         VocabularyResponseDTO, VocabularyMapper, VocabularyRepository> implements VocabularyService {
     private final TopicServiceImpl topicService;
 
-    public VocabularyServiceImpl(VocabularyRepository repository, VocabularyMapper mapper, @Lazy TopicServiceImpl topicService) {
+    public VocabularyServiceImpl(VocabularyRepository repository,
+                                 @Lazy VocabularyMapper mapper,
+                                 @Lazy TopicServiceImpl topicService) {
         super(repository, mapper);
         this.topicService = topicService;
     }

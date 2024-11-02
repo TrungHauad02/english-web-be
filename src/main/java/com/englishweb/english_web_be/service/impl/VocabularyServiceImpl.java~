@@ -15,7 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class VocabularyServiceImpl extends BaseServiceImpl<Vocabulary, VocabularyDTO, VocabularyRequestDTO, VocabularyResponseDTO, VocabularyMapper, VocabularyRepository> implements VocabularyService {
+public class VocabularyServiceImpl extends BaseServiceImpl<Vocabulary, VocabularyDTO, VocabularyRequestDTO,
+        VocabularyResponseDTO, VocabularyMapper, VocabularyRepository> implements VocabularyService {
     private final TopicServiceImpl topicService;
 
     public VocabularyServiceImpl(VocabularyRepository repository, VocabularyMapper mapper, @Lazy TopicServiceImpl topicService) {
@@ -81,7 +82,7 @@ public class VocabularyServiceImpl extends BaseServiceImpl<Vocabulary, Vocabular
         entity.setStatus(dto.getStatus());
         entity.setImage(dto.getImage());
         entity.setExample(dto.getExample());
-        entity.setTopic(topicService.convertToEntity(topicService.findById(dto.getTopicId())));
+        entity.setTopic(topicService.convertToEntity(topicService.findDTOById(dto.getTopicId())));
         return entity;
     }
 }

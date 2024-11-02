@@ -13,6 +13,7 @@ import com.englishweb.english_web_be.service.UserService;
 import com.englishweb.english_web_be.util.ValidationUtils;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +36,10 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserRequestD
     PasswordEncoder passwordEncoder;
     Map<String, OtpEntry> otpStorage = new HashMap<>();
 
-    public UserServiceImpl(UserRepository repository, EmailService emailService, PasswordEncoder passwordEncoder, UserMapper mapper) {
+    public UserServiceImpl(UserRepository repository,
+                           EmailService emailService,
+                           PasswordEncoder passwordEncoder,
+                           @Lazy UserMapper mapper) {
         super(repository, mapper);
         this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;

@@ -10,6 +10,7 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.GrammarRepository;
 import com.englishweb.english_web_be.service.GrammarService;
 import com.englishweb.english_web_be.util.ValidationUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +24,9 @@ public class GrammarServiceImpl extends BaseServiceImpl<Grammar, GrammarDTO, Gra
 
     private final GrammarQuestionServiceImpl grammarQuestionService;
 
-    public GrammarServiceImpl(GrammarRepository repository, GrammarQuestionServiceImpl grammarQuestionService, GrammarMapper mapper) {
+    public GrammarServiceImpl(GrammarRepository repository,
+                              GrammarQuestionServiceImpl grammarQuestionService,
+                              @Lazy GrammarMapper mapper) {
         super(repository, mapper);
         this.grammarQuestionService = grammarQuestionService;
     }

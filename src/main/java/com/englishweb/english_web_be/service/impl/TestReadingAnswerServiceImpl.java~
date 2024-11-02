@@ -4,6 +4,8 @@ import com.englishweb.english_web_be.dto.TestReadingAnswerDTO;
 import com.englishweb.english_web_be.dto.request.TestReadingAnswerRequestDTO;
 import com.englishweb.english_web_be.dto.response.TestReadingAnswerResponseDTO;
 import com.englishweb.english_web_be.mapper.TestReadingAnswerMapper;
+import com.englishweb.english_web_be.mapper.TestReadingMapper;
+import com.englishweb.english_web_be.mapper.TestReadingQuestionMapper;
 import com.englishweb.english_web_be.model.TestReadingAnswer;
 import com.englishweb.english_web_be.repository.TestReadingAnswerRepository;
 import com.englishweb.english_web_be.service.TestReadingAnswerService;

@@ -19,7 +19,9 @@ public class ListenAndWriteAWordServiceImpl extends BaseServiceImpl<ListenAndWri
 
     private final ListeningServiceImpl listeningService;
 
-    public ListenAndWriteAWordServiceImpl(ListenAndWriteAWordRepository repository, @Lazy ListeningServiceImpl listeningService, ListenAndWriteAWordMapper mapper) {
+    public ListenAndWriteAWordServiceImpl(ListenAndWriteAWordRepository repository,
+                                          @Lazy ListeningServiceImpl listeningService,
+                                          @Lazy ListenAndWriteAWordMapper mapper) {
         super(repository, mapper);
         this.listeningService = listeningService;
     }

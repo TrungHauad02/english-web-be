@@ -17,7 +17,9 @@ public class SpeakingConversationServiceImpl extends BaseServiceImpl<SpeakingCon
 
     private final SpeakingServiceImpl speakingService;
 
-    public SpeakingConversationServiceImpl(SpeakingConversationRepository repository, @Lazy SpeakingServiceImpl speakingService, SpeakingConversationMapper mapper) {
+    public SpeakingConversationServiceImpl(SpeakingConversationRepository repository,
+                                           @Lazy SpeakingServiceImpl speakingService,
+                                           @Lazy SpeakingConversationMapper mapper) {
         super(repository, mapper);
         this.speakingService = speakingService;
     }

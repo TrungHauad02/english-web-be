@@ -33,14 +33,8 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO, TestRequestDT
     private final TestMixingQuestionServiceImpl testMixingQuestionService;
     TestMapper mapper;
 
-    public TestServiceImpl(TestRepository repository,
-                           @Lazy TestSpeakingServiceImpl testSpeakingService,
-                           @Lazy TestReadingServiceImpl testReadingService,
-                           @Lazy TestListeningServiceImpl testListeningService,
-                           @Lazy TestWritingServiceImpl testWritingService,
-                           TestMixingQuestionServiceImpl testMixingQuestionService,
-                           @Lazy TestMapper mapper) {
-        super(repository, mapper);
+    public TestServiceImpl(TestRepository repository, @Lazy TestSpeakingServiceImpl testSpeakingService, @Lazy TestReadingServiceImpl testReadingService, @Lazy TestListeningServiceImpl testListeningService, @Lazy TestWritingServiceImpl testWritingService, TestMixingQuestionServiceImpl testMixingQuestionService) {
+        super(repository);
         this.testSpeakingService = testSpeakingService;
         this.testReadingService = testReadingService;
         this.testListeningService = testListeningService;

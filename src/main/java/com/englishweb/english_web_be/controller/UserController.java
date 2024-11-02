@@ -117,7 +117,9 @@ public class UserController {
     @PostMapping("/forgot-password/send-otp")
     public ResponseEntity<String> sendOtp(@RequestBody String email) {
         try {
-            userService.sendOtpByEmail(email);
+            UserRequestDTO userDTO = new UserRequestDTO();
+            userDTO.setEmail(email);
+            userService.sendOtpByEmail(userDTO);
             return new ResponseEntity<>("Mã OTP đã được gửi thành công. Vui lòng kiểm tra email của bạn.", HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

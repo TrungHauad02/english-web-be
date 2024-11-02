@@ -9,6 +9,7 @@ import com.englishweb.english_web_be.model.Speaking;
 import com.englishweb.english_web_be.repository.SpeakingRepository;
 import com.englishweb.english_web_be.service.SpeakingConversationService;
 import com.englishweb.english_web_be.service.SpeakingService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +21,9 @@ public class SpeakingServiceImpl extends BaseServiceImpl<Speaking, SpeakingDTO, 
 
     private final SpeakingConversationService speakingConversationService;
 
-    public SpeakingServiceImpl(SpeakingRepository repository, SpeakingMapper mapper, SpeakingConversationService speakingConversationService) {
+    public SpeakingServiceImpl(SpeakingRepository repository,
+                               @Lazy SpeakingMapper mapper,
+                               SpeakingConversationService speakingConversationService) {
         super(repository, mapper);
         this.speakingConversationService = speakingConversationService;
     }

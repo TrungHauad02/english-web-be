@@ -25,12 +25,21 @@ public class ListeningAnswerServiceImpl extends BaseServiceImpl<ListeningAnswer,
     }
 
     @Override
-    public List<ListeningAnswerResponseDTO> findListeningAnswersByQuestionId(String questionId) {
+    public List<ListeningAnswerResponseDTO> findByQuestionId(String questionId) {
         listeningQuestionService.isExist(questionId);
         List<ListeningAnswer> entityList = repository.findAllByQuestion_Id(questionId);
         return entityList.stream()
                 .map(this::convertToDTO)
                 .map(mapper::mapToResponseDTO)
+                .toList();
+    }
+
+    @Override
+    public List<ListeningAnswerDTO> findDTOByQuestionId(String questionId) {
+        listeningQuestionService.isExist(questionId);
+        List<ListeningAnswer> entityList = repository.findAllByQuestion_Id(questionId);
+        return entityList.stream()
+                .map(this::convertToDTO)
                 .toList();
     }
 

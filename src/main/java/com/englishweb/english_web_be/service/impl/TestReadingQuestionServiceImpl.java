@@ -22,10 +22,12 @@ public class TestReadingQuestionServiceImpl extends BaseServiceImpl<TestReadingQ
 
     private final TestReadingServiceImpl testReadingService;
     private final TestReadingAnswerServiceImpl testReadingAnswerService;
-    TestReadingQuestionMapper mapper;
 
-    public TestReadingQuestionServiceImpl(TestReadingQuestionRepository repository, @Lazy TestReadingServiceImpl testReadingService, @Lazy TestReadingAnswerServiceImpl testReadingAnswerService) {
-        super(repository);
+    public TestReadingQuestionServiceImpl(TestReadingQuestionRepository repository,
+                                          @Lazy TestReadingServiceImpl testReadingService,
+                                          @Lazy TestReadingAnswerServiceImpl testReadingAnswerService,
+                                          @Lazy TestReadingQuestionMapper mapper) {
+        super(repository, mapper);
         this.testReadingService = testReadingService;
         this.testReadingAnswerService = testReadingAnswerService;
     }

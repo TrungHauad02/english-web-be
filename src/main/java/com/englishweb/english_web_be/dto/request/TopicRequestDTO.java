@@ -14,6 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TopicRequestDTO implements BaseDTO {
+    private String id;
     @NotBlank(message = "Title cannot be empty")
     private String title;
     @Positive(message = "Serial number must be greater than 0")

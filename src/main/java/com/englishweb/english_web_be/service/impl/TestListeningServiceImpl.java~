@@ -23,11 +23,8 @@ public class TestListeningServiceImpl extends BaseServiceImpl<TestListening, Tes
     private final TestListeningQuestionServiceImpl testListeningQuestionService;
     TestListeningMapper testListeningMapper;
 
-    public TestListeningServiceImpl(TestListeningRepository repository,
-                                    @Lazy TestServiceImpl testService,
-                                    @Lazy TestListeningQuestionServiceImpl testListeningQuestionService,
-                                    @Lazy TestListeningMapper mapper) {
-        super(repository, mapper);
+    public TestListeningServiceImpl(TestListeningRepository repository, @Lazy TestServiceImpl testService, @Lazy TestListeningQuestionServiceImpl testListeningQuestionService) {
+        super(repository);
         this.testService = testService;
         this.testListeningQuestionService = testListeningQuestionService;
     }
