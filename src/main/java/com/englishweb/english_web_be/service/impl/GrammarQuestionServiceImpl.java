@@ -3,6 +3,7 @@ package com.englishweb.english_web_be.service.impl;
 import com.englishweb.english_web_be.dto.GrammarAnswerDTO;
 import com.englishweb.english_web_be.dto.GrammarQuestionDTO;
 import com.englishweb.english_web_be.model.GrammarQuestion;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.GrammarQuestionRepository;
 import com.englishweb.english_web_be.service.GrammarQuestionService;
 import org.springframework.context.annotation.Lazy;
@@ -24,6 +25,16 @@ public class GrammarQuestionServiceImpl extends BaseServiceImpl<GrammarQuestion,
     public List<GrammarQuestionDTO> findAllByGrammarId(String grammarId) {
         grammarService.isExist(grammarId);
         List<GrammarQuestion> entityList = repository.findAllByGrammar_Id(grammarId);
+        return entityList.stream()
+                .map(this::convertToDTO)
+                .toList();
+    }
+
+    public List<GrammarQuestionDTO> findAllByGrammarIdAndStatus(String grammarId, StatusEnum status) {
+        if(status == null)
+            return findAllByGrammarId(grammarId);
+        grammarService.isExist(grammarId);
+        List<GrammarQuestion> entityList = repository.findAllByGrammar_IdAndStatus(grammarId, status);
         return entityList.stream()
                 .map(this::convertToDTO)
                 .toList();

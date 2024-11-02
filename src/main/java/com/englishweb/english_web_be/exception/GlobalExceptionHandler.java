@@ -1,12 +1,15 @@
 package com.englishweb.english_web_be.exception;
 
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +46,20 @@ public class GlobalExceptionHandler {
                 "Invalid input"
         );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // Xử lý lỗi sai dữ liệu đầu vào kiểu enum
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleEnumTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        String parameterName = ex.getName();
+        String invalidValue = ex.getValue() != null ? ex.getValue().toString() : "null";
+        String errorMessage = String.format("Invalid value '%s' for parameter '%s'. Valid values are: %s",
+                invalidValue,
+                parameterName,
+                Arrays.toString(StatusEnum.values()));
+
+        ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), errorMessage, ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     // Lỗi dữ liệu dto

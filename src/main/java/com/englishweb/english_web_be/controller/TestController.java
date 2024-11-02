@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -44,6 +45,26 @@ public class TestController {
         TestDTO createdTest = testService.create(dto);
 
         return new ResponseEntity<>(createdTest, HttpStatus.CREATED);
+    }
+    @PostMapping("/api/test/question/delete")
+    public ResponseEntity<Void> deleteQuestionTest(@RequestBody Map<String, Object> requestBody) {
+        String testid = (String) requestBody.get("testid");
+        String type = (String) requestBody.get("type");
+        String testdeleteid = (String) requestBody.get("testdeleteid");
+        Integer serial = (Integer) requestBody.get("serial");
+
+        testService.deleteQuestionTest(testid, type, testdeleteid, serial);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/api/test/question/add")
+    public ResponseEntity<Void> addQuestionTest(@RequestBody Map<String, Object> requestBody) {
+        String testid = (String) requestBody.get("testid");
+        String type = (String) requestBody.get("type");
+        Map<String, Object> testadd = (Map<String, Object>) requestBody.get("testadd");
+
+        testService.addQuestionTest(testid, type, testadd);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/api/test/{id}")

@@ -3,6 +3,10 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 
 import java.util.List;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,16 +18,27 @@ import lombok.Setter;
 @AllArgsConstructor
 public class TestDTO implements BaseDTO {
     private String id;
+    @NotBlank(message = "Title cannot be empty")
     private String title;
+    @Positive(message = "Serial number must be greater than 0")
     private int serial;
+    @Positive(message = "Duration must be greater than 0")
     private int duration;
+    @NotBlank(message = "Test type cannot be null")
     private TestTypeEnum type;
+    @NotBlank(message = "Status cannot be null")
     private StatusEnum status;
+    @NotEmpty(message = "Test listening questions cannot be empty")
     private List<TestListeningDTO> testListenings;
+    @NotEmpty(message = "Test reading questions cannot be empty")
     private List<TestReadingDTO> testReadings;
+    @NotEmpty(message = "Test writing questions cannot be empty")
     private List<TestWritingDTO> testWritings;
-    private List<TestSpeakingDTO>  testSpeakings;
+    @NotEmpty(message = "Test speaking questions cannot be empty")
+    private List<TestSpeakingDTO> testSpeakings;
+    @NotEmpty(message = "Test mixing questions cannot be empty")
     private List<TestMixingQuestionDTO> testMixingQuestions;
+
 
     @Override
     public String toString() {
