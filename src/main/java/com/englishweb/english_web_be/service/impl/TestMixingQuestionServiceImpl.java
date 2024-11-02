@@ -3,6 +3,7 @@ package com.englishweb.english_web_be.service.impl;
 import com.englishweb.english_web_be.dto.TestMixingAnswerDTO;
 import com.englishweb.english_web_be.dto.TestMixingQuestionDTO;
 import com.englishweb.english_web_be.model.TestMixingQuestion;
+import com.englishweb.english_web_be.modelenum.TestMixingTypeEnum;
 import com.englishweb.english_web_be.repository.TestMixingQuestionRepository;
 import com.englishweb.english_web_be.service.TestMixingQuestionService;
 import org.springframework.context.annotation.Lazy;
@@ -27,6 +28,20 @@ public class TestMixingQuestionServiceImpl extends BaseServiceImpl<TestMixingQue
     public List<TestMixingQuestionDTO> findAllByTestId(String testId) {
         testService.isExist(testId);
         List<TestMixingQuestion> list = repository.findAllByTest_Id(testId);
+
+        if (list.isEmpty()) {
+            return null;
+        }
+
+        return list.stream()
+                .map(this::convertToDTO)
+                .toList();
+    }
+
+    @Override
+    public List<TestMixingQuestionDTO> findAllByTest_IdAndType(String testId, TestMixingTypeEnum typeEnum) {
+        testService.isExist(testId);
+        List<TestMixingQuestion> list = repository.findAllByTest_IdAndType(testId,typeEnum);
 
         if (list.isEmpty()) {
             return null;

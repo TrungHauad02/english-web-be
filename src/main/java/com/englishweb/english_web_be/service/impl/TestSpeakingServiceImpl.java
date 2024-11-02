@@ -1,16 +1,18 @@
 package com.englishweb.english_web_be.service.impl;
 
+import com.englishweb.english_web_be.dto.TestReadingQuestionDTO;
 import com.englishweb.english_web_be.dto.TestSpeakingDTO;
 import com.englishweb.english_web_be.dto.TestSpeakingQuestionDTO;
 import com.englishweb.english_web_be.model.TestSpeaking;
 import com.englishweb.english_web_be.repository.TestSpeakingRepository;
 import com.englishweb.english_web_be.service.TestSpeakingService;
+import lombok.Getter;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
+@Getter
 @Service
 public class TestSpeakingServiceImpl extends BaseServiceImpl<TestSpeaking, TestSpeakingDTO, TestSpeakingRepository> implements TestSpeakingService {
 
@@ -69,5 +71,18 @@ public class TestSpeakingServiceImpl extends BaseServiceImpl<TestSpeaking, TestS
             }
         }
         super.delete(id);
+    }
+
+    public void deleteQuestionTest(String questionId) {
+
+        testSpeakingQuestionService.delete(questionId);
+    }
+    public void updateQuestionTest(List<TestSpeakingQuestionDTO> questions) {
+
+        if (questions != null) {
+            for (TestSpeakingQuestionDTO question : questions) {
+                testSpeakingQuestionService.update(question,question.getId());
+            }
+        }
     }
 }
