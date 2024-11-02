@@ -40,7 +40,7 @@ public class GrammarServiceImpl extends BaseServiceImpl<Grammar, GrammarDTO, Gra
 
     @Override
     public void delete(String id){
-        List<GrammarQuestionDTO> questionDTOList = grammarQuestionService.findAllByGrammarId(id);
+        List<GrammarQuestionDTO> questionDTOList = grammarQuestionService.findAllByGrammarIdAndStatus(id);
         for(GrammarQuestionDTO questionDTO : questionDTOList){
             grammarQuestionService.delete(questionDTO.getId());
         }

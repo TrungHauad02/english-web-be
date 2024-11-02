@@ -81,7 +81,7 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.2.0</version>
+			<version>2.2.1</version>
 		</dependency>
 
 		<dependency>
@@ -96,10 +96,6 @@
 			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
 		</dependency>
 		<!--		Comment lai dependency nay lai de khong bi loi 401,403 khi dung postman-->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-mail</artifactId>
-		</dependency>
 
 	</dependencies>
 
