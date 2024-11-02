@@ -26,6 +26,8 @@ public class SecurityConfig {
 
     public final String[] PUBLIC_ENDPOINTS = {"/api/users/student/signup",
             "/api/users/teacher/signup", "/api/users/token", "/api/users/introspec",
+            "/api/users/forgot-password/verify-otp", "/api/users/forgot-password/reset-password",
+            "/api/users/forgot-password/send-otp",
     };
 
     @Value("${jwt.signerkey}")

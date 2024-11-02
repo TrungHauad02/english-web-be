@@ -24,6 +24,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex){
+        ErrorResponse response = new ErrorResponse(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                "Email or password is invalid. Please check again"
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     // Xử lý lỗi sai dữ liệu đầu vào
     @ExceptionHandler(InvalidArgumentException.class)
     public ResponseEntity<ErrorResponse> handleInvalidArgumentException(InvalidArgumentException ex) {

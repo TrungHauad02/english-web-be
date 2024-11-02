@@ -1,6 +1,7 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.UserDTO;
+import com.englishweb.english_web_be.exception.AuthenticationException;
 import com.englishweb.english_web_be.model.Authenticate;
 import com.englishweb.english_web_be.model.User;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
@@ -60,14 +61,14 @@ public class AuthenticateServiceImpl extends BaseServiceImpl<User, UserDTO, User
         Optional<User> userOptional = repository.findByEmail(dto.getEmail());
 
         if (userOptional.isEmpty()) {
-            throw new RuntimeException("Email or password is invalid. Please check again.");
+            throw new AuthenticationException( "Email or password is invalid. Please check again.");
         }
 
         User user = userOptional.get();
         boolean isAuthenticated = passwordEncoder.matches(dto.getPassword(), user.getPassword());
 
         if (!isAuthenticated) {
-            throw new RuntimeException("Email or password is invalid. Please check again.");
+            throw new AuthenticationException("Email or password is invalid. Please check again.");
         }
 
         var token = generateToken(user);

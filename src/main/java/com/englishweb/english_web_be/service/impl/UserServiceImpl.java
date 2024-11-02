@@ -21,6 +21,9 @@ import com.englishweb.english_web_be.repository.UserRepository;
 
 import java.security.SecureRandom;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -29,6 +32,7 @@ import java.util.Optional;
 public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserRepository> implements UserService {
     private EmailService emailService;
     PasswordEncoder passwordEncoder;
+    private Map<String, OtpEntry> otpStorage = new HashMap<>();
 
     public UserServiceImpl(UserRepository repository, EmailService emailService, PasswordEncoder passwordEncoder) {
         super(repository);
@@ -45,6 +49,47 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserReposito
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<User> entityPage = repository.findByRoleEnum(role, pageable);
         return entityPage.map(this::convertToDTO);
+    }
+
+    private static class OtpEntry {
+        String otp;
+        LocalDateTime expiryTime;
+
+        OtpEntry(String otp, LocalDateTime expiryTime) {
+            this.otp = otp;
+            this.expiryTime = expiryTime;
+        }
+
+        boolean isExpired() {
+            return LocalDateTime.now().isAfter(expiryTime);
+        }
+    }
+
+    // Gửi mã OTP qua email với TTL (thời gian sống) là 1 phút
+    public void sendOtpByEmail(UserDTO userDTO) {
+        if (repository.findByEmail(userDTO.getEmail()).isEmpty()) {
+            throw new RuntimeException("Email không tồn tại.");
+        }
+        String otp = String.format("%06d", new SecureRandom().nextInt(1000000));
+        LocalDateTime expiryTime = LocalDateTime.now().plusMinutes(1); // Thời gian sống 1 phút
+        otpStorage.put(userDTO.getEmail(), new OtpEntry(otp, expiryTime));
+        emailService.sendOtpByEmail(userDTO.getEmail(), otp);
+    }
+
+    public boolean verifyOtp(String email, String otp) {
+        OtpEntry otpEntry = otpStorage.get(email);
+        if (otpEntry == null || otpEntry.isExpired() || !otpEntry.otp.equals(otp)) {
+            return false;
+        }
+        otpStorage.remove(email);
+        return true;
+    }
+
+    public UserDTO resetPassword(UserDTO userDTO) {
+        User user = repository.findByEmail(userDTO.getEmail()).orElseThrow(() -> new RuntimeException("Email not exist."));
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        repository.save(user);
+        return convertToDTO(user);
     }
 
     public UserDTO createStudent(UserDTO dto) {
