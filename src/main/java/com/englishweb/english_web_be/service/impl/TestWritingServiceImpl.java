@@ -1,6 +1,9 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.TestWritingDTO;
+import com.englishweb.english_web_be.dto.request.TestWritingRequestDTO;
+import com.englishweb.english_web_be.dto.response.TestWritingResponseDTO;
+import com.englishweb.english_web_be.mapper.TestWritingMapper;
 import com.englishweb.english_web_be.model.TestWriting;
 import com.englishweb.english_web_be.repository.TestWritingRepository;
 import com.englishweb.english_web_be.service.TestWritingService;
@@ -9,10 +12,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
-public class TestWritingServiceImpl extends BaseServiceImpl<TestWriting, TestWritingDTO, TestWritingRepository> implements TestWritingService {
+public class TestWritingServiceImpl extends BaseServiceImpl<TestWriting, TestWritingDTO, TestWritingRequestDTO, TestWritingResponseDTO, TestWritingMapper, TestWritingRepository> implements TestWritingService {
 
     private final TestServiceImpl testService;
-
+    TestWritingMapper mapper;
 
     public TestWritingServiceImpl(TestWritingRepository repository, @Lazy TestServiceImpl testService) {
         super(repository);
@@ -20,7 +23,7 @@ public class TestWritingServiceImpl extends BaseServiceImpl<TestWriting, TestWri
     }
 
 
-    public List<TestWritingDTO> findAllByTestId(String test_id) {
+    public List<TestWritingDTO> findAllDTOByTestId(String test_id) {
         testService.isExist(test_id);
         List<TestWriting> list = repository.findAllByTest_Id(test_id);
 
@@ -33,6 +36,20 @@ public class TestWritingServiceImpl extends BaseServiceImpl<TestWriting, TestWri
                 .toList();
     }
 
+    public List<TestWritingResponseDTO> findAllByTestId(String test_id) {
+        testService.isExist(test_id);
+        List<TestWriting> list = repository.findAllByTest_Id(test_id);
+
+        if (list.isEmpty()) {
+            return null;
+        }
+
+        return list.stream()
+                .map(this::convertToDTO)
+                .map(mapper::mapToResponseDTO)
+                .toList();
+    }
+
     @Override
     protected TestWriting convertToEntity(TestWritingDTO dto) {
         TestWriting entity = new TestWriting();
@@ -40,7 +57,7 @@ public class TestWritingServiceImpl extends BaseServiceImpl<TestWriting, TestWri
         entity.setContent(dto.getContent());
         entity.setSerial(dto.getSerial());
         entity.setStatus(dto.getStatus());
-        entity.setTest(testService.convertToEntity(testService.findById(dto.getTestId())));
+        entity.setTest(testService.convertToEntity(testService.findDTOById(dto.getTestId())));
         return entity;
     }
 
