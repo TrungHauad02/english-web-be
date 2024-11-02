@@ -3,6 +3,9 @@ package com.englishweb.english_web_be.service.impl;
 import com.englishweb.english_web_be.dto.ListenAndWriteAWordDTO;
 import com.englishweb.english_web_be.dto.ListeningDTO;
 import com.englishweb.english_web_be.dto.ListeningQuestionDTO;
+import com.englishweb.english_web_be.dto.request.ListeningRequestDTO;
+import com.englishweb.english_web_be.dto.response.ListeningResponseDTO;
+import com.englishweb.english_web_be.mapper.ListeningMapper;
 import com.englishweb.english_web_be.model.Listening;
 import com.englishweb.english_web_be.repository.ListeningRepository;
 import com.englishweb.english_web_be.service.ListeningService;
@@ -11,25 +14,27 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ListeningServiceImpl extends BaseServiceImpl<Listening, ListeningDTO, ListeningRepository> implements ListeningService {
+public class ListeningServiceImpl extends BaseServiceImpl<Listening, ListeningDTO, ListeningRequestDTO,
+        ListeningResponseDTO, ListeningMapper, ListeningRepository> implements ListeningService {
 
     private final ListenAndWriteAWordServiceImpl listenAndWriteAWordService;
     private final ListeningQuestionServiceImpl listeningQuestionService;
 
-    public ListeningServiceImpl(ListeningRepository repository, ListenAndWriteAWordServiceImpl listenAndWriteAWordService, ListeningQuestionServiceImpl listeningQuestionService) {
-        super(repository);
+    public ListeningServiceImpl(ListeningRepository repository, ListenAndWriteAWordServiceImpl listenAndWriteAWordService,
+                                ListeningQuestionServiceImpl listeningQuestionService, ListeningMapper mapper) {
+        super(repository, mapper);
         this.listenAndWriteAWordService = listenAndWriteAWordService;
         this.listeningQuestionService = listeningQuestionService;
     }
 
     @Override
-    public void delete(String id){
+    public void delete(String id) {
         isExist(id);
-        List<ListeningQuestionDTO> questionDTOList = listeningQuestionService.findByListeningId(id);
+        List<ListeningQuestionDTO> questionDTOList = listeningQuestionService.findDTOByListeningId(id);
         for (ListeningQuestionDTO questionDTO : questionDTOList) {
             listeningQuestionService.delete(questionDTO.getId());
         }
-        List<ListenAndWriteAWordDTO> listenAndWriteAWordDTOList = listenAndWriteAWordService.findByListeningId(id);
+        List<ListenAndWriteAWordDTO> listenAndWriteAWordDTOList = listenAndWriteAWordService.findDTOByListeningId(id);
         for (ListenAndWriteAWordDTO listenAndWriteAWordDTO : listenAndWriteAWordDTOList) {
             listenAndWriteAWordService.delete(listenAndWriteAWordDTO.getId());
         }
@@ -37,7 +42,7 @@ public class ListeningServiceImpl extends BaseServiceImpl<Listening, ListeningDT
     }
 
     @Override
-    protected ListeningDTO convertToDTO(Listening entity){
+    protected ListeningDTO convertToDTO(Listening entity) {
         ListeningDTO dto = new ListeningDTO();
         dto.setId(entity.getId());
         dto.setSerial(entity.getSerial());
@@ -50,7 +55,7 @@ public class ListeningServiceImpl extends BaseServiceImpl<Listening, ListeningDT
     }
 
     @Override
-    protected Listening convertToEntity(ListeningDTO dto){
+    protected Listening convertToEntity(ListeningDTO dto) {
         Listening entity = new Listening();
         entity.setId(dto.getId());
         entity.setSerial(dto.getSerial());

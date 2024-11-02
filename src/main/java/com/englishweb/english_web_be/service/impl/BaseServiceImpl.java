@@ -5,21 +5,20 @@ import com.englishweb.english_web_be.mapper.BaseMapper;
 import com.englishweb.english_web_be.model.BaseEntity;
 import com.englishweb.english_web_be.service.BaseService;
 import com.englishweb.english_web_be.util.ValidationUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+@AllArgsConstructor
 public abstract class BaseServiceImpl<Entity extends BaseEntity, DTO extends BaseDTO,
                 RequestDTO extends BaseDTO, ResponseDTO extends BaseDTO,
                 Mapper extends BaseMapper<DTO, RequestDTO, ResponseDTO>,
                 R extends JpaRepository<Entity, String>> implements BaseService<RequestDTO, ResponseDTO> {
     protected R repository;
     protected Mapper mapper;
-    public BaseServiceImpl(R repository) {
-        this.repository = repository;
-    }
 
     public Page<ResponseDTO> findByPage(int page, int size, String sortBy, String sortDir, Class<ResponseDTO> dtoClass) {
         ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, dtoClass);
@@ -34,6 +33,11 @@ public abstract class BaseServiceImpl<Entity extends BaseEntity, DTO extends Bas
     public ResponseDTO findById(String id) {
         isExist(id);
         return mapper.mapToResponseDTO(convertToDTO(repository.findById(id).get()));
+    }
+
+    public DTO findDTOById(String id){
+        isExist(id);
+        return convertToDTO(repository.findById(id).get());
     }
 
     public ResponseDTO create(RequestDTO dto) {

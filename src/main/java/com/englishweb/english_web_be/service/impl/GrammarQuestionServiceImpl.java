@@ -2,6 +2,9 @@ package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.GrammarAnswerDTO;
 import com.englishweb.english_web_be.dto.GrammarQuestionDTO;
+import com.englishweb.english_web_be.dto.request.GrammarQuestionRequestDTO;
+import com.englishweb.english_web_be.dto.response.GrammarQuestionResponseDTO;
+import com.englishweb.english_web_be.mapper.GrammarQuestionMapper;
 import com.englishweb.english_web_be.model.GrammarQuestion;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.GrammarQuestionRepository;
@@ -12,17 +15,28 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class GrammarQuestionServiceImpl extends BaseServiceImpl<GrammarQuestion, GrammarQuestionDTO, GrammarQuestionRepository> implements GrammarQuestionService {
+public class GrammarQuestionServiceImpl extends BaseServiceImpl<GrammarQuestion, GrammarQuestionDTO,
+        GrammarQuestionRequestDTO, GrammarQuestionResponseDTO, GrammarQuestionMapper,
+        GrammarQuestionRepository> implements GrammarQuestionService {
     private final GrammarServiceImpl grammarService;
     GrammarAnswerServiceImpl grammarAnswerService;
 
-    public GrammarQuestionServiceImpl(GrammarQuestionRepository repository, GrammarAnswerServiceImpl grammarAnswerService, @Lazy GrammarServiceImpl grammarService) {
-        super(repository);
+    public GrammarQuestionServiceImpl(GrammarQuestionRepository repository, GrammarAnswerServiceImpl grammarAnswerService, @Lazy GrammarServiceImpl grammarService, GrammarQuestionMapper mapper) {
+        super(repository, mapper);
         this.grammarAnswerService = grammarAnswerService;
         this.grammarService = grammarService;
     }
 
-    public List<GrammarQuestionDTO> findAllByGrammarId(String grammarId) {
+    public List<GrammarQuestionResponseDTO> findAllByGrammarId(String grammarId) {
+        grammarService.isExist(grammarId);
+        List<GrammarQuestion> entityList = repository.findAllByGrammar_Id(grammarId);
+        return entityList.stream()
+                .map(this::convertToDTO)
+                .map(mapper::mapToResponseDTO)
+                .toList();
+    }
+
+    public List<GrammarQuestionDTO> findAllDTOByGrammarId(String grammarId) {
         grammarService.isExist(grammarId);
         List<GrammarQuestion> entityList = repository.findAllByGrammar_Id(grammarId);
         return entityList.stream()
@@ -30,19 +44,20 @@ public class GrammarQuestionServiceImpl extends BaseServiceImpl<GrammarQuestion,
                 .toList();
     }
 
-    public List<GrammarQuestionDTO> findAllByGrammarIdAndStatus(String grammarId, StatusEnum status) {
+    public List<GrammarQuestionResponseDTO> findAllByGrammarIdAndStatus(String grammarId, StatusEnum status) {
         if(status == null)
             return findAllByGrammarId(grammarId);
         grammarService.isExist(grammarId);
         List<GrammarQuestion> entityList = repository.findAllByGrammar_IdAndStatus(grammarId, status);
         return entityList.stream()
                 .map(this::convertToDTO)
+                .map(mapper::mapToResponseDTO)
                 .toList();
     }
 
     @Override
     public void delete(String id){
-        List<GrammarAnswerDTO> answerDTOList = grammarAnswerService.findAllByQuestionId(id);
+        List<GrammarAnswerDTO> answerDTOList = grammarAnswerService.findAllDTOByQuestionId(id);
         for(GrammarAnswerDTO answerDTO : answerDTOList){
             grammarAnswerService.delete(answerDTO.getId());
         }
@@ -56,7 +71,7 @@ public class GrammarQuestionServiceImpl extends BaseServiceImpl<GrammarQuestion,
         dto.setContent(entity.getContent());
         dto.setExplanation(entity.getExplanation());
         dto.setSerial(entity.getSerial());
-        dto.setAnswers(grammarAnswerService.findAllByQuestionId(entity.getId()));
+        dto.setAnswers(grammarAnswerService.findAllDTOByQuestionId(entity.getId()));
         dto.setStatus(entity.getStatus());
         dto.setGrammarId(entity.getGrammar().getId());
         return dto;
@@ -70,7 +85,7 @@ public class GrammarQuestionServiceImpl extends BaseServiceImpl<GrammarQuestion,
         entity.setExplanation(dto.getExplanation());
         entity.setSerial(dto.getSerial());
         entity.setStatus(dto.getStatus());
-        entity.setGrammar(grammarService.convertToEntity(grammarService.findById(dto.getGrammarId())));
+        entity.setGrammar(grammarService.convertToEntity(grammarService.findDTOById(dto.getGrammarId())));
         return entity;
     }
 }

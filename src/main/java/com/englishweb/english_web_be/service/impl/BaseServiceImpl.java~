@@ -36,6 +36,11 @@ public abstract class BaseServiceImpl<Entity extends BaseEntity, DTO extends Bas
         return mapper.mapToResponseDTO(convertToDTO(repository.findById(id).get()));
     }
 
+    public DTO findDTOById(String id){
+        isExist(id);
+        return convertToDTO(repository.findById(id).get());
+    }
+
     public ResponseDTO create(RequestDTO dto) {
         Entity entity = convertToEntity(mapper.mapToDTO(dto));
         entity.setId(null);
@@ -45,7 +50,7 @@ public abstract class BaseServiceImpl<Entity extends BaseEntity, DTO extends Bas
     public ResponseDTO update(RequestDTO dto, String id) {
         isExist(id);
         dto.setId(id);
-        return convertToDTO(repository.save(convertToEntity(dto)));
+        return mapper.mapToResponseDTO(convertToDTO(repository.save(convertToEntity(mapper.mapToDTO(dto)))));
     }
 
     public void delete(String id) {

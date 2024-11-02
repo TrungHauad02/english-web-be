@@ -1,6 +1,9 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.VocabularyDTO;
+import com.englishweb.english_web_be.dto.request.VocabularyRequestDTO;
+import com.englishweb.english_web_be.dto.response.VocabularyResponseDTO;
+import com.englishweb.english_web_be.mapper.VocabularyMapper;
 import com.englishweb.english_web_be.model.Vocabulary;
 import com.englishweb.english_web_be.repository.VocabularyRepository;
 import com.englishweb.english_web_be.service.VocabularyService;
@@ -12,26 +15,41 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class VocabularyServiceImpl extends BaseServiceImpl<Vocabulary, VocabularyDTO, VocabularyRepository> implements VocabularyService {
+public class VocabularyServiceImpl extends BaseServiceImpl<Vocabulary, VocabularyDTO, VocabularyRequestDTO,
+        VocabularyResponseDTO, VocabularyMapper, VocabularyRepository> implements VocabularyService {
     private final TopicServiceImpl topicService;
 
-    public VocabularyServiceImpl(VocabularyRepository repository, @Lazy TopicServiceImpl topicService){
-        super(repository);
+    public VocabularyServiceImpl(VocabularyRepository repository, VocabularyMapper mapper, @Lazy TopicServiceImpl topicService) {
+        super(repository, mapper);
         this.topicService = topicService;
     }
 
-    public Page<VocabularyDTO> findByPageTopicId(int page, int size, String sortBy, String sortDir, Class<VocabularyDTO> dtoClass, String topicId){
+    @Override
+    public Page<VocabularyResponseDTO> findByPageTopicId(int page, int size, String sortBy, String sortDir, Class<VocabularyResponseDTO> dtoClass, String topicId) {
         ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, dtoClass);
         topicService.isExist(topicId);
+
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
+
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<Vocabulary> entityPage = repository.findAllByTopic_Id(pageable, topicId);
-        return entityPage.map(this::convertToDTO);
+
+        return entityPage.map(this::convertToDTO).map(mapper::mapToResponseDTO);
     }
 
-    public List<VocabularyDTO> findByTopicId(String topicId){
+    @Override
+    public List<VocabularyResponseDTO> findByTopicId(String topicId) {
+        topicService.isExist(topicId);
+        return repository.findAllByTopic_Id(topicId).stream()
+                .map(this::convertToDTO)
+                .map(mapper::mapToResponseDTO)
+                .toList();
+    }
+
+    @Override
+    public List<VocabularyDTO> findDTOByTopicId(String topicId) {
         topicService.isExist(topicId);
         return repository.findAllByTopic_Id(topicId).stream()
                 .map(this::convertToDTO)
@@ -64,7 +82,7 @@ public class VocabularyServiceImpl extends BaseServiceImpl<Vocabulary, Vocabular
         entity.setStatus(dto.getStatus());
         entity.setImage(dto.getImage());
         entity.setExample(dto.getExample());
-        entity.setTopic(topicService.convertToEntity(topicService.findById(dto.getTopicId())));
+        entity.setTopic(topicService.convertToEntity(topicService.findDTOById(dto.getTopicId())));
         return entity;
     }
 }
