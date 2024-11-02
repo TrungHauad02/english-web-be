@@ -1,67 +1,56 @@
-package com.englishweb.english_web_be.controller;
-
-import com.englishweb.english_web_be.modelenum.StatusEnum;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import com.englishweb.english_web_be.dto.GrammarDTO;
-import com.englishweb.english_web_be.service.GrammarService;
-import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequestMapping("/api/grammars")
 @Slf4j
 @Tag(name = "Grammar Controller")
+@AllArgsConstructor
 public class GrammarController {
-    GrammarService service;
+    private final GrammarService service;
+    private final GrammarMapper mapper;
 
-    public GrammarController(GrammarService service) {
-        this.service = service;
-    }
-
-    @Operation(method = "GET", summary = "Get grammar with status, sorting and pagination",
-            description = "Send a request via this API to get grammar with status, sorting and pagination. Status is optional")
+    @Operation(method = "GET", summary = "Get grammar with status, sorting, and pagination",
+            description = "Retrieve grammar entries with optional status filtering, sorting, and pagination")
     @GetMapping
-    public ResponseEntity<Page<GrammarDTO>> findGrammarWithStatusAndPagingAndSorting(
-                                            @RequestParam int page,
-                                            @RequestParam int size,
-                                            @RequestParam(defaultValue = "id") String sortBy,
-                                            @RequestParam(defaultValue = "asc") String sortDir,
-                                            @RequestParam(required = false) @Valid StatusEnum status){
-        return new ResponseEntity<>(
-                        service.findGrammarWithStatusAndPagingAndSorting
-                                (status, page, size, sortBy, sortDir, GrammarDTO.class), HttpStatus.OK);
+    public ResponseEntity<Page<GrammarResponseDTO>> findGrammarWithStatusAndPagingAndSorting(
+            @RequestParam int page,
+            @RequestParam int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir,
+            @RequestParam(required = false) StatusEnum status) {
+        Page<GrammarDTO> grammarDTOPage = service.findGrammarWithStatusAndPagingAndSorting(
+                status, page, size, sortBy, sortDir, GrammarDTO.class);
+        Page<GrammarResponseDTO> responsePage = grammarDTOPage.map(mapper::mapToResponseDTO);
+        return new ResponseEntity<>(responsePage, HttpStatus.OK);
     }
 
-    @Operation(method = "GET", summary = "Get grammar by id",
-            description = "Send a request via this API to get grammar information")
+    @Operation(method = "GET", summary = "Get grammar by id", description = "Retrieve grammar information by ID")
     @GetMapping("/{id}")
-    public ResponseEntity<GrammarDTO> findById(@PathVariable String id){
-        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+    public ResponseEntity<GrammarResponseDTO> findById(@PathVariable String id) {
+        GrammarDTO grammarDTO = service.findById(id);
+        GrammarResponseDTO responseDTO = mapper.mapToResponseDTO(grammarDTO);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
-    @Operation(method = "POST", summary = "Create new grammar",
-            description = "Send a request via this API to create grammar")
+    @Operation(method = "POST", summary = "Create new grammar", description = "Create a new grammar entry")
     @PostMapping
-    public ResponseEntity<GrammarDTO> create(@Valid @RequestBody GrammarDTO dto){
-        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
+    public ResponseEntity<GrammarResponseDTO> create(@Valid @RequestBody GrammarRequestDTO requestDTO) {
+        GrammarDTO grammarDTO = mapper.mapToDTO(requestDTO);
+        GrammarDTO createdGrammar = service.create(grammarDTO);
+        GrammarResponseDTO responseDTO = mapper.mapToResponseDTO(createdGrammar);
+        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
-    @Operation(method = "PUT", summary = "Update grammar",
-            description = "Send a request via this API to update grammar")
+    @Operation(method = "PUT", summary = "Update grammar", description = "Update an existing grammar entry")
     @PutMapping("/{id}")
-    public ResponseEntity<GrammarDTO> update(@Valid @RequestBody GrammarDTO dto, @PathVariable String id){
-        return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
+    public ResponseEntity<GrammarResponseDTO> update(@Valid @RequestBody GrammarRequestDTO requestDTO, @PathVariable String id) {
+        GrammarDTO grammarDTO = mapper.mapToDTO(requestDTO);
+        GrammarDTO updatedGrammar = service.update(grammarDTO, id);
+        GrammarResponseDTO responseDTO = mapper.mapToResponseDTO(updatedGrammar);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
-    @Operation(method = "DELETE", summary = "Delete grammar",
-            description = "Send a request via this API to delete grammar")
+    @Operation(method = "DELETE", summary = "Delete grammar", description = "Delete a grammar entry by ID")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable String id){
+    public ResponseEntity<Void> deleteById(@PathVariable String id) {
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
