@@ -48,7 +48,7 @@ public class UserController {
                                                                     @RequestParam int size,
                                                                     @RequestParam(defaultValue = "id") String sortBy,
                                                                     @RequestParam(defaultValue = "asc") String sortDir) {
-        return new ResponseEntity<>(userService.findByRole(page, size, sortBy, sortDir, RoleEnum.TEACHER, UserResponseDTO.class), HttpStatus.OK);
+        return new ResponseEntity<>(userService.findByRole(RoleEnum.TEACHER, page, size, sortBy, sortDir , UserResponseDTO.class), HttpStatus.OK);
     }
 
     @Operation(method = "GET", summary = "Get paginated list of students",
@@ -58,7 +58,7 @@ public class UserController {
                                                                     @RequestParam int size,
                                                                     @RequestParam(defaultValue = "id") String sortBy,
                                                                     @RequestParam(defaultValue = "asc") String sortDir) {
-        return new ResponseEntity<>(userService.findByRole(page, size, sortBy, sortDir, RoleEnum.STUDENT, UserResponseDTO.class), HttpStatus.OK);
+        return new ResponseEntity<>(userService.findByRole(RoleEnum.STUDENT, page, size, sortBy, sortDir, UserResponseDTO.class), HttpStatus.OK);
     }
 
     @Operation(method = "GET", summary = "Get user by ID",
@@ -117,6 +117,8 @@ public class UserController {
     @PostMapping("/forgot-password/send-otp")
     public ResponseEntity<String> sendOtp(@RequestBody String email) {
         try {
+            UserRequestDTO userDTO = new UserRequestDTO();
+            
             userService.sendOtpByEmail(email);
             return new ResponseEntity<>("Mã OTP đã được gửi thành công. Vui lòng kiểm tra email của bạn.", HttpStatus.OK);
         } catch (RuntimeException e) {

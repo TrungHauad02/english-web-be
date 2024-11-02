@@ -19,7 +19,9 @@ public class ListeningAnswerServiceImpl extends BaseServiceImpl<ListeningAnswer,
 
     private final ListeningQuestionServiceImpl listeningQuestionService;
 
-    public ListeningAnswerServiceImpl(ListeningAnswerRepository repository, @Lazy ListeningQuestionServiceImpl listeningQuestionService, ListeningAnswerMapper mapper) {
+    public ListeningAnswerServiceImpl(ListeningAnswerRepository repository,
+                                      @Lazy ListeningQuestionServiceImpl listeningQuestionService,
+                                      @Lazy ListeningAnswerMapper mapper) {
         super(repository, mapper);
         this.listeningQuestionService = listeningQuestionService;
     }

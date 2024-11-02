@@ -20,8 +20,10 @@ public class TestMixingAnswerServiceImpl extends BaseServiceImpl<TestMixingAnswe
     private final TestMixingQuestionServiceImpl testMixingQuestionService;
     TestMixingAnswerMapper mapper;
 
-    public TestMixingAnswerServiceImpl(TestMixingAnswerRepository repository, @Lazy TestMixingQuestionServiceImpl testMixingQuestionService) {
-        super(repository);
+    public TestMixingAnswerServiceImpl(TestMixingAnswerRepository repository,
+                                       @Lazy TestMixingQuestionServiceImpl testMixingQuestionService,
+                                       TestMixingAnswerMapper mapper) {
+        super(repository, mapper);
         this.testMixingQuestionService = testMixingQuestionService;
     }
 

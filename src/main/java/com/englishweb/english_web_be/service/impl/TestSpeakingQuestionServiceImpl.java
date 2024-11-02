@@ -18,8 +18,10 @@ public class TestSpeakingQuestionServiceImpl extends BaseServiceImpl<TestSpeakin
     TestSpeakingQuestionMapper mapper;
 
 
-    public TestSpeakingQuestionServiceImpl(TestSpeakingQuestionRepository repository, @Lazy TestSpeakingServiceImpl testSpeakingService) {
-        super(repository);
+    public TestSpeakingQuestionServiceImpl(TestSpeakingQuestionRepository repository,
+                                           @Lazy TestSpeakingServiceImpl testSpeakingService,
+                                           TestSpeakingQuestionMapper mapper) {
+        super(repository, mapper);
         this.testSpeakingService = testSpeakingService;
     }
     public List<TestSpeakingQuestionDTO> findAllDTOByTestSpeaking_Id (String testSpeakingId) {

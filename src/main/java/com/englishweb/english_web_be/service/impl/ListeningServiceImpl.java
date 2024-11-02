@@ -9,6 +9,7 @@ import com.englishweb.english_web_be.mapper.ListeningMapper;
 import com.englishweb.english_web_be.model.Listening;
 import com.englishweb.english_web_be.repository.ListeningRepository;
 import com.englishweb.english_web_be.service.ListeningService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +21,10 @@ public class ListeningServiceImpl extends BaseServiceImpl<Listening, ListeningDT
     private final ListenAndWriteAWordServiceImpl listenAndWriteAWordService;
     private final ListeningQuestionServiceImpl listeningQuestionService;
 
-    public ListeningServiceImpl(ListeningRepository repository, ListenAndWriteAWordServiceImpl listenAndWriteAWordService,
-                                ListeningQuestionServiceImpl listeningQuestionService, ListeningMapper mapper) {
+    public ListeningServiceImpl(ListeningRepository repository,
+                                ListenAndWriteAWordServiceImpl listenAndWriteAWordService,
+                                ListeningQuestionServiceImpl listeningQuestionService,
+                                @Lazy ListeningMapper mapper) {
         super(repository, mapper);
         this.listenAndWriteAWordService = listenAndWriteAWordService;
         this.listeningQuestionService = listeningQuestionService;

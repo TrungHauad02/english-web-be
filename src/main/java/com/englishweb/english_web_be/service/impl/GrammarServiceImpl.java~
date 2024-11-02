@@ -3,7 +3,6 @@ package com.englishweb.english_web_be.service.impl;
 import com.englishweb.english_web_be.dto.GrammarDTO;
 import com.englishweb.english_web_be.dto.GrammarQuestionDTO;
 import com.englishweb.english_web_be.dto.request.GrammarRequestDTO;
-import com.englishweb.english_web_be.dto.response.GrammarQuestionResponseDTO;
 import com.englishweb.english_web_be.dto.response.GrammarResponseDTO;
 import com.englishweb.english_web_be.mapper.GrammarMapper;
 import com.englishweb.english_web_be.model.Grammar;

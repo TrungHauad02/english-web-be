@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class SpeakingServiceImpl extends BaseServiceImpl<Speaking, SpeakingDTO, SpeakingRequestDTO, SpeakingResponseDTO, SpeakingMapper, SpeakingRepository> implements SpeakingService {
+public class SpeakingServiceImpl extends BaseServiceImpl<Speaking, SpeakingDTO, SpeakingRequestDTO,
+        SpeakingResponseDTO, SpeakingMapper, SpeakingRepository>
+        implements SpeakingService {
 
     private final SpeakingConversationService speakingConversationService;
 

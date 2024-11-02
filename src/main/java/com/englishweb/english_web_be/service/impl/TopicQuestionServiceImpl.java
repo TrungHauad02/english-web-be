@@ -22,7 +22,8 @@ public class TopicQuestionServiceImpl extends BaseServiceImpl<TopicQuestion, Top
     private final TopicAnswerServiceImpl topicAnswerService;
 
     public TopicQuestionServiceImpl(TopicQuestionRepository repository, TopicAnswerServiceImpl topicAnswerService,
-                                    @Lazy TopicServiceImpl topicService, TopicQuestionMapper mapper) {
+                                    @Lazy TopicServiceImpl topicService,
+                                    @Lazy TopicQuestionMapper mapper) {
         super(repository, mapper);
         this.topicAnswerService = topicAnswerService;
         this.topicService = topicService;

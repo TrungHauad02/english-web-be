@@ -19,7 +19,7 @@ public class GrammarAnswerServiceImpl extends BaseServiceImpl<GrammarAnswer, Gra
 
     GrammarQuestionServiceImpl grammarQuestionService;
 
-    public GrammarAnswerServiceImpl(GrammarAnswerRepository repository, @Lazy GrammarQuestionServiceImpl grammarQuestionService, GrammarAnswerMapper mapper) {
+    public GrammarAnswerServiceImpl(GrammarAnswerRepository repository, @Lazy GrammarQuestionServiceImpl grammarQuestionService, @Lazy GrammarAnswerMapper mapper) {
         super(repository, mapper);
         this.grammarQuestionService = grammarQuestionService;
     }

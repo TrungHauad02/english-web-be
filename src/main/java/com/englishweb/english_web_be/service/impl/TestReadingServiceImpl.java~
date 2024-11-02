@@ -23,12 +23,9 @@ public class TestReadingServiceImpl extends BaseServiceImpl<TestReading, TestRea
 
     private final TestServiceImpl testService;
     private final TestReadingQuestionServiceImpl testReadingQuestionService;
-
-    public TestReadingServiceImpl(TestReadingRepository repository,
-                                  @Lazy TestServiceImpl testService,
-                                  @Lazy TestReadingQuestionServiceImpl testReadingQuestionService,
-                                  @Lazy TestReadingMapper mapper) {
-        super(repository, mapper);
+    TestReadingMapper mapper;
+    public TestReadingServiceImpl(TestReadingRepository repository, @Lazy TestServiceImpl testService, @Lazy TestReadingQuestionServiceImpl testReadingQuestionService) {
+        super(repository);
         this.testService = testService;
         this.testReadingQuestionService = testReadingQuestionService;
     }

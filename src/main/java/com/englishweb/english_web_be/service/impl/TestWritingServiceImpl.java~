@@ -17,10 +17,8 @@ public class TestWritingServiceImpl extends BaseServiceImpl<TestWriting, TestWri
     private final TestServiceImpl testService;
     TestWritingMapper mapper;
 
-    public TestWritingServiceImpl(TestWritingRepository repository,
-                                  @Lazy TestServiceImpl testService,
-                                  @Lazy TestWritingMapper mapper) {
-        super(repository, mapper);
+    public TestWritingServiceImpl(TestWritingRepository repository, @Lazy TestServiceImpl testService) {
+        super(repository);
         this.testService = testService;
     }
 

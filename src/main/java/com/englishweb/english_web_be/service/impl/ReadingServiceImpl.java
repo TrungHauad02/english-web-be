@@ -9,6 +9,7 @@ import com.englishweb.english_web_be.model.Reading;
 import com.englishweb.english_web_be.repository.ReadingRepository;
 import com.englishweb.english_web_be.service.ReadingQuestionService;
 import com.englishweb.english_web_be.service.ReadingService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +21,9 @@ public class ReadingServiceImpl extends BaseServiceImpl<Reading, ReadingDTO, Rea
 
     private final ReadingQuestionService readingQuestionService;
 
-    public ReadingServiceImpl(ReadingRepository repository, ReadingMapper mapper, ReadingQuestionService readingQuestionService) {
+    public ReadingServiceImpl(ReadingRepository repository,
+                              @Lazy ReadingMapper mapper,
+                              ReadingQuestionService readingQuestionService) {
         super(repository, mapper);
         this.readingQuestionService = readingQuestionService;
     }

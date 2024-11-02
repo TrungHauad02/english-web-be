@@ -3,7 +3,9 @@ package com.englishweb.english_web_be.mapper;
 import com.englishweb.english_web_be.dto.ListeningQuestionDTO;
 import com.englishweb.english_web_be.dto.request.ListeningQuestionRequestDTO;
 import com.englishweb.english_web_be.dto.response.ListeningQuestionResponseDTO;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ListeningQuestionMapper implements BaseMapper<ListeningQuestionDTO, ListeningQuestionRequestDTO, ListeningQuestionResponseDTO> {
 
     @Override

@@ -12,7 +12,7 @@ public class ReadingAnswerMapper implements BaseMapper<ReadingAnswerDTO, Reading
     }
 
     @Override
-    public ReadingAnswerResponseDTO mapToResponseDTO(ReadingAnswerDTO readingAnswerDTO) {
+    public ReadingAnswerResponseDTO mapToResponseDTO(ReadingAnswerDTO dto) {
         return null;
     }
 }
