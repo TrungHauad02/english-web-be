@@ -1,6 +1,7 @@
 package com.englishweb.english_web_be.controller;
 
-import com.englishweb.english_web_be.dto.GrammarQuestionDTO;
+import com.englishweb.english_web_be.dto.request.GrammarQuestionRequestDTO;
+import com.englishweb.english_web_be.dto.response.GrammarQuestionResponseDTO;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.service.GrammarQuestionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,7 +19,7 @@ import java.util.List;
 @Slf4j
 @Tag(name = "GrammarQuestion Controller")
 public class GrammarQuestionController {
-    GrammarQuestionService service;
+    private final GrammarQuestionService service;
 
     public GrammarQuestionController(GrammarQuestionService service) {
         this.service = service;
@@ -27,31 +28,34 @@ public class GrammarQuestionController {
     @Operation(method = "GET", summary = "Get grammar questions by grammar id and status",
             description = "Send a request via this API to get grammar questions by grammar id and status")
     @GetMapping
-    public ResponseEntity<List<GrammarQuestionDTO>> findByGrammarId(
-                                        @RequestParam String grammarId,
-                                        @RequestParam(required = false) StatusEnum status) {
-        return new ResponseEntity<>(service.findAllByGrammarIdAndStatus(grammarId, status), HttpStatus.OK);
+    public ResponseEntity<List<GrammarQuestionResponseDTO>> findByGrammarId(
+            @RequestParam String grammarId,
+            @RequestParam(required = false) StatusEnum status) {
+        List<GrammarQuestionResponseDTO> questions = service.findAllByGrammarIdAndStatus(grammarId, status);
+        return new ResponseEntity<>(questions, HttpStatus.OK);
     }
 
     @Operation(method = "GET", summary = "Get grammar question by id",
             description = "Send a request via this API to get grammar question by id")
     @GetMapping("/{id}")
-    public ResponseEntity<GrammarQuestionDTO> findById(@PathVariable String id) {
+    public ResponseEntity<GrammarQuestionResponseDTO> findById(@PathVariable String id) {
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 
     @Operation(method = "POST", summary = "Create new grammar question",
             description = "Send a request via this API to create new grammar question")
     @PostMapping
-    public ResponseEntity<GrammarQuestionDTO> create(@Valid @RequestBody GrammarQuestionDTO dto){
-        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
+    public ResponseEntity<GrammarQuestionResponseDTO> create(@Valid @RequestBody GrammarQuestionRequestDTO dto){
+        GrammarQuestionResponseDTO createdQuestion = service.create(dto);
+        return new ResponseEntity<>(createdQuestion, HttpStatus.CREATED);
     }
 
     @Operation(method = "PUT", summary = "Update grammar question",
             description = "Send a request via this API to update grammar question")
     @PutMapping("/{id}")
-    public ResponseEntity<GrammarQuestionDTO> update(@Valid @RequestBody GrammarQuestionDTO dto, @PathVariable String id){
-        return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
+    public ResponseEntity<GrammarQuestionResponseDTO> update(@Valid @RequestBody GrammarQuestionRequestDTO dto, @PathVariable String id){
+        GrammarQuestionResponseDTO updatedQuestion = service.update(dto, id);
+        return new ResponseEntity<>(updatedQuestion, HttpStatus.OK);
     }
 
     @Operation(method = "DELETE", summary = "Delete grammar question",

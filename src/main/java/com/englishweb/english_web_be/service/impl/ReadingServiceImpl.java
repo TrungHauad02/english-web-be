@@ -1,20 +1,41 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.ReadingDTO;
+import com.englishweb.english_web_be.dto.ReadingQuestionDTO;
+import com.englishweb.english_web_be.dto.request.ReadingRequestDTO;
+import com.englishweb.english_web_be.dto.response.ReadingResponseDTO;
+import com.englishweb.english_web_be.mapper.ReadingMapper;
 import com.englishweb.english_web_be.model.Reading;
 import com.englishweb.english_web_be.repository.ReadingRepository;
+import com.englishweb.english_web_be.service.ReadingQuestionService;
 import com.englishweb.english_web_be.service.ReadingService;
 import org.springframework.stereotype.Service;
 
-@Service
-public class ReadingServiceImpl extends BaseServiceImpl<Reading, ReadingDTO, ReadingRepository> implements ReadingService {
+import java.util.List;
 
-    public ReadingServiceImpl(ReadingRepository repository) {
-        super(repository);
+@Service
+public class ReadingServiceImpl extends BaseServiceImpl<Reading, ReadingDTO, ReadingRequestDTO,
+        ReadingResponseDTO, ReadingMapper, ReadingRepository>
+        implements ReadingService {
+
+    private final ReadingQuestionService readingQuestionService;
+
+    public ReadingServiceImpl(ReadingRepository repository, ReadingMapper mapper, ReadingQuestionService readingQuestionService) {
+        super(repository, mapper);
+        this.readingQuestionService = readingQuestionService;
     }
 
     @Override
-    protected Reading convertToEntity(ReadingDTO dto){
+    public void delete(String id) {
+        List<ReadingQuestionDTO> dtoList = readingQuestionService.findAllDTOByReadingId(id);
+        for(ReadingQuestionDTO dto: dtoList){
+            readingQuestionService.delete(dto.getId());
+        }
+        super.delete(id);
+    }
+
+    @Override
+    protected Reading convertToEntity(ReadingDTO dto) {
         Reading entity = new Reading();
         entity.setId(dto.getId());
         entity.setTitle(dto.getTitle());

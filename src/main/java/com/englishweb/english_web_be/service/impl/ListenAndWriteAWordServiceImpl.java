@@ -1,6 +1,9 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.ListenAndWriteAWordDTO;
+import com.englishweb.english_web_be.dto.request.ListenAndWriteAWordRequestDTO;
+import com.englishweb.english_web_be.dto.response.ListenAndWriteAWordResponseDTO;
+import com.englishweb.english_web_be.mapper.ListenAndWriteAWordMapper;
 import com.englishweb.english_web_be.model.ListenAndWriteAWord;
 import com.englishweb.english_web_be.repository.ListenAndWriteAWordRepository;
 import com.englishweb.english_web_be.service.ListenAndWriteAWordService;
@@ -10,16 +13,29 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ListenAndWriteAWordServiceImpl extends BaseServiceImpl<ListenAndWriteAWord, ListenAndWriteAWordDTO, ListenAndWriteAWordRepository> implements ListenAndWriteAWordService {
+public class ListenAndWriteAWordServiceImpl extends BaseServiceImpl<ListenAndWriteAWord, ListenAndWriteAWordDTO,
+        ListenAndWriteAWordRequestDTO, ListenAndWriteAWordResponseDTO, ListenAndWriteAWordMapper, ListenAndWriteAWordRepository>
+        implements ListenAndWriteAWordService {
 
     private final ListeningServiceImpl listeningService;
 
-    public ListenAndWriteAWordServiceImpl(ListenAndWriteAWordRepository repository, @Lazy ListeningServiceImpl listeningService) {
-        super(repository);
+    public ListenAndWriteAWordServiceImpl(ListenAndWriteAWordRepository repository, @Lazy ListeningServiceImpl listeningService, ListenAndWriteAWordMapper mapper) {
+        super(repository, mapper);
         this.listeningService = listeningService;
     }
 
-    public List<ListenAndWriteAWordDTO> findByListeningId(String listeningId) {
+    @Override
+    public List<ListenAndWriteAWordResponseDTO> findByListeningId(String listeningId) {
+        listeningService.isExist(listeningId);
+        List<ListenAndWriteAWord> entityList = repository.findAllByListening_Id(listeningId);
+        return entityList.stream()
+                .map(this::convertToDTO)
+                .map(mapper::mapToResponseDTO)
+                .toList();
+    }
+
+    @Override
+    public List<ListenAndWriteAWordDTO> findDTOByListeningId(String listeningId) {
         listeningService.isExist(listeningId);
         List<ListenAndWriteAWord> entityList = repository.findAllByListening_Id(listeningId);
         return entityList.stream()
@@ -51,7 +67,7 @@ public class ListenAndWriteAWordServiceImpl extends BaseServiceImpl<ListenAndWri
         entity.setSentence(dto.getSentence());
         entity.setMissingIndex(dto.getMissingIndex());
         entity.setStatus(dto.getStatus());
-        entity.setListening(listeningService.convertToEntity(listeningService.findById(dto.getListeningId())));
+        entity.setListening(listeningService.convertToEntity(listeningService.findDTOById(dto.getListeningId())));
         return entity;
     }
 }

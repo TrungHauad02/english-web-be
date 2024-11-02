@@ -1,10 +1,14 @@
 package com.englishweb.english_web_be.service;
 
 import com.englishweb.english_web_be.dto.ListeningQuestionDTO;
+import com.englishweb.english_web_be.dto.request.ListeningQuestionRequestDTO;
+import com.englishweb.english_web_be.dto.response.ListeningQuestionResponseDTO;
 
 import java.util.List;
 
-public interface ListeningQuestionService extends BaseService<ListeningQuestionDTO> {
+public interface ListeningQuestionService extends BaseService<ListeningQuestionRequestDTO, ListeningQuestionResponseDTO> {
 
-    List<ListeningQuestionDTO> findByListeningId(String listeningId);
+    List<ListeningQuestionResponseDTO> findByListeningId(String listeningId);
+
+    List<ListeningQuestionDTO> findDTOByListeningId(String listeningId);
 }

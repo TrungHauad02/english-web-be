@@ -26,7 +26,7 @@ public class User implements BaseEntity {
     private String avatar;
     private String contentMotivation;
     @Enumerated(EnumType.STRING)
-    private StatusEnum statusEnum = StatusEnum.ACTIVE;
+    private StatusEnum status = StatusEnum.ACTIVE;
     @Enumerated(EnumType.STRING)
     private RoleEnum roleEnum = RoleEnum.STUDENT;
     @Enumerated(EnumType.STRING)

@@ -1,7 +1,10 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.UserDTO;
+import com.englishweb.english_web_be.dto.request.UserRequestDTO;
+import com.englishweb.english_web_be.dto.response.UserResponseDTO;
 import com.englishweb.english_web_be.exception.AuthenticationException;
+import com.englishweb.english_web_be.mapper.UserMapper;
 import com.englishweb.english_web_be.model.Authenticate;
 import com.englishweb.english_web_be.model.User;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
@@ -28,7 +31,7 @@ import java.util.Optional;
 import java.util.StringJoiner;
 
 @Service
-public class AuthenticateServiceImpl extends BaseServiceImpl<User, UserDTO, UserRepository> implements AuthenticateService {
+public class AuthenticateServiceImpl extends BaseServiceImpl<User, UserDTO, UserRequestDTO, UserResponseDTO, UserMapper, UserRepository> implements AuthenticateService {
     Logger log;
 
     private final PasswordEncoder passwordEncoder;
@@ -50,8 +53,8 @@ public class AuthenticateServiceImpl extends BaseServiceImpl<User, UserDTO, User
         return new IntrospecResponse(isValid); // Trả về đối tượng IntrospecResponse với true hoặc false
     }
 
-    public AuthenticateServiceImpl(UserRepository repository) {
-        super(repository);
+    public AuthenticateServiceImpl(UserRepository repository, UserMapper mapper) {
+        super(repository, mapper);
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
@@ -123,7 +126,7 @@ public class AuthenticateServiceImpl extends BaseServiceImpl<User, UserDTO, User
             throw new RuntimeException("Email or password is invalid. Please check again.");
         }
 
-        if (user.getStatusEnum() != StatusEnum.ACTIVE) {
+        if (user.getStatus() != StatusEnum.ACTIVE) {
             throw new RuntimeException("Account is not active. Please contact support.");
         }
 
@@ -140,7 +143,7 @@ public class AuthenticateServiceImpl extends BaseServiceImpl<User, UserDTO, User
         entity.setAvatar(dto.getAvatar());
         entity.setContentMotivation(dto.getContentMotivation());
         entity.setRoleEnum(dto.getRole());
-        entity.setStatusEnum(dto.getStatus());
+        entity.setStatus(dto.getStatus());
         entity.setLevelEnum(dto.getLevel());
         entity.setStartDate(dto.getStartDate());
         entity.setEndDate(dto.getEndDate());
@@ -157,7 +160,7 @@ public class AuthenticateServiceImpl extends BaseServiceImpl<User, UserDTO, User
         dto.setAvatar(entity.getAvatar());
         dto.setContentMotivation(entity.getContentMotivation());
         dto.setRole(entity.getRoleEnum());
-        dto.setStatus(entity.getStatusEnum());
+        dto.setStatus(entity.getStatus());
         dto.setLevel(entity.getLevelEnum());
         dto.setStartDate();
         dto.setEndDate(entity.getEndDate());

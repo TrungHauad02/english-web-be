@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ReadingAnswerRepository extends JpaRepository<ReadingAnswer, String> {
-    List<ReadingAnswer> findAllByQuestion_id(String questionId);
+    List<ReadingAnswer> findAllByQuestion_Id(String questionId);
 }

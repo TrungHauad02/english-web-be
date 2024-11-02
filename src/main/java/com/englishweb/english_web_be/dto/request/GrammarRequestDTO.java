@@ -1,5 +1,6 @@
 package com.englishweb.english_web_be.dto.request;
 
+import com.englishweb.english_web_be.dto.BaseDTO;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -12,7 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GrammarRequestDTO {
+public class GrammarRequestDTO implements BaseDTO {
     String id;
     @NotBlank(message = "Title cannot be empty")
     String title;

@@ -1,10 +1,10 @@
 package com.englishweb.english_web_be.controller;
 
+import com.englishweb.english_web_be.dto.request.GrammarRequestDTO;
 import com.englishweb.english_web_be.dto.response.GrammarResponseDTO;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import com.englishweb.english_web_be.dto.GrammarDTO;
 import com.englishweb.english_web_be.service.GrammarService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class GrammarController {
     @Operation(method = "GET", summary = "Get grammar with status, sorting and pagination",
             description = "Send a request via this API to get grammar with status, sorting and pagination. Status is optional")
     @GetMapping
-    public ResponseEntity<Page<GrammarDTO>> findGrammarWithStatusAndPagingAndSorting(
+    public ResponseEntity<Page<GrammarResponseDTO>> findGrammarWithStatusAndPagingAndSorting(
                                             @RequestParam int page,
                                             @RequestParam int size,
                                             @RequestParam(defaultValue = "id") String sortBy,
@@ -35,7 +35,7 @@ public class GrammarController {
                                             @RequestParam(required = false) StatusEnum status){
         return new ResponseEntity<>(
                         service.findGrammarWithStatusAndPagingAndSorting
-                                (status, page, size, sortBy, sortDir, GrammarDTO.class), HttpStatus.OK);
+                                (status, page, size, sortBy, sortDir, GrammarResponseDTO.class), HttpStatus.OK);
     }
 
     @Operation(method = "GET", summary = "Get grammar by id",
@@ -48,14 +48,14 @@ public class GrammarController {
     @Operation(method = "POST", summary = "Create new grammar",
             description = "Send a request via this API to create grammar")
     @PostMapping
-    public ResponseEntity<GrammarDTO> create(@Valid @RequestBody GrammarDTO dto){
+    public ResponseEntity<GrammarResponseDTO> create(@Valid @RequestBody GrammarRequestDTO dto){
         return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
     @Operation(method = "PUT", summary = "Update grammar",
             description = "Send a request via this API to update grammar")
     @PutMapping("/{id}")
-    public ResponseEntity<GrammarDTO> update(@Valid @RequestBody GrammarDTO dto, @PathVariable String id){
+    public ResponseEntity<GrammarResponseDTO> update(@Valid @RequestBody GrammarRequestDTO dto, @PathVariable String id){
         return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }
 

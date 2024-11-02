@@ -1,6 +1,9 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.GrammarAnswerDTO;
+import com.englishweb.english_web_be.dto.request.GrammarAnswerRequestDTO;
+import com.englishweb.english_web_be.dto.response.GrammarAnswerResponseDTO;
+import com.englishweb.english_web_be.mapper.GrammarAnswerMapper;
 import com.englishweb.english_web_be.model.GrammarAnswer;
 import com.englishweb.english_web_be.repository.GrammarAnswerRepository;
 import com.englishweb.english_web_be.service.GrammarAnswerService;
@@ -10,16 +13,27 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class GrammarAnswerServiceImpl extends BaseServiceImpl<GrammarAnswer, GrammarAnswerDTO, GrammarAnswerRepository> implements GrammarAnswerService {
+public class GrammarAnswerServiceImpl extends BaseServiceImpl<GrammarAnswer, GrammarAnswerDTO,
+        GrammarAnswerRequestDTO, GrammarAnswerResponseDTO, GrammarAnswerMapper,
+        GrammarAnswerRepository> implements GrammarAnswerService {
 
     GrammarQuestionServiceImpl grammarQuestionService;
 
-    public GrammarAnswerServiceImpl(GrammarAnswerRepository repository, @Lazy GrammarQuestionServiceImpl grammarQuestionService) {
-        super(repository);
+    public GrammarAnswerServiceImpl(GrammarAnswerRepository repository, @Lazy GrammarQuestionServiceImpl grammarQuestionService, GrammarAnswerMapper mapper) {
+        super(repository, mapper);
         this.grammarQuestionService = grammarQuestionService;
     }
 
-    public List<GrammarAnswerDTO> findAllByQuestionId(String questionId) {
+    public List<GrammarAnswerResponseDTO> findAllByQuestionId(String questionId) {
+        grammarQuestionService.isExist(questionId);
+        List<GrammarAnswer> entityList = repository.findAllByQuestion_Id(questionId);
+        return entityList.stream()
+                .map(this::convertToDTO)
+                .map(mapper::mapToResponseDTO)
+                .toList();
+    }
+
+    public List<GrammarAnswerDTO> findAllDTOByQuestionId(String questionId) {
         grammarQuestionService.isExist(questionId);
         List<GrammarAnswer> entityList = repository.findAllByQuestion_Id(questionId);
         return entityList.stream()
@@ -45,7 +59,7 @@ public class GrammarAnswerServiceImpl extends BaseServiceImpl<GrammarAnswer, Gra
         entity.setCorrect(dto.isCorrect());
         entity.setContent(dto.getContent());
         entity.setStatus(dto.getStatus());
-        entity.setQuestion(grammarQuestionService.convertToEntity(grammarQuestionService.findById(dto.getQuestionId())));
+        entity.setQuestion(grammarQuestionService.convertToEntity(grammarQuestionService.findDTOById(dto.getQuestionId())));
         return entity;
     }
 }
