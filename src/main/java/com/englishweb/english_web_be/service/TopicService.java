@@ -1,6 +1,9 @@
 package com.englishweb.english_web_be.service;
 
-import com.englishweb.english_web_be.dto.TopicDTO;
+import com.englishweb.english_web_be.dto.request.TopicRequestDTO;
+import com.englishweb.english_web_be.dto.response.TopicResponseDTO;
 
-public interface TopicService extends BaseService<TopicDTO> {
+import java.util.List;
+
+public interface TopicService extends BaseService<TopicRequestDTO, TopicResponseDTO> {
 }

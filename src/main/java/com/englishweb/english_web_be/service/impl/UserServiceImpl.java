@@ -1,12 +1,19 @@
 package com.englishweb.english_web_be.service.impl;
 
+import com.englishweb.english_web_be.dto.UserDTO;
+import com.englishweb.english_web_be.dto.request.UserRequestDTO;
+import com.englishweb.english_web_be.dto.response.UserResponseDTO;
+import com.englishweb.english_web_be.mapper.UserMapper;
+import com.englishweb.english_web_be.model.User;
 import com.englishweb.english_web_be.modelenum.RoleEnum;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
+import com.englishweb.english_web_be.repository.UserRepository;
 import com.englishweb.english_web_be.service.EmailService;
 import com.englishweb.english_web_be.service.UserService;
 import com.englishweb.english_web_be.util.ValidationUtils;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,12 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.englishweb.english_web_be.dto.UserDTO;
-import com.englishweb.english_web_be.model.User;
-import com.englishweb.english_web_be.repository.UserRepository;
-
 import java.security.SecureRandom;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,27 +30,115 @@ import java.util.Optional;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserRequestDTO, UserResponseDTO, UserMapper, UserRepository> implements UserService {
 
-public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserRepository> implements UserService {
-    private EmailService emailService;
+    EmailService emailService;
     PasswordEncoder passwordEncoder;
-    private Map<String, OtpEntry> otpStorage = new HashMap<>();
+    Map<String, OtpEntry> otpStorage = new HashMap<>();
 
-    public UserServiceImpl(UserRepository repository, EmailService emailService, PasswordEncoder passwordEncoder) {
-        super(repository);
+    public UserServiceImpl(UserRepository repository,
+                           EmailService emailService,
+                           PasswordEncoder passwordEncoder,
+                           @Lazy UserMapper mapper) {
+        super(repository, mapper);
         this.emailService = emailService;
-        this.repository = repository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Page<UserDTO> findByRole(int page, int size, String sortBy, String sortDir, RoleEnum role, Class<UserDTO> dtoClass) {
-        ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, dtoClass);
+    @Override
+    public Page<UserResponseDTO> findByRole(RoleEnum role, int page, int size, String sortBy, String sortDir, Class<UserResponseDTO> userResponseDTOClass) {
+        ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, userResponseDTOClass);
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<User> entityPage = repository.findByRoleEnum(role, pageable);
-        return entityPage.map(this::convertToDTO);
+        return entityPage.map(this::convertToDTO).map(mapper::mapToResponseDTO);
+    }
+
+    @Override
+    public UserResponseDTO createStudent(UserRequestDTO dto) {
+        if (repository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already exists. Please use another email.");
+        }
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+        dto.setStatus(StatusEnum.ACTIVE);
+        dto.setRole(RoleEnum.STUDENT);
+        return create(dto);
+    }
+
+    @Override
+    public UserResponseDTO createTeacher(UserRequestDTO dto) {
+        if (repository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already exists. Please use another email.");
+        }
+
+        String rawPassword = generatePassword(12);
+        dto.setPassword(passwordEncoder.encode(rawPassword));
+        dto.setStatus(StatusEnum.ACTIVE);
+        dto.setRole(RoleEnum.TEACHER);
+
+        UserResponseDTO createdTeacher = create(dto);
+        emailService.sendPasswordByEmail(dto.getEmail(), rawPassword);
+
+        return createdTeacher;
+    }
+
+    @Override
+    public UserResponseDTO deleteUser(String id) {
+        User user = repository.findById(id).orElseThrow(() -> new RuntimeException("User not found."));
+        user.setStatus(StatusEnum.INACTIVE);
+        repository.save(user);
+        return mapper.mapToResponseDTO(convertToDTO(user));
+    }
+
+    @Override
+    public UserResponseDTO getInfor() {
+        var context = SecurityContextHolder.getContext();
+        String username = context.getAuthentication().getName();
+        User user = repository.findByEmail(username).orElseThrow(() -> new RuntimeException("User not found."));
+        return mapper.mapToResponseDTO(convertToDTO(user));
+    }
+
+    @Override
+    public UserResponseDTO update(UserRequestDTO dto, String id) {
+        User existingUser = repository.findById(id).orElseThrow(() -> new RuntimeException("User not found."));
+        if (dto.getPassword() != null && !dto.getPassword().equals(existingUser.getPassword())) {
+            dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+        } else {
+            dto.setPassword(existingUser.getPassword());
+        }
+
+        return super.update(dto, id);
+    }
+
+    @Override
+    public void sendOtpByEmail(UserRequestDTO userDTO) {
+        if (repository.findByEmail(userDTO.getEmail()).isEmpty()) {
+            throw new RuntimeException("Email không tồn tại.");
+        }
+        String otp = String.format("%06d", new SecureRandom().nextInt(1000000));
+        LocalDateTime expiryTime = LocalDateTime.now().plusMinutes(1);
+        otpStorage.put(userDTO.getEmail(), new OtpEntry(otp, expiryTime));
+        emailService.sendOtpByEmail(userDTO.getEmail(), otp);
+    }
+
+    @Override
+    public boolean verifyOtp(String email, String otp) {
+        OtpEntry otpEntry = otpStorage.get(email);
+        if (otpEntry == null || otpEntry.isExpired() || !otpEntry.otp.equals(otp)) {
+            return false;
+        }
+        otpStorage.remove(email);
+        return true;
+    }
+
+    @Override
+    public UserResponseDTO resetPassword(UserRequestDTO userDTO) {
+        User user = repository.findByEmail(userDTO.getEmail()).orElseThrow(() -> new RuntimeException("Email not exist."));
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        repository.save(user);
+        return mapper.mapToResponseDTO(convertToDTO(user));
     }
 
     private static class OtpEntry {
@@ -65,108 +155,6 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserReposito
         }
     }
 
-    // Gửi mã OTP qua email với TTL (thời gian sống) là 1 phút
-    public void sendOtpByEmail(UserDTO userDTO) {
-        if (repository.findByEmail(userDTO.getEmail()).isEmpty()) {
-            throw new RuntimeException("Email không tồn tại.");
-        }
-        String otp = String.format("%06d", new SecureRandom().nextInt(1000000));
-        LocalDateTime expiryTime = LocalDateTime.now().plusMinutes(1); // Thời gian sống 1 phút
-        otpStorage.put(userDTO.getEmail(), new OtpEntry(otp, expiryTime));
-        emailService.sendOtpByEmail(userDTO.getEmail(), otp);
-    }
-
-    public boolean verifyOtp(String email, String otp) {
-        OtpEntry otpEntry = otpStorage.get(email);
-        if (otpEntry == null || otpEntry.isExpired() || !otpEntry.otp.equals(otp)) {
-            return false;
-        }
-        otpStorage.remove(email);
-        return true;
-    }
-
-    public UserDTO resetPassword(UserDTO userDTO) {
-        User user = repository.findByEmail(userDTO.getEmail()).orElseThrow(() -> new RuntimeException("Email not exist."));
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        repository.save(user);
-        return convertToDTO(user);
-    }
-
-    public UserDTO createStudent(UserDTO dto) {
-        if (repository.findByEmail(dto.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists. Please use another email.");
-        }
-        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-        dto.setStatus(StatusEnum.ACTIVE);
-        dto.setRole(RoleEnum.STUDENT);
-        return create(dto);
-    }
-
-    public UserDTO createTeacher(UserDTO dto) {
-        if (repository.findByEmail(dto.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists. Please use another email.");
-        }
-
-        String rawPassword = generatePassword(12);
-        dto.setPassword(passwordEncoder.encode(rawPassword));
-
-        dto.setStatus(StatusEnum.ACTIVE);
-        dto.setRole(RoleEnum.TEACHER);
-
-        UserDTO createdTeacher = create(dto);
-
-        emailService.sendPasswordByEmail(dto.getEmail(), rawPassword);
-
-        return createdTeacher;
-    }
-
-    public UserDTO deleteUser(String id) {
-        Optional<User> userOptional = repository.findById(id);
-
-        if (userOptional.isEmpty()) {
-            throw new RuntimeException("User not found.");
-        }
-
-        User user = userOptional.get();
-
-        user.setStatusEnum(StatusEnum.INACTIVE);
-        user.setEndDate(LocalDate.now());
-
-        repository.save(user);
-
-        return convertToDTO(user);
-    }
-
-    public UserDTO getInfor(){
-        var context = SecurityContextHolder.getContext();
-        String username = context.getAuthentication().getName();
-
-        User user = repository.findByEmail(username).orElseThrow(() -> new RuntimeException("User not found."));
-
-        return convertToDTO(user);
-    }
-
-    @Override
-    public UserDTO update(UserDTO dto, String id) {
-        User existingUser = repository.findById(id).orElseThrow(() -> new RuntimeException("User not found."));
-
-        if (dto.getPassword() != null && !dto.getPassword().equals(existingUser.getPassword())) {
-            dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-        } else {
-            dto.setPassword(existingUser.getPassword());
-        }
-
-        if (dto.getEmail() == null) {
-            dto.setEmail(existingUser.getEmail());
-        }
-
-        if(dto.getName() == null){
-            dto.setName(existingUser.getName());
-        }
-
-        return super.update(dto, id);
-    }
-
     private String generatePassword(int length) {
         final SecureRandom RANDOM = new SecureRandom();
         final String LOWER_CASE = "abcdefghijklmnopqrstuvwxyz";
@@ -176,7 +164,6 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserReposito
         final String ALL_CHARACTERS = LOWER_CASE + UPPER_CASE + DIGITS + SPECIAL_CHARACTERS;
 
         StringBuilder password = new StringBuilder(length);
-
         password.append(LOWER_CASE.charAt(RANDOM.nextInt(LOWER_CASE.length())));
         password.append(UPPER_CASE.charAt(RANDOM.nextInt(UPPER_CASE.length())));
         password.append(DIGITS.charAt(RANDOM.nextInt(DIGITS.length())));
@@ -207,7 +194,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserReposito
         entity.setAvatar(dto.getAvatar());
         entity.setContentMotivation(dto.getContentMotivation());
         entity.setRoleEnum(dto.getRole());
-        entity.setStatusEnum(dto.getStatus());
+        entity.setStatus(dto.getStatus());
         entity.setLevelEnum(dto.getLevel());
         entity.setStartDate(dto.getStartDate());
         entity.setEndDate(dto.getEndDate());
@@ -224,7 +211,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserReposito
         dto.setAvatar(entity.getAvatar());
         dto.setContentMotivation(entity.getContentMotivation());
         dto.setRole(entity.getRoleEnum());
-        dto.setStatus(entity.getStatusEnum());
+        dto.setStatus(entity.getStatus());
         dto.setLevel(entity.getLevelEnum());
         dto.setStartDate();
         dto.setEndDate(entity.getEndDate());

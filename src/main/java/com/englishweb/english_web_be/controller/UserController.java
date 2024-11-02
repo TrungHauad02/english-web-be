@@ -1,112 +1,134 @@
 package com.englishweb.english_web_be.controller;
 
+import com.englishweb.english_web_be.dto.request.UserRequestDTO;
+import com.englishweb.english_web_be.dto.response.UserResponseDTO;
 import com.englishweb.english_web_be.modelenum.RoleEnum;
 import com.englishweb.english_web_be.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.englishweb.english_web_be.dto.UserDTO;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
 @Slf4j
 @RestController
+@RequestMapping("/api/users")
+@Tag(name = "User Controller")
 public class UserController {
     @Autowired
-    UserService userService;
+    private final UserService userService;
 
-    public UserController(UserService userService) {this.userService = userService;}
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
-    @GetMapping("/api/users")
-    public ResponseEntity<Page<UserDTO>> findByPage(@RequestParam int page,
-                                                     @RequestParam int size,
-                                                     @RequestParam(defaultValue = "id") String sortBy,
-                                                     @RequestParam(defaultValue = "asc") String sortDir) {
+    @Operation(method = "GET", summary = "Get paginated list of users",
+            description = "Send a request via this API to get a paginated list of users")
+    @GetMapping
+    public ResponseEntity<Page<UserResponseDTO>> findByPage(@RequestParam int page,
+                                                            @RequestParam int size,
+                                                            @RequestParam(defaultValue = "id") String sortBy,
+                                                            @RequestParam(defaultValue = "asc") String sortDir) {
         var authenticate = SecurityContextHolder.getContext().getAuthentication();
         log.info("email: {}", authenticate.getName());
         log.info("Role: {}", authenticate.getAuthorities().toString());
-        return new ResponseEntity<>(userService.findByPage(page, size, sortBy, sortDir, UserDTO.class), HttpStatus.OK);
+        return new ResponseEntity<>(userService.findByPage(page, size, sortBy, sortDir, UserResponseDTO.class), HttpStatus.OK);
     }
 
-    @GetMapping("/api/users/teachers")
-    public ResponseEntity<Page<UserDTO>> findTeachersByPage(@RequestParam int page,
-                                                            @RequestParam int size,
-                                                            @RequestParam(defaultValue = "id") String sortBy,
-                                                            @RequestParam(defaultValue = "asc") String sortDir) {
-        return new ResponseEntity<>(userService.findByRole(page, size, sortBy, sortDir, RoleEnum.TEACHER, UserDTO.class), HttpStatus.OK);
+    @Operation(method = "GET", summary = "Get paginated list of teachers",
+            description = "Send a request via this API to get a paginated list of teachers")
+    @GetMapping("/teachers")
+    public ResponseEntity<Page<UserResponseDTO>> findTeachersByPage(@RequestParam int page,
+                                                                    @RequestParam int size,
+                                                                    @RequestParam(defaultValue = "id") String sortBy,
+                                                                    @RequestParam(defaultValue = "asc") String sortDir) {
+        return new ResponseEntity<>(userService.findByRole(RoleEnum.TEACHER, page, size, sortBy, sortDir , UserResponseDTO.class), HttpStatus.OK);
     }
 
-    @GetMapping("/api/users/students")
-    public ResponseEntity<Page<UserDTO>> findStudentsByPage(@RequestParam int page,
-                                                            @RequestParam int size,
-                                                            @RequestParam(defaultValue = "id") String sortBy,
-                                                            @RequestParam(defaultValue = "asc") String sortDir) {
-        return new ResponseEntity<>(userService.findByRole(page, size, sortBy, sortDir, RoleEnum.STUDENT, UserDTO.class), HttpStatus.OK);
+    @Operation(method = "GET", summary = "Get paginated list of students",
+            description = "Send a request via this API to get a paginated list of students")
+    @GetMapping("/students")
+    public ResponseEntity<Page<UserResponseDTO>> findStudentsByPage(@RequestParam int page,
+                                                                    @RequestParam int size,
+                                                                    @RequestParam(defaultValue = "id") String sortBy,
+                                                                    @RequestParam(defaultValue = "asc") String sortDir) {
+        return new ResponseEntity<>(userService.findByRole(RoleEnum.STUDENT, page, size, sortBy, sortDir, UserResponseDTO.class), HttpStatus.OK);
     }
 
-    @GetMapping("/api/users/{id}")
-    public ResponseEntity<UserDTO> findById(@PathVariable String id) {
+    @Operation(method = "GET", summary = "Get user by ID",
+            description = "Send a request via this API to get a user by ID")
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> findById(@PathVariable String id) {
         return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/api/users")
-    public ResponseEntity<UserDTO> create(@Valid @RequestBody UserDTO userDTO) {
-        UserDTO createdUser = userService.create(userDTO);
+    @Operation(method = "POST", summary = "Create new user",
+            description = "Send a request via this API to create a new user")
+    @PostMapping
+    public ResponseEntity<UserResponseDTO> create(@Valid @RequestBody UserRequestDTO userDTO) {
+        UserResponseDTO createdUser = userService.create(userDTO);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/api/users/{id}")
-    public ResponseEntity<UserDTO> delete(@PathVariable String id) {
-        return new ResponseEntity<>(userService.deleteUser(id), HttpStatus.OK);
+    @Operation(method = "DELETE", summary = "Delete user",
+            description = "Send a request via this API to delete a user by ID")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        userService.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/api/users/{id}")
-    public ResponseEntity<UserDTO> update(@Valid @RequestBody UserDTO userDTO, @PathVariable String id) {
+    @Operation(method = "PUT", summary = "Update user",
+            description = "Send a request via this API to update an existing user")
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> update(@Valid @RequestBody UserRequestDTO userDTO, @PathVariable String id) {
         return new ResponseEntity<>(userService.update(userDTO, id), HttpStatus.OK);
     }
 
-    @PostMapping("/api/users/student/signup")
-    public ResponseEntity<UserDTO> createStudent(@Valid @RequestBody UserDTO userDTO) {
+    @Operation(method = "POST", summary = "Create new student user",
+            description = "Send a request via this API to create a new student user")
+    @PostMapping("/student/signup")
+    public ResponseEntity<UserResponseDTO> createStudent(@Valid @RequestBody UserRequestDTO userDTO) {
         return new ResponseEntity<>(userService.createStudent(userDTO), HttpStatus.CREATED);
     }
 
-    @PostMapping("/api/users/teacher/signup")
-    public ResponseEntity<UserDTO> createTeacher(@Valid @RequestBody UserDTO userDTO) {
+    @Operation(method = "POST", summary = "Create new teacher user",
+            description = "Send a request via this API to create a new teacher user")
+    @PostMapping("/teacher/signup")
+    public ResponseEntity<UserResponseDTO> createTeacher(@Valid @RequestBody UserRequestDTO userDTO) {
         return new ResponseEntity<>(userService.createTeacher(userDTO), HttpStatus.CREATED);
     }
 
-    @GetMapping("/api/users/myinfor")
-    public ResponseEntity<UserDTO> myInfor() {
+    @Operation(method = "GET", summary = "Get current user information",
+            description = "Send a request via this API to get the current user's information")
+    @GetMapping("/myinfor")
+    public ResponseEntity<UserResponseDTO> myInfor() {
         return new ResponseEntity<>(userService.getInfor(), HttpStatus.OK);
     }
 
-    // 1. API để gửi mã OTP qua email
-    @PostMapping("/api/users/forgot-password/send-otp")
+    @Operation(method = "POST", summary = "Send OTP for password reset",
+            description = "Send a request via this API to send an OTP for password reset")
+    @PostMapping("/forgot-password/send-otp")
     public ResponseEntity<String> sendOtp(@RequestBody String email) {
         try {
-            UserDTO userDTO = new UserDTO();
+            UserRequestDTO userDTO = new UserRequestDTO();
             userDTO.setEmail(email);
-            userService.sendOtpByEmail(userDTO); // Gửi mã OTP qua email
+            userService.sendOtpByEmail(userDTO);
             return new ResponseEntity<>("Mã OTP đã được gửi thành công. Vui lòng kiểm tra email của bạn.", HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    // 2. API để xác nhận mã OTP
-    @PostMapping("/api/users/forgot-password/verify-otp")
+    @Operation(method = "POST", summary = "Verify OTP for password reset",
+            description = "Send a request via this API to verify the OTP for password reset")
+    @PostMapping("/forgot-password/verify-otp")
     public ResponseEntity<String> verifyOtp(@RequestParam String email, @RequestParam String otp) {
         boolean isOtpValid = userService.verifyOtp(email, otp);
         if (isOtpValid) {
@@ -116,11 +138,12 @@ public class UserController {
         }
     }
 
-    // 3. API để đặt lại mật khẩu
-    @PostMapping("/api/users/forgot-password/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestBody UserDTO userDTO) {
+    @Operation(method = "POST", summary = "Reset password using OTP",
+            description = "Send a request via this API to reset the password using an OTP")
+    @PostMapping("/forgot-password/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody UserRequestDTO userDTO) {
         try {
-            userService.resetPassword(userDTO); // Đặt lại mật khẩu
+            userService.resetPassword(userDTO);
             return new ResponseEntity<>("Mật khẩu đã được đặt lại thành công.", HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

@@ -1,6 +1,8 @@
 package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.dto.TestListeningDTO;
+import com.englishweb.english_web_be.dto.request.TestListeningRequestDTO;
+import com.englishweb.english_web_be.dto.response.TestListeningResponseDTO;
 import com.englishweb.english_web_be.service.TestListeningService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -16,17 +18,17 @@ public class TestListeningController {
     }
 
     @GetMapping("/api/testlistening/{id}")
-    public ResponseEntity<TestListeningDTO> retrieveListeningById(@PathVariable String id) {
+    public ResponseEntity<TestListeningResponseDTO> retrieveListeningById(@PathVariable String id) {
         return new ResponseEntity<>(testListeningService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping("/api/testlistening")
-    public ResponseEntity<TestListeningDTO> createListening(@Valid @RequestBody TestListeningDTO dto) {
+    public ResponseEntity<TestListeningResponseDTO> createListening(@Valid @RequestBody TestListeningRequestDTO dto) {
         return new ResponseEntity<>(testListeningService.create(dto), HttpStatus.CREATED);
     }
 
     @PutMapping("/api/testlistening/{id}")
-    public ResponseEntity<TestListeningDTO> updateListening(@Valid @RequestBody TestListeningDTO dto, @PathVariable String id) {
+    public ResponseEntity<TestListeningResponseDTO> updateListening(@Valid @RequestBody TestListeningRequestDTO dto, @PathVariable String id) {
         return ResponseEntity.ok(testListeningService.update(dto, id));
     }
 

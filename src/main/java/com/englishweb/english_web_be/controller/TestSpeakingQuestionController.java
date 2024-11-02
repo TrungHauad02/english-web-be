@@ -1,6 +1,8 @@
 package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.dto.TestSpeakingQuestionDTO;
+import com.englishweb.english_web_be.dto.request.TestSpeakingQuestionRequestDTO;
+import com.englishweb.english_web_be.dto.response.TestSpeakingQuestionResponseDTO;
 import com.englishweb.english_web_be.service.TestSpeakingQuestionService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -16,17 +18,17 @@ public class TestSpeakingQuestionController {
     }
 
     @GetMapping("/api/testspeakingquestion/{id}")
-    public ResponseEntity<TestSpeakingQuestionDTO> retrieveQuestionById(@PathVariable String id) {
+    public ResponseEntity<TestSpeakingQuestionResponseDTO> retrieveQuestionById(@PathVariable String id) {
         return new ResponseEntity<>(testSpeakingQuestionService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping("/api/testspeakingquestion")
-    public ResponseEntity<TestSpeakingQuestionDTO> createQuestion(@Valid @RequestBody TestSpeakingQuestionDTO dto) {
+    public ResponseEntity<TestSpeakingQuestionResponseDTO> createQuestion(@Valid @RequestBody TestSpeakingQuestionRequestDTO dto) {
         return new ResponseEntity<>(testSpeakingQuestionService.create(dto), HttpStatus.CREATED);
     }
 
     @PutMapping("/api/testspeakingquestion/{id}")
-    public ResponseEntity<TestSpeakingQuestionDTO> updateQuestion(@Valid @RequestBody TestSpeakingQuestionDTO dto, @PathVariable String id) {
+    public ResponseEntity<TestSpeakingQuestionResponseDTO> updateQuestion(@Valid @RequestBody TestSpeakingQuestionRequestDTO dto, @PathVariable String id) {
         return ResponseEntity.ok(testSpeakingQuestionService.update(dto, id));
     }
 

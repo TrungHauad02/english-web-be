@@ -1,6 +1,7 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.BaseDTO;
+import com.englishweb.english_web_be.mapper.BaseMapper;
 import com.englishweb.english_web_be.model.BaseEntity;
 import com.englishweb.english_web_be.service.BaseService;
 import com.englishweb.english_web_be.util.ValidationUtils;
@@ -10,10 +11,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public abstract class BaseServiceImpl<Entity extends BaseEntity, RequestDTO extends BaseDTO, ResponseDTO extends BaseDTO,
-                                    R extends JpaRepository<Entity, String>>
-                                    implements BaseService<RequestDTO, ResponseDTO> {
+public abstract class BaseServiceImpl<Entity extends BaseEntity, DTO extends BaseDTO,
+                RequestDTO extends BaseDTO, ResponseDTO extends BaseDTO,
+                Mapper extends BaseMapper<DTO, RequestDTO, ResponseDTO>,
+                R extends JpaRepository<Entity, String>> implements BaseService<RequestDTO, ResponseDTO> {
     protected R repository;
+    protected Mapper mapper;
     public BaseServiceImpl(R repository) {
         this.repository = repository;
     }
@@ -25,28 +28,29 @@ public abstract class BaseServiceImpl<Entity extends BaseEntity, RequestDTO exte
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<Entity> entityPage = repository.findAll(pageable);
-        return entityPage.map(this::convertToResponseDTO);
+        return entityPage.map(this::convertToDTO).map(mapper::mapToResponseDTO);
     }
 
     public ResponseDTO findById(String id) {
-        return convertToResponseDTO(findEntityById(id));
+        isExist(id);
+        return mapper.mapToResponseDTO(convertToDTO(repository.findById(id).get()));
     }
 
-    public Entity findEntityById(String id){
+    public DTO findDTOById(String id){
         isExist(id);
-        return repository.findById(id).get();
+        return convertToDTO(repository.findById(id).get());
     }
 
     public ResponseDTO create(RequestDTO dto) {
-        Entity entity = convertToEntity(dto);
+        Entity entity = convertToEntity(mapper.mapToDTO(dto));
         entity.setId(null);
-        return convertToResponseDTO(repository.save(entity));
+        return mapper.mapToResponseDTO(convertToDTO(repository.save(entity)));
     }
 
     public ResponseDTO update(RequestDTO dto, String id) {
         isExist(id);
         dto.setId(id);
-        return convertToResponseDTO(repository.save(convertToEntity(dto)));
+        return mapper.mapToResponseDTO(convertToDTO(repository.save(convertToEntity(mapper.mapToDTO(dto)))));
     }
 
     public void delete(String id) {
@@ -58,7 +62,7 @@ public abstract class BaseServiceImpl<Entity extends BaseEntity, RequestDTO exte
         ValidationUtils.getInstance().validateExistId(repository, id);
     }
 
-    protected abstract Entity convertToEntity(RequestDTO dto);
+    protected abstract Entity convertToEntity(DTO dto);
 
-    protected abstract ResponseDTO convertToResponseDTO(Entity entity);
+    protected abstract DTO convertToDTO(Entity entity);
 }

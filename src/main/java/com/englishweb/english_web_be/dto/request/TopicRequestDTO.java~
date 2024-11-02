@@ -1,5 +1,9 @@
 package com.englishweb.english_web_be.dto.request;
 
+import com.englishweb.english_web_be.dto.BaseDTO;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TopicRequestDTO {
+public class TopicRequestDTO implements BaseDTO {
     @NotBlank(message = "Title cannot be empty")
     private String title;
     @Positive(message = "Serial number must be greater than 0")

@@ -1,6 +1,8 @@
 package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.dto.*;
+import com.englishweb.english_web_be.dto.request.TestRequestDTO;
+import com.englishweb.english_web_be.dto.response.TestResponseDTO;
 import com.englishweb.english_web_be.service.TestService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -22,27 +24,28 @@ public class TestController {
     }
 
     @GetMapping("/api/tests")
-    public Page<TestDTO> retrieveTestsByPage(@RequestParam int page, @RequestParam String type) {
+    public Page<TestResponseDTO> retrieveTestsByPage(@RequestParam int page, @RequestParam String type) {
         return testService.retrieveTestsByPage(page, type);
     }
 
     @GetMapping("/api/testsall")
-    public List<TestDTO> retrieveTestsBytype(@RequestParam String type) {
-        return (List<TestDTO>) testService.retrieveTestsAllByType(type);
+    public List<TestResponseDTO> retrieveTestsBytype(@RequestParam String type) {
+        return (List<TestResponseDTO>) testService.retrieveTestsAllByType(type);
     }
 
 
 
     @GetMapping("/api/tests/{id}")
-    public ResponseEntity<TestDTO> retrieveTopicById(@PathVariable String id){
+    public ResponseEntity<TestResponseDTO> retrieveTopicById(@PathVariable String id){
 
         return new ResponseEntity<>(testService.findById(id), HttpStatus.OK);
     }
 
 
     @PostMapping("/api/test")
-    public ResponseEntity<TestDTO> createTest(@Valid @RequestBody TestDTO dto){
-        TestDTO createdTest = testService.create(dto);
+    public ResponseEntity<TestResponseDTO> createTest(@Valid @RequestBody TestRequestDTO dto){
+
+        TestResponseDTO createdTest = testService.create(dto);
 
         return new ResponseEntity<>(createdTest, HttpStatus.CREATED);
     }
@@ -68,8 +71,8 @@ public class TestController {
     }
 
     @PutMapping("/api/test/{id}")
-    public ResponseEntity<TestDTO> updateTest(@Valid @RequestBody TestDTO dto, @PathVariable String id){
-        TestDTO updatedTest = testService.update(dto, id);
+    public ResponseEntity<TestResponseDTO> updateTest(@Valid @RequestBody TestRequestDTO dto, @PathVariable String id){
+        TestResponseDTO updatedTest = testService.update(dto, id);
 
         return ResponseEntity.ok(updatedTest);
     }

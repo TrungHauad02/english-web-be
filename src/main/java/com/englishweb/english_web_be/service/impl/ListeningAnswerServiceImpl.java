@@ -1,6 +1,9 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.ListeningAnswerDTO;
+import com.englishweb.english_web_be.dto.request.ListeningAnswerRequestDTO;
+import com.englishweb.english_web_be.dto.response.ListeningAnswerResponseDTO;
+import com.englishweb.english_web_be.mapper.ListeningAnswerMapper;
 import com.englishweb.english_web_be.model.ListeningAnswer;
 import com.englishweb.english_web_be.repository.ListeningAnswerRepository;
 import com.englishweb.english_web_be.service.ListeningAnswerService;
@@ -10,19 +13,34 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ListeningAnswerServiceImpl extends BaseServiceImpl<ListeningAnswer, ListeningAnswerDTO, ListeningAnswerRepository> implements ListeningAnswerService {
+public class ListeningAnswerServiceImpl extends BaseServiceImpl<ListeningAnswer, ListeningAnswerDTO,
+        ListeningAnswerRequestDTO, ListeningAnswerResponseDTO, ListeningAnswerMapper, ListeningAnswerRepository>
+        implements ListeningAnswerService {
 
     private final ListeningQuestionServiceImpl listeningQuestionService;
 
-    public ListeningAnswerServiceImpl(ListeningAnswerRepository repository, @Lazy ListeningQuestionServiceImpl listeningQuestionService) {
-        super(repository);
+    public ListeningAnswerServiceImpl(ListeningAnswerRepository repository,
+                                      @Lazy ListeningQuestionServiceImpl listeningQuestionService,
+                                      @Lazy ListeningAnswerMapper mapper) {
+        super(repository, mapper);
         this.listeningQuestionService = listeningQuestionService;
     }
 
-    public List<ListeningAnswerDTO> findListeningAnswersByQuestionId(String questionId) {
+    @Override
+    public List<ListeningAnswerResponseDTO> findByQuestionId(String questionId) {
         listeningQuestionService.isExist(questionId);
-        List<ListeningAnswer> enityList = repository.findAllByQuestion_Id(questionId);
-        return enityList.stream()
+        List<ListeningAnswer> entityList = repository.findAllByQuestion_Id(questionId);
+        return entityList.stream()
+                .map(this::convertToDTO)
+                .map(mapper::mapToResponseDTO)
+                .toList();
+    }
+
+    @Override
+    public List<ListeningAnswerDTO> findDTOByQuestionId(String questionId) {
+        listeningQuestionService.isExist(questionId);
+        List<ListeningAnswer> entityList = repository.findAllByQuestion_Id(questionId);
+        return entityList.stream()
                 .map(this::convertToDTO)
                 .toList();
     }
@@ -45,7 +63,7 @@ public class ListeningAnswerServiceImpl extends BaseServiceImpl<ListeningAnswer,
         entity.setContent(dto.getContent());
         entity.setCorrect(dto.isCorrect());
         entity.setStatus(dto.getStatus());
-        entity.setQuestion(listeningQuestionService.convertToEntity(listeningQuestionService.findById(dto.getQuestionId())));
+        entity.setQuestion(listeningQuestionService.convertToEntity(listeningQuestionService.findDTOById(dto.getQuestionId())));
         return entity;
     }
 }
