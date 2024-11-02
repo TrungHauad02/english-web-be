@@ -1,6 +1,9 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.TestMixingAnswerDTO;
+import com.englishweb.english_web_be.dto.request.TestMixingAnswerRequestDTO;
+import com.englishweb.english_web_be.dto.response.TestMixingAnswerResponseDTO;
+import com.englishweb.english_web_be.mapper.TestMixingAnswerMapper;
 import com.englishweb.english_web_be.model.TestMixingAnswer;
 import com.englishweb.english_web_be.repository.TestMixingAnswerRepository;
 import com.englishweb.english_web_be.service.TestMixingAnswerService;
@@ -10,17 +13,34 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class TestMixingAnswerServiceImpl extends BaseServiceImpl<TestMixingAnswer, TestMixingAnswerDTO, TestMixingAnswerRepository> implements TestMixingAnswerService {
+public class TestMixingAnswerServiceImpl extends BaseServiceImpl<TestMixingAnswer,
+        TestMixingAnswerDTO, TestMixingAnswerRequestDTO, TestMixingAnswerResponseDTO, TestMixingAnswerMapper, TestMixingAnswerRepository>
+        implements TestMixingAnswerService {
 
     private final TestMixingQuestionServiceImpl testMixingQuestionService;
+    TestMixingAnswerMapper mapper;
 
-    public TestMixingAnswerServiceImpl(TestMixingAnswerRepository repository,
-                                       @Lazy TestMixingQuestionServiceImpl testMixingQuestionService) {
+    public TestMixingAnswerServiceImpl(TestMixingAnswerRepository repository, @Lazy TestMixingQuestionServiceImpl testMixingQuestionService) {
         super(repository);
         this.testMixingQuestionService = testMixingQuestionService;
     }
 
-    public List<TestMixingAnswerDTO> findAllByQuestionId(String questionId) {
+    @Override
+    public List<TestMixingAnswerResponseDTO> findAllByQuestionId(String questionId) {
+        testMixingQuestionService.isExist(questionId);
+        List<TestMixingAnswer> list = repository.findAllByTestMixingQuestion_Id(questionId);
+
+        List<TestMixingAnswerDTO> dtoList = list.stream()
+                .map(this::convertToDTO)
+                .toList();
+
+        return dtoList.stream()
+                .map(mapper::mapToResponseDTO)
+                .toList();
+    }
+
+    @Override
+    public List<TestMixingAnswerDTO> findAllDTOByQuestionId(String questionId) {
         testMixingQuestionService.isExist(questionId);
         List<TestMixingAnswer> list = repository.findAllByTestMixingQuestion_Id(questionId);
 
@@ -34,10 +54,10 @@ public class TestMixingAnswerServiceImpl extends BaseServiceImpl<TestMixingAnswe
         TestMixingAnswer entity = new TestMixingAnswer();
         entity.setId(dto.getId());
         entity.setContent(dto.getContent());
-        entity.setStatus(dto.getStatus());
         entity.setIsCorrect(dto.getIsCorrect());
+        entity.setStatus(dto.getStatus());
         entity.setTestMixingQuestion(testMixingQuestionService.convertToEntity(
-                testMixingQuestionService.findById(dto.getTestQuestionMixingId())));
+                testMixingQuestionService.findDTOById(dto.getTestQuestionMixingId())));
         return entity;
     }
 
@@ -46,8 +66,8 @@ public class TestMixingAnswerServiceImpl extends BaseServiceImpl<TestMixingAnswe
         TestMixingAnswerDTO dto = new TestMixingAnswerDTO();
         dto.setId(entity.getId());
         dto.setContent(entity.getContent());
-        dto.setStatus(entity.getStatus());
         dto.setIsCorrect(entity.getIsCorrect());
+        dto.setStatus(entity.getStatus());
         dto.setTestQuestionMixingId(entity.getTestMixingQuestion().getId());
         return dto;
     }

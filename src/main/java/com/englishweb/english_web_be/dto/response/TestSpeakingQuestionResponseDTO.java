@@ -1,0 +1,28 @@
+package com.englishweb.english_web_be.dto.response;
+
+import com.englishweb.english_web_be.dto.BaseDTO;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class TestSpeakingQuestionResponseDTO implements BaseDTO {
+    private String id;
+    private String content;
+    private int serial;
+    private StatusEnum status;
+    private String testSpeakingId;
+
+    @Override
+    public String toString() {
+        return "TestSpeakingQuestionDTO{" +
+                "id='" + id + '\'' +
+                ", content='" + content + '\'' +
+                ", serial=" + serial +
+                ", status=" + status +
+                '}';
+    }
+}
