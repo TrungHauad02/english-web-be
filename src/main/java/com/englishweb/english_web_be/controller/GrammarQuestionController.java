@@ -27,8 +27,9 @@ public class GrammarQuestionController {
     @Operation(method = "GET", summary = "Get grammar questions by grammar id and status",
             description = "Send a request via this API to get grammar questions by grammar id and status")
     @GetMapping
-    public ResponseEntity<List<GrammarQuestionDTO>> findByGrammarId(@RequestParam String grammarId,
-                                                                    @RequestParam(required = false) StatusEnum status) {
+    public ResponseEntity<List<GrammarQuestionDTO>> findByGrammarId(
+                                        @RequestParam String grammarId,
+                                        @RequestParam(required = false) StatusEnum status) {
         return new ResponseEntity<>(service.findAllByGrammarIdAndStatus(grammarId, status), HttpStatus.OK);
     }
 
