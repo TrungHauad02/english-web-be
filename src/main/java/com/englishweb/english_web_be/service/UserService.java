@@ -18,4 +18,9 @@ public interface UserService extends BaseService<UserDTO> {
 
     Page<UserDTO> findByRole(int page, int size, String sortBy, String sortDir, RoleEnum role, Class<UserDTO> dtoClass);
 
+    void sendOtpByEmail(UserDTO userDTO);
+
+    boolean verifyOtp(String email, String otp);
+
+    UserDTO resetPassword(UserDTO userDTO);
 }

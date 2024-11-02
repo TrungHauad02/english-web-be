@@ -26,6 +26,18 @@ public class SecurityConfig {
 
     public final String[] PUBLIC_ENDPOINTS = {"/api/users/student/signup",
             "/api/users/teacher/signup", "/api/users/token", "/api/users/introspec",
+            "/api/users/forgot-password/verify-otp", "/api/users/forgot-password/reset-password",
+            "/api/users/forgot-password/send-otp",
+    };
+
+
+    private static final String[] AUTH_WHITELIST = {
+            "/api/v1/auth/**",
+            "/v3/api-docs/**",
+            "/api-docs/**",
+            "/v3/api-docs.yaml",
+            "/swagger-ui/**",
+            "/swagger-ui.html"
     };
 
     @Value("${jwt.signerkey}")
@@ -35,8 +47,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(requests ->
                 requests.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-//                        .requestMatchers("/**").permitAll() // Cho phép tất cả các phương thức với mọi đường dẫn dưới "/api/**"
+                        .requestMatchers("/**").permitAll() // Cho phép tất cả các phương thức với mọi đường dẫn dưới "/api/**"
                         .requestMatchers(HttpMethod.GET, "/api/users").hasRole(RoleEnum.ADMIN.name())
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/users/teachers").hasRole(RoleEnum.ADMIN.name())
                         .requestMatchers(HttpMethod.GET, "/api/users/students").hasRole(RoleEnum.ADMIN.name())
                         .anyRequest().authenticated());

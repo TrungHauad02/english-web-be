@@ -3,9 +3,14 @@ package com.englishweb.english_web_be.service.impl;
 import com.englishweb.english_web_be.dto.GrammarDTO;
 import com.englishweb.english_web_be.dto.GrammarQuestionDTO;
 import com.englishweb.english_web_be.model.Grammar;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.GrammarRepository;
 import com.englishweb.english_web_be.service.GrammarService;
-import lombok.RequiredArgsConstructor;
+import com.englishweb.english_web_be.util.ValidationUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +24,19 @@ public class GrammarServiceImpl extends BaseServiceImpl<Grammar, GrammarDTO, Gra
         super(repository);
         this.grammarQuestionService = grammarQuestionService;
     }
+
+    public Page<GrammarDTO> findGrammarWithStatusAndPagingAndSorting(StatusEnum status, int page, int size, String sortBy, String sortDir, Class<GrammarDTO> grammarDTOClass){
+        if(status == null)
+            return super.findByPage(page, size, sortBy, sortDir, grammarDTOClass);
+        ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, grammarDTOClass);
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return repository.findGrammarWithStatus(status, pageable)
+                .map(this::convertToDTO);
+    }
+
 
     @Override
     public void delete(String id){

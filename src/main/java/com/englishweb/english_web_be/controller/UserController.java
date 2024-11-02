@@ -92,4 +92,38 @@ public class UserController {
         return new ResponseEntity<>(userService.getInfor(), HttpStatus.OK);
     }
 
+    // 1. API để gửi mã OTP qua email
+    @PostMapping("/api/users/forgot-password/send-otp")
+    public ResponseEntity<String> sendOtp(@RequestBody String email) {
+        try {
+            UserDTO userDTO = new UserDTO();
+            userDTO.setEmail(email);
+            userService.sendOtpByEmail(userDTO); // Gửi mã OTP qua email
+            return new ResponseEntity<>("Mã OTP đã được gửi thành công. Vui lòng kiểm tra email của bạn.", HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // 2. API để xác nhận mã OTP
+    @PostMapping("/api/users/forgot-password/verify-otp")
+    public ResponseEntity<String> verifyOtp(@RequestParam String email, @RequestParam String otp) {
+        boolean isOtpValid = userService.verifyOtp(email, otp);
+        if (isOtpValid) {
+            return new ResponseEntity<>("Mã OTP hợp lệ.", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Mã OTP không hợp lệ hoặc đã hết hạn.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // 3. API để đặt lại mật khẩu
+    @PostMapping("/api/users/forgot-password/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody UserDTO userDTO) {
+        try {
+            userService.resetPassword(userDTO); // Đặt lại mật khẩu
+            return new ResponseEntity<>("Mật khẩu đã được đặt lại thành công.", HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }
