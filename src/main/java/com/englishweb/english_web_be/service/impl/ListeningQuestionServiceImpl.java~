@@ -3,7 +3,6 @@ package com.englishweb.english_web_be.service.impl;
 import com.englishweb.english_web_be.dto.ListeningAnswerDTO;
 import com.englishweb.english_web_be.dto.ListeningQuestionDTO;
 import com.englishweb.english_web_be.dto.request.ListeningQuestionRequestDTO;
-import com.englishweb.english_web_be.dto.response.ListeningAnswerResponseDTO;
 import com.englishweb.english_web_be.dto.response.ListeningQuestionResponseDTO;
 import com.englishweb.english_web_be.mapper.ListeningQuestionMapper;
 import com.englishweb.english_web_be.model.ListeningQuestion;
@@ -51,12 +50,6 @@ public class ListeningQuestionServiceImpl extends BaseServiceImpl<ListeningQuest
         return entityList.stream()
                 .map(this::convertToDTO)
                 .map(mapper::mapToResponseDTO)
-                .peek(responseDTO -> {
-                    List<ListeningAnswerResponseDTO> filteredAnswers = responseDTO.getAnswers().stream()
-                            .filter(answer -> answer.getStatus() == status)
-                            .toList();
-                    responseDTO.setAnswers(filteredAnswers);
-                })
                 .toList();
     }
 

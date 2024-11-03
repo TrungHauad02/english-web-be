@@ -3,6 +3,7 @@ package com.englishweb.english_web_be.service.impl;
 import com.englishweb.english_web_be.dto.TopicAnswerDTO;
 import com.englishweb.english_web_be.dto.TopicQuestionDTO;
 import com.englishweb.english_web_be.dto.request.TopicQuestionRequestDTO;
+import com.englishweb.english_web_be.dto.response.TopicAnswerResponseDTO;
 import com.englishweb.english_web_be.dto.response.TopicQuestionResponseDTO;
 import com.englishweb.english_web_be.mapper.TopicQuestionMapper;
 import com.englishweb.english_web_be.model.TopicQuestion;
@@ -49,6 +50,12 @@ public class TopicQuestionServiceImpl extends BaseServiceImpl<TopicQuestion, Top
         return entityList.stream()
                 .map(this::convertToDTO)
                 .map(mapper::mapToResponseDTO)
+                .peek(responseDTO -> {
+                    List<TopicAnswerResponseDTO> filteredAnswers = responseDTO.getAnswers().stream()
+                            .filter(answer -> answer.getStatus() == status)
+                            .toList();
+                    responseDTO.setAnswers(filteredAnswers);
+                })
                 .toList();
     }
 

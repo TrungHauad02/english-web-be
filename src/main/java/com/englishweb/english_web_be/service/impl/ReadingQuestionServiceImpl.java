@@ -3,6 +3,7 @@ package com.englishweb.english_web_be.service.impl;
 import com.englishweb.english_web_be.dto.ReadingAnswerDTO;
 import com.englishweb.english_web_be.dto.ReadingQuestionDTO;
 import com.englishweb.english_web_be.dto.request.ReadingQuestionRequestDTO;
+import com.englishweb.english_web_be.dto.response.ReadingAnswerResponseDTO;
 import com.englishweb.english_web_be.dto.response.ReadingQuestionResponseDTO;
 import com.englishweb.english_web_be.mapper.ReadingQuestionMapper;
 import com.englishweb.english_web_be.model.ReadingQuestion;
@@ -50,6 +51,12 @@ public class ReadingQuestionServiceImpl extends BaseServiceImpl<ReadingQuestion,
         return entityList.stream()
                 .map(this::convertToDTO)
                 .map(mapper::mapToResponseDTO)
+                .peek(responseDTO -> {
+                    List<ReadingAnswerResponseDTO> filteredAnswers = responseDTO.getAnswers().stream()
+                            .filter(answer -> answer.getStatus() == status)
+                            .toList();
+                    responseDTO.setAnswers(filteredAnswers);
+                })
                 .toList();
     }
 
