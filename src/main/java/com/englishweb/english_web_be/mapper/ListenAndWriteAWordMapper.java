@@ -10,11 +10,29 @@ public class ListenAndWriteAWordMapper implements BaseMapper<ListenAndWriteAWord
 
     @Override
     public ListenAndWriteAWordDTO mapToDTO(ListenAndWriteAWordRequestDTO requestDTO) {
-        return null;
+        return ListenAndWriteAWordDTO.builder()
+                .id(requestDTO.getId())
+                .serial(requestDTO.getSerial())
+                .audioUrl(requestDTO.getAudioUrl())
+                .sentence(requestDTO.getSentence())
+                .missingIndex(requestDTO.getMissingIndex())
+                .correctAnswer(requestDTO.getCorrectAnswer())
+                .status(requestDTO.getStatus())
+                .listeningId(requestDTO.getListeningId())
+                .build();
     }
 
     @Override
     public ListenAndWriteAWordResponseDTO mapToResponseDTO(ListenAndWriteAWordDTO dto) {
-        return null;
+        return ListenAndWriteAWordResponseDTO.builder()
+                .id(dto.getId())
+                .serial(dto.getSerial())
+                .audioUrl(dto.getAudioUrl())
+                .sentence(dto.getSentence())
+                .missingIndex(dto.getMissingIndex())
+                .correctAnswer(dto.getCorrectAnswer())
+                .status(dto.getStatus())
+                .listeningId(dto.getListeningId())
+                .build();
     }
 }

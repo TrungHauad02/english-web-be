@@ -10,11 +10,29 @@ public class SpeakingMapper implements BaseMapper<SpeakingDTO, SpeakingRequestDT
 
     @Override
     public SpeakingDTO mapToDTO(SpeakingRequestDTO requestDTO) {
-        return null;
+        return SpeakingDTO.builder()
+                .id(requestDTO.getId())
+                .title(requestDTO.getTitle())
+                .serial(requestDTO.getSerial())
+                .description(requestDTO.getDescription())
+                .image(requestDTO.getImage())
+                .topic(requestDTO.getTopic())
+                .duration(requestDTO.getDuration())
+                .status(requestDTO.getStatus())
+                .build();
     }
 
     @Override
     public SpeakingResponseDTO mapToResponseDTO(SpeakingDTO dto) {
-        return null;
+        return SpeakingResponseDTO.builder()
+                .id(dto.getId())
+                .title(dto.getTitle())
+                .serial(dto.getSerial())
+                .description(dto.getDescription())
+                .image(dto.getImage())
+                .topic(dto.getTopic())
+                .duration(dto.getDuration())
+                .status(dto.getStatus())
+                .build();
     }
 }

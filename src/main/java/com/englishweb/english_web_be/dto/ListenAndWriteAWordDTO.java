@@ -4,15 +4,13 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ListenAndWriteAWordDTO implements BaseDTO {
     String id;
     @Positive(message = "Serial number must be greater than 0")

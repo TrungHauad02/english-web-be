@@ -10,11 +10,27 @@ public class ListeningMapper implements BaseMapper<ListeningDTO, ListeningReques
 
     @Override
     public ListeningDTO mapToDTO(ListeningRequestDTO requestDTO) {
-        return null;
+        return ListeningDTO.builder()
+                .id(requestDTO.getId())
+                .title(requestDTO.getTitle())
+                .serial(requestDTO.getSerial())
+                .description(requestDTO.getDescription())
+                .image(requestDTO.getImage())
+                .audioUrl(requestDTO.getAudioUrl())
+                .status(requestDTO.getStatus())
+                .build();
     }
 
     @Override
     public ListeningResponseDTO mapToResponseDTO(ListeningDTO dto) {
-        return null;
+        return ListeningResponseDTO.builder()
+                .id(dto.getId())
+                .title(dto.getTitle())
+                .serial(dto.getSerial())
+                .description(dto.getDescription())
+                .image(dto.getImage())
+                .audioUrl(dto.getAudioUrl())
+                .status(dto.getStatus())
+                .build();
     }
 }

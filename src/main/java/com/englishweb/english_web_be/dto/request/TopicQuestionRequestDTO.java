@@ -25,7 +25,6 @@ public class TopicQuestionRequestDTO implements BaseDTO {
     @NotBlank(message = "Explanation cannot be empty")
     String explanation;
     StatusEnum status;
-    List<TopicAnswerDTO> answers;
     @NotBlank(message = "Topic id cannot be empty")
     String topicId;
 }

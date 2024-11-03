@@ -10,11 +10,23 @@ public class TopicAnswerMapper implements BaseMapper<TopicAnswerDTO, TopicAnswer
 
     @Override
     public TopicAnswerDTO mapToDTO(TopicAnswerRequestDTO requestDTO) {
-        return null;
+        return TopicAnswerDTO.builder()
+                .id(requestDTO.getId())
+                .content(requestDTO.getContent())
+                .correct(requestDTO.isCorrect())
+                .status(requestDTO.getStatus())
+                .questionId(requestDTO.getQuestionId())
+                .build();
     }
 
     @Override
     public TopicAnswerResponseDTO mapToResponseDTO(TopicAnswerDTO dto) {
-        return null;
+        return TopicAnswerResponseDTO.builder()
+                .id(dto.getId())
+                .content(dto.getContent())
+                .correct(dto.isCorrect())
+                .status(dto.getStatus())
+                .questionId(dto.getQuestionId())
+                .build();
     }
 }
