@@ -34,7 +34,7 @@ public class ListeningController {
             @RequestParam(defaultValue = "asc") String sortDir,
             @RequestParam(required = false) StatusEnum status) {
         return new ResponseEntity<>(
-                service.findByPage(page, size, sortBy, sortDir, ListeningResponseDTO.class),
+                service.findListeningWithStatusAndPagingAndSorting(status ,page, size, sortBy, sortDir, ListeningResponseDTO.class),
                 HttpStatus.OK);
     }
 

@@ -7,15 +7,22 @@ import com.englishweb.english_web_be.dto.request.TopicRequestDTO;
 import com.englishweb.english_web_be.dto.response.TopicResponseDTO;
 import com.englishweb.english_web_be.mapper.TopicMapper;
 import com.englishweb.english_web_be.model.Topic;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.TopicRepository;
 import com.englishweb.english_web_be.service.TopicService;
+import com.englishweb.english_web_be.util.ValidationUtils;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
 @Service
-public class TopicServiceImpl extends BaseServiceImpl<Topic, TopicDTO, TopicRequestDTO, TopicResponseDTO, TopicMapper, TopicRepository> implements TopicService {
+public class TopicServiceImpl extends BaseServiceImpl<Topic, TopicDTO, TopicRequestDTO,
+        TopicResponseDTO, TopicMapper, TopicRepository> implements TopicService {
 
     private final TopicQuestionServiceImpl topicQuestionService;
     private final VocabularyServiceImpl vocabularyService;
@@ -27,6 +34,21 @@ public class TopicServiceImpl extends BaseServiceImpl<Topic, TopicDTO, TopicRequ
         super(repository, mapper);
         this.topicQuestionService = topicQuestionService;
         this.vocabularyService = vocabularyService;
+    }
+
+    @Override
+    public Page<TopicResponseDTO> findTopicWithStatusAndPagingAndSorting(StatusEnum status, int page, int size, String sortBy, String sortDir, Class<TopicResponseDTO> dtoClass) {
+        if (status == null) {
+            return super.findByPage(page, size, sortBy, sortDir, dtoClass);
+        }
+
+        ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, dtoClass);
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        return repository.findTopicWithStatus(status, pageable)
+                .map(this::convertToDTO)
+                .map(mapper::mapToResponseDTO);
     }
 
     @Override

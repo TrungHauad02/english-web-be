@@ -6,10 +6,16 @@ import com.englishweb.english_web_be.dto.request.SpeakingRequestDTO;
 import com.englishweb.english_web_be.dto.response.SpeakingResponseDTO;
 import com.englishweb.english_web_be.mapper.SpeakingMapper;
 import com.englishweb.english_web_be.model.Speaking;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.SpeakingRepository;
 import com.englishweb.english_web_be.service.SpeakingConversationService;
 import com.englishweb.english_web_be.service.SpeakingService;
+import com.englishweb.english_web_be.util.ValidationUtils;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +32,21 @@ public class SpeakingServiceImpl extends BaseServiceImpl<Speaking, SpeakingDTO, 
                                SpeakingConversationService speakingConversationService) {
         super(repository, mapper);
         this.speakingConversationService = speakingConversationService;
+    }
+
+    @Override
+    public Page<SpeakingResponseDTO> findSpeakingWithStatusAndPagingAndSorting(StatusEnum status, int page, int size, String sortBy, String sortDir, Class<SpeakingResponseDTO> dtoClass) {
+        if(status == null) {
+            return super.findByPage(page, size, sortBy, sortDir, dtoClass);
+        }
+
+        ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, dtoClass);
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        return repository.findAllSpeakingByStatus(status, pageable)
+                .map(this::convertToDTO)
+                .map(mapper::mapToResponseDTO);
     }
 
     @Override

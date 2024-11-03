@@ -2,6 +2,7 @@ package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.dto.request.WritingRequestDTO;
 import com.englishweb.english_web_be.dto.response.WritingResponseDTO;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.service.WritingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,7 +30,8 @@ public class WritingController {
     public ResponseEntity<Page<WritingResponseDTO>> findByPage(@RequestParam int page,
                                                                @RequestParam int size,
                                                                @RequestParam(defaultValue = "id") String sortBy,
-                                                               @RequestParam(defaultValue = "asc") String sortDir) {
+                                                               @RequestParam(defaultValue = "asc") String sortDir,
+                                                               @RequestParam(required = false) StatusEnum status) {
         return new ResponseEntity<>(service.findByPage(page, size, sortBy, sortDir, WritingResponseDTO.class), HttpStatus.OK);
     }
 

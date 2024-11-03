@@ -2,6 +2,7 @@ package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.dto.request.SpeakingRequestDTO;
 import com.englishweb.english_web_be.dto.response.SpeakingResponseDTO;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.service.SpeakingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,11 +27,15 @@ public class SpeakingController {
     @Operation(method = "GET", summary = "Get paginated list of speakings",
             description = "Send a request via this API to get a paginated list of speaking questions")
     @GetMapping
-    public ResponseEntity<Page<SpeakingResponseDTO>> findByPage(@RequestParam int page,
-                                                                @RequestParam int size,
-                                                                @RequestParam(defaultValue = "id") String sortBy,
-                                                                @RequestParam(defaultValue = "asc") String sortDir) {
-        return new ResponseEntity<>(service.findByPage(page, size, sortBy, sortDir, SpeakingResponseDTO.class), HttpStatus.OK);
+    public ResponseEntity<Page<SpeakingResponseDTO>> findByPage(
+            @RequestParam int page,
+            @RequestParam int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir,
+            @RequestParam(required = false) StatusEnum status) {
+        return new ResponseEntity<>(service.findSpeakingWithStatusAndPagingAndSorting(
+                                status, page, size, sortBy, sortDir, SpeakingResponseDTO.class),
+                HttpStatus.OK);
     }
 
     @Operation(method = "GET", summary = "Get speaking by ID",
