@@ -1,7 +1,6 @@
 package com.englishweb.english_web_be.dto.response;
 
 import com.englishweb.english_web_be.dto.BaseDTO;
-import com.englishweb.english_web_be.dto.GrammarAnswerDTO;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import lombok.*;
 
@@ -18,6 +17,6 @@ public class GrammarQuestionResponseDTO implements BaseDTO {
     int serial;
     String explanation;
     StatusEnum status;
-    List<GrammarAnswerDTO> answers;
+    List<GrammarAnswerResponseDTO> answers;
     String grammarId;
 }

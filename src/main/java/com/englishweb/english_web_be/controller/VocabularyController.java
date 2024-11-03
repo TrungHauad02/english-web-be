@@ -2,6 +2,7 @@ package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.dto.request.VocabularyRequestDTO;
 import com.englishweb.english_web_be.dto.response.VocabularyResponseDTO;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.service.VocabularyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,8 +33,9 @@ public class VocabularyController {
                                                                             @RequestParam int size,
                                                                             @RequestParam(defaultValue = "id") String sortBy,
                                                                             @RequestParam(defaultValue = "asc") String sortDir,
+                                                                            @RequestParam(required = false) StatusEnum status,
                                                                             @RequestParam String topicId) {
-        return new ResponseEntity<>(service.findByPageTopicId(page, size, sortBy, sortDir, VocabularyResponseDTO.class, topicId), HttpStatus.OK);
+        return new ResponseEntity<>(service.findByPageAndStatusAndTopicId(status, page, size, sortBy, sortDir, VocabularyResponseDTO.class, topicId), HttpStatus.OK);
     }
 
     @Operation(method = "GET", summary = "Get vocabulary by topic ID",

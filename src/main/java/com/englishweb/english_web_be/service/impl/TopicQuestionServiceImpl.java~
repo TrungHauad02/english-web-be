@@ -45,7 +45,7 @@ public class TopicQuestionServiceImpl extends BaseServiceImpl<TopicQuestion, Top
         if(status == null)
             return findAllByTopicId(topicId);
         topicService.isExist(topicId);
-        List<TopicQuestion> entityList = repository.findAllByTopic_IdAndStatus(topicId, status);
+        List<TopicQuestion> entityList = repository.findAllByTopic_IdAndStatus(topicId);
         return entityList.stream()
                 .map(this::convertToDTO)
                 .map(mapper::mapToResponseDTO)

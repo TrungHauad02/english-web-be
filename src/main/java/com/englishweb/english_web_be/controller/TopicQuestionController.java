@@ -2,6 +2,7 @@ package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.dto.request.TopicQuestionRequestDTO;
 import com.englishweb.english_web_be.dto.response.TopicQuestionResponseDTO;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.service.TopicQuestionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,8 +28,10 @@ public class TopicQuestionController {
     @Operation(method = "GET", summary = "Get all questions by topic ID",
             description = "Send a request via this API to get all questions for a specific topic")
     @GetMapping
-    public ResponseEntity<List<TopicQuestionResponseDTO>> findAllQuestionByTopicId(@RequestParam String topicId) {
-        return new ResponseEntity<>(service.findAllByTopicId(topicId), HttpStatus.OK);
+    public ResponseEntity<List<TopicQuestionResponseDTO>> findAllQuestionByTopicId(
+            @RequestParam String topicId,
+            @RequestParam(required = false) StatusEnum status) {
+        return new ResponseEntity<>(service.findAllByTopicIdAndStatus(topicId, status), HttpStatus.OK);
     }
 
     @Operation(method = "POST", summary = "Create new topic question",

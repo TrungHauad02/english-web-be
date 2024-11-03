@@ -1,16 +1,22 @@
 package com.englishweb.english_web_be.controller;
 
-import com.englishweb.english_web_be.dto.ReadingQuestionDTO;
+import com.englishweb.english_web_be.dto.request.ReadingQuestionRequestDTO;
+import com.englishweb.english_web_be.dto.response.ReadingQuestionResponseDTO;
 import com.englishweb.english_web_be.service.ReadingQuestionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/api/reading-questions")
+@Slf4j
+@Tag(name = "Reading Question Controller")
 public class ReadingQuestionController {
     ReadingQuestionService service;
 
@@ -18,23 +24,32 @@ public class ReadingQuestionController {
         this.service = service;
     }
 
-    @GetMapping("/api/reading-question")
-    public ResponseEntity<List<ReadingQuestionDTO>> findByReadingId(@RequestParam String readingId) {
+    @Operation(method = "GET", summary = "Get reading questions by reading id",
+            description = "Send a request via this API to get all questions for a specific reading")
+    @GetMapping
+    public ResponseEntity<List<ReadingQuestionResponseDTO>> findByReadingId(@RequestParam String readingId) {
         return new ResponseEntity<>(service.findAllByReadingId(readingId), HttpStatus.OK);
     }
 
-    @PostMapping("/api/reading-question")
-    public ResponseEntity<ReadingQuestionDTO> create(@Valid @RequestBody ReadingQuestionDTO dto) {
-        return new ResponseEntity<>(service.create(dto), HttpStatus.OK);
+    @Operation(method = "POST", summary = "Create new reading question",
+            description = "Send a request via this API to create reading question")
+    @PostMapping
+    public ResponseEntity<ReadingQuestionResponseDTO> create(@Valid @RequestBody ReadingQuestionRequestDTO dto) {
+        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
-    @PutMapping("/api/reading-question/{id}")
-    public ResponseEntity<ReadingQuestionDTO> update(@Valid @RequestBody ReadingQuestionDTO dto, @PathVariable String id) {
+    @Operation(method = "PUT", summary = "Update reading question",
+            description = "Send a request via this API to update reading question")
+    @PutMapping("/{id}")
+    public ResponseEntity<ReadingQuestionResponseDTO> update(@Valid @RequestBody ReadingQuestionRequestDTO dto,
+                                                             @PathVariable String id) {
         return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }
 
-    @DeleteMapping("/api/reading-question/{id}")
-    public ResponseEntity<ReadingQuestionDTO> delete(@PathVariable String id) {
+    @Operation(method = "DELETE", summary = "Delete reading question",
+            description = "Send a request via this API to delete reading question")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable String id) {
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

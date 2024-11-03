@@ -53,8 +53,7 @@ public class GrammarQuestionServiceImpl extends BaseServiceImpl<GrammarQuestion,
             return findAllByGrammarId(grammarId);
         grammarService.isExist(grammarId);
         List<GrammarQuestion> entityList = repository.findAllByGrammar_IdAndStatus(grammarId, status);
-
-        return entityList.stream()
+        List<GrammarQuestionResponseDTO> responseDTOList = entityList.stream()
                 .map(this::convertToDTO)
                 .map(mapper::mapToResponseDTO)
                 .peek(responseDTO -> {
@@ -64,6 +63,8 @@ public class GrammarQuestionServiceImpl extends BaseServiceImpl<GrammarQuestion,
                     responseDTO.setAnswers(filteredAnswers);
                 })
                 .toList();
+
+        return responseDTOList;
     }
 
     @Override

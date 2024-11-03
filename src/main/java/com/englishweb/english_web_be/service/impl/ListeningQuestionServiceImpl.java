@@ -6,6 +6,7 @@ import com.englishweb.english_web_be.dto.request.ListeningQuestionRequestDTO;
 import com.englishweb.english_web_be.dto.response.ListeningQuestionResponseDTO;
 import com.englishweb.english_web_be.mapper.ListeningQuestionMapper;
 import com.englishweb.english_web_be.model.ListeningQuestion;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.ListeningQuestionRepository;
 import com.englishweb.english_web_be.service.ListeningQuestionService;
 import org.springframework.context.annotation.Lazy;
@@ -34,6 +35,18 @@ public class ListeningQuestionServiceImpl extends BaseServiceImpl<ListeningQuest
     public List<ListeningQuestionResponseDTO> findByListeningId(String listeningId) {
         listeningService.isExist(listeningId);
         List<ListeningQuestion> entityList = repository.findAllByListening_Id(listeningId);
+        return entityList.stream()
+                .map(this::convertToDTO)
+                .map(mapper::mapToResponseDTO)
+                .toList();
+    }
+
+    @Override
+    public List<ListeningQuestionResponseDTO> findByListeningIdAndStatus(String listeningId, StatusEnum status) {
+        if(status == null)
+            return findByListeningId(listeningId);
+        listeningService.isExist(listeningId);
+        List<ListeningQuestion> entityList = repository.findAllByListening_IdAndStatus(listeningId, status);
         return entityList.stream()
                 .map(this::convertToDTO)
                 .map(mapper::mapToResponseDTO)
