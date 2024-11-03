@@ -18,6 +18,6 @@ public class ListeningQuestionResponseDTO implements BaseDTO {
     int serial;
     String explanation;
     StatusEnum status;
-    List<ListeningAnswerDTO> answers;
+    List<ListeningAnswerResponseDTO> answers;
     String listeningId;
 }
