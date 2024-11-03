@@ -5,6 +5,7 @@ import com.englishweb.english_web_be.dto.request.VocabularyRequestDTO;
 import com.englishweb.english_web_be.dto.response.VocabularyResponseDTO;
 import com.englishweb.english_web_be.mapper.VocabularyMapper;
 import com.englishweb.english_web_be.model.Vocabulary;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.VocabularyRepository;
 import com.englishweb.english_web_be.service.VocabularyService;
 import com.englishweb.english_web_be.util.ValidationUtils;
@@ -37,6 +38,24 @@ public class VocabularyServiceImpl extends BaseServiceImpl<Vocabulary, Vocabular
 
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<Vocabulary> entityPage = repository.findAllByTopic_Id(pageable, topicId);
+
+        return entityPage.map(this::convertToDTO).map(mapper::mapToResponseDTO);
+    }
+
+    @Override
+    public Page<VocabularyResponseDTO> findByPageAndStatusAndTopicId(StatusEnum status, int page, int size, String sortBy, String sortDir, Class<VocabularyResponseDTO> dtoClass, String topicId) {
+        if(status == null)
+            return findByPageTopicId(page, size, sortBy, sortDir, dtoClass, topicId);
+
+        ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, dtoClass);
+        topicService.isExist(topicId);
+
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Vocabulary> entityPage = repository.findAllByStatusAndTopic_Id(status, topicId, pageable);
 
         return entityPage.map(this::convertToDTO).map(mapper::mapToResponseDTO);
     }
