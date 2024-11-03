@@ -22,9 +22,9 @@ public class GrammarQuestionMapper implements BaseMapper<GrammarQuestionDTO, Gra
                 .serial(requestDTO.getSerial())
                 .explanation(requestDTO.getExplanation())
                 .status(requestDTO.getStatus())
-                .answers(grammarAnswerService.getAnswersByQuestionId(requestDTO.getId()))
+                .answers(grammarAnswerService.findAllDTOByQuestionId(requestDTO.getId()))
                 .grammarId(requestDTO.getGrammarId())
-                .build();;
+                .build();
     }
 
     @Override

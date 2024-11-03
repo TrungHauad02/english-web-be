@@ -6,6 +6,7 @@ import com.englishweb.english_web_be.dto.request.ReadingQuestionRequestDTO;
 import com.englishweb.english_web_be.dto.response.ReadingQuestionResponseDTO;
 import com.englishweb.english_web_be.mapper.ReadingQuestionMapper;
 import com.englishweb.english_web_be.model.ReadingQuestion;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.ReadingQuestionRepository;
 import com.englishweb.english_web_be.service.ReadingQuestionService;
 import org.springframework.context.annotation.Lazy;
@@ -34,6 +35,18 @@ public class ReadingQuestionServiceImpl extends BaseServiceImpl<ReadingQuestion,
     public List<ReadingQuestionResponseDTO> findAllByReadingId(String readingId) {
         readingService.isExist(readingId);
         List<ReadingQuestion> entityList = repository.findAllByReading_Id(readingId);
+        return entityList.stream()
+                .map(this::convertToDTO)
+                .map(mapper::mapToResponseDTO)
+                .toList();
+    }
+
+    @Override
+    public List<ReadingQuestionResponseDTO> findAllByReadingIdAndStatus(String readingId, StatusEnum status) {
+        if(status == null)
+            return findAllByReadingId(readingId);
+        readingService.isExist(readingId);
+        List<ReadingQuestion> entityList = repository.findAllByReading_IdAndStatus(readingId, status);
         return entityList.stream()
                 .map(this::convertToDTO)
                 .map(mapper::mapToResponseDTO)

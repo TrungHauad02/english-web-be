@@ -35,7 +35,7 @@ public class GrammarQuestionMapper implements BaseMapper<GrammarQuestionDTO, Gra
                 .serial(dto.getSerial())
                 .explanation(dto.getExplanation())
                 .status(dto.getStatus())
-                .answers(dto.getAnswers())
+                .answers(grammarAnswerService.findAllByQuestionId(dto.getId()))
                 .grammarId(dto.getGrammarId())
                 .build();
     }

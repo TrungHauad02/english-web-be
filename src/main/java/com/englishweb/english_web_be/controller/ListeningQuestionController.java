@@ -2,6 +2,7 @@ package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.dto.request.ListeningQuestionRequestDTO;
 import com.englishweb.english_web_be.dto.response.ListeningQuestionResponseDTO;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.service.ListeningQuestionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,8 +28,10 @@ public class ListeningQuestionController {
     @Operation(method = "GET", summary = "Get listening questions by listening id",
             description = "Send a request via this API to get all questions for a specific listening")
     @GetMapping
-    public ResponseEntity<List<ListeningQuestionResponseDTO>> findByListeningId(@RequestParam String listeningId) {
-        return new ResponseEntity<>(service.findByListeningId(listeningId), HttpStatus.OK);
+    public ResponseEntity<List<ListeningQuestionResponseDTO>> findByListeningId(
+            @RequestParam String listeningId,
+            @RequestParam(required = false) StatusEnum status) {
+        return new ResponseEntity<>(service.findByListeningIdAndStatus(listeningId, status), HttpStatus.OK);
     }
 
     @Operation(method = "POST", summary = "Create new listening question",
