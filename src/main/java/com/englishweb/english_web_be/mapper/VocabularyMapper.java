@@ -10,11 +10,31 @@ public class VocabularyMapper implements BaseMapper<VocabularyDTO, VocabularyReq
 
     @Override
     public VocabularyDTO mapToDTO(VocabularyRequestDTO requestDTO) {
-        return null;
+        return VocabularyDTO.builder()
+                .id(requestDTO.getId())
+                .example(requestDTO.getExample())
+                .image(requestDTO.getImage())
+                .word(requestDTO.getWord())
+                .phonetic(requestDTO.getPhonetic())
+                .meaning(requestDTO.getMeaning())
+                .wordType(requestDTO.getWordType())
+                .status(requestDTO.getStatus())
+                .topicId(requestDTO.getTopicId())
+                .build();
     }
 
     @Override
     public VocabularyResponseDTO mapToResponseDTO(VocabularyDTO dto) {
-        return null;
+        return VocabularyResponseDTO.builder()
+                .id(dto.getId())
+                .example(dto.getExample())
+                .image(dto.getImage())
+                .word(dto.getWord())
+                .phonetic(dto.getPhonetic())
+                .meaning(dto.getMeaning())
+                .wordType(dto.getWordType())
+                .status(dto.getStatus())
+                .topicId(dto.getTopicId())
+                .build();
     }
 }

@@ -10,11 +10,27 @@ public class WritingMapper implements BaseMapper<WritingDTO, WritingRequestDTO, 
 
     @Override
     public WritingDTO mapToDTO(WritingRequestDTO requestDTO) {
-        return null;
+        return WritingDTO.builder()
+                .id(requestDTO.getId())
+                .title(requestDTO.getTitle())
+                .serial(requestDTO.getSerial())
+                .description(requestDTO.getDescription())
+                .topic(requestDTO.getTopic())
+                .image(requestDTO.getImage())
+                .status(requestDTO.getStatus())
+                .build();
     }
 
     @Override
     public WritingResponseDTO mapToResponseDTO(WritingDTO dto) {
-        return null;
+        return WritingResponseDTO.builder()
+                .id(dto.getId())
+                .title(dto.getTitle())
+                .serial(dto.getSerial())
+                .description(dto.getDescription())
+                .topic(dto.getTopic())
+                .image(dto.getImage())
+                .status(dto.getStatus())
+                .build();
     }
 }

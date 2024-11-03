@@ -16,11 +16,27 @@ public class GrammarQuestionMapper implements BaseMapper<GrammarQuestionDTO, Gra
 
     @Override
     public GrammarQuestionDTO mapToDTO(GrammarQuestionRequestDTO requestDTO) {
-        return null;
+        return GrammarQuestionDTO.builder()
+                .id(requestDTO.getId())
+                .content(requestDTO.getContent())
+                .serial(requestDTO.getSerial())
+                .explanation(requestDTO.getExplanation())
+                .status(requestDTO.getStatus())
+                .answers(grammarAnswerService.findAllDTOByQuestionId(requestDTO.getId()))
+                .grammarId(requestDTO.getGrammarId())
+                .build();
     }
 
     @Override
     public GrammarQuestionResponseDTO mapToResponseDTO(GrammarQuestionDTO dto) {
-        return null;
+        return GrammarQuestionResponseDTO.builder()
+                .id(dto.getId())
+                .content(dto.getContent())
+                .serial(dto.getSerial())
+                .explanation(dto.getExplanation())
+                .status(dto.getStatus())
+                .answers(dto.getAnswers())
+                .grammarId(dto.getGrammarId())
+                .build();
     }
 }

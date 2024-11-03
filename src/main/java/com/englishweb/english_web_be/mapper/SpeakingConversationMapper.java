@@ -10,11 +10,25 @@ public class SpeakingConversationMapper implements BaseMapper<SpeakingConversati
 
     @Override
     public SpeakingConversationDTO mapToDTO(SpeakingConversationRequestDTO requestDTO) {
-        return null;
+        return SpeakingConversationDTO.builder()
+                .id(requestDTO.getId())
+                .name(requestDTO.getName())
+                .serial(requestDTO.getSerial())
+                .content(requestDTO.getContent())
+                .status(requestDTO.getStatus())
+                .speakingId(requestDTO.getSpeakingId())
+                .build();
     }
 
     @Override
     public SpeakingConversationResponseDTO mapToResponseDTO(SpeakingConversationDTO dto) {
-        return null;
+        return SpeakingConversationResponseDTO.builder()
+                .id(dto.getId())
+                .name(dto.getName())
+                .serial(dto.getSerial())
+                .content(dto.getContent())
+                .status(dto.getStatus())
+                .speakingId(dto.getSpeakingId())
+                .build();
     }
 }

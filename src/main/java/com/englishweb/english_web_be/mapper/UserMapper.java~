@@ -27,7 +27,7 @@ public class UserMapper implements BaseMapper<UserDTO, UserRequestDTO, UserRespo
 
     @Override
     public UserResponseDTO mapToResponseDTO(UserDTO dto) {
-        return UserResponseDTO.builder()
+        UserResponseDTO responseDTO = UserResponseDTO.builder()
                 .id(dto.getId())
                 .name(dto.getName())
                 .email(dto.getEmail())
@@ -39,5 +39,7 @@ public class UserMapper implements BaseMapper<UserDTO, UserRequestDTO, UserRespo
                 .startDate(dto.getStartDate())
                 .endDate(dto.getEndDate())
                 .build();
+
+        return responseDTO;
     }
 }

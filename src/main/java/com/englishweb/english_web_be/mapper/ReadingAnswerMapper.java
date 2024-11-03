@@ -10,11 +10,23 @@ public class ReadingAnswerMapper implements BaseMapper<ReadingAnswerDTO, Reading
 
     @Override
     public ReadingAnswerDTO mapToDTO(ReadingAnswerRequestDTO requestDTO) {
-        return null;
+        return ReadingAnswerDTO.builder()
+                .id(requestDTO.getId())
+                .content(requestDTO.getContent())
+                .correct(requestDTO.isCorrect())
+                .status(requestDTO.getStatus())
+                .questionId(requestDTO.getQuestionId())
+                .build();
     }
 
     @Override
     public ReadingAnswerResponseDTO mapToResponseDTO(ReadingAnswerDTO dto) {
-        return null;
+        return ReadingAnswerResponseDTO.builder()
+                .id(dto.getId())
+                .content(dto.getContent())
+                .correct(dto.isCorrect())
+                .status(dto.getStatus())
+                .questionId(dto.getQuestionId())
+                .build();
     }
 }

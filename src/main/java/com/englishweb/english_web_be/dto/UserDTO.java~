@@ -3,11 +3,8 @@ package com.englishweb.english_web_be.dto;
 import com.englishweb.english_web_be.modelenum.LevelEnum;
 import com.englishweb.english_web_be.modelenum.RoleEnum;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
-import lombok.Builder;
 
 import java.time.LocalDate;
-
-@Builder
 public class UserDTO implements BaseDTO {
     String id;
     String name;

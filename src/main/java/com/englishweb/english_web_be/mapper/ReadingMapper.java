@@ -10,11 +10,27 @@ public class ReadingMapper implements BaseMapper<ReadingDTO, ReadingRequestDTO, 
 
     @Override
     public ReadingDTO mapToDTO(ReadingRequestDTO requestDTO) {
-        return null;
+        return ReadingDTO.builder()
+                .id(requestDTO.getId())
+                .title(requestDTO.getTitle())
+                .serial(requestDTO.getSerial())
+                .description(requestDTO.getDescription())
+                .file(requestDTO.getFile())
+                .image(requestDTO.getImage())
+                .status(requestDTO.getStatus())
+                .build();
     }
 
     @Override
     public ReadingResponseDTO mapToResponseDTO(ReadingDTO dto) {
-        return null;
+        return ReadingResponseDTO.builder()
+                .id(dto.getId())
+                .title(dto.getTitle())
+                .serial(dto.getSerial())
+                .description(dto.getDescription())
+                .file(dto.getFile())
+                .image(dto.getImage())
+                .status(dto.getStatus())
+                .build();
     }
 }

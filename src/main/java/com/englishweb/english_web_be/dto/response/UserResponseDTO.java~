@@ -17,6 +17,7 @@ public class UserResponseDTO implements BaseDTO {
     String id;
     String name;
     String email;
+    String password;
     String avatar;
     String contentMotivation;
     StatusEnum status;
