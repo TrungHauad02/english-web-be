@@ -49,9 +49,7 @@ public class ListeningServiceImpl extends BaseServiceImpl<Listening, ListeningDT
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        return repository.findAllListeningByStatus(status, pageable)
-                .map(this::convertToDTO)
-                .map(mapper::mapToResponseDTO);
+        return null;
     }
 
     @Override

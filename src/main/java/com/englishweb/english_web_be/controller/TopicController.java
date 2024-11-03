@@ -2,6 +2,7 @@ package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.dto.request.TopicRequestDTO;
 import com.englishweb.english_web_be.dto.response.TopicResponseDTO;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.service.TopicService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,8 +30,9 @@ public class TopicController {
     public ResponseEntity<Page<TopicResponseDTO>> findByPage(@RequestParam int page,
                                                              @RequestParam int size,
                                                              @RequestParam(defaultValue = "id") String sortBy,
-                                                             @RequestParam(defaultValue = "asc") String sortDir) {
-        return new ResponseEntity<>(service.findByPage(page, size, sortBy, sortDir, TopicResponseDTO.class), HttpStatus.OK);
+                                                             @RequestParam(defaultValue = "asc") String sortDir,
+                                                             @RequestParam(required = false) StatusEnum status) {
+        return new ResponseEntity<>(service.findTopicWithStatusAndPagingAndSorting(status,page, size, sortBy, sortDir, TopicResponseDTO.class), HttpStatus.OK);
     }
 
     @Operation(method = "GET", summary = "Get topic by ID",
