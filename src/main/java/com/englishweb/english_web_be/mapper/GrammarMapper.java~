@@ -3,7 +3,9 @@ package com.englishweb.english_web_be.mapper;
 import com.englishweb.english_web_be.dto.GrammarDTO;
 import com.englishweb.english_web_be.dto.request.GrammarRequestDTO;
 import com.englishweb.english_web_be.dto.response.GrammarResponseDTO;
+import org.springframework.stereotype.Component;
 
+@Component
 public class GrammarMapper implements BaseMapper<GrammarDTO, GrammarRequestDTO, GrammarResponseDTO> {
     @Override
     public GrammarDTO mapToDTO(GrammarRequestDTO grammarRequestDTO) {

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 public class GrammarQuestionMapper implements BaseMapper<GrammarQuestionDTO, GrammarQuestionRequestDTO, GrammarQuestionResponseDTO> {
-    GrammarService grammarService;
     GrammarAnswerService grammarAnswerService;
 
     @Override
@@ -22,7 +21,6 @@ public class GrammarQuestionMapper implements BaseMapper<GrammarQuestionDTO, Gra
                 .serial(requestDTO.getSerial())
                 .explanation(requestDTO.getExplanation())
                 .status(requestDTO.getStatus())
-                .answers(grammarAnswerService.findAllDTOByQuestionId(requestDTO.getId()))
                 .grammarId(requestDTO.getGrammarId())
                 .build();
     }

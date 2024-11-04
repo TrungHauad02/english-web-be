@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reading-questions")
+@RequestMapping("/api/reading-question")
 @Slf4j
 @Tag(name = "Reading Question Controller")
 public class ReadingQuestionController {
