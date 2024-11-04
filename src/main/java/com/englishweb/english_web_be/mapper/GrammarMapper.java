@@ -10,6 +10,7 @@ public class GrammarMapper implements BaseMapper<GrammarDTO, GrammarRequestDTO, 
     @Override
     public GrammarDTO mapToDTO(GrammarRequestDTO grammarRequestDTO) {
         return GrammarDTO.builder()
+                .id(grammarRequestDTO.getId())
                 .title(grammarRequestDTO.getTitle())
                 .serial(grammarRequestDTO.getSerial())
                 .content(grammarRequestDTO.getContent())

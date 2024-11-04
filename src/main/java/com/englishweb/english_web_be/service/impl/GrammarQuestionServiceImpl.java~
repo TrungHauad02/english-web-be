@@ -10,12 +10,14 @@ import com.englishweb.english_web_be.model.GrammarQuestion;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.GrammarQuestionRepository;
 import com.englishweb.english_web_be.service.GrammarQuestionService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class GrammarQuestionServiceImpl extends BaseServiceImpl<GrammarQuestion, GrammarQuestionDTO,
         GrammarQuestionRequestDTO, GrammarQuestionResponseDTO, GrammarQuestionMapper,
         GrammarQuestionRepository> implements GrammarQuestionService {
@@ -53,7 +55,8 @@ public class GrammarQuestionServiceImpl extends BaseServiceImpl<GrammarQuestion,
             return findAllByGrammarId(grammarId);
         grammarService.isExist(grammarId);
         List<GrammarQuestion> entityList = repository.findAllByGrammar_IdAndStatus(grammarId, status);
-        List<GrammarQuestionResponseDTO> responseDTOList = entityList.stream()
+
+        return entityList.stream()
                 .map(this::convertToDTO)
                 .map(mapper::mapToResponseDTO)
                 .peek(responseDTO -> {
@@ -63,8 +66,6 @@ public class GrammarQuestionServiceImpl extends BaseServiceImpl<GrammarQuestion,
                     responseDTO.setAnswers(filteredAnswers);
                 })
                 .toList();
-
-        return responseDTOList;
     }
 
     @Override
@@ -97,6 +98,7 @@ public class GrammarQuestionServiceImpl extends BaseServiceImpl<GrammarQuestion,
         entity.setExplanation(dto.getExplanation());
         entity.setSerial(dto.getSerial());
         entity.setStatus(dto.getStatus());
+        System.out.println(dto);
         entity.setGrammar(grammarService.convertToEntity(grammarService.findDTOById(dto.getGrammarId())));
         return entity;
     }

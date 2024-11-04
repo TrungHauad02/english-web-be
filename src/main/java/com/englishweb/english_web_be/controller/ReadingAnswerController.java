@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/reading-answers")
+@RequestMapping("/api/reading-answer")
 @Slf4j
 @Tag(name = "Reading Answer Controller")
 public class ReadingAnswerController {

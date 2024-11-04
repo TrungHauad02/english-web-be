@@ -13,9 +13,11 @@ import java.util.List;
 public class ReadingQuestionMapper implements BaseMapper<ReadingQuestionDTO, ReadingQuestionRequestDTO, ReadingQuestionResponseDTO> {
 
     private final ReadingAnswerServiceImpl readingAnswerServiceImpl;
+    private final ReadingAnswerMapper readingAnswerMapper;
 
-    public ReadingQuestionMapper(ReadingAnswerServiceImpl readingAnswerServiceImpl) {
+    public ReadingQuestionMapper(ReadingAnswerServiceImpl readingAnswerServiceImpl, ReadingAnswerMapper readingAnswerMapper) {
         this.readingAnswerServiceImpl = readingAnswerServiceImpl;
+        this.readingAnswerMapper = readingAnswerMapper;
     }
 
     @Override
@@ -38,7 +40,10 @@ public class ReadingQuestionMapper implements BaseMapper<ReadingQuestionDTO, Rea
                 .serial(dto.getSerial())
                 .explanation(dto.getExplanation())
                 .status(dto.getStatus())
-                .answers(readingAnswerServiceImpl.findAllDTOByQuestionId(dto.getId()))
+                .answers(readingAnswerServiceImpl.findAllDTOByQuestionId(dto.getId())
+                        .stream()
+                        .map(readingAnswerMapper::mapToResponseDTO)
+                        .toList())
                 .readingId(dto.getReadingId())
                 .build();
     }

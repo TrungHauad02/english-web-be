@@ -9,9 +9,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ListeningQuestionMapper implements BaseMapper<ListeningQuestionDTO, ListeningQuestionRequestDTO, ListeningQuestionResponseDTO> {
     private final ListeningAnswerService listeningAnswerService;
+    private final ListeningAnswerMapper listeningAnswerMapper;
 
-    public ListeningQuestionMapper(ListeningAnswerService listeningAnswerService) {
+    public ListeningQuestionMapper(ListeningAnswerService listeningAnswerService, ListeningAnswerMapper listeningAnswerMapper) {
         this.listeningAnswerService = listeningAnswerService;
+        this.listeningAnswerMapper = listeningAnswerMapper;
     }
 
     @Override
@@ -35,7 +37,10 @@ public class ListeningQuestionMapper implements BaseMapper<ListeningQuestionDTO,
                 .serial(dto.getSerial())
                 .explanation(dto.getExplanation())
                 .status(dto.getStatus())
-                .answers(dto.getAnswers())
+                .answers(listeningAnswerService.findDTOByQuestionId(dto.getId())
+                        .stream()
+                        .map(listeningAnswerMapper::mapToResponseDTO)
+                        .toList())
                 .listeningId(dto.getListeningId())
                 .build();
     }

@@ -10,12 +10,14 @@ import com.englishweb.english_web_be.model.GrammarQuestion;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.GrammarQuestionRepository;
 import com.englishweb.english_web_be.service.GrammarQuestionService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class GrammarQuestionServiceImpl extends BaseServiceImpl<GrammarQuestion, GrammarQuestionDTO,
         GrammarQuestionRequestDTO, GrammarQuestionResponseDTO, GrammarQuestionMapper,
         GrammarQuestionRepository> implements GrammarQuestionService {

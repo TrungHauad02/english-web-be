@@ -31,7 +31,7 @@ public class ListeningQuestionController {
     public ResponseEntity<List<ListeningQuestionResponseDTO>> findByListeningId(
             @RequestParam String listeningId,
             @RequestParam(required = false) StatusEnum status) {
-        return new ResponseEntity<>(service.findByListeningId(listeningId, status), HttpStatus.OK);
+        return new ResponseEntity<>(service.findByListeningIdAndStatus(listeningId, status), HttpStatus.OK);
     }
 
     @Operation(method = "POST", summary = "Create new listening question",

@@ -2,6 +2,7 @@ package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.dto.request.ReadingQuestionRequestDTO;
 import com.englishweb.english_web_be.dto.response.ReadingQuestionResponseDTO;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.service.ReadingQuestionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,8 +28,10 @@ public class ReadingQuestionController {
     @Operation(method = "GET", summary = "Get reading questions by reading id",
             description = "Send a request via this API to get all questions for a specific reading")
     @GetMapping
-    public ResponseEntity<List<ReadingQuestionResponseDTO>> findByReadingId(@RequestParam String readingId) {
-        return new ResponseEntity<>(service.findAllByReadingId(readingId), HttpStatus.OK);
+    public ResponseEntity<List<ReadingQuestionResponseDTO>> findByReadingId(
+            @RequestParam String readingId,
+            @RequestParam (required = false) StatusEnum status) {
+        return new ResponseEntity<>(service.findAllByReadingIdAndStatus(readingId, status), HttpStatus.OK);
     }
 
     @Operation(method = "POST", summary = "Create new reading question",
