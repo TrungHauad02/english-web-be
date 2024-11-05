@@ -42,11 +42,7 @@ public class ListenAndWriteAWordServiceImpl extends BaseServiceImpl<ListenAndWri
         if(status == null)
             return findByListeningId(listeningId);
         listeningService.isExist(listeningId);
-        List<ListenAndWriteAWord> entityList = repository.findAllByListening_IdAndStatus(listeningId, status);
-        return entityList.stream()
-                .map(this::convertToDTO)
-                .map(mapper::mapToResponseDTO)
-                .toList();
+        return List.of();
     }
 
     @Override
