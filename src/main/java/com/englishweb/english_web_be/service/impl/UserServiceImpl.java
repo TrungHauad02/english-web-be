@@ -23,7 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -34,7 +33,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserRequestD
 
     EmailService emailService;
     PasswordEncoder passwordEncoder;
-    Map<String, OtpEntry> otpStorage = new HashMap<>();
+    private Map<String, OtpData> otpCache = new HashMap<>();
+    private Map<String, Boolean> otpVerifiedCache = new HashMap<>();
 
     public UserServiceImpl(UserRepository repository,
                            EmailService emailService,
@@ -43,6 +43,15 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserRequestD
         super(repository, mapper);
         this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
+    }
+    private class OtpData {
+        String otp;
+        long timestamp;
+
+        OtpData(String otp, long timestamp) {
+            this.otp = otp;
+            this.timestamp = timestamp;
+        }
     }
 
     @Override
@@ -103,56 +112,19 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserRequestD
     @Override
     public UserResponseDTO update(UserRequestDTO dto, String id) {
         User existingUser = repository.findById(id).orElseThrow(() -> new RuntimeException("User not found."));
+        dto.setEmail(existingUser.getEmail());
+        if (dto.getEmail() == null || dto.getEmail().trim().isEmpty()) {
+            dto.setEmail(existingUser.getEmail());
+        }
+        if (dto.getName() == null || dto.getName().trim().isEmpty()) {
+            dto.setName(existingUser.getName());
+        }
         if (dto.getPassword() != null && !dto.getPassword().equals(existingUser.getPassword())) {
             dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         } else {
             dto.setPassword(existingUser.getPassword());
         }
-
         return super.update(dto, id);
-    }
-
-    @Override
-    public void sendOtpByEmail(UserRequestDTO userDTO) {
-        if (repository.findByEmail(userDTO.getEmail()).isEmpty()) {
-            throw new RuntimeException("Email không tồn tại.");
-        }
-        String otp = String.format("%06d", new SecureRandom().nextInt(1000000));
-        LocalDateTime expiryTime = LocalDateTime.now().plusMinutes(1);
-        otpStorage.put(userDTO.getEmail(), new OtpEntry(otp, expiryTime));
-        emailService.sendOtpByEmail(userDTO.getEmail(), otp);
-    }
-
-    @Override
-    public boolean verifyOtp(String email, String otp) {
-        OtpEntry otpEntry = otpStorage.get(email);
-        if (otpEntry == null || otpEntry.isExpired() || !otpEntry.otp.equals(otp)) {
-            return false;
-        }
-        otpStorage.remove(email);
-        return true;
-    }
-
-    @Override
-    public UserResponseDTO resetPassword(UserRequestDTO userDTO) {
-        User user = repository.findByEmail(userDTO.getEmail()).orElseThrow(() -> new RuntimeException("Email not exist."));
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        repository.save(user);
-        return mapper.mapToResponseDTO(convertToDTO(user));
-    }
-
-    private static class OtpEntry {
-        String otp;
-        LocalDateTime expiryTime;
-
-        OtpEntry(String otp, LocalDateTime expiryTime) {
-            this.otp = otp;
-            this.expiryTime = expiryTime;
-        }
-
-        boolean isExpired() {
-            return LocalDateTime.now().isAfter(expiryTime);
-        }
     }
 
     private String generatePassword(int length) {
@@ -182,6 +154,62 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserRequestD
         }
 
         return new String(characters);
+    }
+
+    public void sendOtpForPasswordReset(String email) {
+        if (email.trim().isEmpty()) {
+            throw new RuntimeException("Email không được để trống.");
+        }
+        Optional<User> user = repository.findByEmail(email);
+        if (user.isEmpty()) {
+            throw new RuntimeException("Email không tồn tại.");
+        }
+
+        String otp = generateOtp();
+        long timestamp = System.currentTimeMillis(); // Lấy thời gian hiện tại
+        otpCache.put(email, new OtpData(otp, timestamp)); // Lưu OTP và thời gian tạo
+        emailService.sendOtpByEmail(email, otp);
+    }
+
+    private String generateOtp() {
+        return String.format("%06d", new SecureRandom().nextInt(1000000));
+    }
+
+    public boolean verifyOtp(String email, String inputOtp) {
+        OtpData otpData = otpCache.get(email.trim());
+        if (otpData == null) {
+            return false;
+        }
+
+        long currentTime = System.currentTimeMillis();
+        long elapsedTime = currentTime - otpData.timestamp;
+        if (elapsedTime > 60 * 1000) {
+            otpCache.remove(email.trim());
+            return false;
+        }
+
+        if (!otpData.otp.trim().equals(inputOtp.trim())) {
+            return false;
+        }
+
+        otpCache.remove(email.trim());
+        otpVerifiedCache.put(email.trim(), true);
+        return true;
+    }
+
+    public void resetPassword(String email, String newPassword, String confirmPassword) {
+        if (otpVerifiedCache.get(email.trim()) == null || !otpVerifiedCache.get(email.trim())) {
+            throw new RuntimeException("You need to verify the OTP code before changing your password.");
+        }
+        if (!newPassword.equals(confirmPassword)) {
+            throw new RuntimeException("New password and confirm password do not match.");
+        }
+        Optional<User> userOptional = repository.findByEmail(email);
+        User user = userOptional.get();
+        String hashedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(hashedPassword);
+        repository.save(user);
+        otpVerifiedCache.remove(email.trim());
     }
 
     @Override

@@ -19,9 +19,9 @@ public interface UserService extends BaseService<UserRequestDTO, UserResponseDTO
 
     UserResponseDTO update(UserRequestDTO dto, String id);
 
-    void sendOtpByEmail(UserRequestDTO userDTO);
+    void sendOtpForPasswordReset(String email);
 
-    boolean verifyOtp(String email, String otp);
+    boolean verifyOtp(String email, String inputOtp);
 
-    UserResponseDTO resetPassword(UserRequestDTO userDTO);
+    void resetPassword(String email, String newPassword, String confirmPassword);
 }

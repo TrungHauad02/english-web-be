@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/users")
@@ -112,39 +114,37 @@ public class UserController {
         return new ResponseEntity<>(userService.getInfor(), HttpStatus.OK);
     }
 
-    @Operation(method = "POST", summary = "Send OTP for password reset",
-            description = "Send a request via this API to send an OTP for password reset")
     @PostMapping("/forgot-password/send-otp")
-    public ResponseEntity<String> sendOtp(@RequestBody String email) {
+    public ResponseEntity<String> sendOtp(@RequestBody Map<String, String> request) {
+            String email = request.get("email");
+            userService.sendOtpForPasswordReset(email);
+            return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/forgot-password/verify-otp")
+    public ResponseEntity<String> verifyOtp(@RequestBody Map<String, String> request) {
         try {
-            UserRequestDTO userDTO = new UserRequestDTO();
-            userDTO.setEmail(email);
-            userService.sendOtpByEmail(userDTO);
-            return new ResponseEntity<>("Mã OTP đã được gửi thành công. Vui lòng kiểm tra email của bạn.", HttpStatus.OK);
+            String email = request.get("email");
+            String otp = request.get("otp");
+            if (userService.verifyOtp(email, otp)) {
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @Operation(method = "POST", summary = "Verify OTP for password reset",
-            description = "Send a request via this API to verify the OTP for password reset")
-    @PostMapping("/forgot-password/verify-otp")
-    public ResponseEntity<String> verifyOtp(@RequestParam String email, @RequestParam String otp) {
-        boolean isOtpValid = userService.verifyOtp(email, otp);
-        if (isOtpValid) {
-            return new ResponseEntity<>("Mã OTP hợp lệ.", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Mã OTP không hợp lệ hoặc đã hết hạn.", HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @Operation(method = "POST", summary = "Reset password using OTP",
-            description = "Send a request via this API to reset the password using an OTP")
     @PostMapping("/forgot-password/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestBody UserRequestDTO userDTO) {
+    public ResponseEntity<String> resetPassword(@RequestBody Map<String, String> request) {
         try {
-            userService.resetPassword(userDTO);
-            return new ResponseEntity<>("Mật khẩu đã được đặt lại thành công.", HttpStatus.OK);
+            String email = request.get("email");
+            String newPassword = request.get("newPassword");
+            String confirmPassword = request.get("confirmPassword");
+
+            userService.resetPassword(email, newPassword, confirmPassword);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

@@ -18,7 +18,6 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.experimental.NonFinal;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,8 +31,6 @@ import java.util.StringJoiner;
 
 @Service
 public class AuthenticateServiceImpl extends BaseServiceImpl<User, UserDTO, UserRequestDTO, UserResponseDTO, UserMapper, UserRepository> implements AuthenticateService {
-    Logger log;
-
     private final PasswordEncoder passwordEncoder;
 
     @NonFinal
@@ -86,7 +83,7 @@ public class AuthenticateServiceImpl extends BaseServiceImpl<User, UserDTO, User
                 .issuer("EnglishWebApplication.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(
-                        Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
+                        Instant.now().plus(3, ChronoUnit.HOURS).toEpochMilli()
                 ))
                 .claim("scope", buildScope(user))
                 .build();
@@ -97,7 +94,6 @@ public class AuthenticateServiceImpl extends BaseServiceImpl<User, UserDTO, User
             jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
             return jwsObject.serialize();
         } catch (JOSEException e) {
-            log.error("Cannot create token", e);
             throw new RuntimeException(e);
         }
     }

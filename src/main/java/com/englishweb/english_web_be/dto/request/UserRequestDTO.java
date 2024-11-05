@@ -19,9 +19,7 @@ import java.time.LocalDate;
 public class UserRequestDTO implements BaseDTO {
     String id;
     String name;
-    @NotBlank(message = "Email cannot be empty")
     String email;
-    @NotBlank(message = "Password cannot be empty")
     String password;
     String avatar;
     String contentMotivation;
