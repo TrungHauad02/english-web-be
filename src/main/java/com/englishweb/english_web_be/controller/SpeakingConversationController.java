@@ -2,6 +2,7 @@ package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.dto.request.SpeakingConversationRequestDTO;
 import com.englishweb.english_web_be.dto.response.SpeakingConversationResponseDTO;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.service.SpeakingConversationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,8 +35,10 @@ public class SpeakingConversationController {
     @Operation(method = "GET", summary = "Get speaking conversations by speaking ID",
             description = "Send a request via this API to get all conversations for a specific speaking")
     @GetMapping
-    public ResponseEntity<List<SpeakingConversationResponseDTO>> findBySpeakingId(@RequestParam String speakingId) {
-        return new ResponseEntity<>(service.findBySpeakingId(speakingId), HttpStatus.OK);
+    public ResponseEntity<List<SpeakingConversationResponseDTO>> findBySpeakingId(
+            @RequestParam String speakingId,
+            @RequestParam(required = false) StatusEnum status) {
+        return new ResponseEntity<>(service.findBySpeakingIdAndStatus(speakingId, status), HttpStatus.OK);
     }
 
     @Operation(method = "POST", summary = "Create new speaking conversation",

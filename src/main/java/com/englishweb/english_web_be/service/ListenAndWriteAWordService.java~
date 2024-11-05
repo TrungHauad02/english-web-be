@@ -1,5 +1,6 @@
 package com.englishweb.english_web_be.service;
 
+import com.englishweb.english_web_be.dto.ListenAndWriteAWordDTO;
 import com.englishweb.english_web_be.dto.request.ListenAndWriteAWordRequestDTO;
 import com.englishweb.english_web_be.dto.response.ListenAndWriteAWordResponseDTO;
 
@@ -9,5 +10,5 @@ public interface ListenAndWriteAWordService extends BaseService<ListenAndWriteAW
 
     List<ListenAndWriteAWordResponseDTO> findByListeningId(String listeningId);
 
-    List<Response> findDTOByListeningId(String listeningId);
+    List<ListenAndWriteAWordDTO> findDTOByListeningId(String listeningId);
 }

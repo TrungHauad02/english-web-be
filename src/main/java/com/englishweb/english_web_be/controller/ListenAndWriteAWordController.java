@@ -2,6 +2,7 @@ package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.dto.request.ListenAndWriteAWordRequestDTO;
 import com.englishweb.english_web_be.dto.response.ListenAndWriteAWordResponseDTO;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.service.ListenAndWriteAWordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,8 +34,10 @@ public class ListenAndWriteAWordController {
     @Operation(method = "GET", summary = "Get all Listen and Write a Words by Listening id",
             description = "Send a request via this API to get all Listen and Write a Words by Listening id")
     @GetMapping
-    public ResponseEntity<List<ListenAndWriteAWordResponseDTO>> getByListeningId(@RequestParam String listeningId) {
-        return new ResponseEntity<>(service.findByListeningId(listeningId), HttpStatus.OK);
+    public ResponseEntity<List<ListenAndWriteAWordResponseDTO>> getByListeningId(
+            @RequestParam String listeningId,
+            @RequestParam(required = false) StatusEnum status) {
+        return new ResponseEntity<>(service.findByListeningIdAndStatus(listeningId, status), HttpStatus.OK);
     }
 
     @Operation(method = "POST", summary = "Create a new Listen and Write a Word",
