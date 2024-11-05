@@ -42,10 +42,7 @@ public class SpeakingConversationServiceImpl extends BaseServiceImpl<SpeakingCon
         if(status == null)
             return findBySpeakingId(speakingId);
         List<SpeakingConversation> entityList = repository.findAllBySpeaking_IdAndStatus(speakingId, status);
-        return entityList.stream()
-                .map(this::convertToDTO)
-                .map(mapper::mapToResponseDTO)
-                .toList();
+        return List.of();
     }
 
     @Override

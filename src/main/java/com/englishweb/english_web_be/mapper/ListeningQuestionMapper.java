@@ -24,7 +24,6 @@ public class ListeningQuestionMapper implements BaseMapper<ListeningQuestionDTO,
                 .serial(requestDTO.getSerial())
                 .explanation(requestDTO.getExplanation())
                 .status(requestDTO.getStatus())
-                .answers(listeningAnswerService.findDTOByQuestionId(requestDTO.getId()))
                 .listeningId(requestDTO.getListeningId())
                 .build();
     }

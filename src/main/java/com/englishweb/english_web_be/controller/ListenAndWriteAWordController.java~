@@ -34,8 +34,7 @@ public class ListenAndWriteAWordController {
             description = "Send a request via this API to get all Listen and Write a Words by Listening id")
     @GetMapping
     public ResponseEntity<List<ListenAndWriteAWordResponseDTO>> getByListeningId(@RequestParam String listeningId) {
-        List<ListenAndWriteAWordResponseDTO> dtos = service.findByListeningId(listeningId);
-        return new ResponseEntity<>(dtos, HttpStatus.OK);
+        return new ResponseEntity<>(service.findByListeningId(listeningId), HttpStatus.OK);
     }
 
     @Operation(method = "POST", summary = "Create a new Listen and Write a Word",
