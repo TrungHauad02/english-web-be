@@ -95,13 +95,13 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserRequestD
         return createdTeacher;
     }
 
-    @Override
-    public UserResponseDTO deleteUser(String id) {
-        User user = repository.findById(id).orElseThrow(() -> new RuntimeException("User not found."));
-        user.setStatus(StatusEnum.INACTIVE);
-        repository.save(user);
-        return mapper.mapToResponseDTO(convertToDTO(user));
-    }
+//    @Override
+//    public UserResponseDTO deleteUser(String id) {
+//        User user = repository.findById(id).orElseThrow(() -> new RuntimeException("User not found."));
+//        user.setStatus(StatusEnum.INACTIVE);
+//        repository.save(user);
+//        return mapper.mapToResponseDTO(convertToDTO(user));
+//    }
 
     @Override
     public UserResponseDTO getInfor() {

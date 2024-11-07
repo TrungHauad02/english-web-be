@@ -82,7 +82,7 @@ public class UserController {
             description = "Send a request via this API to delete a user by ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
-        userService.deleteUser(id);
+        userService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

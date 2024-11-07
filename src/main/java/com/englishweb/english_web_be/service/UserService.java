@@ -13,7 +13,7 @@ public interface UserService extends BaseService<UserRequestDTO, UserResponseDTO
 
     UserResponseDTO createTeacher(UserRequestDTO dto);
 
-    UserResponseDTO deleteUser(String id);
+//    UserResponseDTO deleteUser(String id);
 
     UserResponseDTO getInfor();
 
