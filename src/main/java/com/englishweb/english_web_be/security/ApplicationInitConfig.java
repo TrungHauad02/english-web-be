@@ -26,11 +26,11 @@ public class ApplicationInitConfig {
     @Bean
     ApplicationRunner applicationRunner(UserRepository userRepository) {
         return args -> {
-            if(userRepository.findByEmail("hungat418@gmail.com").isEmpty()){
+            if(userRepository.findByEmail("21110487@student.hcmute.edu.vn").isEmpty()){
                 User user = new User(
-                        "admin-id",                                        // Thay thế "unique-id" bằng một ID hợp lệ
+                        "admin-id",                                        // Thay thế "admin-id" bằng một ID hợp lệ
                         "Hung",                                                // Tên người dùng
-                        "21110487@student.hcmute.edu.vn",                                 // Email
+                        "21110487@student.hcmute.edu.vn",                      // Email
                         passwordEncoder.encode("admin"),            // Mật khẩu đã mã hóa
                         null,                                                  // URL ảnh đại diện nếu có
                         null,                                                  // Nội dung động lực

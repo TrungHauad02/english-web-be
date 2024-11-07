@@ -26,6 +26,8 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -112,20 +114,30 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserRequestD
     @Override
     public UserResponseDTO update(UserRequestDTO dto, String id) {
         User existingUser = repository.findById(id).orElseThrow(() -> new RuntimeException("User not found."));
-        dto.setEmail(existingUser.getEmail());
-        if (dto.getEmail() == null || dto.getEmail().trim().isEmpty()) {
-            dto.setEmail(existingUser.getEmail());
-        }
-        if (dto.getName() == null || dto.getName().trim().isEmpty()) {
-            dto.setName(existingUser.getName());
-        }
-        if (dto.getPassword() != null && !dto.getPassword().equals(existingUser.getPassword())) {
-            dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-        } else {
-            dto.setPassword(existingUser.getPassword());
-        }
-        return super.update(dto, id);
+
+        // Phương thức tiện ích để cập nhật nếu giá trị tồn tại và không rỗng
+        BiConsumer<String, Consumer<String>> updateIfPresent = (newValue, setter) -> {
+            if (newValue != null && !newValue.trim().isEmpty()) {
+                setter.accept(newValue);
+            }
+        };
+
+        updateIfPresent.accept(dto.getName(), existingUser::setName);
+        updateIfPresent.accept(dto.getEmail(), existingUser::setEmail);
+        updateIfPresent.accept(dto.getPassword(), password -> existingUser.setPassword(passwordEncoder.encode(password)));
+        updateIfPresent.accept(dto.getAvatar(), existingUser::setAvatar);
+        updateIfPresent.accept(dto.getContentMotivation(), existingUser::setContentMotivation);
+
+        // Các trường enum và ngày
+        Optional.ofNullable(dto.getStatus()).ifPresent(existingUser::setStatus);
+        Optional.ofNullable(dto.getRole()).ifPresent(existingUser::setRoleEnum);
+        Optional.ofNullable(dto.getLevel()).ifPresent(existingUser::setLevelEnum);
+        Optional.ofNullable(dto.getStartDate()).ifPresent(existingUser::setStartDate);
+        Optional.ofNullable(dto.getEndDate()).ifPresent(existingUser::setEndDate);
+
+        return mapper.mapToResponseDTO(convertToDTO(repository.save(existingUser)));
     }
+
 
     private String generatePassword(int length) {
         final SecureRandom RANDOM = new SecureRandom();

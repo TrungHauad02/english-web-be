@@ -88,7 +88,7 @@ public class UserController {
 
     @Operation(method = "PUT", summary = "Update user",
             description = "Send a request via this API to update an existing user")
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<UserResponseDTO> update(@Valid @RequestBody UserRequestDTO userDTO, @PathVariable String id) {
         return new ResponseEntity<>(userService.update(userDTO, id), HttpStatus.OK);
     }
@@ -109,7 +109,7 @@ public class UserController {
 
     @Operation(method = "GET", summary = "Get current user information",
             description = "Send a request via this API to get the current user's information")
-    @GetMapping("/myinfor")
+    @GetMapping("/myinfo")
     public ResponseEntity<UserResponseDTO> myInfor() {
         return new ResponseEntity<>(userService.getInfor(), HttpStatus.OK);
     }

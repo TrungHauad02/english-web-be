@@ -24,13 +24,6 @@ public class AuthenticateController {
         this.authenticateService = authenticateService;
     }
 
-//    // Endpoint cho đăng nhập
-//    @PostMapping("/api/signin")
-//    public ResponseEntity<UserDTO> signIn(@Valid @RequestBody UserDTO userDTO) {
-//        UserDTO authenticatedUser = authenticateService.signIn(userDTO);
-//        return new ResponseEntity<>(authenticatedUser, HttpStatus.OK);
-//    }
-
     @PostMapping("/api/users/token")
     public ResponseEntity<Authenticate> authenticate(@RequestBody UserDTO userDTO) {
         Authenticate result = authenticateService.authenticate(userDTO);

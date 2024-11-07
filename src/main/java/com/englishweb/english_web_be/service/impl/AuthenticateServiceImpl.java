@@ -65,14 +65,19 @@ public class AuthenticateServiceImpl extends BaseServiceImpl<User, UserDTO, User
         }
 
         User user = userOptional.get();
+        if (user.getStatus() == StatusEnum.INACTIVE) {
+            throw new AuthenticationException("Account is inactive. Please contact support.");
+        }
+
         boolean isAuthenticated = passwordEncoder.matches(dto.getPassword(), user.getPassword());
 
         if (!isAuthenticated) {
             throw new AuthenticationException("Email or password is invalid. Please check again.");
         }
-
+        String id = user.getId();
+        String role = user.getRoleEnum().name();
         var token = generateToken(user);
-        return new Authenticate(isAuthenticated, token);
+        return new Authenticate(isAuthenticated, token, role, id);
     }
 
     private String generateToken(User user) {
@@ -86,6 +91,7 @@ public class AuthenticateServiceImpl extends BaseServiceImpl<User, UserDTO, User
                         Instant.now().plus(3, ChronoUnit.HOURS).toEpochMilli()
                 ))
                 .claim("scope", buildScope(user))
+                .claim("id", user.getId())
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
