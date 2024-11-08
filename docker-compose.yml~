@@ -1,0 +1,16 @@
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql_container
+    environment:
+      MYSQL_DATABASE: study_english_web       # Tên database
+      MYSQL_ROOT_PASSWORD: dummy              # Mật khẩu root
+      MYSQL_USER: dummy                       # Tên người dùng
+      MYSQL_PASSWORD: dummy                   # Mật khẩu người dùng
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql              # Lưu trữ dữ liệu của MySQL
+
+volumes:
+  mysql_data:
