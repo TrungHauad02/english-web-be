@@ -17,9 +17,9 @@ docker image ls
 
 #### Chạy Image
 ```bash
-docker container run --name <tên container> -p <port>:<port> <tên image>:<version>  
+docker container run -d -p <port>:<port> <tên image>:<version>  
 # Ví dụ
-docker container run --name study-english-web -p 8080:8080 study-english-web:v1
+docker container run -d -p 8080:8080 study-english-web:v1
 ```
 
 ---
@@ -68,12 +68,15 @@ docker rmi <Repository>:<tag>
 
 ## Chạy MySQL trên Docker
 ```bash
-docker run --detach \
-  --env MYSQL_ROOT_PASSWORD=123456 \
-  --env MYSQL_USER=study-english \
-  --env MYSQL_PASSWORD=123456 \
-  --env MYSQL_DATABASE=study-english \
-  --name mysql \
-  --publish 3306:3306 \
-  mysql:8-oracle
+docker run --detach --env MYSQL_ROOT_PASSWORD=123456 --env MYSQL_USER=study-english --env MYSQL_PASSWORD=123456 --env MYSQL_DATABASE=study-english --name mysql --publish 3307:3306 mysql:8-oracle
+```
+
+## Kết nối với mysql docker bằng mysqlsh
+```bash
+mysqlsh
+\connect study-english@localhost:3307
+```
+```bash
+\use study-english
+select * from topic;
 ```
