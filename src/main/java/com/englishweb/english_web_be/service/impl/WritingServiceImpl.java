@@ -1,9 +1,6 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.WritingDTO;
-import com.englishweb.english_web_be.dto.request.WritingRequestDTO;
-import com.englishweb.english_web_be.dto.response.WritingResponseDTO;
-import com.englishweb.english_web_be.mapper.WritingMapper;
 import com.englishweb.english_web_be.model.Writing;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.WritingRepository;
@@ -17,15 +14,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WritingServiceImpl extends BaseServiceImpl<Writing, WritingDTO, WritingRequestDTO,
-        WritingResponseDTO, WritingMapper, WritingRepository> implements WritingService {
+public class WritingServiceImpl extends BaseServiceImpl<Writing, WritingDTO, WritingRepository> implements WritingService {
 
-    public WritingServiceImpl(WritingRepository repository, @Lazy WritingMapper mapper) {
-        super(repository, mapper);
+    public WritingServiceImpl(WritingRepository repository) {
+        super(repository);
     }
 
     @Override
-    public Page<WritingResponseDTO> findWritingWithStatusAndPagingAndSorting(StatusEnum status, int page, int size, String sortBy, String sortDir, Class<WritingResponseDTO> dtoClass) {
+    public Page<WritingDTO> findWritingWithStatusAndPagingAndSorting(StatusEnum status, int page, int size, String sortBy, String sortDir, Class<WritingDTO> dtoClass) {
         if(status == null)
             return super.findByPage(page, size, sortBy, sortDir, dtoClass);
 
@@ -34,8 +30,7 @@ public class WritingServiceImpl extends BaseServiceImpl<Writing, WritingDTO, Wri
         Pageable pageable = PageRequest.of(page, size, sort);
 
         return repository.findAllWritingByStatus(status, pageable)
-                .map(this::convertToDTO)
-                .map(mapper::mapToResponseDTO);
+                .map(this::convertToDTO);
     }
 
     @Override

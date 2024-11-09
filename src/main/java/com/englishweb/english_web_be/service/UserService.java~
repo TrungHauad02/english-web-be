@@ -6,21 +6,21 @@ import org.springframework.data.domain.Page;
 
 public interface UserService extends BaseService<UserDTO> {
 
-    UserDTO createStudent(UserDTO dto);
+    Page<UserResponseDTO> findByRole(RoleEnum role, int page, int size, String sortBy, String sortDir, Class<UserResponseDTO> userResponseDTOClass);
 
-    UserDTO createTeacher(UserDTO dto);
+    UserResponseDTO createStudent(UserRequestDTO dto);
 
-    UserDTO deleteUser(String id);
+    UserResponseDTO createTeacher(UserRequestDTO dto);
 
-    UserDTO getInfor();
+//    UserResponseDTO deleteUser(String id);
 
-    UserDTO update(UserDTO dto, String id);
+    UserResponseDTO getInfor();
 
-    Page<UserDTO> findByRole(int page, int size, String sortBy, String sortDir, RoleEnum role, Class<UserDTO> dtoClass);
+    UserResponseDTO update(UserRequestDTO dto, String id);
 
-    void sendOtpByEmail(UserDTO userDTO);
+    void sendOtpForPasswordReset(String email);
 
-    boolean verifyOtp(String email, String otp);
+    boolean verifyOtp(String email, String inputOtp);
 
-    UserDTO resetPassword(UserDTO userDTO);
+    void resetPassword(String email, String newPassword, String confirmPassword);
 }

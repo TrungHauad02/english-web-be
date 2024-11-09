@@ -2,16 +2,12 @@ package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.SpeakingDTO;
 import com.englishweb.english_web_be.dto.SpeakingConversationDTO;
-import com.englishweb.english_web_be.dto.request.SpeakingRequestDTO;
-import com.englishweb.english_web_be.dto.response.SpeakingResponseDTO;
-import com.englishweb.english_web_be.mapper.SpeakingMapper;
 import com.englishweb.english_web_be.model.Speaking;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.SpeakingRepository;
 import com.englishweb.english_web_be.service.SpeakingConversationService;
 import com.englishweb.english_web_be.service.SpeakingService;
 import com.englishweb.english_web_be.util.ValidationUtils;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,21 +17,19 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class SpeakingServiceImpl extends BaseServiceImpl<Speaking, SpeakingDTO, SpeakingRequestDTO,
-        SpeakingResponseDTO, SpeakingMapper, SpeakingRepository>
+public class SpeakingServiceImpl extends BaseServiceImpl<Speaking, SpeakingDTO, SpeakingRepository>
         implements SpeakingService {
 
     private final SpeakingConversationService speakingConversationService;
 
     public SpeakingServiceImpl(SpeakingRepository repository,
-                               @Lazy SpeakingMapper mapper,
                                SpeakingConversationService speakingConversationService) {
-        super(repository, mapper);
+        super(repository);
         this.speakingConversationService = speakingConversationService;
     }
 
     @Override
-    public Page<SpeakingResponseDTO> findSpeakingWithStatusAndPagingAndSorting(StatusEnum status, int page, int size, String sortBy, String sortDir, Class<SpeakingResponseDTO> dtoClass) {
+    public Page<SpeakingDTO> findSpeakingWithStatusAndPagingAndSorting(StatusEnum status, int page, int size, String sortBy, String sortDir, Class<SpeakingDTO> dtoClass) {
         if(status == null) {
             return super.findByPage(page, size, sortBy, sortDir, dtoClass);
         }
@@ -45,13 +39,12 @@ public class SpeakingServiceImpl extends BaseServiceImpl<Speaking, SpeakingDTO, 
         Pageable pageable = PageRequest.of(page, size, sort);
 
         return repository.findAllSpeakingByStatus(status, pageable)
-                .map(this::convertToDTO)
-                .map(mapper::mapToResponseDTO);
+                .map(this::convertToDTO);
     }
 
     @Override
     public void delete(String id) {
-        List<SpeakingConversationDTO> speakingConversationDTOList = speakingConversationService.findAllDTOBySpeakingId(id);
+        List<SpeakingConversationDTO> speakingConversationDTOList = speakingConversationService.findBySpeakingId(id);
         for (SpeakingConversationDTO speakingConversationDTO : speakingConversationDTOList) {
             speakingConversationService.delete(speakingConversationDTO.getId());
         }

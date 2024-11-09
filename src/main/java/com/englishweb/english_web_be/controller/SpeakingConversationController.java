@@ -1,7 +1,6 @@
 package com.englishweb.english_web_be.controller;
 
-import com.englishweb.english_web_be.dto.request.SpeakingConversationRequestDTO;
-import com.englishweb.english_web_be.dto.response.SpeakingConversationResponseDTO;
+import com.englishweb.english_web_be.dto.SpeakingConversationDTO;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.service.SpeakingConversationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,14 +27,14 @@ public class SpeakingConversationController {
     @Operation(method = "GET", summary = "Get speaking conversation by ID",
             description = "Send a request via this API to get a specific speaking conversation by ID")
     @GetMapping("/{id}")
-    public ResponseEntity<SpeakingConversationResponseDTO> findById(@PathVariable String id) {
+    public ResponseEntity<SpeakingConversationDTO> findById(@PathVariable String id) {
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 
     @Operation(method = "GET", summary = "Get speaking conversations by speaking ID",
             description = "Send a request via this API to get all conversations for a specific speaking")
     @GetMapping
-    public ResponseEntity<List<SpeakingConversationResponseDTO>> findBySpeakingId(
+    public ResponseEntity<List<SpeakingConversationDTO>> findBySpeakingId(
             @RequestParam String speakingId,
             @RequestParam(required = false) StatusEnum status) {
         return new ResponseEntity<>(service.findBySpeakingIdAndStatus(speakingId, status), HttpStatus.OK);
@@ -44,14 +43,14 @@ public class SpeakingConversationController {
     @Operation(method = "POST", summary = "Create new speaking conversation",
             description = "Send a request via this API to create a new speaking conversation")
     @PostMapping
-    public ResponseEntity<SpeakingConversationResponseDTO> create(@Valid @RequestBody SpeakingConversationRequestDTO dto) {
+    public ResponseEntity<SpeakingConversationDTO> create(@Valid @RequestBody SpeakingConversationDTO dto) {
         return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
     @Operation(method = "PUT", summary = "Update speaking conversation",
             description = "Send a request via this API to update an existing speaking conversation")
     @PutMapping("/{id}")
-    public ResponseEntity<SpeakingConversationResponseDTO> update(@Valid @RequestBody SpeakingConversationRequestDTO dto, @PathVariable String id) {
+    public ResponseEntity<SpeakingConversationDTO> update(@Valid @RequestBody SpeakingConversationDTO dto, @PathVariable String id) {
         return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }
 

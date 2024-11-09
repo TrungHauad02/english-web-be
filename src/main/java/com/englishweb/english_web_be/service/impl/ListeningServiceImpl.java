@@ -3,15 +3,11 @@ package com.englishweb.english_web_be.service.impl;
 import com.englishweb.english_web_be.dto.ListenAndWriteAWordDTO;
 import com.englishweb.english_web_be.dto.ListeningDTO;
 import com.englishweb.english_web_be.dto.ListeningQuestionDTO;
-import com.englishweb.english_web_be.dto.request.ListeningRequestDTO;
-import com.englishweb.english_web_be.dto.response.ListeningResponseDTO;
-import com.englishweb.english_web_be.mapper.ListeningMapper;
 import com.englishweb.english_web_be.model.Listening;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.ListeningRepository;
 import com.englishweb.english_web_be.service.ListeningService;
 import com.englishweb.english_web_be.util.ValidationUtils;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,25 +17,24 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ListeningServiceImpl extends BaseServiceImpl<Listening, ListeningDTO, ListeningRequestDTO,
-        ListeningResponseDTO, ListeningMapper, ListeningRepository> implements ListeningService {
+public class ListeningServiceImpl extends BaseServiceImpl<Listening, ListeningDTO, ListeningRepository>
+        implements ListeningService {
 
     private final ListenAndWriteAWordServiceImpl listenAndWriteAWordService;
     private final ListeningQuestionServiceImpl listeningQuestionService;
 
     public ListeningServiceImpl(ListeningRepository repository,
                                 ListenAndWriteAWordServiceImpl listenAndWriteAWordService,
-                                ListeningQuestionServiceImpl listeningQuestionService,
-                                @Lazy ListeningMapper mapper) {
-        super(repository, mapper);
+                                ListeningQuestionServiceImpl listeningQuestionService) {
+        super(repository);
         this.listenAndWriteAWordService = listenAndWriteAWordService;
         this.listeningQuestionService = listeningQuestionService;
     }
 
     @Override
-    public Page<ListeningResponseDTO> findListeningWithStatusAndPagingAndSorting(
+    public Page<ListeningDTO> findListeningWithStatusAndPagingAndSorting(
             StatusEnum status, int page, int size, String sortBy, String sortDir,
-            Class<ListeningResponseDTO> dtoClass) {
+            Class<ListeningDTO> dtoClass) {
 
         if (status == null) {
             return super.findByPage(page, size, sortBy, sortDir, dtoClass);
@@ -50,18 +45,17 @@ public class ListeningServiceImpl extends BaseServiceImpl<Listening, ListeningDT
         Pageable pageable = PageRequest.of(page, size, sort);
 
         return repository.findAllListeningByStatus(status, pageable)
-                .map(this::convertToDTO)
-                .map(mapper::mapToResponseDTO);
+                .map(this::convertToDTO);
     }
 
     @Override
     public void delete(String id) {
         isExist(id);
-        List<ListeningQuestionDTO> questionDTOList = listeningQuestionService.findDTOByListeningId(id);
+        List<ListeningQuestionDTO> questionDTOList = listeningQuestionService.findByListeningId(id);
         for (ListeningQuestionDTO questionDTO : questionDTOList) {
             listeningQuestionService.delete(questionDTO.getId());
         }
-        List<ListenAndWriteAWordDTO> listenAndWriteAWordDTOList = listenAndWriteAWordService.findDTOByListeningId(id);
+        List<ListenAndWriteAWordDTO> listenAndWriteAWordDTOList = listenAndWriteAWordService.findByListeningId(id);
         for (ListenAndWriteAWordDTO listenAndWriteAWordDTO : listenAndWriteAWordDTOList) {
             listenAndWriteAWordService.delete(listenAndWriteAWordDTO.getId());
         }
