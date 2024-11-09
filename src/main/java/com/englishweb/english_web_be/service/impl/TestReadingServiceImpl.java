@@ -97,6 +97,7 @@ public class TestReadingServiceImpl extends BaseServiceImpl<TestReading, TestRea
         if (questions != null) {
             for (TestReadingQuestionRequestDTO question : questions) {
                 try {
+                    question.setTestReadingId(createReading.getId());
                     testReadingQuestionService.create(question);
                 } catch (Exception e) {
                     System.err.println("Error processing question with ID: " + (question != null ? question.getId() : "unknown"));
@@ -120,6 +121,7 @@ public class TestReadingServiceImpl extends BaseServiceImpl<TestReading, TestRea
             for (TestReadingQuestionRequestDTO question : questions) {
                 try {
                     if (question.getId().startsWith("add")) {
+                        question.setTestReadingId(dto.getId());
                         testReadingQuestionService.create(question);
                     } else if (question.getId().startsWith("delete")) {
                         testReadingQuestionService.delete(question.getId());

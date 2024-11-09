@@ -91,7 +91,7 @@ public class TestReadingQuestionServiceImpl extends BaseServiceImpl<TestReadingQ
 
         if (answerRequestDTOS != null) {
             for (TestReadingAnswerRequestDTO answer : answerRequestDTOS) {
-
+                answer.setTestQuestionReadingId(createQuestionReading.getId());
                 testReadingAnswerService.create(answer);
 
             }
@@ -108,6 +108,7 @@ public class TestReadingQuestionServiceImpl extends BaseServiceImpl<TestReadingQ
         for (TestReadingAnswerRequestDTO answer : answerRequestDTOS) {
             try {
                 if (answer.getId().startsWith("add")) {
+                    answer.setTestQuestionReadingId(dto.getId());
                     testReadingAnswerService.create(answer);
                 } else if (answer.getId().startsWith("delete")) {
                     testReadingAnswerService.delete(answer.getId());
