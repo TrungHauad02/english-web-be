@@ -1,10 +1,7 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.UserDTO;
-import com.englishweb.english_web_be.dto.request.UserRequestDTO;
-import com.englishweb.english_web_be.dto.response.UserResponseDTO;
 import com.englishweb.english_web_be.exception.AuthenticationException;
-import com.englishweb.english_web_be.mapper.UserMapper;
 import com.englishweb.english_web_be.model.Authenticate;
 import com.englishweb.english_web_be.model.User;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
@@ -30,7 +27,7 @@ import java.util.Optional;
 import java.util.StringJoiner;
 
 @Service
-public class AuthenticateServiceImpl extends BaseServiceImpl<User, UserDTO, UserRequestDTO, UserResponseDTO, UserMapper, UserRepository> implements AuthenticateService {
+public class AuthenticateServiceImpl extends BaseServiceImpl<User, UserDTO, UserRepository> implements AuthenticateService {
     private final PasswordEncoder passwordEncoder;
 
     @NonFinal
@@ -50,8 +47,8 @@ public class AuthenticateServiceImpl extends BaseServiceImpl<User, UserDTO, User
         return new IntrospecResponse(isValid); // Trả về đối tượng IntrospecResponse với true hoặc false
     }
 
-    public AuthenticateServiceImpl(UserRepository repository, UserMapper mapper) {
-        super(repository, mapper);
+    public AuthenticateServiceImpl(UserRepository repository) {
+        super(repository);
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 

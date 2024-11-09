@@ -34,7 +34,7 @@ public class ReadingController {
             @RequestParam(defaultValue = "asc") String sortDir,
             @RequestParam(required = false) StatusEnum status) {
         return new ResponseEntity<>(
-                service.findByPage(page, size, sortBy, sortDir, ReadingResponseDTO.class),
+                service.findReadingWithStatusAndPagingAndSorting(status, page, size, sortBy, sortDir, ReadingResponseDTO.class),
                 HttpStatus.OK);
     }
 

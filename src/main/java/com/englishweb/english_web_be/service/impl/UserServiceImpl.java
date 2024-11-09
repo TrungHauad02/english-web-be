@@ -1,9 +1,6 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.UserDTO;
-import com.englishweb.english_web_be.dto.request.UserRequestDTO;
-import com.englishweb.english_web_be.dto.response.UserResponseDTO;
-import com.englishweb.english_web_be.mapper.UserMapper;
 import com.englishweb.english_web_be.model.User;
 import com.englishweb.english_web_be.modelenum.RoleEnum;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
@@ -31,7 +28,7 @@ import java.util.function.Consumer;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserRequestDTO, UserResponseDTO, UserMapper, UserRepository> implements UserService {
+public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserRepository> implements UserService {
 
     EmailService emailService;
     PasswordEncoder passwordEncoder;
@@ -40,9 +37,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserRequestD
 
     public UserServiceImpl(UserRepository repository,
                            EmailService emailService,
-                           PasswordEncoder passwordEncoder,
-                           @Lazy UserMapper mapper) {
-        super(repository, mapper);
+                           PasswordEncoder passwordEncoder) {
+        super(repository);
         this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -57,18 +53,18 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserRequestD
     }
 
     @Override
-    public Page<UserResponseDTO> findByRole(RoleEnum role, int page, int size, String sortBy, String sortDir, Class<UserResponseDTO> userResponseDTOClass) {
+    public Page<UserDTO> findByRole(RoleEnum role, int page, int size, String sortBy, String sortDir, Class<UserDTO> userResponseDTOClass) {
         ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, userResponseDTOClass);
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<User> entityPage = repository.findByRoleEnum(role, pageable);
-        return entityPage.map(this::convertToDTO).map(mapper::mapToResponseDTO);
+        return entityPage.map(this::convertToDTO);
     }
 
     @Override
-    public UserResponseDTO createStudent(UserRequestDTO dto) {
+    public UserDTO createStudent(UserDTO dto) {
         if (repository.findByEmail(dto.getEmail()).isPresent()) {
             throw new RuntimeException("Email already exists. Please use another email.");
         }
@@ -79,7 +75,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserRequestD
     }
 
     @Override
-    public UserResponseDTO createTeacher(UserRequestDTO dto) {
+    public UserDTO createTeacher(UserDTO dto) {
         if (repository.findByEmail(dto.getEmail()).isPresent()) {
             throw new RuntimeException("Email already exists. Please use another email.");
         }
@@ -89,7 +85,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserRequestD
         dto.setStatus(StatusEnum.ACTIVE);
         dto.setRole(RoleEnum.TEACHER);
 
-        UserResponseDTO createdTeacher = create(dto);
+        UserDTO createdTeacher = create(dto);
         emailService.sendPasswordByEmail(dto.getEmail(), rawPassword);
 
         return createdTeacher;
@@ -104,15 +100,15 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserRequestD
 //    }
 
     @Override
-    public UserResponseDTO getInfor() {
+    public UserDTO getInfor() {
         var context = SecurityContextHolder.getContext();
         String username = context.getAuthentication().getName();
         User user = repository.findByEmail(username).orElseThrow(() -> new RuntimeException("User not found."));
-        return mapper.mapToResponseDTO(convertToDTO(user));
+        return convertToDTO(user);
     }
 
     @Override
-    public UserResponseDTO update(UserRequestDTO dto, String id) {
+    public UserDTO update(UserDTO dto, String id) {
         User existingUser = repository.findById(id).orElseThrow(() -> new RuntimeException("User not found."));
 
         // Phương thức tiện ích để cập nhật nếu giá trị tồn tại và không rỗng
@@ -135,7 +131,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserRequestD
         Optional.ofNullable(dto.getStartDate()).ifPresent(existingUser::setStartDate);
         Optional.ofNullable(dto.getEndDate()).ifPresent(existingUser::setEndDate);
 
-        return mapper.mapToResponseDTO(convertToDTO(repository.save(existingUser)));
+        return convertToDTO(repository.save(existingUser));
     }
 
 

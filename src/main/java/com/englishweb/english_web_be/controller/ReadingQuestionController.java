@@ -1,7 +1,6 @@
 package com.englishweb.english_web_be.controller;
 
-import com.englishweb.english_web_be.dto.request.ReadingQuestionRequestDTO;
-import com.englishweb.english_web_be.dto.response.ReadingQuestionResponseDTO;
+import com.englishweb.english_web_be.dto.ReadingQuestionDTO;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.service.ReadingQuestionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +27,7 @@ public class ReadingQuestionController {
     @Operation(method = "GET", summary = "Get reading questions by reading id",
             description = "Send a request via this API to get all questions for a specific reading")
     @GetMapping
-    public ResponseEntity<List<ReadingQuestionResponseDTO>> findByReadingId(
+    public ResponseEntity<List<ReadingQuestionDTO>> findByReadingId(
             @RequestParam String readingId,
             @RequestParam (required = false) StatusEnum status) {
         return new ResponseEntity<>(service.findAllByReadingIdAndStatus(readingId, status), HttpStatus.OK);
@@ -37,14 +36,14 @@ public class ReadingQuestionController {
     @Operation(method = "POST", summary = "Create new reading question",
             description = "Send a request via this API to create reading question")
     @PostMapping
-    public ResponseEntity<ReadingQuestionResponseDTO> create(@Valid @RequestBody ReadingQuestionRequestDTO dto) {
+    public ResponseEntity<ReadingQuestionDTO> create(@Valid @RequestBody ReadingQuestionDTO dto) {
         return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
     @Operation(method = "PUT", summary = "Update reading question",
             description = "Send a request via this API to update reading question")
     @PutMapping("/{id}")
-    public ResponseEntity<ReadingQuestionResponseDTO> update(@Valid @RequestBody ReadingQuestionRequestDTO dto,
+    public ResponseEntity<ReadingQuestionDTO> update(@Valid @RequestBody ReadingQuestionDTO dto,
                                                              @PathVariable String id) {
         return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }

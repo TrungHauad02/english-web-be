@@ -1,7 +1,6 @@
 package com.englishweb.english_web_be.controller;
 
-import com.englishweb.english_web_be.dto.request.ListenAndWriteAWordRequestDTO;
-import com.englishweb.english_web_be.dto.response.ListenAndWriteAWordResponseDTO;
+import com.englishweb.english_web_be.dto.ListenAndWriteAWordDTO;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.service.ListenAndWriteAWordService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,15 +25,14 @@ public class ListenAndWriteAWordController {
     @Operation(method = "GET", summary = "Get a Listen and Write a Word by id",
             description = "Send a request via this API to get a Listen and Write a Word by id")
     @GetMapping("/{id}")
-    public ResponseEntity<ListenAndWriteAWordResponseDTO> getById(@PathVariable String id) {
-        ListenAndWriteAWordResponseDTO dto = service.findById(id);
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+    public ResponseEntity<ListenAndWriteAWordDTO> getById(@PathVariable String id) {
+        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 
     @Operation(method = "GET", summary = "Get all Listen and Write a Words by Listening id",
             description = "Send a request via this API to get all Listen and Write a Words by Listening id")
     @GetMapping
-    public ResponseEntity<List<ListenAndWriteAWordResponseDTO>> getByListeningId(
+    public ResponseEntity<List<ListenAndWriteAWordDTO>> getByListeningId(
             @RequestParam String listeningId,
             @RequestParam(required = false) StatusEnum status) {
         return new ResponseEntity<>(service.findByListeningIdAndStatus(listeningId, status), HttpStatus.OK);
@@ -43,17 +41,15 @@ public class ListenAndWriteAWordController {
     @Operation(method = "POST", summary = "Create a new Listen and Write a Word",
             description = "Send a request via this API to create a new Listen and Write a Word")
     @PostMapping
-    public ResponseEntity<ListenAndWriteAWordResponseDTO> create(@Valid @RequestBody ListenAndWriteAWordRequestDTO dto) {
-        ListenAndWriteAWordResponseDTO createdDto = service.create(dto);
-        return new ResponseEntity<>(createdDto, HttpStatus.CREATED);
+    public ResponseEntity<ListenAndWriteAWordDTO> create(@Valid @RequestBody ListenAndWriteAWordDTO dto) {
+        return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
     @Operation(method = "PUT", summary = "Update a Listen and Write a Word",
             description = "Send a request via this API to update a Listen and Write a Word")
     @PutMapping("/{id}")
-    public ResponseEntity<ListenAndWriteAWordResponseDTO> update(@Valid @RequestBody ListenAndWriteAWordRequestDTO dto, @PathVariable String id) {
-        ListenAndWriteAWordResponseDTO updatedDto = service.update(dto, id);
-        return new ResponseEntity<>(updatedDto, HttpStatus.OK);
+    public ResponseEntity<ListenAndWriteAWordDTO> update(@Valid @RequestBody ListenAndWriteAWordDTO dto, @PathVariable String id) {
+        return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }
 
     @Operation(method = "DELETE", summary = "Delete a Listen and Write a Word",

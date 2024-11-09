@@ -1,9 +1,6 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.VocabularyDTO;
-import com.englishweb.english_web_be.dto.request.VocabularyRequestDTO;
-import com.englishweb.english_web_be.dto.response.VocabularyResponseDTO;
-import com.englishweb.english_web_be.mapper.VocabularyMapper;
 import com.englishweb.english_web_be.model.Vocabulary;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.VocabularyRepository;
@@ -16,19 +13,17 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class VocabularyServiceImpl extends BaseServiceImpl<Vocabulary, VocabularyDTO, VocabularyRequestDTO,
-        VocabularyResponseDTO, VocabularyMapper, VocabularyRepository> implements VocabularyService {
+public class VocabularyServiceImpl extends BaseServiceImpl<Vocabulary, VocabularyDTO, VocabularyRepository> implements VocabularyService {
     private final TopicServiceImpl topicService;
 
     public VocabularyServiceImpl(VocabularyRepository repository,
-                                 @Lazy VocabularyMapper mapper,
                                  @Lazy TopicServiceImpl topicService) {
-        super(repository, mapper);
+        super(repository);
         this.topicService = topicService;
     }
 
     @Override
-    public Page<VocabularyResponseDTO> findByPageTopicId(int page, int size, String sortBy, String sortDir, Class<VocabularyResponseDTO> dtoClass, String topicId) {
+    public Page<VocabularyDTO> findByPageTopicId(int page, int size, String sortBy, String sortDir, Class<VocabularyDTO> dtoClass, String topicId) {
         ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, dtoClass);
         topicService.isExist(topicId);
 
@@ -39,11 +34,11 @@ public class VocabularyServiceImpl extends BaseServiceImpl<Vocabulary, Vocabular
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<Vocabulary> entityPage = repository.findAllByTopic_Id(pageable, topicId);
 
-        return entityPage.map(this::convertToDTO).map(mapper::mapToResponseDTO);
+        return entityPage.map(this::convertToDTO);
     }
 
     @Override
-    public Page<VocabularyResponseDTO> findByPageAndStatusAndTopicId(StatusEnum status, int page, int size, String sortBy, String sortDir, Class<VocabularyResponseDTO> dtoClass, String topicId) {
+    public Page<VocabularyDTO> findByPageAndStatusAndTopicId(StatusEnum status, int page, int size, String sortBy, String sortDir, Class<VocabularyDTO> dtoClass, String topicId) {
         if(status == null)
             return findByPageTopicId(page, size, sortBy, sortDir, dtoClass, topicId);
 
@@ -57,20 +52,11 @@ public class VocabularyServiceImpl extends BaseServiceImpl<Vocabulary, Vocabular
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<Vocabulary> entityPage = repository.findAllByStatusAndTopic_Id(status, topicId, pageable);
 
-        return entityPage.map(this::convertToDTO).map(mapper::mapToResponseDTO);
+        return entityPage.map(this::convertToDTO);
     }
 
     @Override
-    public List<VocabularyResponseDTO> findByTopicId(String topicId) {
-        topicService.isExist(topicId);
-        return repository.findAllByTopic_Id(topicId).stream()
-                .map(this::convertToDTO)
-                .map(mapper::mapToResponseDTO)
-                .toList();
-    }
-
-    @Override
-    public List<VocabularyDTO> findDTOByTopicId(String topicId) {
+    public List<VocabularyDTO> findByTopicId(String topicId) {
         topicService.isExist(topicId);
         return repository.findAllByTopic_Id(topicId).stream()
                 .map(this::convertToDTO)
@@ -103,7 +89,7 @@ public class VocabularyServiceImpl extends BaseServiceImpl<Vocabulary, Vocabular
         entity.setStatus(dto.getStatus());
         entity.setImage(dto.getImage());
         entity.setExample(dto.getExample());
-        entity.setTopic(topicService.convertToEntity(topicService.findDTOById(dto.getTopicId())));
+        entity.setTopic(topicService.convertToEntity(topicService.findById(dto.getTopicId())));
         return entity;
     }
 }

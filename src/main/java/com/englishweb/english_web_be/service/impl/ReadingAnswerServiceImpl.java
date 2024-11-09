@@ -1,9 +1,6 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.ReadingAnswerDTO;
-import com.englishweb.english_web_be.dto.request.ReadingAnswerRequestDTO;
-import com.englishweb.english_web_be.dto.response.ReadingAnswerResponseDTO;
-import com.englishweb.english_web_be.mapper.ReadingAnswerMapper;
 import com.englishweb.english_web_be.model.ReadingAnswer;
 import com.englishweb.english_web_be.repository.ReadingAnswerRepository;
 import com.englishweb.english_web_be.service.ReadingAnswerService;
@@ -14,30 +11,18 @@ import java.util.List;
 
 @Service
 public class ReadingAnswerServiceImpl extends BaseServiceImpl<ReadingAnswer, ReadingAnswerDTO,
-        ReadingAnswerRequestDTO, ReadingAnswerResponseDTO, ReadingAnswerMapper,
         ReadingAnswerRepository> implements ReadingAnswerService {
 
     private final ReadingQuestionServiceImpl readingQuestionService;
 
     public ReadingAnswerServiceImpl(ReadingAnswerRepository repository,
-                                    @Lazy ReadingQuestionServiceImpl readingQuestionService,
-                                    @Lazy ReadingAnswerMapper mapper) {
-        super(repository, mapper);
+                                    @Lazy ReadingQuestionServiceImpl readingQuestionService) {
+        super(repository);
         this.readingQuestionService = readingQuestionService;
     }
 
     @Override
-    public List<ReadingAnswerResponseDTO> findAllByQuestionId(String questionId) {
-        readingQuestionService.isExist(questionId);
-        List<ReadingAnswer> entityList = repository.findAllByQuestion_Id(questionId);
-        return entityList.stream()
-                .map(this::convertToDTO)
-                .map(mapper::mapToResponseDTO)
-                .toList();
-    }
-
-    @Override
-    public List<ReadingAnswerDTO> findAllDTOByQuestionId(String questionId) {
+    public List<ReadingAnswerDTO> findAllByQuestionId(String questionId) {
         readingQuestionService.isExist(questionId);
         List<ReadingAnswer> entityList = repository.findAllByQuestion_Id(questionId);
         return entityList.stream()
@@ -63,7 +48,7 @@ public class ReadingAnswerServiceImpl extends BaseServiceImpl<ReadingAnswer, Rea
         entity.setContent(dto.getContent());
         entity.setCorrect(dto.isCorrect());
         entity.setStatus(dto.getStatus());
-        entity.setQuestion(readingQuestionService.convertToEntity(readingQuestionService.findDTOById(dto.getQuestionId())));
+        entity.setQuestion(readingQuestionService.convertToEntity(readingQuestionService.findById(dto.getQuestionId())));
         return entity;
     }
 }

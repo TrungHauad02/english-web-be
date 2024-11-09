@@ -1,7 +1,6 @@
 package com.englishweb.english_web_be.controller;
 
-import com.englishweb.english_web_be.dto.request.GrammarAnswerRequestDTO;
-import com.englishweb.english_web_be.dto.response.GrammarAnswerResponseDTO;
+import com.englishweb.english_web_be.dto.GrammarAnswerDTO;
 import com.englishweb.english_web_be.service.GrammarAnswerService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -15,13 +14,13 @@ public class GrammarAnswerController {
     GrammarAnswerService service;
 
     @PostMapping("/api/grammar-answer")
-    public ResponseEntity<GrammarAnswerResponseDTO> create(@Valid @RequestBody GrammarAnswerRequestDTO requestDTO) {
+    public ResponseEntity<GrammarAnswerDTO> create(@Valid @RequestBody GrammarAnswerDTO requestDTO) {
         return new ResponseEntity<>(service.create(requestDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/api/grammar-answer/{id}")
-    public ResponseEntity<GrammarAnswerResponseDTO> update(
-            @Valid @RequestBody GrammarAnswerRequestDTO requestDTO,
+    public ResponseEntity<GrammarAnswerDTO> update(
+            @Valid @RequestBody GrammarAnswerDTO requestDTO,
             @PathVariable String id) {
 
         return new ResponseEntity<>(service.update(requestDTO, id), HttpStatus.OK);

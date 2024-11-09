@@ -1,9 +1,6 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.ListenAndWriteAWordDTO;
-import com.englishweb.english_web_be.dto.request.ListenAndWriteAWordRequestDTO;
-import com.englishweb.english_web_be.dto.response.ListenAndWriteAWordResponseDTO;
-import com.englishweb.english_web_be.mapper.ListenAndWriteAWordMapper;
 import com.englishweb.english_web_be.model.ListenAndWriteAWord;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.ListenAndWriteAWordRepository;
@@ -15,44 +12,32 @@ import java.util.List;
 
 @Service
 public class ListenAndWriteAWordServiceImpl extends BaseServiceImpl<ListenAndWriteAWord, ListenAndWriteAWordDTO,
-        ListenAndWriteAWordRequestDTO, ListenAndWriteAWordResponseDTO, ListenAndWriteAWordMapper, ListenAndWriteAWordRepository>
+        ListenAndWriteAWordRepository>
         implements ListenAndWriteAWordService {
 
     private final ListeningServiceImpl listeningService;
 
     public ListenAndWriteAWordServiceImpl(ListenAndWriteAWordRepository repository,
-                                          @Lazy ListeningServiceImpl listeningService,
-                                          @Lazy ListenAndWriteAWordMapper mapper) {
-        super(repository, mapper);
+                                          @Lazy ListeningServiceImpl listeningService) {
+        super(repository);
         this.listeningService = listeningService;
     }
 
     @Override
-    public List<ListenAndWriteAWordResponseDTO> findByListeningId(String listeningId) {
+    public List<ListenAndWriteAWordDTO> findByListeningId(String listeningId) {
         listeningService.isExist(listeningId);
         List<ListenAndWriteAWord> entityList = repository.findAllByListening_Id(listeningId);
         return entityList.stream()
                 .map(this::convertToDTO)
-                .map(mapper::mapToResponseDTO)
                 .toList();
     }
 
     @Override
-    public List<ListenAndWriteAWordResponseDTO> findByListeningIdAndStatus(String listeningId, StatusEnum status) {
+    public List<ListenAndWriteAWordDTO> findByListeningIdAndStatus(String listeningId, StatusEnum status) {
         if(status == null)
             return findByListeningId(listeningId);
         listeningService.isExist(listeningId);
         List<ListenAndWriteAWord> entityList = repository.findAllByListening_IdAndStatus(listeningId, status);
-        return entityList.stream()
-                .map(this::convertToDTO)
-                .map(mapper::mapToResponseDTO)
-                .toList();
-    }
-
-    @Override
-    public List<ListenAndWriteAWordDTO> findDTOByListeningId(String listeningId) {
-        listeningService.isExist(listeningId);
-        List<ListenAndWriteAWord> entityList = repository.findAllByListening_Id(listeningId);
         return entityList.stream()
                 .map(this::convertToDTO)
                 .toList();
@@ -82,7 +67,7 @@ public class ListenAndWriteAWordServiceImpl extends BaseServiceImpl<ListenAndWri
         entity.setSentence(dto.getSentence());
         entity.setMissingIndex(dto.getMissingIndex());
         entity.setStatus(dto.getStatus());
-        entity.setListening(listeningService.convertToEntity(listeningService.findDTOById(dto.getListeningId())));
+        entity.setListening(listeningService.convertToEntity(listeningService.findById(dto.getListeningId())));
         return entity;
     }
 }

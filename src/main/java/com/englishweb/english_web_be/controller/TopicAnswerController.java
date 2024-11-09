@@ -1,7 +1,6 @@
 package com.englishweb.english_web_be.controller;
 
-import com.englishweb.english_web_be.dto.request.TopicAnswerRequestDTO;
-import com.englishweb.english_web_be.dto.response.TopicAnswerResponseDTO;
+import com.englishweb.english_web_be.dto.TopicAnswerDTO;
 import com.englishweb.english_web_be.service.TopicAnswerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,14 +24,14 @@ public class TopicAnswerController {
     @Operation(method = "POST", summary = "Create new topic answer",
             description = "Send a request via this API to create a new topic answer")
     @PostMapping
-    public ResponseEntity<TopicAnswerResponseDTO> create(@Valid @RequestBody TopicAnswerRequestDTO dto) {
+    public ResponseEntity<TopicAnswerDTO> create(@Valid @RequestBody TopicAnswerDTO dto) {
         return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
     @Operation(method = "PUT", summary = "Update topic answer",
             description = "Send a request via this API to update an existing topic answer")
     @PutMapping("/{id}")
-    public ResponseEntity<TopicAnswerResponseDTO> update(@Valid @RequestBody TopicAnswerRequestDTO dto, @PathVariable String id) {
+    public ResponseEntity<TopicAnswerDTO> update(@Valid @RequestBody TopicAnswerDTO dto, @PathVariable String id) {
         return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }
 

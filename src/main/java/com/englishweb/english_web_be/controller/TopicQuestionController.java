@@ -1,7 +1,6 @@
 package com.englishweb.english_web_be.controller;
 
-import com.englishweb.english_web_be.dto.request.TopicQuestionRequestDTO;
-import com.englishweb.english_web_be.dto.response.TopicQuestionResponseDTO;
+import com.englishweb.english_web_be.dto.TopicQuestionDTO;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.service.TopicQuestionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +27,7 @@ public class TopicQuestionController {
     @Operation(method = "GET", summary = "Get all questions by topic ID",
             description = "Send a request via this API to get all questions for a specific topic")
     @GetMapping
-    public ResponseEntity<List<TopicQuestionResponseDTO>> findAllQuestionByTopicId(
+    public ResponseEntity<List<TopicQuestionDTO>> findAllQuestionByTopicId(
             @RequestParam String topicId,
             @RequestParam(required = false) StatusEnum status) {
         return new ResponseEntity<>(service.findAllByTopicIdAndStatus(topicId, status), HttpStatus.OK);
@@ -37,14 +36,14 @@ public class TopicQuestionController {
     @Operation(method = "POST", summary = "Create new topic question",
             description = "Send a request via this API to create a new topic question")
     @PostMapping
-    public ResponseEntity<TopicQuestionResponseDTO> create(@Valid @RequestBody TopicQuestionRequestDTO dto) {
+    public ResponseEntity<TopicQuestionDTO> create(@Valid @RequestBody TopicQuestionDTO dto) {
         return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
     @Operation(method = "PUT", summary = "Update topic question",
             description = "Send a request via this API to update an existing topic question")
     @PutMapping("/{id}")
-    public ResponseEntity<TopicQuestionResponseDTO> update(@Valid @RequestBody TopicQuestionRequestDTO dto, @PathVariable String id) {
+    public ResponseEntity<TopicQuestionDTO> update(@Valid @RequestBody TopicQuestionDTO dto, @PathVariable String id) {
         return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }
 
