@@ -1,6 +1,7 @@
 package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.dto.GrammarDTO;
+import com.englishweb.english_web_be.dto.ResponseDTO;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,16 +27,25 @@ public class GrammarController {
     @Operation(method = "GET", summary = "Get grammar with status, sorting and pagination",
             description = "Send a request via this API to get grammar with status, sorting and pagination. Status is optional")
     @GetMapping
-    public ResponseEntity<Page<GrammarDTO>> findGrammarWithStatusAndPagingAndSorting(
-                                            @RequestParam int page,
-                                            @RequestParam int size,
-                                            @RequestParam(defaultValue = "id") String sortBy,
-                                            @RequestParam(defaultValue = "asc") String sortDir,
-                                            @RequestParam(required = false) StatusEnum status){
-        return new ResponseEntity<>(
-                        service.findGrammarWithStatusAndPagingAndSorting
-                                (status, page, size, sortBy, sortDir, GrammarDTO.class), HttpStatus.OK);
+    public ResponseEntity<ResponseDTO<Page<GrammarDTO>>> findGrammarWithStatusAndPagingAndSorting(
+            @RequestParam int page,
+            @RequestParam int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir,
+            @RequestParam(required = false) StatusEnum status) {
+
+        Page<GrammarDTO> grammarPage = service.findGrammarWithStatusAndPagingAndSorting(
+                status, page, size, sortBy, sortDir, GrammarDTO.class);
+
+        ResponseDTO<Page<GrammarDTO>> response = ResponseDTO.<Page<GrammarDTO>>builder()
+                .data(grammarPage)
+                .success(true)
+                .message("Get data successfully")
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
     @Operation(method = "GET", summary = "Get grammar by id",
             description = "Send a request via this API to get grammar information")
