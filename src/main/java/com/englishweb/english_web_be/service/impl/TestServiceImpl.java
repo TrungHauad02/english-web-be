@@ -249,7 +249,7 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO, TestRequestDT
 
                     }
                     else {
-                        testReadingService.update(testReadingRequest, testReadingRequest.getId());
+                      TestReadingResponseDTO  testReadingResponseDTO =  testReadingService.update(testReadingRequest, testReadingRequest.getId());
                         serialadd = (int) testReadingRequest.getQuestions()
                                 .stream()
                                 .filter(question -> question.getId().startsWith("add"))
@@ -258,6 +258,8 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO, TestRequestDT
                                 .stream()
                                 .filter(question -> question.getId().startsWith("delete"))
                                 .count();
+                        idnew= testReadingResponseDTO.getId();
+
                     }
                 } else {
                     List<TestReadingQuestionRequestDTO> questionReadings = testRequestDTO.getTestReadings().stream()
