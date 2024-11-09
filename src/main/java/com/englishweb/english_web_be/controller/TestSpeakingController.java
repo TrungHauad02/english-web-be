@@ -1,8 +1,6 @@
 package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.dto.TestSpeakingDTO;
-import com.englishweb.english_web_be.dto.request.TestSpeakingRequestDTO;
-import com.englishweb.english_web_be.dto.response.TestSpeakingResponseDTO;
 import com.englishweb.english_web_be.service.TestSpeakingService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -18,17 +16,17 @@ public class TestSpeakingController {
     }
 
     @GetMapping("/api/testspeaking/{id}")
-    public ResponseEntity<TestSpeakingResponseDTO> retrieveSpeakingById(@PathVariable String id) {
+    public ResponseEntity<TestSpeakingDTO> retrieveSpeakingById(@PathVariable String id) {
         return new ResponseEntity<>(testSpeakingService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping("/api/testspeaking")
-    public ResponseEntity<TestSpeakingResponseDTO> createSpeaking(@Valid @RequestBody TestSpeakingRequestDTO dto) {
+    public ResponseEntity<TestSpeakingDTO> createSpeaking(@Valid @RequestBody TestSpeakingDTO dto) {
         return new ResponseEntity<>(testSpeakingService.create(dto), HttpStatus.CREATED);
     }
 
     @PutMapping("/api/testspeaking/{id}")
-    public ResponseEntity<TestSpeakingResponseDTO> updateSpeaking(@Valid @RequestBody TestSpeakingRequestDTO dto, @PathVariable String id) {
+    public ResponseEntity<TestSpeakingDTO> updateSpeaking(@Valid @RequestBody TestSpeakingDTO dto, @PathVariable String id) {
         return ResponseEntity.ok(testSpeakingService.update(dto, id));
     }
 

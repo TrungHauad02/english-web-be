@@ -1,9 +1,6 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.TestSpeakingQuestionDTO;
-import com.englishweb.english_web_be.dto.request.TestSpeakingQuestionRequestDTO;
-import com.englishweb.english_web_be.dto.response.TestSpeakingQuestionResponseDTO;
-import com.englishweb.english_web_be.mapper.TestSpeakingQuestionMapper;
 import com.englishweb.english_web_be.model.TestSpeakingQuestion;
 import com.englishweb.english_web_be.repository.TestSpeakingQuestionRepository;
 import com.englishweb.english_web_be.service.TestSpeakingQuestionService;
@@ -12,33 +9,21 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
-public class TestSpeakingQuestionServiceImpl extends BaseServiceImpl<TestSpeakingQuestion, TestSpeakingQuestionDTO, TestSpeakingQuestionRequestDTO, TestSpeakingQuestionResponseDTO, TestSpeakingQuestionMapper, TestSpeakingQuestionRepository> implements TestSpeakingQuestionService {
+public class TestSpeakingQuestionServiceImpl extends BaseServiceImpl<TestSpeakingQuestion, TestSpeakingQuestionDTO, TestSpeakingQuestionRepository> implements TestSpeakingQuestionService {
 
     private final TestSpeakingServiceImpl testSpeakingService;
 
 
-
-    public TestSpeakingQuestionServiceImpl(TestSpeakingQuestionRepository repository,
-                                           @Lazy TestSpeakingServiceImpl testSpeakingService,
-                                           TestSpeakingQuestionMapper mapper) {
-        super(repository, mapper);
+    public TestSpeakingQuestionServiceImpl(TestSpeakingQuestionRepository repository, @Lazy TestSpeakingServiceImpl testSpeakingService) {
+        super(repository);
         this.testSpeakingService = testSpeakingService;
     }
-    public List<TestSpeakingQuestionDTO> findAllDTOByTestSpeaking_Id (String testSpeakingId) {
+    public List<TestSpeakingQuestionDTO> findAllByTestSpeaking_Id (String testSpeakingId) {
         testSpeakingService.isExist(testSpeakingId);
         List<TestSpeakingQuestion> list = repository.findAllByTestSpeaking_Id(testSpeakingId);
 
         return list.stream()
                 .map(this::convertToDTO)
-                .toList();
-    }
-    public List<TestSpeakingQuestionResponseDTO> findAllByTestSpeaking_Id (String testSpeakingId) {
-        testSpeakingService.isExist(testSpeakingId);
-        List<TestSpeakingQuestion> list = repository.findAllByTestSpeaking_Id(testSpeakingId);
-
-        return list.stream()
-                .map(this::convertToDTO)
-                .map(mapper::mapToResponseDTO)
                 .toList();
     }
 
@@ -49,7 +34,7 @@ public class TestSpeakingQuestionServiceImpl extends BaseServiceImpl<TestSpeakin
         entity.setSerial(dto.getSerial());
         entity.setContent(dto.getContent());
         entity.setStatus(dto.getStatus());
-        entity.setTestSpeaking(testSpeakingService.convertToEntity(testSpeakingService.findDTOById(dto.getTestSpeakingId())));
+        entity.setTestSpeaking(testSpeakingService.convertToEntity(testSpeakingService.findById(dto.getTestSpeakingId())));
         return entity;
     }
 
