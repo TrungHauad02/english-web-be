@@ -1,8 +1,6 @@
 package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.dto.TestReadingDTO;
-import com.englishweb.english_web_be.dto.request.TestReadingRequestDTO;
-import com.englishweb.english_web_be.dto.response.TestReadingResponseDTO;
 import com.englishweb.english_web_be.service.TestReadingService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -18,17 +16,17 @@ public class TestReadingController {
     }
 
     @GetMapping("/api/testreading/{id}")
-    public ResponseEntity<TestReadingResponseDTO> retrieveReadingById(@PathVariable String id) {
+    public ResponseEntity<TestReadingDTO> retrieveReadingById(@PathVariable String id) {
         return new ResponseEntity<>(testReadingService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping("/api/testreading")
-    public ResponseEntity<TestReadingResponseDTO> createReading(@Valid @RequestBody TestReadingRequestDTO dto) {
+    public ResponseEntity<TestReadingDTO> createReading(@Valid @RequestBody TestReadingDTO dto) {
         return new ResponseEntity<>(testReadingService.create(dto), HttpStatus.CREATED);
     }
 
     @PutMapping("/api/testreading/{id}")
-    public ResponseEntity<TestReadingResponseDTO> updateReading(@Valid @RequestBody TestReadingRequestDTO dto, @PathVariable String id) {
+    public ResponseEntity<TestReadingDTO> updateReading(@Valid @RequestBody TestReadingDTO dto, @PathVariable String id) {
         return ResponseEntity.ok( testReadingService.update(dto, id));
     }
 

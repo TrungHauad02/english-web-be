@@ -2,8 +2,6 @@ package com.englishweb.english_web_be.controller;
 
 
 import com.englishweb.english_web_be.dto.TestMixingAnswerDTO;
-import com.englishweb.english_web_be.dto.request.TestMixingAnswerRequestDTO;
-import com.englishweb.english_web_be.dto.response.TestMixingAnswerResponseDTO;
 import com.englishweb.english_web_be.service.TestMixingAnswerService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,18 +19,18 @@ public class TestMixingAnswerController {
 
 
     @GetMapping("/api/testmixinganswer/{id}")
-    public ResponseEntity<TestMixingAnswerResponseDTO> retrieveAnswerById(@PathVariable String id) {
+    public ResponseEntity<TestMixingAnswerDTO> retrieveAnswerById(@PathVariable String id) {
         return new ResponseEntity<>(testMixingAnswerService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping("/api/testmixinganswer")
-    public ResponseEntity<TestMixingAnswerResponseDTO> createAnswer(@Valid @RequestBody TestMixingAnswerRequestDTO dto) {
+    public ResponseEntity<TestMixingAnswerDTO> createAnswer(@Valid @RequestBody TestMixingAnswerDTO dto) {
         return new ResponseEntity<>(testMixingAnswerService.create(dto), HttpStatus.CREATED);
     }
 
 
     @PutMapping("/api/testmixinganswer/{id}")
-    public ResponseEntity<TestMixingAnswerResponseDTO> updateAnswer(@Valid @RequestBody TestMixingAnswerRequestDTO dto, @PathVariable String id) {
+    public ResponseEntity<TestMixingAnswerDTO> updateAnswer(@Valid @RequestBody TestMixingAnswerDTO dto, @PathVariable String id) {
         return ResponseEntity.ok(testMixingAnswerService.update(dto, id));
     }
 
