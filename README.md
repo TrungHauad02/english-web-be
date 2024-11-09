@@ -80,3 +80,10 @@ mysqlsh
 \use study-english
 select * from topic;
 ```
+## Chạy các container đã được tạo
+```bash
+# Xem danh sách các container đang chạy hoặc đã dừng
+docker ps -a
+# Chạy lại container đã dừng
+docker start <id container>
+```
