@@ -1,7 +1,6 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.BaseDTO;
-import com.englishweb.english_web_be.mapper.BaseMapper;
 import com.englishweb.english_web_be.model.BaseEntity;
 import com.englishweb.english_web_be.service.BaseService;
 import com.englishweb.english_web_be.util.ValidationUtils;
@@ -14,42 +13,34 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 @AllArgsConstructor
 public abstract class BaseServiceImpl<Entity extends BaseEntity, DTO extends BaseDTO,
-                RequestDTO extends BaseDTO, ResponseDTO extends BaseDTO,
-                Mapper extends BaseMapper<DTO, RequestDTO, ResponseDTO>,
-                R extends JpaRepository<Entity, String>> implements BaseService<RequestDTO, ResponseDTO> {
+                R extends JpaRepository<Entity, String>> implements BaseService<DTO> {
     protected R repository;
-    protected Mapper mapper;
 
-    public Page<ResponseDTO> findByPage(int page, int size, String sortBy, String sortDir, Class<ResponseDTO> dtoClass) {
+    public Page<DTO> findByPage(int page, int size, String sortBy, String sortDir, Class<DTO> dtoClass) {
         ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, dtoClass);
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<Entity> entityPage = repository.findAll(pageable);
-        return entityPage.map(this::convertToDTO).map(mapper::mapToResponseDTO);
+        return entityPage.map(this::convertToDTO);
     }
 
-    public ResponseDTO findById(String id) {
-        isExist(id);
-        return mapper.mapToResponseDTO(convertToDTO(repository.findById(id).get()));
-    }
-
-    public DTO findDTOById(String id){
+    public DTO findById(String id) {
         isExist(id);
         return convertToDTO(repository.findById(id).get());
     }
 
-    public ResponseDTO create(RequestDTO dto) {
-        Entity entity = convertToEntity(mapper.mapToDTO(dto));
+    public DTO create(DTO dto) {
+        Entity entity = convertToEntity(dto);
         entity.setId(null);
-        return mapper.mapToResponseDTO(convertToDTO(repository.save(entity)));
+        return convertToDTO(repository.save(entity));
     }
 
-    public ResponseDTO update(RequestDTO dto, String id) {
+    public DTO update(DTO dto, String id) {
         isExist(id);
         dto.setId(id);
-        return mapper.mapToResponseDTO(convertToDTO(repository.save(convertToEntity(mapper.mapToDTO(dto)))));
+        return convertToDTO(repository.save(convertToEntity(dto)));
     }
 
     public void delete(String id) {

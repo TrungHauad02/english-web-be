@@ -2,15 +2,15 @@ package com.englishweb.english_web_be.service;
 
 import org.springframework.data.domain.Page;
 
-public interface BaseService<RequestDTO, ResponseDTO> {
+public interface BaseService<DTO> {
 
-    Page<ResponseDTO> findByPage(int page, int size, String sortBy, String sortDir, Class<ResponseDTO> dtoClass);
+    Page<DTO> findByPage(int page, int size, String sortBy, String sortDir, Class<DTO> dtoClass);
 
-    ResponseDTO findById(String id);
+    DTO findById(String id);
 
-    ResponseDTO create(RequestDTO dto);
+    DTO create(DTO dto);
 
-    ResponseDTO update(RequestDTO dto, String id);
+    DTO update(DTO dto, String id);
 
     void delete(String id);
 
