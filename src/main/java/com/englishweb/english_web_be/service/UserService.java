@@ -1,23 +1,22 @@
 package com.englishweb.english_web_be.service;
 
-import com.englishweb.english_web_be.dto.request.UserRequestDTO;
-import com.englishweb.english_web_be.dto.response.UserResponseDTO;
+import com.englishweb.english_web_be.dto.UserDTO;
 import com.englishweb.english_web_be.modelenum.RoleEnum;
 import org.springframework.data.domain.Page;
 
-public interface UserService extends BaseService<UserRequestDTO, UserResponseDTO> {
+public interface UserService extends BaseService<UserDTO> {
 
-    Page<UserResponseDTO> findByRole(RoleEnum role, int page, int size, String sortBy, String sortDir, Class<UserResponseDTO> userResponseDTOClass);
+    Page<UserDTO> findByRole(RoleEnum role, int page, int size, String sortBy, String sortDir, Class<UserDTO> userResponseDTOClass);
 
-    UserResponseDTO createStudent(UserRequestDTO dto);
+    UserDTO createStudent(UserDTO dto);
 
-    UserResponseDTO createTeacher(UserRequestDTO dto);
+    UserDTO createTeacher(UserDTO dto);
 
 //    UserResponseDTO deleteUser(String id);
 
-    UserResponseDTO getInfor();
+    UserDTO getInfor();
 
-    UserResponseDTO update(UserRequestDTO dto, String id);
+    UserDTO update(UserDTO dto, String id);
 
     void sendOtpForPasswordReset(String email);
 

@@ -15,40 +15,30 @@ import java.util.List;
 
 @Service
 public class SpeakingConversationServiceImpl extends BaseServiceImpl<SpeakingConversation, SpeakingConversationDTO,
-        SpeakingConversationRequestDTO, SpeakingConversationResponseDTO, SpeakingConversationMapper,
         SpeakingConversationRepository> implements SpeakingConversationService {
 
     private final SpeakingServiceImpl speakingService;
 
     public SpeakingConversationServiceImpl(SpeakingConversationRepository repository,
-                                           @Lazy SpeakingServiceImpl speakingService,
-                                           @Lazy SpeakingConversationMapper mapper) {
-        super(repository, mapper);
+                                           @Lazy SpeakingServiceImpl speakingService) {
+        super(repository);
         this.speakingService = speakingService;
     }
 
     @Override
-    public List<SpeakingConversationResponseDTO> findBySpeakingId(String speakingId) {
+    public List<SpeakingConversationDTO> findBySpeakingId(String speakingId) {
         speakingService.isExist(speakingId);
         List<SpeakingConversation> entityList = repository.findAllBySpeaking_Id(speakingId);
         return entityList.stream()
                 .map(this::convertToDTO)
-                .map(mapper::mapToResponseDTO)
                 .toList();
     }
 
     @Override
-    public List<SpeakingConversationResponseDTO> findBySpeakingIdAndStatus(String speakingId, StatusEnum status) {
+    public List<SpeakingConversationDTO> findBySpeakingIdAndStatus(String speakingId, StatusEnum status) {
         if(status == null)
             return findBySpeakingId(speakingId);
         List<SpeakingConversation> entityList = repository.findAllBySpeaking_IdAndStatus(speakingId, status);
-        return List.of();
-    }
-
-    @Override
-    public List<SpeakingConversationDTO> findAllDTOBySpeakingId(String speakingId) {
-        speakingService.isExist(speakingId);
-        List<SpeakingConversation> entityList = repository.findAllBySpeaking_Id(speakingId);
         return entityList.stream()
                 .map(this::convertToDTO)
                 .toList();
@@ -74,7 +64,7 @@ public class SpeakingConversationServiceImpl extends BaseServiceImpl<SpeakingCon
         entity.setContent(dto.getContent());
         entity.setSerial(dto.getSerial());
         entity.setStatus(dto.getStatus());
-        entity.setSpeaking(speakingService.convertToEntity(speakingService.findDTOById(dto.getSpeakingId())));
+        entity.setSpeaking(speakingService.convertToEntity(speakingService.findById(dto.getSpeakingId())));
         return entity;
     }
 }

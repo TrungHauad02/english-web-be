@@ -2,10 +2,6 @@ package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.ListeningAnswerDTO;
 import com.englishweb.english_web_be.dto.ListeningQuestionDTO;
-import com.englishweb.english_web_be.dto.request.ListeningQuestionRequestDTO;
-import com.englishweb.english_web_be.dto.response.ListeningAnswerResponseDTO;
-import com.englishweb.english_web_be.dto.response.ListeningQuestionResponseDTO;
-import com.englishweb.english_web_be.mapper.ListeningQuestionMapper;
 import com.englishweb.english_web_be.model.ListeningQuestion;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.ListeningQuestionRepository;
@@ -17,7 +13,7 @@ import java.util.List;
 
 @Service
 public class ListeningQuestionServiceImpl extends BaseServiceImpl<ListeningQuestion, ListeningQuestionDTO,
-        ListeningQuestionRequestDTO, ListeningQuestionResponseDTO, ListeningQuestionMapper, ListeningQuestionRepository>
+        ListeningQuestionRepository>
         implements ListeningQuestionService {
 
     private final ListeningServiceImpl listeningService;
@@ -25,34 +21,31 @@ public class ListeningQuestionServiceImpl extends BaseServiceImpl<ListeningQuest
 
     public ListeningQuestionServiceImpl(ListeningQuestionRepository repository,
                                         ListeningAnswerServiceImpl answerService,
-                                        @Lazy ListeningServiceImpl listeningService,
-                                        @Lazy ListeningQuestionMapper mapper) {
-        super(repository, mapper);
+                                        @Lazy ListeningServiceImpl listeningService) {
+        super(repository);
         this.answerService = answerService;
         this.listeningService = listeningService;
     }
 
     @Override
-    public List<ListeningQuestionResponseDTO> findByListeningId(String listeningId) {
+    public List<ListeningQuestionDTO> findByListeningId(String listeningId) {
         listeningService.isExist(listeningId);
         List<ListeningQuestion> entityList = repository.findAllByListening_Id(listeningId);
         return entityList.stream()
                 .map(this::convertToDTO)
-                .map(mapper::mapToResponseDTO)
                 .toList();
     }
 
     @Override
-    public List<ListeningQuestionResponseDTO> findByListeningIdAndStatus(String listeningId, StatusEnum status) {
+    public List<ListeningQuestionDTO> findByListeningIdAndStatus(String listeningId, StatusEnum status) {
         if(status == null)
             return findByListeningId(listeningId);
         listeningService.isExist(listeningId);
         List<ListeningQuestion> entityList = repository.findAllByListening_IdAndStatus(listeningId, status);
         return entityList.stream()
                 .map(this::convertToDTO)
-                .map(mapper::mapToResponseDTO)
                 .peek(responseDTO -> {
-                    List<ListeningAnswerResponseDTO> filteredAnswers = responseDTO.getAnswers().stream()
+                    List<ListeningAnswerDTO> filteredAnswers = responseDTO.getAnswers().stream()
                             .filter(answer -> answer.getStatus() == status)
                             .toList();
                     responseDTO.setAnswers(filteredAnswers);
@@ -61,18 +54,9 @@ public class ListeningQuestionServiceImpl extends BaseServiceImpl<ListeningQuest
     }
 
     @Override
-    public List<ListeningQuestionDTO> findDTOByListeningId(String listeningId) {
-        listeningService.isExist(listeningId);
-        List<ListeningQuestion> entityList = repository.findAllByListening_Id(listeningId);
-        return entityList.stream()
-                .map(this::convertToDTO)
-                .toList();
-    }
-
-    @Override
     public void delete(String id) {
         isExist(id);
-        List<ListeningAnswerDTO> answerDTOList = answerService.findDTOByQuestionId(id);
+        List<ListeningAnswerDTO> answerDTOList = answerService.findByQuestionId(id);
         for (ListeningAnswerDTO answerDTO : answerDTOList) {
             answerService.delete(answerDTO.getId());
         }
@@ -87,7 +71,7 @@ public class ListeningQuestionServiceImpl extends BaseServiceImpl<ListeningQuest
         dto.setExplanation(entity.getExplanation());
         dto.setSerial(entity.getSerial());
         dto.setStatus(entity.getStatus());
-        dto.setAnswers(answerService.findDTOByQuestionId(entity.getId()));
+        dto.setAnswers(answerService.findByQuestionId(entity.getId()));
         dto.setListeningId(entity.getListening().getId());
         return dto;
     }
@@ -100,7 +84,7 @@ public class ListeningQuestionServiceImpl extends BaseServiceImpl<ListeningQuest
         entity.setExplanation(dto.getExplanation());
         entity.setSerial(dto.getSerial());
         entity.setStatus(dto.getStatus());
-        entity.setListening(listeningService.convertToEntity(listeningService.findDTOById(dto.getListeningId())));
+        entity.setListening(listeningService.convertToEntity(listeningService.findById(dto.getListeningId())));
         return entity;
     }
 }

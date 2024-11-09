@@ -1,7 +1,5 @@
 package com.englishweb.english_web_be.controller;
 
-import com.englishweb.english_web_be.dto.request.ListeningRequestDTO;
-import com.englishweb.english_web_be.dto.response.ListeningResponseDTO;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.service.ListeningService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,15 +25,14 @@ public class ListeningController {
     @Operation(method = "GET", summary = "Get listening with status, sorting and pagination",
             description = "Send a request via this API to get listening with status, sorting and pagination. Status is optional")
     @GetMapping
-    public ResponseEntity<Page<ListeningResponseDTO>> findListeningWithStatusAndPagingAndSorting(
+    public ResponseEntity<Page<ListeningDTO>> findListeningWithStatusAndPagingAndSorting(
             @RequestParam int page,
             @RequestParam int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir,
             @RequestParam(required = false) StatusEnum status) {
         return new ResponseEntity<>(
-                service.findListeningWithStatusAndPagingAndSorting(status ,page, size, sortBy, sortDir,
-                                                                    ListeningResponseDTO.class),
+                service.findListeningWithStatusAndPagingAndSorting(status ,page, size, sortBy, sortDir, ListeningResponseDTO.class),
                 HttpStatus.OK);
     }
 

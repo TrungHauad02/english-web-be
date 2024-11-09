@@ -2,15 +2,11 @@ package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.GrammarDTO;
 import com.englishweb.english_web_be.dto.GrammarQuestionDTO;
-import com.englishweb.english_web_be.dto.request.GrammarRequestDTO;
-import com.englishweb.english_web_be.dto.response.GrammarResponseDTO;
-import com.englishweb.english_web_be.mapper.GrammarMapper;
 import com.englishweb.english_web_be.model.Grammar;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.GrammarRepository;
 import com.englishweb.english_web_be.service.GrammarService;
 import com.englishweb.english_web_be.util.ValidationUtils;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,19 +16,19 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class GrammarServiceImpl extends BaseServiceImpl<Grammar, GrammarDTO, GrammarRequestDTO, GrammarResponseDTO, GrammarMapper, GrammarRepository> implements GrammarService {
+public class GrammarServiceImpl extends BaseServiceImpl<Grammar, GrammarDTO,
+        GrammarRepository> implements GrammarService {
 
     private final GrammarQuestionServiceImpl grammarQuestionService;
 
     public GrammarServiceImpl(GrammarRepository repository,
-                              GrammarQuestionServiceImpl grammarQuestionService,
-                              @Lazy GrammarMapper mapper) {
-        super(repository, mapper);
+                              GrammarQuestionServiceImpl grammarQuestionService) {
+        super(repository);
         this.grammarQuestionService = grammarQuestionService;
     }
 
     @Override
-    public Page<GrammarResponseDTO> findGrammarWithStatusAndPagingAndSorting(StatusEnum status, int page, int size, String sortBy, String sortDir, Class<GrammarResponseDTO> grammarResponseDTOClass) {
+    public Page<GrammarDTO> findGrammarWithStatusAndPagingAndSorting(StatusEnum status, int page, int size, String sortBy, String sortDir, Class<GrammarDTO> grammarResponseDTOClass) {
         if (status == null) {
             return super.findByPage(page, size, sortBy, sortDir, grammarResponseDTOClass);
         }
@@ -42,13 +38,12 @@ public class GrammarServiceImpl extends BaseServiceImpl<Grammar, GrammarDTO, Gra
         Pageable pageable = PageRequest.of(page, size, sort);
 
         return repository.findGrammarWithStatus(status, pageable)
-                .map(this::convertToDTO)
-                .map(mapper::mapToResponseDTO);
+                .map(this::convertToDTO);
     }
 
     @Override
     public void delete(String id) {
-        List<GrammarQuestionDTO> questionDTOList = grammarQuestionService.findAllDTOByGrammarId(id);
+        List<GrammarQuestionDTO> questionDTOList = grammarQuestionService.findAllByGrammarId(id);
         for (GrammarQuestionDTO questionDTO : questionDTOList) {
             grammarQuestionService.delete(questionDTO.getId());
         }

@@ -3,14 +3,6 @@ package com.englishweb.english_web_be.service.impl;
 import com.englishweb.english_web_be.dto.TestListeningQuestionDTO;
 import com.englishweb.english_web_be.dto.TestReadingAnswerDTO;
 import com.englishweb.english_web_be.dto.TestReadingQuestionDTO;
-import com.englishweb.english_web_be.dto.request.TestReadingAnswerRequestDTO;
-import com.englishweb.english_web_be.dto.request.TestReadingQuestionRequestDTO;
-import com.englishweb.english_web_be.dto.request.TestReadingRequestDTO;
-import com.englishweb.english_web_be.dto.response.TestReadingAnswerResponseDTO;
-import com.englishweb.english_web_be.dto.response.TestReadingQuestionResponseDTO;
-import com.englishweb.english_web_be.dto.response.TestReadingResponseDTO;
-import com.englishweb.english_web_be.mapper.TestReadingQuestionMapper;
-import com.englishweb.english_web_be.model.TestReadingAnswer;
 import com.englishweb.english_web_be.model.TestReadingQuestion;
 import com.englishweb.english_web_be.repository.TestReadingQuestionRepository;
 import com.englishweb.english_web_be.service.TestReadingQuestionService;
@@ -21,34 +13,20 @@ import java.util.List;
 
 
 @Service
-public class TestReadingQuestionServiceImpl extends BaseServiceImpl<TestReadingQuestion, TestReadingQuestionDTO , TestReadingQuestionRequestDTO, TestReadingQuestionResponseDTO, TestReadingQuestionMapper, TestReadingQuestionRepository> implements TestReadingQuestionService {
+public class TestReadingQuestionServiceImpl extends BaseServiceImpl<TestReadingQuestion, TestReadingQuestionDTO, TestReadingQuestionRepository> implements TestReadingQuestionService {
 
 
     private final TestReadingServiceImpl testReadingService;
     private final TestReadingAnswerServiceImpl testReadingAnswerService;
 
-    public TestReadingQuestionServiceImpl(TestReadingQuestionRepository repository,
-                                          @Lazy TestReadingServiceImpl testReadingService,
-                                          @Lazy TestReadingAnswerServiceImpl testReadingAnswerService,
-                                          @Lazy TestReadingQuestionMapper mapper) {
-        super(repository, mapper);
+    public TestReadingQuestionServiceImpl(TestReadingQuestionRepository repository, @Lazy TestReadingServiceImpl testReadingService, @Lazy TestReadingAnswerServiceImpl testReadingAnswerService) {
+        super(repository);
         this.testReadingService = testReadingService;
         this.testReadingAnswerService = testReadingAnswerService;
     }
 
 
-    public List<TestReadingQuestionResponseDTO> findAllByTestReading_Id(String testReadingId) {
-        testReadingService.isExist(testReadingId);
-        List<TestReadingQuestion> list = repository.findAllByTestReading_Id(testReadingId);
-
-        return list.stream()
-                .map(this::convertToDTO)
-                .map(mapper::mapToResponseDTO)
-                .toList();
-    }
-
-
-    public List<TestReadingQuestionDTO> findAllDTOByTestReading_Id(String testReadingId) {
+    public List<TestReadingQuestionDTO> findAllByTestReading_Id(String testReadingId) {
         testReadingService.isExist(testReadingId);
         List<TestReadingQuestion> list = repository.findAllByTestReading_Id(testReadingId);
 
@@ -66,7 +44,7 @@ public class TestReadingQuestionServiceImpl extends BaseServiceImpl<TestReadingQ
         entity.setContent(dto.getContent());
         entity.setExplantion(dto.getExplanation());
         entity.setStatus(dto.getStatus());
-        entity.setTestReading(testReadingService.convertToEntity(testReadingService.findDTOById(dto.getTestReadingId())));
+        entity.setTestReading(testReadingService.convertToEntity(testReadingService.findById(dto.getTestReadingId())));
         return entity;
     }
 
@@ -79,59 +57,15 @@ public class TestReadingQuestionServiceImpl extends BaseServiceImpl<TestReadingQ
         dto.setExplanation(entity.getExplantion());
         dto.setStatus(entity.getStatus());
         dto.setTestReadingId(entity.getTestReading().getId());
-        dto.setAnswers(testReadingAnswerService.findAllDTOByQuestionId(entity.getId()));
+        dto.setAnswers(testReadingAnswerService.findAllByQuestionId(entity.getId()));
         return dto;
     }
-
-    @Override
-    public TestReadingQuestionResponseDTO create(TestReadingQuestionRequestDTO dto)
-    {
-        TestReadingQuestionResponseDTO createQuestionReading = super.create(dto);
-        List<TestReadingAnswerRequestDTO> answerRequestDTOS = dto.getAnswers();
-
-        if (answerRequestDTOS != null) {
-            for (TestReadingAnswerRequestDTO answer : answerRequestDTOS) {
-                answer.setTestQuestionReadingId(createQuestionReading.getId());
-                testReadingAnswerService.create(answer);
-
-            }
-        }
-
-        return createQuestionReading;
-    }
-
-    @Override
-    public TestReadingQuestionResponseDTO update(TestReadingQuestionRequestDTO dto, String id) {
-
-        TestReadingQuestionResponseDTO savedReadinQuestion = super.update(dto, id);
-        List<TestReadingAnswerRequestDTO> answerRequestDTOS = dto.getAnswers();
-        for (TestReadingAnswerRequestDTO answer : answerRequestDTOS) {
-            try {
-                if (answer.getId().startsWith("add")) {
-                    answer.setTestQuestionReadingId(dto.getId());
-                    testReadingAnswerService.create(answer);
-                } else if (answer.getId().startsWith("delete")) {
-                    testReadingAnswerService.delete(answer.getId());
-                } else {
-                    testReadingAnswerService.update(answer, answer.getId());
-                }
-            } catch (Exception e) {
-
-                System.err.println("Error processing question with ID: " + answer.getId());
-                e.printStackTrace();
-            }
-        }
-
-
-        return savedReadinQuestion;
-    }
-
     @Override
     public void delete(String id) {
 
-        List<TestReadingAnswerResponseDTO> answers = testReadingAnswerService.findAllByQuestionId(id);
+        List<TestReadingAnswerDTO> answers = testReadingAnswerService.findAllByQuestionId(id);
         if (answers != null) {
-            for (TestReadingAnswerResponseDTO answer : answers) {
+            for (TestReadingAnswerDTO answer : answers) {
                 testReadingAnswerService.delete(answer.getId());
             }
         }

@@ -1,7 +1,6 @@
 package com.englishweb.english_web_be.controller;
 
-import com.englishweb.english_web_be.dto.request.ReadingRequestDTO;
-import com.englishweb.english_web_be.dto.response.ReadingResponseDTO;
+import com.englishweb.english_web_be.dto.ReadingDTO;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.service.ReadingService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,35 +26,35 @@ public class ReadingController {
     @Operation(method = "GET", summary = "Get reading with status, sorting and pagination",
             description = "Send a request via this API to get reading with status, sorting and pagination. Status is optional")
     @GetMapping
-    public ResponseEntity<Page<ReadingResponseDTO>> findReadingWithStatusAndPagingAndSorting(
+    public ResponseEntity<Page<ReadingDTO>> findReadingWithStatusAndPagingAndSorting(
             @RequestParam int page,
             @RequestParam int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir,
             @RequestParam(required = false) StatusEnum status) {
         return new ResponseEntity<>(
-                service.findReadingWithStatusAndPagingAndSorting(status, page, size, sortBy, sortDir, ReadingResponseDTO.class),
+                service.findReadingWithStatusAndPagingAndSorting(status, page, size, sortBy, sortDir, ReadingDTO.class),
                 HttpStatus.OK);
     }
 
     @Operation(method = "GET", summary = "Get reading by id",
             description = "Send a request via this API to get reading information")
     @GetMapping("/{id}")
-    public ResponseEntity<ReadingResponseDTO> findById(@PathVariable String id) {
+    public ResponseEntity<ReadingDTO> findById(@PathVariable String id) {
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 
     @Operation(method = "POST", summary = "Create new reading",
             description = "Send a request via this API to create reading")
     @PostMapping
-    public ResponseEntity<ReadingResponseDTO> create(@Valid @RequestBody ReadingRequestDTO dto) {
+    public ResponseEntity<ReadingDTO> create(@Valid @RequestBody ReadingDTO dto) {
         return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
     @Operation(method = "PUT", summary = "Update reading",
             description = "Send a request via this API to update reading")
     @PutMapping("/{id}")
-    public ResponseEntity<ReadingResponseDTO> update(@Valid @RequestBody ReadingRequestDTO dto, @PathVariable String id) {
+    public ResponseEntity<ReadingDTO> update(@Valid @RequestBody ReadingDTO dto, @PathVariable String id) {
         return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }
 

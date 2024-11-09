@@ -11,7 +11,7 @@ public interface ListeningQuestionService extends BaseService<ListeningQuestionR
 
     List<ListeningQuestionResponseDTO> findByListeningId(String listeningId);
 
-    List<ListeningQuestionResponseDTO> findByListeningId(String listeningId, StatusEnum status);
+    List<ListeningQuestionResponseDTO> findByListeningIdAndStatus(String listeningId, StatusEnum status);
 
     List<ListeningQuestionDTO> findDTOByListeningId(String listeningId);
 }

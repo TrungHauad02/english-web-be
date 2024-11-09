@@ -1,7 +1,6 @@
 package com.englishweb.english_web_be.controller;
 
-import com.englishweb.english_web_be.dto.request.ReadingAnswerRequestDTO;
-import com.englishweb.english_web_be.dto.response.ReadingAnswerResponseDTO;
+import com.englishweb.english_web_be.dto.ReadingAnswerDTO;
 import com.englishweb.english_web_be.service.ReadingAnswerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,14 +24,14 @@ public class ReadingAnswerController {
     @Operation(method = "POST", summary = "Create new reading answer",
             description = "Send a request via this API to create reading answer")
     @PostMapping
-    public ResponseEntity<ReadingAnswerResponseDTO> create(@Valid @RequestBody ReadingAnswerRequestDTO dto) {
+    public ResponseEntity<ReadingAnswerDTO> create(@Valid @RequestBody ReadingAnswerDTO dto) {
         return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
     @Operation(method = "PUT", summary = "Update reading answer",
             description = "Send a request via this API to update reading answer")
     @PutMapping("/{id}")
-    public ResponseEntity<ReadingAnswerResponseDTO> update(@Valid @RequestBody ReadingAnswerRequestDTO dto,
+    public ResponseEntity<ReadingAnswerDTO> update(@Valid @RequestBody ReadingAnswerDTO dto,
                                                            @PathVariable String id) {
         return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }

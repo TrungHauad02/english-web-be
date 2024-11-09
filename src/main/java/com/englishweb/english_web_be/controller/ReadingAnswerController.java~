@@ -1,7 +1,5 @@
 package com.englishweb.english_web_be.controller;
 
-import com.englishweb.english_web_be.dto.request.ReadingAnswerRequestDTO;
-import com.englishweb.english_web_be.dto.response.ReadingAnswerResponseDTO;
 import com.englishweb.english_web_be.service.ReadingAnswerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/reading-answers")
+@RequestMapping("/api/reading-answer")
 @Slf4j
 @Tag(name = "Reading Answer Controller")
 public class ReadingAnswerController {
@@ -25,7 +23,7 @@ public class ReadingAnswerController {
     @Operation(method = "POST", summary = "Create new reading answer",
             description = "Send a request via this API to create reading answer")
     @PostMapping
-    public ResponseEntity<ReadingAnswerResponseDTO> create(@Valid @RequestBody ReadingAnswerRequestDTO dto) {
+    public ResponseEntity<ReadingAnswerDTO> create(@Valid @RequestBody ReadingAnswerRequestDTO dto) {
         return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 

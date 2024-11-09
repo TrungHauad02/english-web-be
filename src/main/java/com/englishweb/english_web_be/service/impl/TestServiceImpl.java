@@ -1,9 +1,6 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.*;
-import com.englishweb.english_web_be.dto.request.*;
-import com.englishweb.english_web_be.dto.response.*;
-import com.englishweb.english_web_be.mapper.TestMapper;
 import com.englishweb.english_web_be.model.*;
 import com.englishweb.english_web_be.modelenum.TestMixingTypeEnum;
 import com.englishweb.english_web_be.modelenum.TestTypeEnum;
@@ -23,7 +20,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 @Service
-public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO, TestRequestDTO, TestResponseDTO, TestMapper,TestRepository> implements TestService {
+public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO,TestRepository> implements TestService {
 
 
     private final TestSpeakingServiceImpl testSpeakingService;
@@ -32,15 +29,8 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO, TestRequestDT
     private final TestWritingServiceImpl testWritingService;
     private final TestMixingQuestionServiceImpl testMixingQuestionService;
 
-
-    public TestServiceImpl(TestRepository repository,
-                           @Lazy TestSpeakingServiceImpl testSpeakingService,
-                           @Lazy TestReadingServiceImpl testReadingService,
-                           @Lazy TestListeningServiceImpl testListeningService,
-                           @Lazy TestWritingServiceImpl testWritingService,
-                           TestMixingQuestionServiceImpl testMixingQuestionService,
-                           @Lazy TestMapper mapper) {
-        super(repository, mapper);
+    public TestServiceImpl(TestRepository repository, @Lazy TestSpeakingServiceImpl testSpeakingService, @Lazy TestReadingServiceImpl testReadingService, @Lazy TestListeningServiceImpl testListeningService, @Lazy TestWritingServiceImpl testWritingService, TestMixingQuestionServiceImpl testMixingQuestionService) {
+        super(repository);
         this.testSpeakingService = testSpeakingService;
         this.testReadingService = testReadingService;
         this.testListeningService = testListeningService;
@@ -49,18 +39,18 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO, TestRequestDT
     }
 
 
-    public Page<TestResponseDTO> retrieveTestsByPage( int page, String type) {
+    public Page<TestDTO> retrieveTestsByPage( int page, String type) {
         Pageable pageable = PageRequest.of(page, 10, Sort.by("serial"));
         TestTypeEnum testType = TestTypeEnum.valueOf(type.toUpperCase());
 
         Page<Test> tests = repository.findAllByType(pageable, testType);
-        Page<TestResponseDTO> testResponseDTOS = tests.map(this::convertToDTO).map(mapper::mapToResponseDTO);
-        return testResponseDTOS;
+        Page<TestDTO> testDTOs = tests.map(this::convertToDTO);
+        return testDTOs;
     }
-    public List<TestResponseDTO> retrieveTestsAllByType(String type) {
+    public List<TestDTO> retrieveTestsAllByType(String type) {
         List<Test> tests = repository.findAllByType(TestTypeEnum.valueOf(type));
-        List<TestResponseDTO> testResponseDTOS = tests.stream().map(this::convertToDTO).map(mapper::mapToResponseDTO).collect(Collectors.toList());
-        return testResponseDTOS;
+        List<TestDTO> testDTOs = tests.stream().map(this::convertToDTO).collect(Collectors.toList());
+        return testDTOs;
     }
 
     @Override
@@ -85,44 +75,44 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO, TestRequestDT
         dto.setTitle(entity.getTitle());
         dto.setDuration(entity.getDuration());
         dto.setStatus(entity.getStatus());
-        dto.setTestListenings(testListeningService.findAllDTOByTestId(entity.getId()));
-        dto.setTestWritings(testWritingService.findAllDTOByTestId(entity.getId()));
-        dto.setTestReadings(testReadingService.findAllDTOByTestId(entity.getId()));
-        dto.setTestSpeakings(testSpeakingService.findAllDTOByTest_Id(entity.getId()));
-        dto.setTestMixingQuestions(testMixingQuestionService.findAllDTOByTestId(entity.getId()));
+        dto.setTestListenings(testListeningService.findAllByTestId(entity.getId()));
+        dto.setTestWritings(testWritingService.findAllByTestId(entity.getId()));
+        dto.setTestReadings(testReadingService.findAllByTestId(entity.getId()));
+        dto.setTestSpeakings(testSpeakingService.findAllByTest_Id(entity.getId()));
+        dto.setTestMixingQuestions(testMixingQuestionService.findAllByTestId(entity.getId()));
         return dto;
     }
 
     @Override
     public void delete(String id) {
-        List<TestSpeakingResponseDTO> testSpeakings = testSpeakingService.findAllByTest_Id(id);
-        for (TestSpeakingResponseDTO testSpeaking : testSpeakings) {
+        List<TestSpeakingDTO> testSpeakings = testSpeakingService.findAllByTest_Id(id);
+        for (TestSpeakingDTO testSpeaking : testSpeakings) {
             testSpeakingService.delete(testSpeaking.getId());
         }
 
-        List<TestReadingResponseDTO> testReadings = testReadingService.findAllByTestId(id);
-        for (TestReadingResponseDTO testReading : testReadings) {
+        List<TestReadingDTO> testReadings = testReadingService.findAllByTestId(id);
+        for (TestReadingDTO testReading : testReadings) {
             testReadingService.delete(testReading.getId());
         }
 
-        List<TestListeningResponseDTO> testListenings = testListeningService.findAllByTestId(id);
-        for (TestListeningResponseDTO testListening : testListenings) {
+        List<TestListeningDTO> testListenings = testListeningService.findAllByTestId(id);
+        for (TestListeningDTO testListening : testListenings) {
             testListeningService.delete(testListening.getId());
         }
 
-        List<TestWritingResponseDTO> testWritings = testWritingService.findAllByTestId(id);
-        for (TestWritingResponseDTO testWriting : testWritings) {
+        List<TestWritingDTO> testWritings = testWritingService.findAllByTestId(id);
+        for (TestWritingDTO testWriting : testWritings) {
             testWritingService.delete(testWriting.getId());
         }
 
-        List<TestMixingQuestionResponseDTO> testMixingQuestions = testMixingQuestionService.findAllByTestId(id);
-        for (TestMixingQuestionResponseDTO testMixingQuestion : testMixingQuestions) {
+        List<TestMixingQuestionDTO> testMixingQuestions = testMixingQuestionService.findAllByTestId(id);
+        for (TestMixingQuestionDTO testMixingQuestion : testMixingQuestions) {
             testMixingQuestionService.delete(testMixingQuestion.getId());
         }
         super.delete(id);
     }
 
-    public void deleteQuestionTest(TestRequestDTO testRequestDTO, String type, String testdeleteid, int serial) {
+    public void deleteQuestionTest(String testid, String type, String testdeleteid, int serial) {
         int questionCount = 1;
 
         switch (type) {
@@ -132,10 +122,11 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO, TestRequestDT
                 if (type.equals("GRAMMAR")) {
                     testMixingQuestionService.delete(testdeleteid);
                 }
-                List<TestMixingQuestionRequestDTO> questionToUpdateGrammars = testRequestDTO.getTestMixingQuestions().stream()
+                List<TestMixingQuestionDTO> questionGrammars = testMixingQuestionService.findAllByTestId(testid);
+                List<TestMixingQuestionDTO> questionToUpdateGrammars = questionGrammars.stream()
                         .filter(q -> q.getSerial() > serial)
                         .collect(Collectors.toList());
-                for (TestMixingQuestionRequestDTO question : questionToUpdateGrammars) {
+                for (TestMixingQuestionDTO question : questionToUpdateGrammars) {
                     question.setSerial(question.getSerial() - 1);
                     testMixingQuestionService.update(question, question.getId());
                 }
@@ -146,8 +137,8 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO, TestRequestDT
                             .size();
                     testReadingService.delete(testdeleteid);
                 }
-                List<TestReadingRequestDTO> testReadingRequestDTOs = testRequestDTO.getTestReadings();
-                List<TestReadingQuestionRequestDTO> questionReadings = testReadingRequestDTOs.stream()
+                List<TestReadingDTO> testReadingDTOs = testReadingService.findAllByTestId(testid);
+                List<TestReadingQuestionDTO> questionReadings = testReadingDTOs.stream()
                         .flatMap(testReadingDTO -> testReadingDTO.getQuestions().stream())
                         .collect(Collectors.toList());
 
@@ -165,8 +156,8 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO, TestRequestDT
                             .size();
                     testListeningService.delete(testdeleteid);
                 }
-                List<TestListeningRequestDTO> testListeningDTOs = testRequestDTO.getTestListenings();
-                List<TestListeningQuestionRequestDTO> questionListenings = testListeningDTOs.stream()
+                List<TestListeningDTO> testListeningDTOs = testListeningService.findAllByTestId(testid);
+                List<TestListeningQuestionDTO> questionListenings = testListeningDTOs.stream()
                         .flatMap(testListeningDTO -> testListeningDTO.getQuestions().stream())
                         .collect(Collectors.toList());
                 int finalQuestionCount = questionCount;
@@ -183,8 +174,8 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO, TestRequestDT
                             .size();
                     testSpeakingService.delete(testdeleteid);
                 }
-                List<TestSpeakingRequestDTO> testSpeakingDTOs = testRequestDTO.getTestSpeakings();
-                List<TestSpeakingQuestionRequestDTO> questionSpeakings = testSpeakingDTOs.stream()
+                List<TestSpeakingDTO> testSpeakingDTOs = testSpeakingService.findAllByTest_Id(testid);
+                List<TestSpeakingQuestionDTO> questionSpeakings = testSpeakingDTOs.stream()
                         .flatMap(testSpeakingDTO -> testSpeakingDTO.getQuestions().stream())
                         .collect(Collectors.toList());
 
@@ -199,11 +190,11 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO, TestRequestDT
                 if (type.equals("WRITING")) {
                     testWritingService.delete(testdeleteid);
                 }
-                List<TestWritingRequestDTO> testWritingDTOs = testRequestDTO.getTestWritings();
-                List<TestWritingRequestDTO> testWritingDTOList = testWritingDTOs.stream()
+                List<TestWritingDTO> testWritingDTOs = testWritingService.findAllByTestId(testid);
+                List<TestWritingDTO> testWritingDTOList = testWritingDTOs.stream()
                         .filter(q -> q.getSerial() > serial)
                         .collect(Collectors.toList());
-                for (TestWritingRequestDTO testWritingDTO : testWritingDTOList) {
+                for (TestWritingDTO testWritingDTO : testWritingDTOList) {
                     testWritingDTO.setSerial(testWritingDTO.getSerial() - questionCount);
                     testWritingService.update(testWritingDTO, testWritingDTO.getId());
                 }
@@ -215,119 +206,164 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO, TestRequestDT
     }
 
 
-    public String addQuestionTest(TestRequestDTO testRequestDTO, String type, Map<String, Object> testadd) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String idnew = "";
-        int serialadd = 1;
+    public String addQuestionTest (String testid, String type, Map<String, Object> testadd ){
+        ObjectMapper mapper = new ObjectMapper();
+        int serialquestion = 1;
+        List<TestMixingQuestionDTO> questionVocabularys = testMixingQuestionService.findAllByTest_IdAndType(testid, TestMixingTypeEnum.VOCABULARY);
+
+        int serialquestiongrammar;
+        if (!questionVocabularys.isEmpty()) {
+            serialquestiongrammar = questionVocabularys.get(questionVocabularys.size() - 1).getSerial() + 1;
+        } else {
+            serialquestiongrammar = 1;
+        }
 
         switch (type) {
             case "VOCABULARY":
-                TestMixingQuestionRequestDTO vocabularyQuestion = objectMapper.convertValue(testadd, TestMixingQuestionRequestDTO.class);
-                idnew = testMixingQuestionService.create(vocabularyQuestion).getId();
-
-            case "GRAMMAR":
-
-                if (type.equals("GRAMMAR")) {
-                    TestMixingQuestionRequestDTO grammarQuestion = objectMapper.convertValue(testadd, TestMixingQuestionRequestDTO.class);
-                    idnew= testMixingQuestionService.create(grammarQuestion).getId();
+                TestMixingQuestionDTO vocabularyQuestion = mapper.convertValue(testadd, TestMixingQuestionDTO.class);
+                if (!questionVocabularys.isEmpty()) {
+                    int lastSerial = questionVocabularys.get(questionVocabularys.size() - 1).getSerial();
+                    vocabularyQuestion.setSerial(lastSerial + 1);
                 } else {
-                    int finalSerialadd4 = serialadd;
-                    testRequestDTO.getTestMixingQuestions().stream()
-                            .filter(question -> TestMixingTypeEnum.GRAMMAR.equals(question.getType()))
-                            .forEach(question -> {
-                                question.setSerial(question.getSerial() + finalSerialadd4);
-                                testMixingQuestionService.update(question, question.getId());
-                            });
+                    vocabularyQuestion.setSerial(serialquestion);
                 }
-
+                testMixingQuestionService.create(vocabularyQuestion);
+            case "GRAMMAR":
+                if (type.equals("GRAMMAR")) {
+                    List<TestMixingQuestionDTO> questionGrammars = testMixingQuestionService.findAllByTest_IdAndType(testid, TestMixingTypeEnum.GRAMMAR);
+                    TestMixingQuestionDTO grammarQuestion = mapper.convertValue(testadd, TestMixingQuestionDTO.class);
+                    if (!questionGrammars.isEmpty()) {
+                        int lastSerial = questionGrammars.get(questionGrammars.size() - 1).getSerial();
+                        grammarQuestion.setSerial(lastSerial + 1);
+                    } else {
+                        grammarQuestion.setSerial(serialquestiongrammar);
+                    }
+                }
+                else
+                {
+                    List<TestMixingQuestionDTO> questionGrammars = testMixingQuestionService.findAllByTest_IdAndType(testid, TestMixingTypeEnum.valueOf("GRAMMAR"));
+                    for (TestMixingQuestionDTO question : questionGrammars) {
+                        question.setSerial(question.getSerial() + 1);
+                        testMixingQuestionService.update(question, question.getId());
+                    }
+                }
             case "READING":
                 if (type.equals("READING")) {
-                    TestReadingRequestDTO testReadingRequest = objectMapper.convertValue(testadd, TestReadingRequestDTO.class);
-                    if ( testReadingRequest.getId().startsWith("temp")) {
-                        testReadingService.create(testReadingRequest);
-                        serialadd = testReadingRequest.getQuestions().size();
-
+                    testadd.remove("type");
+                    try {
+                        TestReadingDTO readingQuestion = mapper.convertValue(testadd, TestReadingDTO.class);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Conversion error: " + e.getMessage());
+                        e.printStackTrace();
                     }
-                    else {
-                      TestReadingResponseDTO  testReadingResponseDTO =  testReadingService.update(testReadingRequest, testReadingRequest.getId());
-                        serialadd = (int) testReadingRequest.getQuestions()
-                                .stream()
-                                .filter(question -> question.getId().startsWith("add"))
-                                .count()
-                                - (int) testReadingRequest.getQuestions()
-                                .stream()
-                                .filter(question -> question.getId().startsWith("delete"))
-                                .count();
-                        idnew= testReadingResponseDTO.getId();
+                    List<TestReadingDTO> testReadingDTOs = testReadingService.findAllByTestId(testid);
 
+                    TestReadingDTO readingQuestion = mapper.convertValue(testadd, TestReadingDTO.class);
+                    if (!testReadingDTOs.isEmpty()) {
+                        int lastSerial = testReadingDTOs.get(testReadingDTOs.size() - 1).getSerial();
+                        readingQuestion.setSerial(lastSerial + 1);
+                    } else {
+                        readingQuestion.setSerial(1);
                     }
-                } else {
-                    List<TestReadingQuestionRequestDTO> questionReadings = testRequestDTO.getTestReadings().stream()
+                    testReadingService.create(readingQuestion);
+                }
+                else
+                {
+                    List<TestReadingDTO> testReadingDTOs = testReadingService.findAllByTestId(testid);
+                    List<TestReadingQuestionDTO> questionReadings = testReadingDTOs.stream()
                             .flatMap(testReadingDTO -> testReadingDTO.getQuestions().stream())
                             .collect(Collectors.toList());
 
-                    int finalSerialadd3 = serialadd;
-                    questionReadings.forEach(question -> {
-                        question.setSerial(question.getSerial() + finalSerialadd3);
+                    for (TestReadingQuestionDTO question : questionReadings) {
+                        question.setSerial(question.getSerial() + 1);
                         testReadingService.getTestReadingQuestionService().update(question, question.getId());
-                    });
+                    }
                 }
 
             case "LISTENING":
                 if (type.equals("LISTENING")) {
-                    TestListeningRequestDTO listeningQuestion = objectMapper.convertValue(testadd, TestListeningRequestDTO.class);
+                    testadd.remove("type");
+                    List<TestListeningDTO> testListeningDTOs = testListeningService.findAllByTestId(testid);
+                    TestListeningDTO listeningQuestion = mapper.convertValue(testadd, TestListeningDTO.class);
+                    if (!testListeningDTOs.isEmpty()) {
+                        int lastSerial = testListeningDTOs.get(testListeningDTOs.size() - 1).getSerial();
+                        listeningQuestion.setSerial(lastSerial + 1);
+                    } else {
+                        listeningQuestion.setSerial(1);
+                    }
                     testListeningService.create(listeningQuestion);
-                    idnew = testListeningService.create(listeningQuestion).getId();
-                } else {
-                    List<TestListeningQuestionRequestDTO> questionListenings = testRequestDTO.getTestListenings().stream()
+                }
+                else {
+                    List<TestListeningDTO> testListeningDTOS = testListeningService.findAllByTestId(testid);
+                    List<TestListeningQuestionDTO> questionListenings = testListeningDTOS.stream()
                             .flatMap(testListeningDTO -> testListeningDTO.getQuestions().stream())
                             .collect(Collectors.toList());
 
-                    int finalSerialadd = serialadd;
-                    questionListenings.forEach(question -> {
-                        question.setSerial(question.getSerial() + finalSerialadd);
+                    for (TestListeningQuestionDTO question : questionListenings) {
+                        question.setSerial(question.getSerial() + 1);
                         testListeningService.getTestListeningQuestionService().update(question, question.getId());
-                    });
+                    }
                 }
 
             case "SPEAKING":
                 if (type.equals("SPEAKING")) {
-                    TestSpeakingRequestDTO speakingQuestion = objectMapper.convertValue(testadd, TestSpeakingRequestDTO.class);
+                    testadd.remove("type");
+                    List<TestSpeakingDTO> testSpeakingDTOs = testSpeakingService.findAllByTest_Id(testid);
+                    TestSpeakingDTO speakingQuestion = mapper.convertValue(testadd, TestSpeakingDTO.class);
+                    if (!testSpeakingDTOs.isEmpty()) {
+                        int lastSerial = testSpeakingDTOs.get(testSpeakingDTOs.size() - 1).getSerial();
+                        speakingQuestion.setSerial(lastSerial + 1);
+                    } else {
+                        speakingQuestion.setSerial(1);
+                    }
                     testSpeakingService.create(speakingQuestion);
-                    idnew = testSpeakingService.create(speakingQuestion).getId();
-                } else {
-                    List<TestSpeakingQuestionRequestDTO> questionSpeakings = testRequestDTO.getTestSpeakings().stream()
+                }
+                else
+                {
+                    List<TestSpeakingDTO> testSpeakingDTOs = testSpeakingService.findAllByTest_Id(testid);
+                    List<TestSpeakingQuestionDTO> questionSpeakings = testSpeakingDTOs.stream()
                             .flatMap(testSpeakingDTO -> testSpeakingDTO.getQuestions().stream())
                             .collect(Collectors.toList());
-
-                    int finalSerialadd1 = serialadd;
-                    questionSpeakings.forEach(question -> {
-                        question.setSerial(question.getSerial() + finalSerialadd1);
+                    for (TestSpeakingQuestionDTO question : questionSpeakings) {
+                        question.setSerial(question.getSerial() + 1);
                         testSpeakingService.getTestSpeakingQuestionService().update(question, question.getId());
-                    });
+                    }
                 }
+
 
             case "WRITING":
                 if (type.equals("WRITING")) {
-                    TestWritingRequestDTO writingQuestion = objectMapper.convertValue(testadd, TestWritingRequestDTO.class);
+                    testadd.remove("type");
+                    List<TestWritingDTO> testWritingDTOs = testWritingService.findAllByTestId(testid);
+                    TestWritingDTO writingQuestion = mapper.convertValue(testadd, TestWritingDTO.class);
+                    if (!testWritingDTOs.isEmpty()) {
+                        int lastSerial = testWritingDTOs.get(testWritingDTOs.size() - 1).getSerial();
+                        writingQuestion.setSerial(lastSerial + 1);
+                    } else {
+                        writingQuestion.setSerial(1);
+                    }
                     testWritingService.create(writingQuestion);
-                    idnew = testWritingService.create(writingQuestion).getId();
-                } else {
-                    List<TestWritingRequestDTO> testWritingDTOs = testRequestDTO.getTestWritings();
+                }
+                else
+                {
+                    List<TestWritingDTO> testWritingDTOs = testWritingService.findAllByTestId(testid);
 
-                    int finalSerialadd2 = serialadd;
-                    testWritingDTOs.forEach(testWritingDTO -> {
-                        testWritingDTO.setSerial(testWritingDTO.getSerial() + finalSerialadd2);
+                    for (TestWritingDTO testWritingDTO : testWritingDTOs) {
+                        testWritingDTO.setSerial(testWritingDTO.getSerial() +1);
                         testWritingService.update(testWritingDTO, testWritingDTO.getId());
-                    });
+                    }
+
                 }
                 break;
+
+            default:
+                return "";
         }
-        return idnew;
+        return "";
+
     }
 
 
 }
-
 
 

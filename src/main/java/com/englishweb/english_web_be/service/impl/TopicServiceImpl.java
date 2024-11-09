@@ -3,9 +3,6 @@ package com.englishweb.english_web_be.service.impl;
 import com.englishweb.english_web_be.dto.TopicDTO;
 import com.englishweb.english_web_be.dto.TopicQuestionDTO;
 import com.englishweb.english_web_be.dto.VocabularyDTO;
-import com.englishweb.english_web_be.dto.request.TopicRequestDTO;
-import com.englishweb.english_web_be.dto.response.TopicResponseDTO;
-import com.englishweb.english_web_be.mapper.TopicMapper;
 import com.englishweb.english_web_be.model.Topic;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.TopicRepository;
@@ -21,23 +18,21 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 
 @Service
-public class TopicServiceImpl extends BaseServiceImpl<Topic, TopicDTO, TopicRequestDTO,
-        TopicResponseDTO, TopicMapper, TopicRepository> implements TopicService {
+public class TopicServiceImpl extends BaseServiceImpl<Topic, TopicDTO, TopicRepository> implements TopicService {
 
     private final TopicQuestionServiceImpl topicQuestionService;
     private final VocabularyServiceImpl vocabularyService;
 
     public TopicServiceImpl(TopicRepository repository,
                             TopicQuestionServiceImpl topicQuestionService,
-                            VocabularyServiceImpl vocabularyService,
-                            @Lazy TopicMapper mapper) {
-        super(repository, mapper);
+                            VocabularyServiceImpl vocabularyService) {
+        super(repository);
         this.topicQuestionService = topicQuestionService;
         this.vocabularyService = vocabularyService;
     }
 
     @Override
-    public Page<TopicResponseDTO> findTopicWithStatusAndPagingAndSorting(StatusEnum status, int page, int size, String sortBy, String sortDir, Class<TopicResponseDTO> dtoClass) {
+    public Page<TopicDTO> findTopicWithStatusAndPagingAndSorting(StatusEnum status, int page, int size, String sortBy, String sortDir, Class<TopicDTO> dtoClass) {
         if (status == null) {
             return super.findByPage(page, size, sortBy, sortDir, dtoClass);
         }
@@ -47,17 +42,16 @@ public class TopicServiceImpl extends BaseServiceImpl<Topic, TopicDTO, TopicRequ
         Pageable pageable = PageRequest.of(page, size, sort);
 
         return repository.findTopicWithStatus(status, pageable)
-                .map(this::convertToDTO)
-                .map(mapper::mapToResponseDTO);
+                .map(this::convertToDTO);
     }
 
     @Override
     public void delete(String id) {
-        List<TopicQuestionDTO> topicQuestionDTOList = topicQuestionService.findAllDTOByTopicId(id);
+        List<TopicQuestionDTO> topicQuestionDTOList = topicQuestionService.findAllByTopicId(id);
         for (TopicQuestionDTO topicQuestion : topicQuestionDTOList) {
             topicQuestionService.delete(topicQuestion.getId());
         }
-        List<VocabularyDTO> vocabularyDTOList = vocabularyService.findDTOByTopicId(id);
+        List<VocabularyDTO> vocabularyDTOList = vocabularyService.findByTopicId(id);
         for (VocabularyDTO vocabulary : vocabularyDTOList) {
             vocabularyService.delete(vocabulary.getId());
         }
