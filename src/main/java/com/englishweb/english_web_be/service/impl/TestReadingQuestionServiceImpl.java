@@ -3,10 +3,14 @@ package com.englishweb.english_web_be.service.impl;
 import com.englishweb.english_web_be.dto.TestListeningQuestionDTO;
 import com.englishweb.english_web_be.dto.TestReadingAnswerDTO;
 import com.englishweb.english_web_be.dto.TestReadingQuestionDTO;
+import com.englishweb.english_web_be.dto.request.TestReadingAnswerRequestDTO;
 import com.englishweb.english_web_be.dto.request.TestReadingQuestionRequestDTO;
+import com.englishweb.english_web_be.dto.request.TestReadingRequestDTO;
 import com.englishweb.english_web_be.dto.response.TestReadingAnswerResponseDTO;
 import com.englishweb.english_web_be.dto.response.TestReadingQuestionResponseDTO;
+import com.englishweb.english_web_be.dto.response.TestReadingResponseDTO;
 import com.englishweb.english_web_be.mapper.TestReadingQuestionMapper;
+import com.englishweb.english_web_be.model.TestReadingAnswer;
 import com.englishweb.english_web_be.model.TestReadingQuestion;
 import com.englishweb.english_web_be.repository.TestReadingQuestionRepository;
 import com.englishweb.english_web_be.service.TestReadingQuestionService;
@@ -78,6 +82,49 @@ public class TestReadingQuestionServiceImpl extends BaseServiceImpl<TestReadingQ
         dto.setAnswers(testReadingAnswerService.findAllDTOByQuestionId(entity.getId()));
         return dto;
     }
+
+    @Override
+    public TestReadingQuestionResponseDTO create(TestReadingQuestionRequestDTO dto)
+    {
+        TestReadingQuestionResponseDTO createQuestionReading = super.create(dto);
+        List<TestReadingAnswerRequestDTO> answerRequestDTOS = dto.getAnswers();
+
+        if (answerRequestDTOS != null) {
+            for (TestReadingAnswerRequestDTO answer : answerRequestDTOS) {
+
+                testReadingAnswerService.create(answer);
+
+            }
+        }
+
+        return createQuestionReading;
+    }
+
+    @Override
+    public TestReadingQuestionResponseDTO update(TestReadingQuestionRequestDTO dto, String id) {
+
+        TestReadingQuestionResponseDTO savedReadinQuestion = super.update(dto, id);
+        List<TestReadingAnswerRequestDTO> answerRequestDTOS = dto.getAnswers();
+        for (TestReadingAnswerRequestDTO answer : answerRequestDTOS) {
+            try {
+                if (answer.getId().startsWith("add")) {
+                    testReadingAnswerService.create(answer);
+                } else if (answer.getId().startsWith("delete")) {
+                    testReadingAnswerService.delete(answer.getId());
+                } else {
+                    testReadingAnswerService.update(answer, answer.getId());
+                }
+            } catch (Exception e) {
+
+                System.err.println("Error processing question with ID: " + answer.getId());
+                e.printStackTrace();
+            }
+        }
+
+
+        return savedReadinQuestion;
+    }
+
     @Override
     public void delete(String id) {
 

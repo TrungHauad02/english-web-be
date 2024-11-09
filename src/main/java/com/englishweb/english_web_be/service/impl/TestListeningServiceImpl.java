@@ -21,7 +21,7 @@ public class TestListeningServiceImpl extends BaseServiceImpl<TestListening, Tes
 
     private final TestServiceImpl testService;
     private final TestListeningQuestionServiceImpl testListeningQuestionService;
-    TestListeningMapper testListeningMapper;
+
 
     public TestListeningServiceImpl(TestListeningRepository repository,
                                     @Lazy TestServiceImpl testService,

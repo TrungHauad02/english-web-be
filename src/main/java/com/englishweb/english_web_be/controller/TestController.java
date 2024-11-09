@@ -4,6 +4,7 @@ import com.englishweb.english_web_be.dto.*;
 import com.englishweb.english_web_be.dto.request.TestRequestDTO;
 import com.englishweb.english_web_be.dto.response.TestResponseDTO;
 import com.englishweb.english_web_be.service.TestService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -51,23 +52,51 @@ public class TestController {
     }
     @PostMapping("/api/test/question/delete")
     public ResponseEntity<Void> deleteQuestionTest(@RequestBody Map<String, Object> requestBody) {
-        String testid = (String) requestBody.get("testid");
+        Object obj = requestBody.get("testrequestdto");
+        TestRequestDTO testRequestDTO = null;
+
+        if (obj != null && obj instanceof Map) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                testRequestDTO  = objectMapper.convertValue(obj, TestRequestDTO.class);
+                System.out.println("Successfully converted to TestRequestDTO: " + testRequestDTO);
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Unable to convert to TestRequestDTO");
+            }
+        } else {
+            System.out.println("Object is either null or not an instance of Map");
+        }
         String type = (String) requestBody.get("type");
         String testdeleteid = (String) requestBody.get("testdeleteid");
         Integer serial = (Integer) requestBody.get("serial");
 
-        testService.deleteQuestionTest(testid, type, testdeleteid, serial);
+        testService.deleteQuestionTest(testRequestDTO, type, testdeleteid, serial);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/api/test/question/add")
-    public ResponseEntity<Void> addQuestionTest(@RequestBody Map<String, Object> requestBody) {
-        String testid = (String) requestBody.get("testid");
+    public ResponseEntity<String> addQuestionTest(@RequestBody Map<String, Object> requestBody) {
+        Object obj = requestBody.get("testrequestdto");
+        TestRequestDTO testRequestDTO = null;
+
+        if (obj != null && obj instanceof Map) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                testRequestDTO  = objectMapper.convertValue(obj, TestRequestDTO.class);
+                System.out.println("Successfully converted to TestRequestDTO: " + testRequestDTO);
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Unable to convert to TestRequestDTO");
+            }
+        } else {
+            System.out.println("Object is either null or not an instance of Map");
+        }
         String type = (String) requestBody.get("type");
         Map<String, Object> testadd = (Map<String, Object>) requestBody.get("testadd");
+        String id = testService.addQuestionTest(testRequestDTO, type, testadd);
 
-        testService.addQuestionTest(testid, type, testadd);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(id);
     }
 
     @PutMapping("/api/test/{id}")

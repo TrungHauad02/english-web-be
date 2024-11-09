@@ -4,6 +4,7 @@ import com.englishweb.english_web_be.dto.BaseDTO;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Builder
 
 public class TestRequestDTO implements BaseDTO {

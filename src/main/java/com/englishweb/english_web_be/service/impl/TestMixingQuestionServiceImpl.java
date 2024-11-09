@@ -2,6 +2,7 @@ package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.TestMixingAnswerDTO;
 import com.englishweb.english_web_be.dto.TestMixingQuestionDTO;
+import com.englishweb.english_web_be.dto.request.TestMixingAnswerRequestDTO;
 import com.englishweb.english_web_be.dto.request.TestMixingQuestionRequestDTO;
 import com.englishweb.english_web_be.dto.response.TestMixingAnswerResponseDTO;
 import com.englishweb.english_web_be.dto.response.TestMixingQuestionResponseDTO;
@@ -23,7 +24,7 @@ public class TestMixingQuestionServiceImpl extends BaseServiceImpl<TestMixingQue
 
     private final TestServiceImpl testService;
     private final TestMixingAnswerServiceImpl testMixingAnswerService;
-    TestMixingQuestionMapper mapper;
+
 
     public TestMixingQuestionServiceImpl(TestMixingQuestionRepository repository,
                                          @Lazy TestServiceImpl testService,
@@ -133,5 +134,38 @@ public class TestMixingQuestionServiceImpl extends BaseServiceImpl<TestMixingQue
             }
         }
         super.delete(id);
+    }
+
+    @Override
+    public TestMixingQuestionResponseDTO create(TestMixingQuestionRequestDTO dto) {
+
+        TestMixingQuestionResponseDTO savedQuestion = super.create(dto);
+
+        List<TestMixingAnswerRequestDTO> answers = dto.getAnswers();
+        if (answers != null) {
+            for (TestMixingAnswerRequestDTO answer : answers) {
+                answer.setTestQuestionMixingId(savedQuestion.getId());
+                testMixingAnswerService.create(answer);
+            }
+        }
+
+        return savedQuestion;
+    }
+
+    @Override
+    public TestMixingQuestionResponseDTO update(TestMixingQuestionRequestDTO dto, String id) {
+
+
+        TestMixingQuestionResponseDTO savedQuestion = super.update(dto, id);
+        List<TestMixingAnswerRequestDTO> answers = dto.getAnswers();
+        for (TestMixingAnswerRequestDTO answer : answers) {
+            try {
+                testMixingAnswerService.update(answer, answer.getId());
+            } catch (Exception e) {
+                testMixingAnswerService.create(answer);
+            }
+        }
+
+        return savedQuestion;
     }
 }

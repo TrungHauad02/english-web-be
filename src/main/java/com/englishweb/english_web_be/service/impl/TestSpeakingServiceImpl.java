@@ -22,7 +22,7 @@ public class TestSpeakingServiceImpl extends BaseServiceImpl<TestSpeaking, TestS
 
     private final TestServiceImpl testService;
     private final TestSpeakingQuestionServiceImpl testSpeakingQuestionService;
-    TestSpeakingMapper testSpeakingMapper;
+
 
     public TestSpeakingServiceImpl(TestSpeakingRepository repository,
                                    @Lazy TestServiceImpl testService,

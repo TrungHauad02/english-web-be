@@ -18,7 +18,7 @@ public class TestMixingAnswerServiceImpl extends BaseServiceImpl<TestMixingAnswe
         implements TestMixingAnswerService {
 
     private final TestMixingQuestionServiceImpl testMixingQuestionService;
-    TestMixingAnswerMapper mapper;
+
 
     public TestMixingAnswerServiceImpl(TestMixingAnswerRepository repository,
                                        @Lazy TestMixingQuestionServiceImpl testMixingQuestionService,

@@ -12,6 +12,6 @@ import java.util.Map;
 public interface TestService extends BaseService<TestRequestDTO, TestResponseDTO> {
     Page<TestResponseDTO> retrieveTestsByPage(int page, String type);
     List<TestResponseDTO> retrieveTestsAllByType(String type);
-    void  deleteQuestionTest(String testid, String type, String testupdateid,int serial);
-    void addQuestionTest (String testid, String type, Map<String, Object> testadd );
+    void  deleteQuestionTest(TestRequestDTO testRequestDTO, String type, String testupdateid,int serial);
+    String addQuestionTest (TestRequestDTO testRequestDTO, String type, Map<String, Object> testadd );
 }

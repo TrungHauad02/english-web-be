@@ -4,7 +4,11 @@ import com.englishweb.english_web_be.dto.TestListeningQuestionDTO;
 import com.englishweb.english_web_be.dto.TestReadingDTO;
 
 import com.englishweb.english_web_be.dto.TestReadingQuestionDTO;
+import com.englishweb.english_web_be.dto.request.TestMixingAnswerRequestDTO;
+import com.englishweb.english_web_be.dto.request.TestMixingQuestionRequestDTO;
+import com.englishweb.english_web_be.dto.request.TestReadingQuestionRequestDTO;
 import com.englishweb.english_web_be.dto.request.TestReadingRequestDTO;
+import com.englishweb.english_web_be.dto.response.TestMixingQuestionResponseDTO;
 import com.englishweb.english_web_be.dto.response.TestReadingQuestionResponseDTO;
 import com.englishweb.english_web_be.dto.response.TestReadingResponseDTO;
 import com.englishweb.english_web_be.mapper.TestReadingMapper;
@@ -84,6 +88,57 @@ public class TestReadingServiceImpl extends BaseServiceImpl<TestReading, TestRea
         dto.setTestId(entity.getTest().getId());
         return dto;
     }
+    @Override
+    public TestReadingResponseDTO create(TestReadingRequestDTO dto)
+    {
+        TestReadingResponseDTO createReading = super.create(dto);
+        List<TestReadingQuestionRequestDTO> questions = dto.getQuestions();
+
+        if (questions != null) {
+            for (TestReadingQuestionRequestDTO question : questions) {
+                try {
+                    testReadingQuestionService.create(question);
+                } catch (Exception e) {
+                    System.err.println("Error processing question with ID: " + (question != null ? question.getId() : "unknown"));
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            System.out.println("No questions provided in the request.");
+        }
+
+        return createReading;
+    }
+
+
+    @Override
+    public TestReadingResponseDTO update(TestReadingRequestDTO dto, String id) {
+
+        TestReadingResponseDTO savedReading = super.update(dto, id);
+        List<TestReadingQuestionRequestDTO> questions = dto.getQuestions();
+        if(questions != null) {
+            for (TestReadingQuestionRequestDTO question : questions) {
+                try {
+                    if (question.getId().startsWith("add")) {
+                        testReadingQuestionService.create(question);
+                    } else if (question.getId().startsWith("delete")) {
+                        testReadingQuestionService.delete(question.getId());
+                    } else {
+                        testReadingQuestionService.update(question, question.getId());
+                    }
+                } catch (Exception e) {
+
+                    System.err.println("Error processing question with ID: " + question.getId());
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+
+        return savedReading;
+    }
+
     @Override
     public void delete(String id) {
 
