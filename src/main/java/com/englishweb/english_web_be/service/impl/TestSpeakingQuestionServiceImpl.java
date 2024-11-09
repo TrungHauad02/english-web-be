@@ -15,7 +15,7 @@ import java.util.List;
 public class TestSpeakingQuestionServiceImpl extends BaseServiceImpl<TestSpeakingQuestion, TestSpeakingQuestionDTO, TestSpeakingQuestionRequestDTO, TestSpeakingQuestionResponseDTO, TestSpeakingQuestionMapper, TestSpeakingQuestionRepository> implements TestSpeakingQuestionService {
 
     private final TestSpeakingServiceImpl testSpeakingService;
-    TestSpeakingQuestionMapper mapper;
+
 
 
     public TestSpeakingQuestionServiceImpl(TestSpeakingQuestionRepository repository,

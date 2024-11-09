@@ -15,7 +15,7 @@ import java.util.List;
 public class TestWritingServiceImpl extends BaseServiceImpl<TestWriting, TestWritingDTO, TestWritingRequestDTO, TestWritingResponseDTO, TestWritingMapper, TestWritingRepository> implements TestWritingService {
 
     private final TestServiceImpl testService;
-    TestWritingMapper mapper;
+
 
     public TestWritingServiceImpl(TestWritingRepository repository,
                                   @Lazy TestServiceImpl testService,
