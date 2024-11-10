@@ -13,7 +13,7 @@ import lombok.*;
 public class ListenAndWriteAWord implements BaseEntity {
     @Id
     private String id;
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private int serial;
     @Column(nullable = false)
     private String audioUrl;

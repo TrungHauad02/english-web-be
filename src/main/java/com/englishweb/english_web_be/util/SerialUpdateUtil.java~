@@ -1,0 +1,39 @@
+package com.englishweb.english_web_be.util;
+
+import com.englishweb.english_web_be.model.SerialEntity;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.LinkedList;
+import java.util.List;
+
+public class SerialUpdateUtil {
+
+    public static <T extends SerialEntity> void updateSerial(JpaRepository<T, String> repository, int targetSerial) {
+        List<T> list = repository.findAll(Sort.by("serial"));
+        List<T> listEntities = new LinkedList<>();
+
+        for(int i = list.size() - 1; i >= 1; --i) {
+            T entity = list.get(i);
+            if(entity.getSerial() < targetSerial){
+                break;
+            } else if(entity.getSerial() > list.get(i - 1).getSerial() + 1) {
+                listEntities.clear();
+            } else if(entity.getSerial() == list.get(i - 1).getSerial() + 1) {
+                listEntities.add(entity);
+            }
+        }
+        if(list.get(0).getSerial() > targetSerial + 1)
+            listEntities.add(list.get(0));
+
+        if (listEntities.isEmpty() || listEntities.get(0).getSerial() > targetSerial) {
+            return;
+        }
+
+        for (int i = listEntities.size() - 1; i >= 0; i--) {
+            T entityToUpdate = listEntities.get(i);
+            entityToUpdate.setSerial(entityToUpdate.getSerial() + 1);
+            repository.save(entityToUpdate);
+        }
+    }
+}

@@ -1,6 +1,7 @@
 package com.englishweb.english_web_be.exception;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -76,6 +77,17 @@ public class GlobalExceptionHandler {
                 errors
         );
 
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    // Lỗi số thứ tự duy nhất
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        ErrorResponse response = new ErrorResponse(
+                LocalDateTime.now(),
+                "Serial must be unique",
+                ex.getMessage()
+        );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

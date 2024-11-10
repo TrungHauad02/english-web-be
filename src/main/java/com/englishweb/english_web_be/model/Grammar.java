@@ -10,6 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "grammar")
 public class Grammar implements BaseEntity {
     @Id
     private String id;

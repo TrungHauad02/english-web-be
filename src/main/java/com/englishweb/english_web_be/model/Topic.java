@@ -10,12 +10,13 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "topic")
 public class Topic implements BaseEntity {
     @Id
     private String id;
     @Column(nullable = false)
     private String title;
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private int serial;
     @Column(nullable = false)
     private String image;
