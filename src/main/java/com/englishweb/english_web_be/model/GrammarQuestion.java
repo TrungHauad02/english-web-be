@@ -15,7 +15,7 @@ public class GrammarQuestion implements BaseEntity {
     private String id;
     @Column(nullable = false)
     private String content;
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private int serial;
     @Column(nullable = false)
     private String explanation;

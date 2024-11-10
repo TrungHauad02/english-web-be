@@ -10,24 +10,26 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReadingQuestion implements BaseEntity{
+public class Speaking implements BaseEntity {
     @Id
     private String id;
     @Column(nullable = false)
-    private String content;
-    @Column(unique = true, nullable = false)
+    private String title;
+    @Column(unique = true,nullable = false)
     private int serial;
     @Column(nullable = false)
-    private String explanation;
+    private String description;
     @Column(nullable = false)
+    private String image;
+    @Column(nullable = false)
+    private String topic;
+    @Column(nullable = false)
+    private int duration;
     @Enumerated(EnumType.STRING)
-    private StatusEnum status;
-    @ManyToOne
-    @JoinColumn(name = "reading_id")
-    private Reading reading;
+    private StatusEnum status = StatusEnum.ACTIVE;
 
     @PrePersist
     private void generateId() {
-        this.id = "Read_que_" + System.nanoTime();
+        this.id = "Speak_" + System.nanoTime();
     }
 }
