@@ -10,24 +10,27 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Writing implements BaseEntity {
+public class ListenAndWriteAWord implements BaseEntity {
     @Id
     private String id;
-    @Column(nullable = false)
-    private String title;
-    @Column(unique = true, nullable = false)
+    @Column(unique = true,nullable = false)
     private int serial;
     @Column(nullable = false)
-    private String description;
+    private String audioUrl;
     @Column(nullable = false)
-    private String topic;
+    private String sentence;
     @Column(nullable = false)
-    private String image;
+    private int missingIndex = 0;
+    @Column(nullable = false)
+    private String correctAnswer;
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
+    @ManyToOne
+    @JoinColumn(name="listening_id")
+    private Listening listening;
 
     @PrePersist
     private void generateId() {
-        this.id = "Write_" + System.nanoTime();
+        this.id = "Listen_Word_" + System.nanoTime();
     }
 }

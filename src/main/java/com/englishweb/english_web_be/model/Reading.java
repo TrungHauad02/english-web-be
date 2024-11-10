@@ -15,7 +15,7 @@ public class Reading implements BaseEntity {
     private String id;
     @Column(nullable = false)
     private String title;
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private int serial;
     @Column(nullable = false)
     private String description;
