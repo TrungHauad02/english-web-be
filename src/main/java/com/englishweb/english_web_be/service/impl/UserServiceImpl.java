@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -134,6 +135,21 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserReposito
         return convertToDTO(repository.save(existingUser));
     }
 
+    public void changePassword(String id, String oldPassword, String newPassword) {
+        if (oldPassword == null || newPassword == null) {
+            throw new IllegalArgumentException("Both old and new passwords must be provided.");
+        }
+
+        User existingUser = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found."));
+
+        if (!passwordEncoder.matches(oldPassword, existingUser.getPassword())) {
+            throw new RuntimeException("Old password is incorrect.");
+        }
+
+        existingUser.setPassword(passwordEncoder.encode(newPassword));
+        repository.save(existingUser);
+    }
 
     private String generatePassword(int length) {
         final SecureRandom RANDOM = new SecureRandom();

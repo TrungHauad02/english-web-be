@@ -84,11 +84,19 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Operation(method = "PUT", summary = "Update user",
+    @Operation(method = "PATCH", summary = "Update user",
             description = "Send a request via this API to update an existing user")
     @PatchMapping("/{id}")
     public ResponseEntity<UserDTO> update(@Valid @RequestBody UserDTO userDTO, @PathVariable String id) {
         return new ResponseEntity<>(userService.update(userDTO, id), HttpStatus.OK);
+    }
+
+    @PatchMapping("/change-password/{id}")
+    public ResponseEntity<String> changePassword(@PathVariable String id, @RequestBody Map<String, String> passwordData) {
+        String oldPassword = passwordData.get("oldPassword");
+        String newPassword = passwordData.get("newPassword");
+        userService.changePassword(id, oldPassword, newPassword);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Operation(method = "POST", summary = "Create new student user",
