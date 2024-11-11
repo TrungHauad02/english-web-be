@@ -30,7 +30,7 @@ build/
 !**/src/test/**/build/
 
 ## Ignore service account key
-src/main/resources/serviceAccountKey.json
+src/main/resources/englishweb-firebase-adminsdk.json
 src/main/resources/ttsServiceAccountKey.json
 
 ### VS Code ###
