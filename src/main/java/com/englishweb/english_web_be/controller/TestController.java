@@ -58,13 +58,13 @@ public class TestController {
     }
 
     @PostMapping("/api/test/question/add")
-    public ResponseEntity<Void> addQuestionTest(@RequestBody Map<String, Object> requestBody) {
+    public String addQuestionTest(@RequestBody Map<String, Object> requestBody) {
         String testid = (String) requestBody.get("testid");
         String type = (String) requestBody.get("type");
         Map<String, Object> testadd = (Map<String, Object>) requestBody.get("testadd");
 
-        testService.addQuestionTest(testid, type, testadd);
-        return ResponseEntity.noContent().build();
+        String id = testService.addQuestionTest(testid, type, testadd);
+        return id;
     }
 
     @PutMapping("/api/test/{id}")
