@@ -33,6 +33,9 @@ public class FirebaseStorageServiceImpl implements FirebaseStorageService {
     }
 
     public void deleteFile(String fileUrl) throws IOException {
+        if(!fileUrl.contains("o/")){
+            return;
+        }
         String path = fileUrl.split("o/")[1].split("\\?")[0];
 
         Bucket bucket = StorageClient.getInstance().bucket(BUCKET_NAME);

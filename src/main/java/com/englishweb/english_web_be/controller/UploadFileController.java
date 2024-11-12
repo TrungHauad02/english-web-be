@@ -46,6 +46,9 @@ public class UploadFileController {
     @DeleteMapping
     public ResponseEntity<Void> deleteFile(@RequestBody String fileUrl){
         try {
+            if(fileUrl == null || fileUrl.isEmpty()) {
+                return ResponseEntity.ok().build();
+            }
             service.deleteFile(fileUrl);
             return ResponseEntity.ok().build();
         } catch (IOException e) {
