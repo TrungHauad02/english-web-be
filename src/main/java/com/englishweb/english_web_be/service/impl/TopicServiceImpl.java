@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -22,13 +23,16 @@ public class TopicServiceImpl extends BaseServiceImpl<Topic, TopicDTO, TopicRepo
 
     private final TopicQuestionServiceImpl topicQuestionService;
     private final VocabularyServiceImpl vocabularyService;
+    private final FirebaseStorageServiceImpl firebaseStorageServiceImpl;
 
     public TopicServiceImpl(TopicRepository repository,
                             TopicQuestionServiceImpl topicQuestionService,
-                            VocabularyServiceImpl vocabularyService) {
+                            VocabularyServiceImpl vocabularyService,
+                            @Lazy FirebaseStorageServiceImpl firebaseStorageServiceImpl) {
         super(repository);
         this.topicQuestionService = topicQuestionService;
         this.vocabularyService = vocabularyService;
+        this.firebaseStorageServiceImpl = firebaseStorageServiceImpl;
     }
 
     @Override
@@ -47,6 +51,7 @@ public class TopicServiceImpl extends BaseServiceImpl<Topic, TopicDTO, TopicRepo
 
     @Override
     public void delete(String id) {
+        isExist(id);
         List<TopicQuestionDTO> topicQuestionDTOList = topicQuestionService.findAllByTopicId(id);
         for (TopicQuestionDTO topicQuestion : topicQuestionDTOList) {
             topicQuestionService.delete(topicQuestion.getId());
@@ -54,6 +59,11 @@ public class TopicServiceImpl extends BaseServiceImpl<Topic, TopicDTO, TopicRepo
         List<VocabularyDTO> vocabularyDTOList = vocabularyService.findByTopicId(id);
         for (VocabularyDTO vocabulary : vocabularyDTOList) {
             vocabularyService.delete(vocabulary.getId());
+        }
+        try {
+            firebaseStorageServiceImpl.deleteFile(findById(id).getImage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         super.delete(id);
     }
