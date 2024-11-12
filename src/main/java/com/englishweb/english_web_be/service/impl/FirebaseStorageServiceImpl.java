@@ -28,6 +28,7 @@ public class FirebaseStorageServiceImpl implements FirebaseStorageService {
         Bucket bucket = StorageClient.getInstance().bucket(BUCKET_NAME);
         bucket.create(path + "/" + uniqueFileName, bytes, mimeType);
         // Get the public URL
+        path = path.replace("/", "%2F");
         return "https://firebasestorage.googleapis.com/v0/b/" + BUCKET_NAME + "/o/" + path + "%2F" + uniqueFileName + "?alt=media";
     }
 
