@@ -1,6 +1,7 @@
 package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.dto.UserDTO;
+import com.englishweb.english_web_be.modelenum.LevelEnum;
 import com.englishweb.english_web_be.modelenum.RoleEnum;
 import com.englishweb.english_web_be.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Map;
 
 @Slf4j
@@ -45,20 +49,25 @@ public class UserController {
     @Operation(method = "GET", summary = "Get paginated list of teachers",
             description = "Send a request via this API to get a paginated list of teachers")
     @GetMapping("/teachers")
-    public ResponseEntity<Page<UserDTO>> findTeachersByPage(@RequestParam int page,
-                                                                    @RequestParam int size,
-                                                                    @RequestParam(defaultValue = "id") String sortBy,
-                                                                    @RequestParam(defaultValue = "asc") String sortDir) {
-        return new ResponseEntity<>(userService.findByRole(RoleEnum.TEACHER, page, size, sortBy, sortDir , UserDTO.class), HttpStatus.OK);
+    public ResponseEntity<Page<UserDTO>> findTeachersBySpecification(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(required = false) LevelEnum level,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Page<UserDTO> result = userService.findTeachersBySpecification(name, startDate, endDate, level, page, size);
+        return ResponseEntity.ok(result);
     }
 
     @Operation(method = "GET", summary = "Get paginated list of students",
             description = "Send a request via this API to get a paginated list of students")
     @GetMapping("/students")
     public ResponseEntity<Page<UserDTO>> findStudentsByPage(@RequestParam int page,
-                                                                    @RequestParam int size,
-                                                                    @RequestParam(defaultValue = "id") String sortBy,
-                                                                    @RequestParam(defaultValue = "asc") String sortDir) {
+                                                            @RequestParam int size,
+                                                            @RequestParam(defaultValue = "id") String sortBy,
+                                                            @RequestParam(defaultValue = "asc") String sortDir) {
         return new ResponseEntity<>(userService.findByRole(RoleEnum.STUDENT, page, size, sortBy, sortDir, UserDTO.class), HttpStatus.OK);
     }
 

@@ -1,8 +1,12 @@
 package com.englishweb.english_web_be.service;
 
 import com.englishweb.english_web_be.dto.UserDTO;
+import com.englishweb.english_web_be.modelenum.LevelEnum;
 import com.englishweb.english_web_be.modelenum.RoleEnum;
 import org.springframework.data.domain.Page;
+
+import java.time.LocalDate;
+import java.util.Date;
 
 public interface UserService extends BaseService<UserDTO> {
 
@@ -25,4 +29,8 @@ public interface UserService extends BaseService<UserDTO> {
     void resetPassword(String email, String newPassword, String confirmPassword);
 
     void changePassword(String userId, String oldPassword, String newPassword);
+
+
+    Page<UserDTO> findTeachersBySpecification(String name, LocalDate searchStartDate, LocalDate searchEndDate, LevelEnum level, int page, int size);
+
 }
