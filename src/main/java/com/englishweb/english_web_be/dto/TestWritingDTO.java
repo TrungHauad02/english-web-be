@@ -17,7 +17,7 @@ public class TestWritingDTO implements BaseDTO {
     private int serial;
     @NotBlank(message = "Nội dung không được để trống")
     private String content;
-    @NotNull(message = "Trạng thái không được để trống")
+
     private StatusEnum status;
     @NotBlank(message = "Test ID không được để trống")
     private String testId;

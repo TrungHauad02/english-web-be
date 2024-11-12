@@ -16,7 +16,7 @@ public class TestReadingAnswerDTO implements BaseDTO {
     private String content;
     @NotNull(message = "Trường isCorrect không được để trống")
     private Boolean isCorrect;
-    @NotNull(message = "Trạng thái không được để trống")
+
     private StatusEnum status;
     @NotBlank(message = "Test Question Reading ID không được để trống")
     private String testQuestionReadingId;

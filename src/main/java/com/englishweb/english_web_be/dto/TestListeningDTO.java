@@ -22,11 +22,11 @@ public class TestListeningDTO implements BaseDTO {
     private String content;
     @NotBlank(message = "Bản dịch không được để trống")
     private String transcript;
-    @NotBlank(message = "Trạng thái không được để trống")
+
     private StatusEnum status;
     @NotBlank(message = "Test ID không được để trống")
     private String testId;
-    @NotNull(message = "Danh sách câu hỏi không được để trống")
+
     private List<TestListeningQuestionDTO> questions;
 
 
