@@ -1,12 +1,15 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.UserDTO;
+import com.englishweb.english_web_be.exception.UserNotFoundException;
 import com.englishweb.english_web_be.model.User;
+import com.englishweb.english_web_be.modelenum.LevelEnum;
 import com.englishweb.english_web_be.modelenum.RoleEnum;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.UserRepository;
 import com.englishweb.english_web_be.service.EmailService;
 import com.englishweb.english_web_be.service.UserService;
+import com.englishweb.english_web_be.util.UserSpecification;
 import com.englishweb.english_web_be.util.ValidationUtils;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -15,11 +18,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -35,13 +41,15 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserReposito
     PasswordEncoder passwordEncoder;
     private Map<String, OtpData> otpCache = new HashMap<>();
     private Map<String, Boolean> otpVerifiedCache = new HashMap<>();
+    private final UserRepository userRepository;
 
     public UserServiceImpl(UserRepository repository,
                            EmailService emailService,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder, UserRepository userRepository) {
         super(repository);
         this.emailService = emailService;
         this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
     }
     private class OtpData {
         String otp;
@@ -63,6 +71,19 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserReposito
         Page<User> entityPage = repository.findByRoleEnum(role, pageable);
         return entityPage.map(this::convertToDTO);
     }
+
+    public Page<UserDTO> findTeachersBySpecification(String name, LocalDate searchStartDate, LocalDate searchEndDate, LevelEnum level, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Specification<User> spec = Specification.where(UserSpecification.hasRole(RoleEnum.TEACHER))
+                .and(UserSpecification.hasName(name))
+                .and(UserSpecification.hasLevel(level))
+                .and(UserSpecification.hasDateRange(searchStartDate, searchEndDate)); // Sử dụng bộ lọc ngày
+
+        Page<User> userPage = userRepository.findAll(spec, pageable);
+        return userPage.map(this::convertToDTO);
+    }
+
 
     @Override
     public UserDTO createStudent(UserDTO dto) {
@@ -141,7 +162,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserReposito
         }
 
         User existingUser = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found."));
+                .orElseThrow(() -> new UserNotFoundException("User not found."));
 
         if (!passwordEncoder.matches(oldPassword, existingUser.getPassword())) {
             throw new RuntimeException("Old password is incorrect.");

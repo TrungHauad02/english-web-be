@@ -90,4 +90,15 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(DataIntegrityViolationException ex){
+        ErrorResponse response = new ErrorResponse(
+                LocalDateTime.now(),
+                "User not found.",
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
 }
