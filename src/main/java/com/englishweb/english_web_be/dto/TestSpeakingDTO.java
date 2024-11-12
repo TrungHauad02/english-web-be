@@ -22,9 +22,9 @@ public class TestSpeakingDTO implements BaseDTO {
     private String title;
     @Positive(message = "Serial phải là số dương")
     private int serial;
-    @NotNull(message = "Trạng thái không được để trống")
+
     private StatusEnum status;
-    @NotNull(message = "Danh sách câu hỏi không được để trống")
+
     private List<TestSpeakingQuestionDTO> questions;
     @NotBlank(message = "Test ID không được để trống")
     private String testId;

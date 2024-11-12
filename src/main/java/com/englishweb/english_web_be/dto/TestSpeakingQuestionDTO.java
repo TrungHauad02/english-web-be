@@ -17,9 +17,9 @@ public class TestSpeakingQuestionDTO implements BaseDTO {
     private String content;
     @Positive(message = "Serial phải là số dương")
     private int serial;
-    @NotNull(message = "Trạng thái không được để trống")
+
     private StatusEnum status;
-    @NotBlank(message = "Test Speaking ID không được để trống")
+
     private String testSpeakingId;
 
     @Override

@@ -24,17 +24,17 @@ public class TestDTO implements BaseDTO {
     private int duration;
     @NotBlank(message = "Test type cannot be null")
     private TestTypeEnum type;
-    @NotBlank(message = "Status cannot be null")
+
     private StatusEnum status;
-    @NotEmpty(message = "Test listening questions cannot be empty")
+
     private List<TestListeningDTO> testListenings;
-    @NotEmpty(message = "Test reading questions cannot be empty")
+
     private List<TestReadingDTO> testReadings;
-    @NotEmpty(message = "Test writing questions cannot be empty")
+
     private List<TestWritingDTO> testWritings;
-    @NotEmpty(message = "Test speaking questions cannot be empty")
+
     private List<TestSpeakingDTO> testSpeakings;
-    @NotEmpty(message = "Test mixing questions cannot be empty")
+
     private List<TestMixingQuestionDTO> testMixingQuestions;
 
 

@@ -25,9 +25,9 @@ public class TestMixingQuestionDTO implements BaseDTO {
     private String explanation;
     @NotNull(message = "Loại câu hỏi không được để trống")
     private TestMixingTypeEnum type;
-    @NotBlank(message = "Trạng thái không được để trống")
+
     private StatusEnum status;
-    @NotNull(message = "Danh sách câu trả lời không được để trống")
+
     private List<TestMixingAnswerDTO> answers;
     @NotBlank(message = "Test ID không được để trống")
     private String testId;

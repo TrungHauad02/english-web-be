@@ -22,9 +22,9 @@ public class TestReadingDTO implements BaseDTO {
     private String content;
     @NotBlank(message = "Hình ảnh không được để trống")
     private String image;
-    @NotNull(message = "Trạng thái không được để trống")
+
     private StatusEnum status;
-    @NotNull(message = "Danh sách câu hỏi không được để trống")
+
     private List<TestReadingQuestionDTO> questions;
     @NotBlank(message = "Test ID không được để trống")
     private String testId;

@@ -162,7 +162,9 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserReposito
         }
 
         User existingUser = repository.findById(id)
+
                 .orElseThrow(() -> new UserNotFoundException("User not found."));
+
 
         if (!passwordEncoder.matches(oldPassword, existingUser.getPassword())) {
             throw new RuntimeException("Old password is incorrect.");
