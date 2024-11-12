@@ -31,4 +31,6 @@ public interface UserService extends BaseService<UserDTO> {
     void changePassword(String userId, String oldPassword, String newPassword);
 
     Page<UserDTO> findTeachersBySpecification(String name, LocalDate searchStartDate, LocalDate searchEndDate, LevelEnum level, int page, int size);
+
+    Page<UserDTO> findStudentsBySpecification(String name, LocalDate searchStartDate, LocalDate searchEndDate, int page, int size);
 }

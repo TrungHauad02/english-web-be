@@ -64,11 +64,15 @@ public class UserController {
     @Operation(method = "GET", summary = "Get paginated list of students",
             description = "Send a request via this API to get a paginated list of students")
     @GetMapping("/students")
-    public ResponseEntity<Page<UserDTO>> findStudentsByPage(@RequestParam int page,
-                                                            @RequestParam int size,
-                                                            @RequestParam(defaultValue = "id") String sortBy,
-                                                            @RequestParam(defaultValue = "asc") String sortDir) {
-        return new ResponseEntity<>(userService.findByRole(RoleEnum.STUDENT, page, size, sortBy, sortDir, UserDTO.class), HttpStatus.OK);
+    public ResponseEntity<Page<UserDTO>> findStudentsBySpecification(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Page<UserDTO> result = userService.findStudentsBySpecification(name, startDate, endDate, page, size);
+        return ResponseEntity.ok(result);
     }
 
     @Operation(method = "GET", summary = "Get user by ID",

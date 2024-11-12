@@ -3,9 +3,7 @@ import com.englishweb.english_web_be.model.User;
 import com.englishweb.english_web_be.modelenum.LevelEnum;
 import com.englishweb.english_web_be.modelenum.RoleEnum;
 import org.springframework.data.jpa.domain.Specification;
-
 import java.time.LocalDate;
-import java.util.Date;
 
 public class UserSpecification {
 
@@ -19,18 +17,6 @@ public class UserSpecification {
         return (root, query, criteriaBuilder) -> role == null
                 ? criteriaBuilder.conjunction()
                 : criteriaBuilder.equal(root.get("roleEnum"), role);
-    }
-
-    public static Specification<User> hasStartDateAfter(Date startDate) {
-        return (root, query, criteriaBuilder) -> startDate == null
-                ? criteriaBuilder.conjunction()
-                : criteriaBuilder.greaterThanOrEqualTo(root.get("startDate"), startDate);
-    }
-
-    public static Specification<User> hasEndDateBefore(Date endDate) {
-        return (root, query, criteriaBuilder) -> endDate == null
-                ? criteriaBuilder.conjunction()
-                : criteriaBuilder.lessThanOrEqualTo(root.get("endDate"), endDate);
     }
 
     public static Specification<User> hasDateRange(LocalDate searchStartDate, LocalDate searchEndDate) {

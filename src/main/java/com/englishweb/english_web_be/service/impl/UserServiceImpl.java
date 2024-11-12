@@ -84,6 +84,16 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserReposito
         return userPage.map(this::convertToDTO);
     }
 
+    public Page<UserDTO> findStudentsBySpecification(String name, LocalDate searchStartDate, LocalDate searchEndDate, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Specification<User> spec = Specification.where(UserSpecification.hasRole(RoleEnum.STUDENT))
+                .and(UserSpecification.hasName(name))
+                .and(UserSpecification.hasDateRange(searchStartDate, searchEndDate));
+
+        Page<User> userPage = userRepository.findAll(spec, pageable);
+        return userPage.map(this::convertToDTO);
+    }
 
     @Override
     public UserDTO createStudent(UserDTO dto) {
