@@ -22,9 +22,9 @@ public class TestReadingQuestionDTO implements BaseDTO {
     private int serial;
     @NotBlank(message = "Giải thích không được để trống")
     private String explanation;
-    @NotNull(message = "Trạng thái không được để trống")
+
     private StatusEnum status;
-    @NotNull(message = "Danh sách câu trả lời không được để trống")
+
     private List<TestReadingAnswerDTO> answers;
     @NotBlank(message = "Test Reading ID không được để trống")
     private String testReadingId;
