@@ -2,10 +2,6 @@ package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.ReadingAnswerDTO;
 import com.englishweb.english_web_be.dto.ReadingQuestionDTO;
-import com.englishweb.english_web_be.dto.request.ReadingQuestionRequestDTO;
-import com.englishweb.english_web_be.dto.response.ReadingAnswerResponseDTO;
-import com.englishweb.english_web_be.dto.response.ReadingQuestionResponseDTO;
-import com.englishweb.english_web_be.mapper.ReadingQuestionMapper;
 import com.englishweb.english_web_be.model.ReadingQuestion;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.ReadingQuestionRepository;

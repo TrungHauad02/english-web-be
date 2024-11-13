@@ -7,6 +7,7 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.TopicQuestionRepository;
 import com.englishweb.english_web_be.service.TopicQuestionService;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,6 +50,29 @@ public class TopicQuestionServiceImpl extends BaseServiceImpl<TopicQuestion, Top
                     responseDTO.setAnswers(filteredAnswers);
                 })
                 .toList();
+    }
+
+    @Override
+    public TopicQuestionDTO create(TopicQuestionDTO dto) {
+        if (isSerialUnique(dto.getTopicId(), dto.getSerial(), null)) {
+            throw new DataIntegrityViolationException("Serial " + dto.getSerial() + " must be unique for Topic ID: " + dto.getTopicId());
+        }
+        return super.create(dto);
+    }
+
+    @Override
+    public TopicQuestionDTO update(TopicQuestionDTO dto, String id) {
+        if (isSerialUnique(dto.getTopicId(), dto.getSerial(), id)) {
+            throw new DataIntegrityViolationException("Serial " + dto.getSerial() + " must be unique for Topic ID: " + dto.getTopicId());
+        }
+        return super.update(dto, id);
+    }
+
+    private boolean isSerialUnique(String topicId, Integer serial, String excludeId) {
+        List<TopicQuestion> entityList = repository.findAllByTopic_Id(topicId);
+        return entityList.stream()
+                .filter(entity -> !entity.getId().equals(excludeId))
+                .anyMatch(entity -> entity.getSerial() == serial);
     }
 
     @Override
