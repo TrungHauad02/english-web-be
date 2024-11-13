@@ -16,11 +16,16 @@ import java.util.UUID;
 public class FirebaseStorageServiceImpl implements FirebaseStorageService {
 
     private final String BUCKET_NAME = "englishweb-5a6ce.appspot.com";
+    public enum RandomName {
+        YES,
+        NO
+    }
 
     @Override
-    public String uploadFile(String path, String fileName, byte[] bytes, String mimeType) throws IOException {
+    public String uploadFile(String path, String fileName, byte[] bytes, String mimeType, RandomName randomName) throws IOException {
         // Generate a unique file name
-        String uniqueFileName = fileName + "-" + UUID.randomUUID().toString();
+        String uniqueFileName = fileName;
+        if(randomName.equals(RandomName.YES)) uniqueFileName += "-" + UUID.randomUUID().toString();
 
         if (mimeType == null || mimeType.isEmpty()) {
             mimeType = "application/octet-stream";
