@@ -2,15 +2,15 @@ package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.service.FirebaseStorageService;
 import com.google.cloud.storage.Bucket;
-import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
 import com.google.firebase.cloud.StorageClient;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class FirebaseStorageServiceImpl implements FirebaseStorageService {
 
     private final String BUCKET_NAME = "englishweb-5a6ce.appspot.com";
@@ -27,15 +27,13 @@ public class FirebaseStorageServiceImpl implements FirebaseStorageService {
         // Upload the file
         Bucket bucket = StorageClient.getInstance().bucket(BUCKET_NAME);
         bucket.create(path + "/" + uniqueFileName, bytes, mimeType);
+        log.info("File uploaded successfully!");
         // Get the public URL
         path = path.replace("/", "%2F");
         return "https://firebasestorage.googleapis.com/v0/b/" + BUCKET_NAME + "/o/" + path + "%2F" + uniqueFileName + "?alt=media";
     }
 
     public void deleteFile(String fileUrl) throws IOException {
-        if(!fileUrl.contains("o/")){
-            return;
-        }
         String path = fileUrl.split("o/")[1].split("\\?")[0];
 
         Bucket bucket = StorageClient.getInstance().bucket(BUCKET_NAME);
@@ -45,12 +43,12 @@ public class FirebaseStorageServiceImpl implements FirebaseStorageService {
             if (blob != null) {
                 boolean deleted = blob.delete();
                 if (deleted) {
-                    System.out.println("File deleted successfully!");
+                    log.info("File deleted successfully!");
                 } else {
-                    System.out.println("Failed to delete the file.");
+                    log.error("Failed to delete the file.");
                 }
             } else {
-                System.out.println("File not found: " + path);
+                log.error("File not found: {}", path);
             }
         }
     }

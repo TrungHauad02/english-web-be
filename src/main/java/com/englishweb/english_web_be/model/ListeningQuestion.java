@@ -15,7 +15,7 @@ public class ListeningQuestion implements BaseEntity {
     private String id;
     @Column(nullable = false)
     private String content;
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private int serial;
     @Column(nullable = false)
     private String explanation;
