@@ -1,6 +1,7 @@
 package com.englishweb.english_web_be.exception;
 
 import com.englishweb.english_web_be.modelenum.StatusEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     // Xử lý lỗi không tìm thấy tài nguyên
@@ -83,9 +85,13 @@ public class GlobalExceptionHandler {
     // Lỗi số thứ tự duy nhất
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        log.error("A data integrity error occurred: {}", ex.getMessage());
+
+        String userFriendlyMessage = "A data integrity error occurred. Please ensure all data constraints are satisfied.";
+
         ErrorResponse response = new ErrorResponse(
                 LocalDateTime.now(),
-                "Serial must be unique",
+                userFriendlyMessage,
                 ex.getMessage()
         );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

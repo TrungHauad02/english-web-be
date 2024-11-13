@@ -8,6 +8,7 @@ import com.englishweb.english_web_be.repository.GrammarQuestionRepository;
 import com.englishweb.english_web_be.service.GrammarQuestionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,6 +51,29 @@ public class GrammarQuestionServiceImpl extends BaseServiceImpl<GrammarQuestion,
                     responseDTO.setAnswers(filteredAnswers);
                 })
                 .toList();
+    }
+
+    @Override
+    public GrammarQuestionDTO create(GrammarQuestionDTO dto) {
+        if (isSerialUnique(dto.getGrammarId(), dto.getSerial(), null)) {
+            throw new DataIntegrityViolationException("Serial " + dto.getSerial() + " must be unique for Grammar ID: " + dto.getGrammarId());
+        }
+        return super.create(dto);
+    }
+
+    @Override
+    public GrammarQuestionDTO update(GrammarQuestionDTO dto, String id) {
+        if (isSerialUnique(dto.getGrammarId(), dto.getSerial(), id)) {
+            throw new DataIntegrityViolationException("Serial " + dto.getSerial() + " must be unique for Grammar ID: " + dto.getGrammarId());
+        }
+        return super.update(dto, id);
+    }
+
+    private boolean isSerialUnique(String topicId, Integer serial, String excludeId) {
+        List<GrammarQuestion> entityList = repository.findAllByGrammar_Id(topicId);
+        return entityList.stream()
+                .filter(entity -> !entity.getId().equals(excludeId))
+                .anyMatch(entity -> entity.getSerial() == serial);
     }
 
     @Override
