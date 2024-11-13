@@ -22,7 +22,7 @@ public class TestDTO implements BaseDTO {
     private int serial;
     @Positive(message = "Duration must be greater than 0")
     private int duration;
-    @NotBlank(message = "Test type cannot be null")
+
     private TestTypeEnum type;
 
     private StatusEnum status;
