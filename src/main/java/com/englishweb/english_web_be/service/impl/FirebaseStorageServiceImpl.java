@@ -1,11 +1,13 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.service.FirebaseStorageService;
+import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Bucket;
 import com.google.firebase.cloud.StorageClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -34,6 +36,9 @@ public class FirebaseStorageServiceImpl implements FirebaseStorageService {
     }
 
     public void deleteFile(String fileUrl) throws IOException {
+        if (fileUrl == null || !fileUrl.contains("o/")) {
+            return;
+        }
         String path = fileUrl.split("o/")[1].split("\\?")[0];
 
         Bucket bucket = StorageClient.getInstance().bucket(BUCKET_NAME);
@@ -51,5 +56,23 @@ public class FirebaseStorageServiceImpl implements FirebaseStorageService {
                 log.error("File not found: {}", path);
             }
         }
+    }
+
+    public byte[] downloadFile(String fileUrl) throws IOException {
+        if (fileUrl == null || !fileUrl.contains("o/")) {
+            throw new IllegalArgumentException("Invalid file URL.");
+        }
+
+        String path = fileUrl.split("o/")[1].split("\\?")[0];
+        path = path.replace("%2F", "/");
+
+        Bucket bucket = StorageClient.getInstance().bucket(BUCKET_NAME);
+        Blob blob = bucket.get(path);
+
+        if (blob == null) {
+            throw new IOException("File not found: " + path);
+        }
+
+        return blob.getContent();
     }
 }
