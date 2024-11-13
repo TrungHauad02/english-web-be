@@ -6,6 +6,7 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.ListenAndWriteAWordRepository;
 import com.englishweb.english_web_be.service.ListenAndWriteAWordService;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,6 +42,29 @@ public class ListenAndWriteAWordServiceImpl extends BaseServiceImpl<ListenAndWri
         return entityList.stream()
                 .map(this::convertToDTO)
                 .toList();
+    }
+
+    @Override
+    public ListenAndWriteAWordDTO create(ListenAndWriteAWordDTO dto) {
+        if (isSerialUnique(dto.getListeningId(), dto.getSerial(), null)) {
+            throw new DataIntegrityViolationException("Serial " + dto.getSerial() + " must be unique for Listening ID: " + dto.getListeningId());
+        }
+        return super.create(dto);
+    }
+
+    @Override
+    public ListenAndWriteAWordDTO update(ListenAndWriteAWordDTO dto, String id) {
+        if (isSerialUnique(dto.getListeningId(), dto.getSerial(), id)) {
+            throw new DataIntegrityViolationException("Serial " + dto.getSerial() + " must be unique for Listening ID: " + dto.getListeningId());
+        }
+        return super.update(dto, id);
+    }
+
+    private boolean isSerialUnique(String listenAndWriteId, Integer serial, String excludeId) {
+        List<ListenAndWriteAWord> entityList = repository.findAllByListening_Id(listenAndWriteId);
+        return entityList.stream()
+                .filter(entity -> !entity.getId().equals(excludeId))
+                .anyMatch(entity -> entity.getSerial() == serial);
     }
 
     @Override

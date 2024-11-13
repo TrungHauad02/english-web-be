@@ -14,15 +14,18 @@ import java.io.IOException;
 public class FirebaseConfig {
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
-        FileInputStream serviceAccount =
-                new FileInputStream("src/main/resources/englishweb-firebase-adminsdk.json");
+        if (FirebaseApp.getApps().isEmpty()) {
+            FileInputStream serviceAccount =
+                    new FileInputStream("src/main/resources/englishweb-firebase-adminsdk.json");
 
-        FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setDatabaseUrl("https://englishweb-5a6ce-default-rtdb.firebaseio.com")
-                .setStorageBucket("englishweb-5a6ce.appspot.com")
-                .build();
+            FirebaseOptions options = FirebaseOptions.builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .setDatabaseUrl("https://englishweb-5a6ce-default-rtdb.firebaseio.com")
+                    .setStorageBucket("englishweb-5a6ce.appspot.com")
+                    .build();
 
-        return FirebaseApp.initializeApp(options);
+            return FirebaseApp.initializeApp(options);
+        }
+        return FirebaseApp.getInstance();
     }
 }
