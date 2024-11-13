@@ -3,6 +3,7 @@ package com.englishweb.english_web_be.controller;
 import com.englishweb.english_web_be.dto.request.UploadRequest;
 import com.englishweb.english_web_be.dto.response.UploadResponse;
 import com.englishweb.english_web_be.service.FirebaseStorageService;
+import com.englishweb.english_web_be.service.impl.FirebaseStorageServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -35,7 +36,7 @@ public class UploadFileController {
             byte[] fileBytes = Base64.getDecoder().decode(base64Data);
             String mimeType = fileData.split(",")[0].split(":")[1].split(";")[0];
 
-            String url = service.uploadFile(request.getPath(), request.getFileName(), fileBytes, mimeType);
+            String url = service.uploadFile(request.getPath(), request.getFileName(), fileBytes, mimeType, FirebaseStorageServiceImpl.RandomName.YES);
             return ResponseEntity.ok(new UploadResponse(url));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
