@@ -19,12 +19,6 @@ public class SubmitTest implements BaseEntity {
     private String id;
 
     @Column(nullable = false)
-    private String testId;
-
-    @Column(nullable = false)
-    private String userId;
-
-    @Column(precision = 5, scale = 2)
     private BigDecimal score;
 
     @Column(nullable = false)
@@ -33,6 +27,13 @@ public class SubmitTest implements BaseEntity {
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
 
+    @ManyToOne
+    @JoinColumn(name = "test_id")
+    private Test test;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @PrePersist
     private void generateId() {
