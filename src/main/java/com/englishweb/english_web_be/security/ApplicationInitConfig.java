@@ -43,27 +43,10 @@ public class ApplicationInitConfig {
                 userRepository.save(user);                                     // Lưu người dùng vào cơ sở dữ liệu
                 log.warn("Admin user has been created with default password: admin, please change it");
             }
-            if(userRepository.findByEmail("21110487@student.hcmute.edu.vn").isEmpty()){
-                User user = new User(
-                        "admin-id",                                        // Thay thế "admin-id" bằng một ID hợp lệ
-                        "Hung",                                                // Tên người dùng
-                        "21110487@student.hcmute.edu.vn",                      // Email
-                        passwordEncoder.encode("123"),            // Mật khẩu đã mã hóa
-                        null,                                                  // URL ảnh đại diện nếu có
-                        null,                                                  // Nội dung động lực
-                        StatusEnum.ACTIVE,                                     // Trạng thái người dùng (giả sử bạn có `StatusEnum.ACTIVE`)
-                        RoleEnum.ADMIN,                                        // Vai trò người dùng (giả sử bạn có `RoleEnum.USER`)
-                        null,                                                  // Cấp độ người dùng (giả sử bạn có `LevelEnum.BEGINNER`)
-                        LocalDate.now(),                                       // Ngày bắt đầu
-                        null                                                   // Ngày kết thúc (có thể là null nếu chưa xác định)
-                );
-                userRepository.save(user);                                     // Lưu người dùng vào cơ sở dữ liệu
-                log.warn("Admin user has been created with default password: admin, please change it");
-            }
             if(userRepository.findByEmail("student").isEmpty()){
                 User user = new User(
                         "user-id",                                        // Thay thế "admin-id" bằng một ID hợp lệ
-                        "student",                                                // Tên người dùng
+                        "student",                                            // Tên người dùng
                         "student",                                              // Email
                         passwordEncoder.encode("123"),            // Mật khẩu đã mã hóa
                         null,                                                  // URL ảnh đại diện nếu có

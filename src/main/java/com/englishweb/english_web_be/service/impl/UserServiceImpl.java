@@ -19,9 +19,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.SecureRandom;
 import java.time.LocalDate;
@@ -109,7 +111,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserReposito
     @Override
     public UserDTO createTeacher(UserDTO dto) {
         if (repository.findByEmail(dto.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists. Please use another email.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists. Please use another email.");
         }
 
         String rawPassword = generatePassword(12);
@@ -123,14 +125,6 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserReposito
         return createdTeacher;
     }
 
-//    @Override
-//    public UserResponseDTO deleteUser(String id) {
-//        User user = repository.findById(id).orElseThrow(() -> new RuntimeException("User not found."));
-//        user.setStatus(StatusEnum.INACTIVE);
-//        repository.save(user);
-//        return mapper.mapToResponseDTO(convertToDTO(user));
-//    }
-
     @Override
     public UserDTO getInfor() {
         var context = SecurityContextHolder.getContext();
@@ -143,7 +137,6 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserReposito
     public UserDTO update(UserDTO dto, String id) {
         User existingUser = repository.findById(id).orElseThrow(() -> new RuntimeException("User not found."));
 
-        // Phương thức tiện ích để cập nhật nếu giá trị tồn tại và không rỗng
         BiConsumer<String, Consumer<String>> updateIfPresent = (newValue, setter) -> {
             if (newValue != null && !newValue.trim().isEmpty()) {
                 setter.accept(newValue);
@@ -156,12 +149,23 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserReposito
         updateIfPresent.accept(dto.getAvatar(), existingUser::setAvatar);
         updateIfPresent.accept(dto.getContentMotivation(), existingUser::setContentMotivation);
 
-        // Các trường enum và ngày
-        Optional.ofNullable(dto.getStatus()).ifPresent(existingUser::setStatus);
-        Optional.ofNullable(dto.getRole()).ifPresent(existingUser::setRoleEnum);
-        Optional.ofNullable(dto.getLevel()).ifPresent(existingUser::setLevelEnum);
-        Optional.ofNullable(dto.getStartDate()).ifPresent(existingUser::setStartDate);
-        Optional.ofNullable(dto.getEndDate()).ifPresent(existingUser::setEndDate);
+        if (dto.getStatus() != null) {
+            existingUser.setStatus(dto.getStatus());
+        }
+        if (dto.getRole() != null) {
+            existingUser.setRoleEnum(dto.getRole());
+        }
+        if (dto.getLevel() != null) {
+            existingUser.setLevelEnum(dto.getLevel());
+        }
+        if (dto.getStartDate() != null) {
+            existingUser.setStartDate(dto.getStartDate());
+        }
+        if (StatusEnum.ACTIVE.equals(dto.getStatus())) {
+            existingUser.setEndDate(null);
+        } else if (dto.getEndDate() != null) {
+            existingUser.setEndDate(dto.getEndDate());
+        }
 
         return convertToDTO(repository.save(existingUser));
     }
@@ -292,7 +296,6 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserReposito
         dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setEmail(entity.getEmail());
-        dto.setPassword(entity.getPassword());
         dto.setAvatar(entity.getAvatar());
         dto.setContentMotivation(entity.getContentMotivation());
         dto.setRole(entity.getRoleEnum());
