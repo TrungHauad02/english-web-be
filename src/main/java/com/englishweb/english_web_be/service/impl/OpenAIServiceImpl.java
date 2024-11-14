@@ -1,0 +1,58 @@
+package com.englishweb.english_web_be.service.impl;
+
+import com.englishweb.english_web_be.dto.request.OpenAIRequestDTO;
+import com.englishweb.english_web_be.dto.response.OpenAIResponseDTO;
+import com.englishweb.english_web_be.service.OpenAIService;
+import com.englishweb.english_web_be.util.OpenAIModel;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+
+@Service
+@Slf4j
+public class OpenAIServiceImpl implements OpenAIService {
+    @Value("${openai.api.key}")
+    private String apiKey;
+
+    @Value("${openai.api.url}")
+    private String apiUrl;
+
+    private final WebClient webClient;
+
+    public OpenAIServiceImpl(WebClient.Builder webClientBuilder) {
+        this.webClient = webClientBuilder.build();
+    }
+
+    @Override
+    public OpenAIResponseDTO generateResponse(OpenAIModel model, String prompt, int maxTokens, double temperature) {
+        OpenAIRequestDTO request = new OpenAIRequestDTO(model, prompt, maxTokens, temperature);
+
+        log.info("Preparing to send request to OpenAI API: Model = {}, Prompt = {}, Max Tokens = {}, Temperature = {}",
+                model.getModelName(), prompt, maxTokens, temperature);
+
+        try {
+            OpenAIResponseDTO response = webClient.post()
+                    .uri(apiUrl)
+                    .header("Authorization", "Bearer " + apiKey)
+                    .header("Content-Type", "application/json")
+                    .bodyValue(request)
+                    .retrieve()
+                    .bodyToMono(OpenAIResponseDTO.class)
+                    .block();
+            if (response != null) {
+                log.info("Received successful response from OpenAI API. Response: {}", response);
+            } else {
+                log.warn("Received empty response from OpenAI API.");
+            }
+
+            return response;
+        } catch (Exception e) {
+            log.error("Error calling OpenAI API: {}. Request details: Model = {}, Prompt = {}, Max Tokens = {}, Temperature = {}",
+                    e.getMessage(), model.getModelName(), prompt, maxTokens, temperature);
+            return null;
+        }
+    }
+
+}

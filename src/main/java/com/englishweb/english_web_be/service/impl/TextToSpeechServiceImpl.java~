@@ -24,7 +24,7 @@ public class TextToSpeechServiceImpl implements TextToSpeechService {
     private String userId;
     @Override
     public InputStreamResource convertTextToSpeech(String text, String voice) throws IOException, InterruptedException {
-        String jsonPayload = String.format("{\"text\":\"%s\",\"voice\":\"%s\",\"output_format\":\"mp3\",\"language\":\"english\"}", text, voice);
+        String jsonPayload = String.format("{\"text\":\"%s\",\"voice\":\"%s\",\"output_format\":\"mp3\"}", text, voice);
 
         // Log jsonPayload để kiểm tra
         log.info("Sending request with payload: {}", jsonPayload);

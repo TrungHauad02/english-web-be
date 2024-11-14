@@ -1,0 +1,47 @@
+package com.englishweb.english_web_be.controller;
+
+import com.englishweb.english_web_be.dto.response.OpenAIResponseDTO;
+import com.englishweb.english_web_be.service.OpenAIService;
+import com.englishweb.english_web_be.util.OpenAIModel;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/openai")
+@Tag(name = "OpenAI Controller")
+@Slf4j
+public class OpenAIController {
+    OpenAIService service;
+
+    public OpenAIController(OpenAIService service) {
+        this.service = service;
+    }
+
+    /**
+     * Endpoint để gửi yêu cầu chấm điểm văn bản hoặc yêu cầu sinh văn bản từ OpenAI API.
+     *
+     * @param prompt      nội dung yêu cầu để API xử lý.
+     * @param model       mô hình OpenAI để sử dụng, mặc định là DAVINCI.
+     * @param maxTokens   số token tối đa cho kết quả sinh ra.
+     * @param temperature giá trị nhiệt độ để kiểm soát độ sáng tạo của phản hồi.
+     * @return phản hồi từ OpenAI API dưới dạng ResponseEntity.
+     */
+    @PostMapping("/generate")
+    public ResponseEntity<OpenAIResponseDTO> generateResponse(
+            @RequestBody String prompt,
+            @RequestParam(defaultValue = "GPT_3_5_TURBO") OpenAIModel model,
+            @RequestParam(defaultValue = "100") int maxTokens,
+            @RequestParam(defaultValue = "0.1") double temperature) {
+
+        try {
+            return service.generateResponse(model, prompt, maxTokens, temperature)
+                    .map(ResponseEntity::ok)
+                    .defaultIfEmpty(ResponseEntity.badRequest().build()).block();
+        } catch (Exception e) {
+            log.error("Error calling OpenAI API in controller: {}", e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
+    }
+}
