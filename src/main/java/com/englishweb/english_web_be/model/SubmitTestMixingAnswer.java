@@ -16,20 +16,22 @@ public class SubmitTestMixingAnswer implements BaseEntity {
     private String id;
 
     @Column(nullable = false)
-    private String submitTestId;
-
-    @Column(nullable = false)
-    private String questionId;
-
-    @Column(nullable = false)
-    private String answerId;
-
-    @Column
     private String comment;
 
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
 
+    @ManyToOne
+    @JoinColumn(name = "submit_test_id")
+    private SubmitTest submitTest;
+
+    @ManyToOne
+    @JoinColumn(name = "question_id")
+    private TestMixingQuestion question;
+
+    @OneToOne
+    @JoinColumn(name = "answer_id")
+    private TestMixingAnswer answer;
 
     @PrePersist
     private void generateId() {

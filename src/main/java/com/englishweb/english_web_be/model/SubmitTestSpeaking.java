@@ -18,26 +18,27 @@ public class SubmitTestSpeaking implements BaseEntity {
     private String id;
 
     @Column(nullable = false)
-    private String testSpeakingQuestionId;
-
-    @Column(nullable = false)
-    private String submitTestId;
-
-    @Column(precision = 5, scale = 2)
     private BigDecimal score;
 
-    @Column
-    private String content; // Assuming this stores the file path to the .mp3 file
+    @Column(nullable = false)
+    private String content;
 
-    @Column
+    @Column(nullable = false)
     private String explanation;
 
-    @Column
+    @Column(nullable = false)
     private String comment;
 
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
 
+    @OneToOne
+    @JoinColumn(name = "test_speaking_question_id")
+    private TestSpeakingQuestion testSpeakingQuestion;
+
+    @ManyToOne
+    @JoinColumn(name = "submit_test_id")
+    private SubmitTest submitTest;
 
     @PrePersist
     private void generateId() {
