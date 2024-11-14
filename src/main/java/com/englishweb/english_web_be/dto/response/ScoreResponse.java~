@@ -1,0 +1,6 @@
+package com.englishweb.english_web_be.dto.response;
+
+public class ScoreResponse {
+    private Integer score;
+    private String comment;
+}
