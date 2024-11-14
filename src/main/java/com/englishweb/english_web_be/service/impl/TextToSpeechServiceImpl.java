@@ -17,10 +17,10 @@ import java.nio.charset.StandardCharsets;
 @Service
 @Slf4j
 public class TextToSpeechServiceImpl implements TextToSpeechService {
-    @Value("${api.key}")
+    @Value("${tts.api.key}")
     private String apiKey;
 
-    @Value("${user.id}")
+    @Value("${tts.user.id}")
     private String userId;
     @Override
     public InputStreamResource convertTextToSpeech(String text, String voice) throws IOException, InterruptedException {

@@ -1,0 +1,18 @@
+package com.englishweb.english_web_be.service;
+
+import com.englishweb.english_web_be.dto.response.OpenAIResponseDTO;
+import com.englishweb.english_web_be.util.OpenAIModel;
+import reactor.core.publisher.Mono;
+
+public interface OpenAIService {
+
+    /**
+     * Phương thức gửi yêu cầu tới OpenAI API và nhận phản hồi.
+     * @param model mô hình OpenAI để sử dụng.
+     * @param prompt nội dung yêu cầu để API xử lý.
+     * @param maxTokens số token tối đa cho kết quả sinh ra.
+     * @param temperature giá trị nhiệt độ để kiểm soát độ sáng tạo của phản hồi.
+     * @return phản hồi từ OpenAI API dưới dạng OpenAIResponseDTO.
+     */
+    Mono<OpenAIResponseDTO> generateResponse(OpenAIModel model, String prompt, int maxTokens, double temperature);
+}
