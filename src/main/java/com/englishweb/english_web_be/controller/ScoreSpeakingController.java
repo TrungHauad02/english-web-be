@@ -1,7 +1,9 @@
 package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.dto.request.PostRequest;
+import com.englishweb.english_web_be.dto.request.ScoreSpeakingRequest;
 import com.englishweb.english_web_be.dto.response.PostResponse;
+import com.englishweb.english_web_be.dto.response.ScoreSpeakingResponse;
 import com.englishweb.english_web_be.service.ScoreSpeakingService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -19,5 +21,10 @@ public class ScoreSpeakingController {
     @PostMapping("/post")
     public ResponseEntity<PostResponse> addPost(@RequestBody PostRequest request){
         return new ResponseEntity<>(service.addPost(request), HttpStatus.OK);
+    }
+
+    @PostMapping("/score")
+    public ResponseEntity<ScoreSpeakingResponse> scoreSpeaking(@RequestBody ScoreSpeakingRequest request){
+        return new ResponseEntity<>(service.scoreSpeaking(request.getSpeakingConversationId(), request.getScale(), request.getAudioProvided()), HttpStatus.OK);
     }
 }

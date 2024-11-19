@@ -102,6 +102,8 @@ public class SpeakingConversationServiceImpl extends BaseServiceImpl<SpeakingCon
         entity.setId(id);
         if (!postId.isEmpty()) {
             entity.setPostId(postId);
+        } else {
+            entity.setPostId(repository.findById(id).get().getPostId());
         }
 
         log.info("Updating SpeakingConversation with ID {}: {}", id, entity);

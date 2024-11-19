@@ -3,6 +3,7 @@ package com.englishweb.english_web_be.controller;
 import com.englishweb.english_web_be.dto.request.UploadRequest;
 import com.englishweb.english_web_be.dto.response.UploadResponse;
 import com.englishweb.english_web_be.service.FirebaseStorageService;
+import com.englishweb.english_web_be.service.impl.FirebaseStorageServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -25,8 +26,11 @@ public class UploadFileController {
     @Operation(method = "POST", summary = "Upload file",
             description = "Send a request via this API to upload a file to firebase storage")
     @PostMapping
-    public ResponseEntity<UploadResponse> uploadFile(@RequestBody UploadRequest request){
+    public ResponseEntity<UploadResponse> uploadFile(@RequestBody UploadRequest request,
+                                                     @RequestParam(required = false, defaultValue = "YES") String randomName) {
         try {
+            FirebaseStorageServiceImpl.RandomName randomNameEnum = FirebaseStorageServiceImpl.RandomName.fromString(randomName); // Chuyển chuỗi thành enum
+
             String fileData = request.getFile();
             if (fileData == null || !fileData.contains(",")) {
                 return ResponseEntity.badRequest().build();
@@ -35,7 +39,7 @@ public class UploadFileController {
             byte[] fileBytes = Base64.getDecoder().decode(base64Data);
             String mimeType = fileData.split(",")[0].split(":")[1].split(";")[0];
 
-            String url = service.uploadFile(request.getPath(), request.getFileName(), fileBytes, mimeType);
+            String url = service.uploadFile(request.getPath(), request.getFileName(), fileBytes, mimeType, randomNameEnum);
             return ResponseEntity.ok(new UploadResponse(url));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -43,6 +47,7 @@ public class UploadFileController {
             throw new RuntimeException(e);
         }
     }
+
 
     @Operation(method = "DELETE", summary = "Delete file",
             description = "Send a request via this API to delete a file from firebase storage")

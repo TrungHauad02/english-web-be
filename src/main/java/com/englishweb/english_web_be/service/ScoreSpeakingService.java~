@@ -10,5 +10,5 @@ public interface ScoreSpeakingService {
 
     void deletePost(String id);
 
-    ScoreSpeakingResponse scoreSpeaking(String speakingConversationId, int scale, String audioProvided);
+    ScoreSpeakingResponse scoreSpeaking(String postId, int scale, String audioProvided);
 }
