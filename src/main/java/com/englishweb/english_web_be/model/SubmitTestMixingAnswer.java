@@ -4,6 +4,8 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 @Entity
 @Getter
 @Setter
@@ -36,6 +38,6 @@ public class SubmitTestMixingAnswer implements BaseEntity {
 
     @PrePersist
     private void generateId() {
-        this.id = "Submit_mixing_ans_" + System.nanoTime();
+        this.id = "Submit_mixing_ans_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString();
     }
 }

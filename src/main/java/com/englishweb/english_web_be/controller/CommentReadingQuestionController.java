@@ -28,7 +28,7 @@ public class CommentReadingQuestionController {
     @PostMapping
     public ResponseEntity<CommentResponse> commentReadingQuestion(@RequestBody @Valid CommentReadingQuestionRequest request) {
         CommentResponse response = service.commentReadingQuestion(request.getQuestionContent(), request.getReadingContent(), request.getAnswers(), request.getUserAnswer());
-       
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
