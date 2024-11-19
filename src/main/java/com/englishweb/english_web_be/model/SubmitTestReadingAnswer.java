@@ -10,11 +10,12 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class SubmitTestReadingAnswer implements BaseEntity {
 
     @Id
     private String id;
-    
+
     @Column(nullable = false)
     private String comment;
 
@@ -29,7 +30,7 @@ public class SubmitTestReadingAnswer implements BaseEntity {
     @JoinColumn(name = "question_id")
     private TestReadingQuestion question;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "answer_id")
     private TestReadingAnswer answer;
 

@@ -32,7 +32,7 @@ public class SubmitTestSpeaking implements BaseEntity {
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "test_speaking_question_id")
     private TestSpeakingQuestion testSpeakingQuestion;
 
