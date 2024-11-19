@@ -18,7 +18,18 @@ public class FirebaseStorageServiceImpl implements FirebaseStorageService {
     private final String BUCKET_NAME = "englishweb-5a6ce.appspot.com";
     public enum RandomName {
         YES,
-        NO
+        NO;
+
+        public static RandomName fromString(String value) {
+            if (value != null) {
+            for (RandomName randomName : RandomName.values()) {
+                if (value.equalsIgnoreCase(randomName.name())) {
+                    return randomName;
+                }
+            }
+        }
+            throw new IllegalArgumentException("Unexpected value '" + value + "'");
+        }
     }
 
     @Override

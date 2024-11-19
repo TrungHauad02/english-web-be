@@ -1,0 +1,7 @@
+package com.englishweb.english_web_be.dto.request;
+
+public class ScoreSpeakingRequest {
+    private String speakingConversationId;
+    private int scale;
+    private String audioProvided;
+}

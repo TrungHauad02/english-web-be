@@ -4,6 +4,7 @@ import com.englishweb.english_web_be.dto.SpeakingConversationDTO;
 import com.englishweb.english_web_be.dto.response.SpeakingConversationResponse;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.service.SpeakingConversationService;
+import com.englishweb.english_web_be.service.impl.SpeakingConversationServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -21,7 +22,7 @@ import java.util.List;
 public class SpeakingConversationController {
     private final SpeakingConversationService service;
 
-    public SpeakingConversationController(SpeakingConversationService service) {
+    public SpeakingConversationController(SpeakingConversationServiceImpl service) {
         this.service = service;
     }
 

@@ -70,7 +70,7 @@ public class SpeakingConversationServiceImpl extends BaseServiceImpl<SpeakingCon
 
     @Override
     public SpeakingConversationDTO create(SpeakingConversationDTO dto) {
-        if (isSerialUnique(dto.getSpeakingId(), dto.getSerial(), null)) {
+        if (SpeakingConversationUtils.isSerialUnique(dto.getSpeakingId(), dto.getSerial(), null, repository)) {
             throw new DataIntegrityViolationException("Serial " + dto.getSerial() + " must be unique for Speaking ID: " + dto.getSpeakingId());
         }
         String postId = SpeakingConversationUtils.addPostForSpeaking(scoreSpeakingServiceImpl, dto.getName(), dto.getContent());
@@ -88,11 +88,11 @@ public class SpeakingConversationServiceImpl extends BaseServiceImpl<SpeakingCon
 
     @Override
     public SpeakingConversationDTO update(SpeakingConversationDTO dto, String id) {
-        if (isSerialUnique(dto.getSpeakingId(), dto.getSerial(), id)) {
+        if (SpeakingConversationUtils.isSerialUnique(dto.getSpeakingId(), dto.getSerial(), id, repository)) {
             throw new DataIntegrityViolationException("Serial " + dto.getSerial() + " must be unique for Speaking ID: " + dto.getSpeakingId());
         }
         String postId = "";
-        if (shouldAddNewPost(dto)) {
+        if (SpeakingConversationUtils.shouldAddNewPost(dto, repository)) {
             postId = SpeakingConversationUtils.addPostForSpeaking(scoreSpeakingServiceImpl, dto.getName(), dto.getContent());
             log.info("Added new post for update, postId: {}", postId);
             SpeakingConversationUtils.deletePostForSpeaking(scoreSpeakingServiceImpl, repository.findById(id).get());
@@ -102,6 +102,8 @@ public class SpeakingConversationServiceImpl extends BaseServiceImpl<SpeakingCon
         entity.setId(id);
         if (!postId.isEmpty()) {
             entity.setPostId(postId);
+        } else {
+            
         }
 
         log.info("Updating SpeakingConversation with ID {}: {}", id, entity);

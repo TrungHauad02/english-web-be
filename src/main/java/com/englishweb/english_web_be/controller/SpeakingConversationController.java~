@@ -48,10 +48,8 @@ public class SpeakingConversationController {
     public ResponseEntity<List<SpeakingConversationResponse>> findBySpeakingId(
             @RequestParam String speakingId,
             @RequestParam(required = false) StatusEnum status) {
-        // Tìm kiếm các SpeakingConversationDTO từ service
         List<SpeakingConversationDTO> dtos = service.findBySpeakingIdAndStatus(speakingId, status);
 
-        // Chuyển đổi danh sách SpeakingConversationDTO thành danh sách SpeakingConversationResponse
         List<SpeakingConversationResponse> responses = dtos.stream()
                 .map(dto -> SpeakingConversationResponse.builder()
                         .id(dto.getId())
