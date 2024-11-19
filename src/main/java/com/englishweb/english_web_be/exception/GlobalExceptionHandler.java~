@@ -22,6 +22,7 @@ public class GlobalExceptionHandler {
     // Xử lý lỗi không tìm thấy tài nguyên
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        log.error("ResourceNotFoundException: {}", ex.getMessage(), ex);
         ErrorResponse response = new ErrorResponse(
                 LocalDateTime.now(),
                 ex.getMessage(),
@@ -32,6 +33,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex){
+        log.error("AuthenticationException: {}", ex.getMessage(), ex);
         ErrorResponse response = new ErrorResponse(
                 LocalDateTime.now(),
                 ex.getMessage(),
@@ -43,6 +45,7 @@ public class GlobalExceptionHandler {
     // Xử lý lỗi sai dữ liệu đầu vào
     @ExceptionHandler(InvalidArgumentException.class)
     public ResponseEntity<ErrorResponse> handleInvalidArgumentException(InvalidArgumentException ex) {
+        log.error("InvalidArgumentException: {}", ex.getMessage(), ex);
         ErrorResponse response = new ErrorResponse(
                 LocalDateTime.now(),
                 "Invalid request: " + ex.getMessage(),
@@ -60,7 +63,7 @@ public class GlobalExceptionHandler {
                 invalidValue,
                 parameterName,
                 Arrays.toString(StatusEnum.values()));
-
+        log.error("MethodArgumentTypeMismatchException: {}", errorMessage, ex);
         ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), errorMessage, ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -72,6 +75,7 @@ public class GlobalExceptionHandler {
         ex.getBindingResult().getFieldErrors().forEach(error -> {
             errors.put(error.getField(), error.getDefaultMessage());
         });
+        log.error("MethodArgumentNotValidException: Validation errors - {}", errors, ex);
 
         ErrorResponse response = new ErrorResponse(
                 LocalDateTime.now(),
@@ -85,6 +89,7 @@ public class GlobalExceptionHandler {
     // Lỗi số thứ tự duy nhất
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        log.error("DataIntegrityViolationException: A data integrity error occurred - {}", ex.getMessage(), ex);
 
         String userFriendlyMessage = "A data integrity error occurred. Please ensure all data constraints are satisfied.";
 

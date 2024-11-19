@@ -49,7 +49,7 @@ public class GeminiClientServiceImpl implements GeminiClientService {
             ObjectMapper responseMapper = new ObjectMapper();
             JsonNode rootNode = responseMapper.readTree(responseBody);
             JsonNode candidatesNode = rootNode.path("candidates");
-            if (candidatesNode.isArray() && candidatesNode.size() > 0) {
+            if (candidatesNode.isArray() && !candidatesNode.isEmpty()) {
                 JsonNode contentNode = candidatesNode.get(0).path("content").path("parts").get(0);
                 return contentNode.path("text").asText();
             } else {
@@ -63,7 +63,7 @@ public class GeminiClientServiceImpl implements GeminiClientService {
             }
         } catch (Exception e) {
             throw new RuntimeException("Unexpected error occurred: " + e.getMessage(), e);
-        }
+        }   
     }
 }
 
