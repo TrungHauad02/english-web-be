@@ -33,13 +33,14 @@ public class OpenAIServiceImpl implements OpenAIService {
                 model.getModelName(), prompt, maxTokens, temperature);
 
         try {
-            OpenAIResponseDTO response = webClient.post()
-                    .uri(apiUrl)  // URL của OpenAI API
+            Class<?> Object;
+            Object response = webClient.post()
+                    .uri(apiUrl)
                     .header("Authorization", "Bearer " + apiKey)
                     .header("Content-Type", "application/json")
                     .bodyValue(request)
                     .retrieve()
-                    .bodyToMono(OpenAIResponseDTO.class)
+                    .bodyToMono(Object.class)
                     .block();
             if (response != null) {
                 log.info("Received successful response from OpenAI API. Response: {}", response);

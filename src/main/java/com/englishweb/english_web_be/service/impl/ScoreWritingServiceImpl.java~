@@ -1,26 +1,26 @@
 package com.englishweb.english_web_be.service.impl;
 
-import com.englishweb.english_web_be.dto.response.OpenAIResponseDTO;
 import com.englishweb.english_web_be.dto.response.ScoreResponse;
+import com.englishweb.english_web_be.service.GeminiClientService;
 import com.englishweb.english_web_be.service.ScoreWritingService;
-import com.englishweb.english_web_be.util.OpenAIModel;
 import com.textrazor.AnalysisException;
 import com.textrazor.NetworkException;
 import com.textrazor.annotations.AnalyzedText;
 import com.textrazor.annotations.Topic;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 
 @Service
+@Slf4j
 public class ScoreWritingServiceImpl implements ScoreWritingService {
-    private final OpenAIServiceImpl openAIServiceImpl;
+    GeminiClientService geminiClientService;
     TextRazorServiceImpl textRazorServiceImpl;
 
-    public ScoreWritingServiceImpl(TextRazorServiceImpl textRazorServiceImpl, OpenAIServiceImpl openAIServiceImpl) {
+    public ScoreWritingServiceImpl(TextRazorServiceImpl textRazorServiceImpl, GeminiClientService geminiClientService) {
         this.textRazorServiceImpl = textRazorServiceImpl;
-        this.openAIServiceImpl = openAIServiceImpl;
+        this.geminiClientService = geminiClientService;
     }
 
     public ScoreResponse scoreWriting(String text, String topic) {
@@ -39,23 +39,24 @@ public class ScoreWritingServiceImpl implements ScoreWritingService {
                         .append(identifiedTopic.getScore())
                         .append(")\n");
             }
-            promptBuilder.append("\nPlease also evaluate the following aspects of the text:\n");
-            promptBuilder.append("- Grammar: Assess the grammatical correctness of the text.\n");
-            promptBuilder.append("- Vocabulary: Evaluate the appropriateness and accuracy of the vocabulary used in the text.\n");
-            promptBuilder.append("\nProvide a score and feedback on the relevance of the text to the topic, grammar, and vocabulary, and check for any errors.\n");
-
-            promptBuilder.append("\nProvide a score (from 0 to 100) and a detailed comment for each aspect: relevance to the topic, grammar, and vocabulary.");
+            
+            promptBuilder.append("Provide a brief evaluation (max 30 words) for the following text. The evaluation should include: ");
+            promptBuilder.append("1. Grammar (whether it's correct or any suggested improvements). ");
+            promptBuilder.append("2. Vocabulary accuracy (whether the words used are appropriate). ");
+            promptBuilder.append("3. Relevance to the topic (how well the text stays on topic). ");
+            promptBuilder.append("Provide the evaluation in the following format:\n");
+            promptBuilder.append("Score: [score/100] (on the first line) and the comments (on the second line, max 30 words).");
             String prompt = promptBuilder.toString();
-
-            Mono<OpenAIResponseDTO> response = openAIServiceImpl.generateResponse(OpenAIModel.GPT_4, prompt, 100, 0.1);
-            OpenAIResponseDTO responseDTO = response.block();
-            String resultText = responseDTO.getChoices().get(0).getText().trim();
-            String[] parts = resultText.split("\n");
+            log.info("Send prompt: {}", prompt);
+            String response = geminiClientService.generateText(prompt);
+            log.info("Response from gemini: {}", response);
+            String[] parts = response.split("\n");
             String scoreText = parts[0];
             String comment = String.join("\n", Arrays.copyOfRange(parts, 1, parts.length));
-
+            log.info("Score Text: {}", scoreText);
+            log.info("Comment: {}", comment);
             return ScoreResponse.builder()
-                    .score(Integer.parseInt(scoreText))
+                    .score(scoreText)
                     .comment(comment)
                     .build();
         } catch (AnalysisException | NetworkException e) {

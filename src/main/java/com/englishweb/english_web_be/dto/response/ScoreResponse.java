@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class ScoreResponse {
-    private Integer score;
+    private String score;
     private String comment;
 }

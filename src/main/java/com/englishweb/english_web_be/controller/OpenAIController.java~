@@ -5,6 +5,7 @@ import com.englishweb.english_web_be.service.OpenAIService;
 import com.englishweb.english_web_be.util.OpenAIModel;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,9 +37,7 @@ public class OpenAIController {
             @RequestParam(defaultValue = "0.1") double temperature) {
 
         try {
-            return service.generateResponse(model, prompt, maxTokens, temperature)
-                    .map(ResponseEntity::ok)
-                    .defaultIfEmpty(ResponseEntity.badRequest().build()).block();
+            return new ResponseEntity<>(service.generateResponse(model, prompt, maxTokens, temperature), HttpStatus.OK);
         } catch (Exception e) {
             log.error("Error calling OpenAI API in controller: {}", e.getMessage());
             return ResponseEntity.badRequest().build();

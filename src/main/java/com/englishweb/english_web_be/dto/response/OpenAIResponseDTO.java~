@@ -24,6 +24,7 @@ public class OpenAIResponseDTO {
         private String text;
         private int index;
         private String finishReason;
+        private Message message;
     }
 
     @Getter
@@ -35,5 +36,10 @@ public class OpenAIResponseDTO {
         private int promptTokens;
         private int completionTokens;
         private int totalTokens;
+    }
+
+    public static class Message {
+        private String role;
+        private String content;
     }
 }
