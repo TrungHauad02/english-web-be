@@ -5,15 +5,15 @@ import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface TestRepository extends JpaRepository<Test, String> {
+public interface TestRepository extends JpaRepository<Test, String>  , JpaSpecificationExecutor<Test> {
 
     Page<Test> findAllByType(Pageable pageable, TestTypeEnum type);
 
     List<Test> findAllByType(TestTypeEnum type);
-
 
 }

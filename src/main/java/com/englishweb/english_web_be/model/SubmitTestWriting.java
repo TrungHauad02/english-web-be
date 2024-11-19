@@ -29,7 +29,7 @@ public class SubmitTestWriting implements BaseEntity {
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "test_writing_id")
     private TestWriting testWriting;
 

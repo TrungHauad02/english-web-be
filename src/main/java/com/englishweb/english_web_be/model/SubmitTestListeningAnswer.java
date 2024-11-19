@@ -10,6 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class SubmitTestListeningAnswer implements BaseEntity {
 
     @Id
@@ -29,7 +30,7 @@ public class SubmitTestListeningAnswer implements BaseEntity {
     @JoinColumn(name = "question_id")
     private TestListeningQuestion question;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "answer_id")
     private TestListeningAnswer answer;
 

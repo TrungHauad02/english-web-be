@@ -31,7 +31,7 @@ public class SubmitTest implements BaseEntity {
     @JoinColumn(name = "test_id")
     private Test test;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 

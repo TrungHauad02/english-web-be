@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-public class TestSpeaking implements BaseEntity {
+public class   TestSpeaking implements BaseEntity {
     @Id
     private String id;
     @Column(nullable = false)

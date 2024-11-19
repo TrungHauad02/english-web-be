@@ -18,122 +18,99 @@ public class DataLoader implements CommandLineRunner {
     private final TopicRepository topicRepository;
     private final VocabularyRepository vocabularyRepository;
     private final TestRepository testRepository;
-
     private final TopicQuestionRepository topicQuestionRepository;
     private final TopicAnswerRepository topicAnswerRepository;
     private static final TestTypeEnum[] TEST_TYPES = TestTypeEnum.values();
     private final Random random = new Random();
-    private  int serialtestmixed=1;
+    private int serialtestmixed = 1;
 
     public DataLoader(TopicRepository topicRepository, TestRepository testRepository,
-
                       VocabularyRepository vocabularyRepository,
                       TopicQuestionRepository topicQuestionRepository,
                       TopicAnswerRepository topicAnswerRepository) {
         this.topicRepository = topicRepository;
         this.testRepository = testRepository;
-
         this.vocabularyRepository = vocabularyRepository;
         this.topicQuestionRepository = topicQuestionRepository;
         this.topicAnswerRepository = topicAnswerRepository;
     }
 
     public void generateTest() {
-        for (int i = 100; i >= 1; i--) {
+        TestTypeEnum[] testTypes = TestTypeEnum.values();
 
-            // Tạo đối tượng Test trước và lưu nó vào database
-            String testId = "test_" + i;
-            TestTypeEnum type = TEST_TYPES[random.nextInt(TEST_TYPES.length)];
-            String title = "Test " + type + " " + i;
-            int serial = i;
-            int duration = 600;
-            StatusEnum status = StatusEnum.ACTIVE;
+        for (TestTypeEnum type : testTypes) {
+            for (int i = 1; i <= 10; i++) { // Tạo ít dữ liệu hơn để dễ kiểm tra
+                String testId = "test_" + type + "_" + i;
+                String title = "Test " + type + " " + i;
+                int serial = i;
+                int duration = 600;
+                StatusEnum status = StatusEnum.ACTIVE;
 
-            Test test = new Test(testId, title, serial, duration, type, status);
-            switch (type) {
-                case READING:
-                    List<TestReading> testReadings = generateTestDataReading(test, i,type);
-                    test.setTestReadings(testReadings);
-                    break;
+                Test test = new Test(testId, title, serial, duration, type, status);
+                switch (type) {
+                    case READING:
+                        List<TestReading> testReadings = generateTestDataReading(test, i, type);
+                        test.setTestReadings(testReadings);
+                        break;
+                    case LISTENING:
+                        List<TestListening> testListenings = generateTestDataListening(test, i, type);
+                        test.setTestListenings(testListenings);
+                        break;
+                    case SPEAKING:
+                        List<TestSpeaking> testSpeakings = generateTestDataSpeaking(test, i, type);
+                        test.setTestSpeakings(testSpeakings);
+                        break;
+                    case WRITING:
+                        List<TestWriting> testWritings = generateTestDataWriting(test, i, type);
+                        test.setTestWritings(testWritings);
+                        break;
+                    case MIXING:
+                        serialtestmixed = 1;
+                        test.setTestMixingQuestions(generataTestMixing(test, i, type));
+                        List<TestReading> mixedReadings = generateTestDataReading(test, i, type);
+                        List<TestListening> mixedListenings = generateTestDataListening(test, i, type);
+                        List<TestSpeaking> mixedSpeaking = generateTestDataSpeaking(test, i, type);
+                        List<TestWriting> mixedWritings = generateTestDataWriting(test, i, type);
 
-                case LISTENING:
-                    List<TestListening> testListenings = generateTestDataListening(test, i,type);
-                    test.setTestListenings(testListenings);
-                    break;
-
-                case SPEAKING:
-                    List<TestSpeaking> testSpeakings = generateTestDataSpeaking(test, i,type);
-                    test.setTestSpeakings(testSpeakings);
-                    break;
-
-                case WRITING:
-                    List<TestWriting> testWritings = generateTestDataWriting(test, i,type);
-                    test.setTestWritings(testWritings);
-                    break;
-
-                case MIXING:
-                    serialtestmixed=1;
-                    test.setTestMixingQuestions(generataTestMixing(test,i,type));
-                    List<TestReading> mixedReadings = generateTestDataReading(test, i,type);
-                    List<TestListening> mixedListenings = generateTestDataListening(test, i,type);
-                    List<TestSpeaking> mixedSpeaking = generateTestDataSpeaking(test, i,type);
-                    List<TestWriting> mixedWritings = generateTestDataWriting(test, i,type);
-
-
-
-                    test.setTestReadings(mixedReadings);
-                    test.setTestListenings(mixedListenings);
-                    test.setTestSpeakings(mixedSpeaking);
-                    test.setTestWritings(mixedWritings);
-                    break;
-
-                default:
-                    throw new IllegalStateException("Unexpected value: " + type);
+                        test.setTestReadings(mixedReadings);
+                        test.setTestListenings(mixedListenings);
+                        test.setTestSpeakings(mixedSpeaking);
+                        test.setTestWritings(mixedWritings);
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + type);
+                }
+                testRepository.save(test);
             }
-            testRepository.save(test);
         }
     }
-    public List<TestListening> generateTestDataListening(Test test, int i, TestTypeEnum type) {
 
+    public List<TestListening> generateTestDataListening(Test test, int i, TestTypeEnum type) {
         List<TestListening> testListenings = new ArrayList<>();
-        for (int j = 1; j <= 3; j++) {
+        for (int j = 1; j <= 2; j++) {
             String testListeningId = "listening_" + i + "_" + j;
-            String content = "/testlistening" + j + ".mp3";
-            String transcript = "Transcript for listening " + j + " of test " + i;
+            String content = "/audio/testlistening" + j + ".mp3";
+            String transcript = "Transcript: 'The quick brown fox jumps over the lazy dog' - test " + i;
             StatusEnum statusEnum = StatusEnum.ACTIVE;
 
             TestListening testListening = new TestListening(testListeningId, j, content, transcript, statusEnum);
-            testListening.setTest(test); // Liên kết TestListening với Test sau khi Test đã được lưu
+            testListening.setTest(test);
 
             List<TestListeningQuestion> questions = new ArrayList<>();
-            for (int k = 1; k <= 3; k++) {
+            for (int k = 1; k <= 2; k++) {
                 String questionId = "question_" + i + "_" + j + "_" + k;
-                String questionContent = "Question " + (j * 3 + k - 3) + " for listening " + j + " of test " + i;
+                String questionContent = "What is the main topic of the audio section " + j + "?";
+                int serial = (type == TestTypeEnum.MIXING) ? serialtestmixed++ : (j * 2 + k - 2);
                 StatusEnum questionStatus = StatusEnum.ACTIVE;
-                int serial;
-                if(type==TestTypeEnum.MIXING) {
-                    serial = serialtestmixed;
-                    serialtestmixed++;
-                }
-                else {
-                    serial =  (j * 3 + k - 3);
-                }
 
                 TestListeningQuestion question = new TestListeningQuestion(questionId, serial, questionContent, questionStatus);
                 question.setTestListening(testListening);
 
-
                 List<TestListeningAnswer> answers = new ArrayList<>();
-                for (int h = 1; h <= 4; h++) {
-                    String answerId = "answer_" + i + "_" + j + "_" + k + "_" + h;
-                    String answerContent = "Answer " + h + " for question " + questionId;
-                    boolean isCorrect = (h == 1);  // Giả định câu trả lời đầu tiên là đúng
-                    StatusEnum answerStatus = StatusEnum.ACTIVE;
-
-                    TestListeningAnswer answer = new TestListeningAnswer(answerId, answerContent, isCorrect, answerStatus);
-                    answer.setTestListeningQuestion(question);
-                    answers.add(answer);
-                }
+                answers.add(new TestListeningAnswer("answer_" + i + "_" + j + "_" + k + "_1", "The benefits of running.", true, StatusEnum.ACTIVE));
+                answers.add(new TestListeningAnswer("answer_" + i + "_" + j + "_" + k + "_2", "Cooking tips.", false, StatusEnum.ACTIVE));
+                answers.add(new TestListeningAnswer("answer_" + i + "_" + j + "_" + k + "_3", "A historical story.", false, StatusEnum.ACTIVE));
+                answers.add(new TestListeningAnswer("answer_" + i + "_" + j + "_" + k + "_4", "A music lesson.", false, StatusEnum.ACTIVE));
 
                 question.setAnswersList(answers);
                 questions.add(question);
@@ -145,192 +122,137 @@ public class DataLoader implements CommandLineRunner {
         return testListenings;
     }
 
-    public  List<TestReading> generateTestDataReading(Test test, int i, TestTypeEnum type) {
+    public List<TestReading> generateTestDataReading(Test test, int i, TestTypeEnum type) {
+        List<TestReading> testReadings = new ArrayList<>();
+        for (int j = 1; j <= 2; j++) {
+            String testReadingId = "reading_" + i + "_" + j;
+            String content = "In the article, 'The Future of Technology', the author discusses various advancements in AI and its impact.";
+            String image = "/images/reading_" + j + ".png";
+            StatusEnum statusEnum = StatusEnum.ACTIVE;
 
-            List<TestReading> testReadings = new ArrayList<>();
-            for (int j = 1; j <= 3; j++) {
-                String testReadingId = "reading_" + i + "_" + j;
-                String content = "This is the content for reading " + j + " of test " + i;
-                String image = "/images/reading_" + j + ".png";
-                StatusEnum statusEnum = StatusEnum.ACTIVE;
+            TestReading testReading = new TestReading(testReadingId, j, content, image, statusEnum);
+            testReading.setTest(test);
 
-                TestReading testReading = new TestReading(testReadingId, j, content, image, statusEnum);
-                testReading.setTest(test); // Liên kết TestReading với Test sau khi Test đã được lưu
-
-                // Tạo các câu hỏi cho TestReading
-                List<TestReadingQuestion> questions = new ArrayList<>();
-                for (int k = 1; k <= 3; k++) {
-                    String questionId = "question_" + i + "_" + j + "_" + k;
-                    String questionContent = "Question " + (j * 3 + k - 3) + " for reading " + j + " of test " + i;
-                    String explanation = "Explanation for question " + (j * 3 + k - 3);
-                    int serial;
-                    if(type==TestTypeEnum.MIXING) {
-                        serial = serialtestmixed;
-                        serialtestmixed++;
-                    }
-                    else {
-                        serial =  (j * 3 + k - 3);
-                    }
-                    StatusEnum questionStatus = StatusEnum.ACTIVE;
-
-                    TestReadingQuestion question = new TestReadingQuestion(questionId, questionContent, serial, explanation, questionStatus);
-                    question.setTestReading(testReading);
-
-                    // Tạo các câu trả lời cho câu hỏi
-                    List<TestReadingAnswer> answers = new ArrayList<>();
-                    for (int h = 1; h <= 4; h++) {
-                        String answerId = "answer_" + i + "_" + j + "_" + k + "_" + h;
-                        String answerContent = "Answer " + h + " for question " + questionId;
-                        boolean isCorrect = (h == 1);  // Giả định câu trả lời đầu tiên là đúng
-                        StatusEnum answerStatus = StatusEnum.ACTIVE;
-
-                        TestReadingAnswer answer = new TestReadingAnswer(answerId, answerContent, isCorrect, answerStatus);
-                        answer.setTestReadingQuestion(question);
-                        answers.add(answer);
-                    }
-
-                    question.setAnswers(answers);
-                    questions.add(question);
-                }
-
-                testReading.setQuestions(questions);
-                testReadings.add(testReading);
-            }
-            return testReadings;
-        }
-
-
-
-    public List<TestSpeaking> generateTestDataSpeaking(Test test, int i, TestTypeEnum type) {
-
-        List<TestSpeaking> testSpeakings = new ArrayList<>();
-
-        for (int k = 1; k <= 5; k++)
-        {
-
-            String testSpeakingId = "speaking_" + i+k;
-            TestSpeaking testSpeaking = new TestSpeaking(testSpeakingId, "Speaking Title " + k,k, StatusEnum.ACTIVE);
-            testSpeaking.setTest(test); // Liên kết TestSpeaking với Test
-            List<TestSpeakingQuestion> questions = new ArrayList<>();
-            for (int j = 1; j <= 5; j++) {
-                String questionId = "speaking_question_" + i + "_" + j;
-                String questionContent = "Speaking Question " + j + " for test speaking " + i;
-                int serialQuestion;
-                if (type==TestTypeEnum.MIXING) {
-                    serialQuestion= serialtestmixed;
-                    serialtestmixed++;
-                }
-                else
-                {
-                    serialQuestion =(k-1)*5+j;
-                }
+            List<TestReadingQuestion> questions = new ArrayList<>();
+            for (int k = 1; k <= 2; k++) {
+                String questionId = "question_" + i + "_" + j + "_" + k;
+                String questionContent = "What does the article suggest about the future of AI?";
+                int serial = (type == TestTypeEnum.MIXING) ? serialtestmixed++ : (j * 2 + k - 2);
+                String explanation = "AI is expected to revolutionize multiple industries.";
                 StatusEnum questionStatus = StatusEnum.ACTIVE;
 
-                // Tạo đối tượng TestSpeakingQuestion
-                TestSpeakingQuestion question = new TestSpeakingQuestion(questionId, questionContent, serialQuestion, questionStatus);
-                question.setTestSpeaking(testSpeaking); // Liên kết câu hỏi với TestSpeaking
+                TestReadingQuestion question = new TestReadingQuestion(questionId, questionContent, serial, explanation, questionStatus);
+                question.setTestReading(testReading);
+
+                List<TestReadingAnswer> answers = new ArrayList<>();
+                TestReadingAnswer answer1 = new TestReadingAnswer("answer_" + i + "_" + j + "_" + k + "_1", "It will lead to job creation in tech.", true, StatusEnum.ACTIVE);
+                answer1.setTestReadingQuestion(question); // Liên kết câu trả lời với câu hỏi cha
+                answers.add(answer1);
+
+                TestReadingAnswer answer2 = new TestReadingAnswer("answer_" + i + "_" + j + "_" + k + "_2", "It will only benefit large corporations.", false, StatusEnum.ACTIVE);
+                answer2.setTestReadingQuestion(question);
+                answers.add(answer2);
+
+                TestReadingAnswer answer3 = new TestReadingAnswer("answer_" + i + "_" + j + "_" + k + "_3", "AI will replace all human jobs.", false, StatusEnum.ACTIVE);
+                answer3.setTestReadingQuestion(question);
+                answers.add(answer3);
+
+                TestReadingAnswer answer4 = new TestReadingAnswer("answer_" + i + "_" + j + "_" + k + "_4", "It will be mostly used in agriculture.", false, StatusEnum.ACTIVE);
+                answer4.setTestReadingQuestion(question);
+                answers.add(answer4);
+
+                question.setAnswers(answers);
 
                 questions.add(question);
-
             }
+
+            testReading.setQuestions(questions);
+            testReadings.add(testReading);
+        }
+        return testReadings;
+    }
+
+    public List<TestSpeaking> generateTestDataSpeaking(Test test, int i, TestTypeEnum type) {
+        List<TestSpeaking> testSpeakings = new ArrayList<>();
+        for (int k = 1; k <= 2; k++) {
+            String testSpeakingId = "speaking_" + i + "_" + k;
+            TestSpeaking testSpeaking = new TestSpeaking(testSpeakingId, "Speaking Test " + k, k, StatusEnum.ACTIVE);
+            testSpeaking.setTest(test);
+
+            List<TestSpeakingQuestion> questions = new ArrayList<>();
+            for (int j = 1; j <= 2; j++) {
+                String questionId = "speaking_question_" + i + "_" + k + "_" + j;
+                String questionContent = "Describe a place you visited recently and why it was memorable.";
+                int serial = (type == TestTypeEnum.MIXING) ? serialtestmixed++ : (k - 1) * 2 + j;
+                StatusEnum questionStatus = StatusEnum.ACTIVE;
+
+                TestSpeakingQuestion question = new TestSpeakingQuestion(questionId, questionContent, serial, questionStatus);
+                question.setTestSpeaking(testSpeaking);
+
+                questions.add(question);
+            }
+
             testSpeaking.setQuestions(questions);
             testSpeakings.add(testSpeaking);
-
         }
-
-
-            return testSpeakings;
+        return testSpeakings;
     }
-    public List<TestWriting> generateTestDataWriting(Test test, int i, TestTypeEnum type){
 
-            List<TestWriting> testWritings = new ArrayList<>();
-            for (int j = 1; j <= 5; j++) {
-                String testWritingId = "writing_" + i + "_" + j;
-                String content = "Writing content " + j + " for test writing " + i;
-                int serialWriting ;
-                if(type==TestTypeEnum.MIXING) {
-                    serialWriting = serialtestmixed;
-                    serialtestmixed++;
-                }
-                else
-                {
-                    serialWriting = j;
-                }
+    public List<TestWriting> generateTestDataWriting(Test test, int i, TestTypeEnum type) {
+        List<TestWriting> testWritings = new ArrayList<>();
+        for (int j = 1; j <= 2; j++) {
+            String testWritingId = "writing_" + i + "_" + j;
+            String content = "Discuss the pros and cons of remote work.";
+            int serial = (type == TestTypeEnum.MIXING) ? serialtestmixed++ : j;
+            StatusEnum writingStatus = StatusEnum.ACTIVE;
 
-                StatusEnum writingStatus = StatusEnum.ACTIVE;
+            TestWriting testWriting = new TestWriting(testWritingId, serial, content, writingStatus);
+            testWriting.setTest(test);
 
-                // Tạo đối tượng TestWriting
-                TestWriting testWriting = new TestWriting(testWritingId, serialWriting, content, writingStatus);
-                testWriting.setTest(test); // Liên kết TestWriting với Test
-
-                testWritings.add(testWriting);
-            }
-            return testWritings;
-
+            testWritings.add(testWriting);
         }
+        return testWritings;
+    }
 
     public List<TestMixingQuestion> generataTestMixing(Test test, int i, TestTypeEnum type) {
-        // Tạo danh sách câu hỏi từ vựng cho bài kiểm tra
         List<TestMixingQuestion> mixingQuestions = new ArrayList<>();
-
-        // Tạo các câu hỏi từ vựng (giả sử có 5 câu hỏi từ vựng)
-        for (int j = 1; j <= 10; j++) {
-            String questionId = "grammar_question_" + i + "_" + j;
-            String questionContent = "Vocabulary question content " + j;
-            String explanation = "Explanation for vocabulary question " + j;
-            TestMixingTypeEnum  testMixingTypeEnum;
-            if(j<5)
-            {
-                testMixingTypeEnum  = TestMixingTypeEnum.VOCABULARY;
-            }
-            else
-            {
-                testMixingTypeEnum  = TestMixingTypeEnum.GRAMMAR;
-            }
-
+        for (int j = 1; j <= 5; j++) {
+            String questionId = "mixing_question_" + i + "_" + j;
+            String questionContent = (j <= 3) ? "Choose the correct synonym for 'quick'." : "Select the correct usage of 'were' in a sentence.";
+            String explanation = "Synonyms help expand vocabulary and understand word meanings.";
+            TestMixingTypeEnum testMixingTypeEnum = (j <= 3) ? TestMixingTypeEnum.VOCABULARY : TestMixingTypeEnum.GRAMMAR;
             StatusEnum status = StatusEnum.ACTIVE;
-            int serial ;
-            if(type==TestTypeEnum.MIXING) {
-                serial = serialtestmixed;
-                serialtestmixed++;
-            }
-            else
-            {
-                serial = j;
-            }
+            int serial = serialtestmixed++;
 
-            // Tạo đối tượng TestVocabularyQuestion
-            TestMixingQuestion question = new TestMixingQuestion(questionId, questionContent, serial, explanation,testMixingTypeEnum ,status);
-            question.setTest(test); // Liên kết câu hỏi từ vựng với bài kiểm tra
-
-
+            TestMixingQuestion question = new TestMixingQuestion(questionId, questionContent, serial, explanation, testMixingTypeEnum, status);
+            question.setTest(test);
             List<TestMixingAnswer> answers = new ArrayList<>();
-            for (int h = 1; h <= 4; h++) {
-                String answerId = "vocab_answer_" + questionId + "_" + h;
-                String answerContent = "Answer " + h + " for vocabulary question " + i;
-                boolean isCorrect = (h == 1);
-                StatusEnum answerStatus = StatusEnum.ACTIVE;
+            TestMixingAnswer answer1 = new TestMixingAnswer("answer_" + i + "_" + j + "_1", "Fast", j == 1, StatusEnum.ACTIVE);
+            answer1.setTestMixingQuestion(question); // Liên kết câu trả lời với câu hỏi cha
+            answers.add(answer1);
 
-                // Tạo đối tượng TestVocabularyAnswer
-                TestMixingAnswer answer = new TestMixingAnswer(answerId, answerContent, isCorrect, answerStatus);
-                answer.setTestMixingQuestion(question); // Liên kết câu trả lời với câu hỏi
+            TestMixingAnswer answer2 = new TestMixingAnswer("answer_" + i + "_" + j + "_2", "Slow", false, StatusEnum.ACTIVE);
+            answer2.setTestMixingQuestion(question);
+            answers.add(answer2);
 
-                answers.add(answer);
-            }
+            TestMixingAnswer answer3 = new TestMixingAnswer("answer_" + i + "_" + j + "_3", "Late", false, StatusEnum.ACTIVE);
+            answer3.setTestMixingQuestion(question);
+            answers.add(answer3);
+
+            TestMixingAnswer answer4 = new TestMixingAnswer("answer_" + i + "_" + j + "_4", "Happy", false, StatusEnum.ACTIVE);
+            answer4.setTestMixingQuestion(question);
+            answers.add(answer4);
 
             question.setAnswers(answers);
 
-
+            question.setAnswers(answers);
             mixingQuestions.add(question);
         }
-
         return mixingQuestions;
     }
+
     @Override
     public void run(String... args) throws Exception {
         generateTest();
     }
 }
-
-
-
