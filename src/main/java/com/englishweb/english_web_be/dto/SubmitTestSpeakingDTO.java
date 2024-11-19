@@ -18,13 +18,13 @@ public class SubmitTestSpeakingDTO implements BaseDTO {
     String testSpeakingQuestionId;
     @NotBlank(message = "Submit Test ID cannot be empty")
     String submitTestId;
-    @Positive(message = "Score must be a positive number")
+
     BigDecimal score;
-    @NotBlank(message = "Content cannot be empty")
+
     String content;
-    @NotBlank(message = "Explanation cannot be empty")
+
     String explanation;
-    @NotBlank(message = "Comment cannot be empty")
+
     String comment;
     StatusEnum status;
 }

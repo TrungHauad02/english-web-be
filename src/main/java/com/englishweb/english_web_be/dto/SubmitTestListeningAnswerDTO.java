@@ -16,9 +16,9 @@ public class SubmitTestListeningAnswerDTO implements BaseDTO {
     String submitTestId;
     @NotBlank(message = "Question ID cannot be empty")
     String questionId;
-    @NotBlank(message = "Answer ID cannot be empty")
+
     String answerId;
-    @NotBlank(message = "Comment  cannot be empty")
+
     String comment;
     StatusEnum status;
 }

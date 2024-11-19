@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -39,6 +40,6 @@ public class SubmitTestWriting implements BaseEntity {
 
     @PrePersist
     private void generateId() {
-        this.id = "Submit_writing_" + System.nanoTime();
+        this.id = "Submit_writing_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString();
     }
 }

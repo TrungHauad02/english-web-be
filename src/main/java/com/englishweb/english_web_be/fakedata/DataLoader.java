@@ -107,10 +107,21 @@ public class DataLoader implements CommandLineRunner {
                 question.setTestListening(testListening);
 
                 List<TestListeningAnswer> answers = new ArrayList<>();
-                answers.add(new TestListeningAnswer("answer_" + i + "_" + j + "_" + k + "_1", "The benefits of running.", true, StatusEnum.ACTIVE));
-                answers.add(new TestListeningAnswer("answer_" + i + "_" + j + "_" + k + "_2", "Cooking tips.", false, StatusEnum.ACTIVE));
-                answers.add(new TestListeningAnswer("answer_" + i + "_" + j + "_" + k + "_3", "A historical story.", false, StatusEnum.ACTIVE));
-                answers.add(new TestListeningAnswer("answer_" + i + "_" + j + "_" + k + "_4", "A music lesson.", false, StatusEnum.ACTIVE));
+                TestListeningAnswer answer1 = new TestListeningAnswer("answer_" + i + "_" + j + "_" + k + "_1", "The benefits of running.", true, StatusEnum.ACTIVE);
+                answer1.setTestListeningQuestion(question); // Liên kết câu trả lời với câu hỏi cha
+                answers.add(answer1);
+
+                TestListeningAnswer answer2 = new TestListeningAnswer("answer_" + i + "_" + j + "_" + k + "_2", "Cooking tips.", false, StatusEnum.ACTIVE);
+                answer2.setTestListeningQuestion(question);
+                answers.add(answer2);
+
+                TestListeningAnswer answer3 = new TestListeningAnswer("answer_" + i + "_" + j + "_" + k + "_3", "A historical story.", false, StatusEnum.ACTIVE);
+                answer3.setTestListeningQuestion(question);
+                answers.add(answer3);
+
+                TestListeningAnswer answer4 = new TestListeningAnswer("answer_" + i + "_" + j + "_" + k + "_4", "A music lesson.", false, StatusEnum.ACTIVE);
+                answer4.setTestListeningQuestion(question);
+                answers.add(answer4);
 
                 question.setAnswersList(answers);
                 questions.add(question);
