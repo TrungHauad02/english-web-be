@@ -27,8 +27,8 @@ public class CommentMixingQuestionController {
             description = "Send question content, answers, and user answer to generate a comment")
     @PostMapping
     public ResponseEntity<CommentResponse> commentMixingQuestion(@RequestBody @Valid CommentMixingQuestionRequest request) {
-        CommentResponse comment = service.commentMixingQuestion(request.getQuestionContent(), request.getAnswers(), request.getUserAnswer());
+        CommentResponse response = service.commentMixingQuestion(request.getQuestionContent(), request.getAnswers(), request.getUserAnswer());
 
-        return new ResponseEntity<>(comment, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

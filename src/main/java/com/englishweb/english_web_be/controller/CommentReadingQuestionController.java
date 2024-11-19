@@ -27,8 +27,8 @@ public class CommentReadingQuestionController {
             description = "Send question content, reading content, answers, and user answer to generate a comment")
     @PostMapping
     public ResponseEntity<CommentResponse> commentReadingQuestion(@RequestBody @Valid CommentReadingQuestionRequest request) {
-        String comment = service.commentReadingQuestion(request.getQuestionContent(), request.getReadingContent(), request.getAnswers(), request.getUserAnswer());
-        CommentResponse response = new CommentResponse(comment);
+        CommentResponse response = service.commentReadingQuestion(request.getQuestionContent(), request.getReadingContent(), request.getAnswers(), request.getUserAnswer());
+       
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
