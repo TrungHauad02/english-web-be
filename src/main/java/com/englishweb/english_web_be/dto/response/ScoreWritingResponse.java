@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ScoreResponse {
+public class ScoreWritingResponse {
     private String score;
     private String comment;
 }

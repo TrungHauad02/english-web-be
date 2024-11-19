@@ -39,7 +39,7 @@ public class ScoreWritingServiceImpl implements ScoreWritingService {
                         .append(identifiedTopic.getScore())
                         .append(")\n");
             }
-            
+
             promptBuilder.append("Provide a brief evaluation (max 30 words) for the following text. The evaluation should include: ");
             promptBuilder.append("1. Grammar (whether it's correct or any suggested improvements). ");
             promptBuilder.append("2. Vocabulary accuracy (whether the words used are appropriate). ");

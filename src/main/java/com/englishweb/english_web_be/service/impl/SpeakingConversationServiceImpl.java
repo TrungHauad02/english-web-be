@@ -7,14 +7,12 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.SpeakingConversationRepository;
 import com.englishweb.english_web_be.service.SpeakingConversationService;
 import com.englishweb.english_web_be.service.TextToSpeechService;
+import com.englishweb.english_web_be.util.SpeakingConversationUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 @Service
@@ -25,13 +23,15 @@ public class SpeakingConversationServiceImpl extends BaseServiceImpl<SpeakingCon
     private final SpeakingServiceImpl speakingService;
     private final TextToSpeechService textToSpeechService;
     private final FirebaseStorageServiceImpl firebaseStorageService;
+    private final ScoreSpeakingServiceImpl scoreSpeakingServiceImpl;
 
     public SpeakingConversationServiceImpl(SpeakingConversationRepository repository,
-                                           @Lazy SpeakingServiceImpl speakingService, TextToSpeechService textToSpeechService, FirebaseStorageServiceImpl firebaseStorageService) {
+                                           @Lazy SpeakingServiceImpl speakingService, TextToSpeechService textToSpeechService, FirebaseStorageServiceImpl firebaseStorageService, ScoreSpeakingServiceImpl scoreSpeakingServiceImpl) {
         super(repository);
         this.speakingService = speakingService;
         this.textToSpeechService = textToSpeechService;
         this.firebaseStorageService = firebaseStorageService;
+        this.scoreSpeakingServiceImpl = scoreSpeakingServiceImpl;
     }
 
     @Override
@@ -55,98 +55,65 @@ public class SpeakingConversationServiceImpl extends BaseServiceImpl<SpeakingCon
 
     @Override
     public SpeakingConversationResponse saveAudio(SpeakingConversationDTO dto) {
-        try {
-            InputStreamResource audioResource = textToSpeechService.convertTextToSpeech(dto.getContent(), dto.getName());
-
-            byte[] audioBytes = inputStreamToByteArray(audioResource);
-
-            String path = "study/speaking/conversation/" + dto.getSpeakingId();
-            String fileName = dto.getId();
-            String mimeType = "audio/mp3";
-            String audioUrl = firebaseStorageService.uploadFile(path, fileName, audioBytes, mimeType, FirebaseStorageServiceImpl.RandomName.NO);
-
-            return SpeakingConversationResponse.builder()
-                    .id(dto.getId())
-                    .name(dto.getName())
-                    .serial(dto.getSerial())
-                    .content(dto.getContent())
-                    .status(dto.getStatus())
-                    .speakingId(dto.getSpeakingId())
-                    .audioUrl(audioUrl)
-                    .build();
-        } catch (IOException | InterruptedException e) {
-            log.error("Error occurred while processing audio for SpeakingConversation with ID: {}", dto.getId(), e);
-            return null;
-        }
-    }
-
-    private byte[] inputStreamToByteArray(InputStreamResource audioResource) throws IOException {
-        try (InputStream inputStream = audioResource.getInputStream()) {
-            return inputStream.readAllBytes();
-        }
+        return SpeakingConversationUtils.saveAudio(textToSpeechService, firebaseStorageService, dto);
     }
 
     @Override
     public void deleteAudio(SpeakingConversationDTO dto) {
-        try {
-            String path = "study/speaking/conversation/" + dto.getSpeakingId();
-            String fileName = dto.getId();
-
-            String fileUrl = "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/"
-                    + path.replace("/", "%2F") + "%2F" + fileName + "?alt=media";
-
-            firebaseStorageService.deleteFile(fileUrl);
-
-            log.info("Successfully deleted audio file for SpeakingConversation with ID: {}", dto.getId());
-        } catch (IOException e) {
-            log.error("Error occurred while deleting audio for SpeakingConversation with ID: {}", dto.getId(), e);
-        }
+        SpeakingConversationUtils.deleteAudio(firebaseStorageService, dto);
     }
 
     @Override
     public String getAudio(SpeakingConversationDTO dto) {
-        try {
-            String path = "study/speaking/conversation/" + dto.getSpeakingId();
-            String fileName = dto.getId();
-
-            String audioUrl = "https://firebasestorage.googleapis.com/v0/b/englishweb-5a6ce.appspot.com/o/"
-                    + path.replace("/", "%2F") + "%2F" + fileName + "?alt=media";
-
-            log.info("Audio URL retrieved successfully for SpeakingConversation with ID: {}", dto.getId());
-            return audioUrl;
-        } catch (Exception e) {
-            log.error("Error occurred while retrieving audio for SpeakingConversation with ID: {}", dto.getId(), e);
-            return null;
-        }
+        return SpeakingConversationUtils.getAudioUrl(dto);
     }
-
 
     @Override
     public SpeakingConversationDTO create(SpeakingConversationDTO dto) {
-        if (isSerialUnique(dto.getSpeakingId(), dto.getSerial(), null)) {
+        if (SpeakingConversationUtils.isSerialUnique(dto.getSpeakingId(), dto.getSerial(), null, repository)) {
             throw new DataIntegrityViolationException("Serial " + dto.getSerial() + " must be unique for Speaking ID: " + dto.getSpeakingId());
         }
-        return super.create(dto);
+        String postId = SpeakingConversationUtils.addPostForSpeaking(scoreSpeakingServiceImpl, dto.getName(), dto.getContent());
+
+        SpeakingConversation entity = convertToEntity(dto);
+        entity.setId(null);
+        entity.setPostId(postId);
+        log.info("Saving SpeakingConversation: {}", entity);
+
+        SpeakingConversationDTO dtoCreated = convertToDTO(repository.save(entity));
+        log.info("Saved successfully speaking conversation: {}", dtoCreated.getId());
+
+        return dtoCreated;
     }
 
     @Override
     public SpeakingConversationDTO update(SpeakingConversationDTO dto, String id) {
-        if (isSerialUnique(dto.getSpeakingId(), dto.getSerial(), id)) {
+        if (SpeakingConversationUtils.isSerialUnique(dto.getSpeakingId(), dto.getSerial(), id, repository)) {
             throw new DataIntegrityViolationException("Serial " + dto.getSerial() + " must be unique for Speaking ID: " + dto.getSpeakingId());
         }
-        return super.update(dto, id);
-    }
+        String postId = "";
+        if (SpeakingConversationUtils.shouldAddNewPost(dto, repository)) {
+            postId = SpeakingConversationUtils.addPostForSpeaking(scoreSpeakingServiceImpl, dto.getName(), dto.getContent());
+            log.info("Added new post for update, postId: {}", postId);
+            SpeakingConversationUtils.deletePostForSpeaking(scoreSpeakingServiceImpl, repository.findById(id).get());
+        }
 
-    private boolean isSerialUnique(String speakingId, Integer serial, String excludeId) {
-        List<SpeakingConversation> entityList = repository.findAllBySpeaking_Id(speakingId);
-        return entityList.stream()
-                .filter(entity -> !entity.getId().equals(excludeId))
-                .anyMatch(entity -> entity.getSerial() == serial);
+        SpeakingConversation entity = convertToEntity(dto);
+        entity.setId(id);
+        if (!postId.isEmpty()) {
+            entity.setPostId(postId);
+        }
+
+        log.info("Updating SpeakingConversation with ID {}: {}", id, entity);
+        SpeakingConversationDTO updatedDto = convertToDTO(repository.save(entity));
+        log.info("Updated successfully speaking conversation with ID {}: {}", id, updatedDto);
+        return updatedDto;
     }
 
     @Override
     public void delete(String id) {
         SpeakingConversationDTO dto = super.findById(id);
+        SpeakingConversationUtils.deletePostForSpeaking(scoreSpeakingServiceImpl, repository.findById(id).get());
         this.deleteAudio(dto);
         super.delete(id);
     }
@@ -175,3 +142,4 @@ public class SpeakingConversationServiceImpl extends BaseServiceImpl<SpeakingCon
         return entity;
     }
 }
+

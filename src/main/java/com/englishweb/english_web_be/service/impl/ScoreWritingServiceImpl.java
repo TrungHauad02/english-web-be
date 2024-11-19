@@ -1,6 +1,6 @@
 package com.englishweb.english_web_be.service.impl;
 
-import com.englishweb.english_web_be.dto.response.ScoreResponse;
+import com.englishweb.english_web_be.dto.response.ScoreWritingResponse;
 import com.englishweb.english_web_be.service.GeminiClientService;
 import com.englishweb.english_web_be.service.ScoreWritingService;
 import com.textrazor.AnalysisException;
@@ -23,7 +23,7 @@ public class ScoreWritingServiceImpl implements ScoreWritingService {
         this.geminiClientService = geminiClientService;
     }
 
-    public ScoreResponse scoreWriting(String text, String topic) {
+    public ScoreWritingResponse scoreWriting(String text, String topic) {
         try {
             AnalyzedText analyzedText = textRazorServiceImpl.analyzeText(text);
             StringBuilder promptBuilder = new StringBuilder();
@@ -55,7 +55,7 @@ public class ScoreWritingServiceImpl implements ScoreWritingService {
             String comment = String.join("\n", Arrays.copyOfRange(parts, 1, parts.length));
             log.info("Score Text: {}", scoreText);
             log.info("Comment: {}", comment);
-            return ScoreResponse.builder()
+            return ScoreWritingResponse.builder()
                     .score(scoreText)
                     .comment(comment)
                     .build();

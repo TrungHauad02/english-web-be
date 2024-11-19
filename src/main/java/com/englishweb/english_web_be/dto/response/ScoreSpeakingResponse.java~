@@ -1,0 +1,13 @@
+package com.englishweb.english_web_be.dto.response;
+import lombok.*;
+
+import java.net.URL;
+import java.util.List;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class ScoreSpeakingResponse {
+}

@@ -15,10 +15,11 @@ public class SpeakingConversation implements BaseEntity {
     private String id;
     @Column(nullable = false)
     private String name;
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private int serial;
     @Column(nullable = false)
     private String content;
+    private String postId; // Store post_id of this conver in https://thefluent.me/
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
     @ManyToOne
