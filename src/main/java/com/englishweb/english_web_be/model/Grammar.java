@@ -1,5 +1,7 @@
 package com.englishweb.english_web_be.model;
 
+import com.englishweb.english_web_be.model.interfacemodel.BaseEntity;
+import com.englishweb.english_web_be.model.interfacemodel.LessonEntity;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,7 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "grammar")
-public class Grammar implements BaseEntity {
+public class Grammar implements LessonEntity {
     @Id
     private String id;
     @Column(nullable = false)

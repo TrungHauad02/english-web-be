@@ -31,9 +31,10 @@ public class ReadingController {
             @RequestParam int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir,
+            @RequestParam(required = false) String title,
             @RequestParam(required = false) StatusEnum status) {
         return new ResponseEntity<>(
-                service.findReadingWithStatusAndPagingAndSorting(status, page, size, sortBy, sortDir, ReadingDTO.class),
+                service.findWithPagingSortingSearching(title, status, page, size, sortBy, sortDir, ReadingDTO.class),
                 HttpStatus.OK);
     }
 

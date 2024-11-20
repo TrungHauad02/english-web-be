@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 
 public interface SpeakingService extends BaseService<SpeakingDTO> {
 
-    Page<SpeakingDTO> findSpeakingWithStatusAndPagingAndSorting(StatusEnum status, int page, int size,
-                                                                String sortBy, String sortDir,
-                                                                Class<SpeakingDTO> dtoClass);
+    Page<SpeakingDTO> findWithPagingSortingSearching(String title, StatusEnum status, int page, int size,
+                                                     String sortBy, String sortDir,
+                                                     Class<SpeakingDTO> dtoClass);
 }

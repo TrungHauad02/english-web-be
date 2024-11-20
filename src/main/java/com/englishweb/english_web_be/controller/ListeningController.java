@@ -31,9 +31,10 @@ public class ListeningController {
             @RequestParam int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir,
+            @RequestParam(required = false) String title,
             @RequestParam(required = false) StatusEnum status) {
         return new ResponseEntity<>(
-                service.findListeningWithStatusAndPagingAndSorting(status ,page, size, sortBy, sortDir, ListeningDTO.class),
+                service.findWithPagingSortingSearching(title, status ,page, size, sortBy, sortDir, ListeningDTO.class),
                 HttpStatus.OK);
     }
 

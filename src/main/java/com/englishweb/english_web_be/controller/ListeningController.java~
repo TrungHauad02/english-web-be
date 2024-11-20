@@ -1,5 +1,6 @@
 package com.englishweb.english_web_be.controller;
 
+import com.englishweb.english_web_be.dto.ListeningDTO;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.service.ListeningService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,28 +33,28 @@ public class ListeningController {
             @RequestParam(defaultValue = "asc") String sortDir,
             @RequestParam(required = false) StatusEnum status) {
         return new ResponseEntity<>(
-                service.findListeningWithStatusAndPagingAndSorting(status ,page, size, sortBy, sortDir, ListeningResponseDTO.class),
+                service.findListeningWithStatusAndPagingAndSorting(status ,page, size, sortBy, sortDir, ListeningDTO.class),
                 HttpStatus.OK);
     }
 
     @Operation(method = "GET", summary = "Get listening by id",
             description = "Send a request via this API to get listening information")
     @GetMapping("/{id}")
-    public ResponseEntity<ListeningResponseDTO> findById(@PathVariable String id) {
+    public ResponseEntity<ListeningDTO> findById(@PathVariable String id) {
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
 
     @Operation(method = "POST", summary = "Create new listening",
             description = "Send a request via this API to create listening")
     @PostMapping
-    public ResponseEntity<ListeningResponseDTO> create(@Valid @RequestBody ListeningRequestDTO dto) {
+    public ResponseEntity<ListeningDTO> create(@Valid @RequestBody ListeningDTO dto) {
         return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
     @Operation(method = "PUT", summary = "Update listening",
             description = "Send a request via this API to update listening")
     @PutMapping("/{id}")
-    public ResponseEntity<ListeningResponseDTO> update(@Valid @RequestBody ListeningRequestDTO dto, @PathVariable String id) {
+    public ResponseEntity<ListeningDTO> update(@Valid @RequestBody ListeningDTO dto, @PathVariable String id) {
         return new ResponseEntity<>(service.update(dto, id), HttpStatus.OK);
     }
 

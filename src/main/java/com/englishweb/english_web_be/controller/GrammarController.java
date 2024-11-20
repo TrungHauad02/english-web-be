@@ -31,10 +31,11 @@ public class GrammarController {
             @RequestParam int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir,
+            @RequestParam(required = false) String title,
             @RequestParam(required = false) StatusEnum status) {
 
-        Page<GrammarDTO> grammarPage = service.findGrammarWithStatusAndPagingAndSorting(
-                status, page, size, sortBy, sortDir, GrammarDTO.class);
+        Page<GrammarDTO> grammarPage = service.findWithPagingSortingSearching(
+                title, status, page, size, sortBy, sortDir, GrammarDTO.class);
 
         return new ResponseEntity<>(grammarPage, HttpStatus.OK);
     }

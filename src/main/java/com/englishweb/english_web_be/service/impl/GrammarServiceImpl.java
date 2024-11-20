@@ -5,17 +5,21 @@ import com.englishweb.english_web_be.dto.GrammarQuestionDTO;
 import com.englishweb.english_web_be.model.Grammar;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.GrammarRepository;
+import com.englishweb.english_web_be.repository.specifications.LessonSpecification;
 import com.englishweb.english_web_be.service.GrammarService;
 import com.englishweb.english_web_be.util.ValidationUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class GrammarServiceImpl extends BaseServiceImpl<Grammar, GrammarDTO,
         GrammarRepository> implements GrammarService {
 
@@ -28,17 +32,17 @@ public class GrammarServiceImpl extends BaseServiceImpl<Grammar, GrammarDTO,
     }
 
     @Override
-    public Page<GrammarDTO> findGrammarWithStatusAndPagingAndSorting(StatusEnum status, int page, int size, String sortBy, String sortDir, Class<GrammarDTO> grammarResponseDTOClass) {
-        if (status == null) {
-            return super.findByPage(page, size, sortBy, sortDir, grammarResponseDTOClass);
-        }
+    public Page<GrammarDTO> findWithPagingSortingSearching(String title, StatusEnum status, int page, int size, String sortBy, String sortDir, Class<GrammarDTO> grammarResponseDTOClass) {
+        Specification<Grammar> specTitle = Specification.where(title != null ? LessonSpecification.byTitle(title): null);
+        Specification<Grammar> spec = specTitle.and(status != null ? LessonSpecification.hasStatus(status) : null);
 
         ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, grammarResponseDTOClass);
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-
-        return repository.findGrammarWithStatus(status, pageable)
-                .map(this::convertToDTO);
+        log.info("Get grammar page with searching: pageable: {}, spec: {}", pageable, spec);
+        Page<Grammar> entityPage = repository.findAll(spec, pageable);
+        log.info("Get grammar page with searching successfully: {} record found.", entityPage.getNumberOfElements());
+        return entityPage.map(this::convertToDTO);
     }
 
     @Override

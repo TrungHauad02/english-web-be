@@ -1,5 +1,7 @@
 package com.englishweb.english_web_be.model;
 
+import com.englishweb.english_web_be.model.interfacemodel.BaseEntity;
+import com.englishweb.english_web_be.model.interfacemodel.LessonEntity;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +12,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Writing implements BaseEntity {
+public class Writing implements LessonEntity {
     @Id
     private String id;
     @Column(nullable = false)

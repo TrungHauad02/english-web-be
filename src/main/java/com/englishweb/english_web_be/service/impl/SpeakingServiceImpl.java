@@ -5,18 +5,22 @@ import com.englishweb.english_web_be.dto.SpeakingConversationDTO;
 import com.englishweb.english_web_be.model.Speaking;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.SpeakingRepository;
+import com.englishweb.english_web_be.repository.specifications.LessonSpecification;
 import com.englishweb.english_web_be.service.SpeakingConversationService;
 import com.englishweb.english_web_be.service.SpeakingService;
 import com.englishweb.english_web_be.util.ValidationUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class SpeakingServiceImpl extends BaseServiceImpl<Speaking, SpeakingDTO, SpeakingRepository>
         implements SpeakingService {
 
@@ -29,17 +33,16 @@ public class SpeakingServiceImpl extends BaseServiceImpl<Speaking, SpeakingDTO, 
     }
 
     @Override
-    public Page<SpeakingDTO> findSpeakingWithStatusAndPagingAndSorting(StatusEnum status, int page, int size, String sortBy, String sortDir, Class<SpeakingDTO> dtoClass) {
-        if(status == null) {
-            return super.findByPage(page, size, sortBy, sortDir, dtoClass);
-        }
-
+    public Page<SpeakingDTO> findWithPagingSortingSearching(String title, StatusEnum status, int page, int size, String sortBy, String sortDir, Class<SpeakingDTO> dtoClass) {
         ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, dtoClass);
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-
-        return repository.findAllSpeakingByStatus(status, pageable)
-                .map(this::convertToDTO);
+        Specification<Speaking> specTitle = Specification.where(title != null ?LessonSpecification.byTitle(title): null);
+        Specification<Speaking> spec = specTitle.and(status != null ? LessonSpecification.hasStatus(status): null);
+        log.info("Find Speaking page with searching: title: {}, status: {}, pageable: {}", title, status, pageable);
+        Page<SpeakingDTO> result = repository.findAll(spec, pageable).map(this::convertToDTO);
+        log.info("Find Speaking page with searching successfully: {} record found.", result.getNumberOfElements());
+        return result;
     }
 
     @Override

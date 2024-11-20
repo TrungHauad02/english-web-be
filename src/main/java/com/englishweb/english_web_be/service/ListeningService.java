@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 
 public interface ListeningService extends BaseService<ListeningDTO> {
 
-    Page<ListeningDTO> findListeningWithStatusAndPagingAndSorting(
-            StatusEnum status, int page, int size, String sortBy, String sortDir,
+    Page<ListeningDTO> findWithPagingSortingSearching(
+            String title, StatusEnum status, int page, int size, String sortBy, String sortDir,
             Class<ListeningDTO> dtoClass);
 }

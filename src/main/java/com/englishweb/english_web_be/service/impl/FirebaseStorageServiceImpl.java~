@@ -20,7 +20,8 @@ public class FirebaseStorageServiceImpl implements FirebaseStorageService {
         YES,
         NO;
 
-        public static RandomName fromString(String value) {if (value != null) {
+        public static RandomName fromString(String value) {
+            if (value != null) {
             for (RandomName randomName : RandomName.values()) {
                 if (value.equalsIgnoreCase(randomName.name())) {
                     return randomName;
@@ -75,7 +76,7 @@ public class FirebaseStorageServiceImpl implements FirebaseStorageService {
 
     public byte[] downloadFile(String fileUrl) throws IOException {
         if (fileUrl == null || !fileUrl.contains("o/")) {
-            throw new IllegalArgumentException("Invalid file URL.");
+            throw new IllegalArgumentException("Invalid file URL: {}", fileUrl);
         }
 
         String path = fileUrl.split("o/")[1].split("\\?")[0];

@@ -6,5 +6,7 @@ import org.springframework.data.domain.Page;
 
 public interface WritingService extends BaseService<WritingDTO> {
 
-    Page<WritingDTO> findWritingWithStatusAndPagingAndSorting(StatusEnum status, int page, int size, String sortBy, String sortDir, Class<WritingDTO> dtoClass);
+    Page<WritingDTO> findWithPagingSortingSearching(
+            String title, StatusEnum status, int page, int size, String sortBy, String sortDir,
+            Class<WritingDTO> dtoClass);
 }
