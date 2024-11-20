@@ -31,9 +31,10 @@ public class SpeakingController {
             @RequestParam int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir,
+            @RequestParam(required = false) String title,
             @RequestParam(required = false) StatusEnum status) {
-        return new ResponseEntity<>(service.findSpeakingWithStatusAndPagingAndSorting(
-                                status, page, size, sortBy, sortDir, SpeakingDTO.class),
+        return new ResponseEntity<>(service.findWithPagingSortingSearching(
+                title, status, page, size, sortBy, sortDir, SpeakingDTO.class),
                 HttpStatus.OK);
     }
 

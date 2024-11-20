@@ -1,5 +1,6 @@
 package com.englishweb.english_web_be.model;
 
+import com.englishweb.english_web_be.model.interfacemodel.BaseEntity;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +11,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReadingQuestion implements BaseEntity{
+public class ReadingQuestion implements BaseEntity {
     @Id
     private String id;
     @Column(nullable = false)

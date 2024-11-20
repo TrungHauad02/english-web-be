@@ -6,5 +6,5 @@ import org.springframework.data.domain.Page;
 
 public interface ReadingService extends BaseService<ReadingDTO> {
 
-    Page<ReadingDTO> findReadingWithStatusAndPagingAndSorting(StatusEnum status, int page, int size, String sortBy, String sortDir, Class<ReadingDTO> dtoClass);
+    Page<ReadingDTO> findWithPagingSortingSearching(String title, StatusEnum status, int page, int size, String sortBy, String sortDir, Class<ReadingDTO> dtoClass);
 }

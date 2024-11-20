@@ -30,8 +30,9 @@ public class WritingController {
                                                        @RequestParam int size,
                                                        @RequestParam(defaultValue = "id") String sortBy,
                                                        @RequestParam(defaultValue = "asc") String sortDir,
+                                                       @RequestParam(required = false) String title,
                                                        @RequestParam(required = false) StatusEnum status) {
-        return new ResponseEntity<>(service.findWritingWithStatusAndPagingAndSorting(status, page, size, sortBy, sortDir, WritingDTO.class), HttpStatus.OK);
+        return new ResponseEntity<>(service.findWithPagingSortingSearching(title, status, page, size, sortBy, sortDir, WritingDTO.class), HttpStatus.OK);
     }
 
     @Operation(method = "GET", summary = "Get writing by ID",

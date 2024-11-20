@@ -1,7 +1,7 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.BaseDTO;
-import com.englishweb.english_web_be.model.BaseEntity;
+import com.englishweb.english_web_be.model.interfacemodel.BaseEntity;
 import com.englishweb.english_web_be.service.BaseService;
 import com.englishweb.english_web_be.util.ValidationUtils;
 import lombok.AllArgsConstructor;

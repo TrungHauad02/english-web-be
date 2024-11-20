@@ -6,11 +6,14 @@ import com.englishweb.english_web_be.dto.VocabularyDTO;
 import com.englishweb.english_web_be.model.Topic;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.TopicRepository;
+import com.englishweb.english_web_be.repository.specifications.LessonSpecification;
 import com.englishweb.english_web_be.service.TopicService;
 import com.englishweb.english_web_be.util.ValidationUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -19,6 +22,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
+@Slf4j
 public class TopicServiceImpl extends BaseServiceImpl<Topic, TopicDTO, TopicRepository> implements TopicService {
 
     private final TopicQuestionServiceImpl topicQuestionService;
@@ -36,17 +40,16 @@ public class TopicServiceImpl extends BaseServiceImpl<Topic, TopicDTO, TopicRepo
     }
 
     @Override
-    public Page<TopicDTO> findTopicWithStatusAndPagingAndSorting(StatusEnum status, int page, int size, String sortBy, String sortDir, Class<TopicDTO> dtoClass) {
-        if (status == null) {
-            return super.findByPage(page, size, sortBy, sortDir, dtoClass);
-        }
-
+    public Page<TopicDTO> findWithPagingSortingSearching(String title, StatusEnum status, int page, int size, String sortBy, String sortDir, Class<TopicDTO> dtoClass) {
         ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, dtoClass);
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-
-        return repository.findTopicWithStatus(status, pageable)
-                .map(this::convertToDTO);
+        Specification<Topic> specTitle = Specification.where(title != null ? LessonSpecification.byTitle(title) : null);
+        Specification<Topic> spec = specTitle.and(Specification.where(status != null ? LessonSpecification.hasStatus(status): null));
+        log.info("Find Topic page with searching: title: {}, status: {}, pageable: {}", title, status, pageable);
+        Page<TopicDTO> result = repository.findAll(spec, pageable).map(this::convertToDTO);
+        log.info("Find Topic page with searching successfully: {} record found.", result.getNumberOfElements());
+        return result;
     }
 
     @Override

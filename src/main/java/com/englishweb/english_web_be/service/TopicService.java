@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 
 public interface TopicService extends BaseService<TopicDTO> {
 
-    Page<TopicDTO> findTopicWithStatusAndPagingAndSorting(
-            StatusEnum status, int page, int size, String sortBy, String sortDir,
+    Page<TopicDTO> findWithPagingSortingSearching(
+            String title, StatusEnum status, int page, int size, String sortBy, String sortDir,
             Class<TopicDTO> dtoClass);
 }

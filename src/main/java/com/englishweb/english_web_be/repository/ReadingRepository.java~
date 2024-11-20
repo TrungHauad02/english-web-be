@@ -1,6 +1,7 @@
 package com.englishweb.english_web_be.repository;
 
 import com.englishweb.english_web_be.model.Reading;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

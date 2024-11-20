@@ -76,6 +76,7 @@ public class FirebaseStorageServiceImpl implements FirebaseStorageService {
 
     public byte[] downloadFile(String fileUrl) throws IOException {
         if (fileUrl == null || !fileUrl.contains("o/")) {
+            log.error("Invalid file URL: {}", fileUrl);
             throw new IllegalArgumentException("Invalid file URL.");
         }
 
