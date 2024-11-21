@@ -32,6 +32,7 @@ public class VocabularyController {
                                                                     @RequestParam int size,
                                                                     @RequestParam(defaultValue = "id") String sortBy,
                                                                     @RequestParam(defaultValue = "asc") String sortDir,
+
                                                                     @RequestParam(required = false) StatusEnum status,
                                                                     @RequestParam String topicId) {
         return new ResponseEntity<>(service.findByPageAndStatusAndTopicId(status, page, size, sortBy, sortDir, VocabularyDTO.class, topicId), HttpStatus.OK);
