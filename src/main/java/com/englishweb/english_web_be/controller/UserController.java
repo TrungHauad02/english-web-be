@@ -55,7 +55,7 @@ public class UserController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam(required = false) LevelEnum level,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "5") int size) {
 
         Page<UserDTO> result = userService.findTeachersBySpecification(name, startDate, endDate, level, page, size);
         return ResponseEntity.ok(result);
@@ -69,7 +69,7 @@ public class UserController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "5") int size) {
 
         Page<UserDTO> result = userService.findStudentsBySpecification(name, startDate, endDate, page, size);
         return ResponseEntity.ok(result);
