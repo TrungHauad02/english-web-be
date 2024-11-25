@@ -8,9 +8,6 @@ import com.textrazor.annotations.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-
 @Service
 public class TextRazorServiceImpl implements TextRazorService {
     @Value("${text-razor.api.key}")
