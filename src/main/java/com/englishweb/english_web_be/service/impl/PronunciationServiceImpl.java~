@@ -1,0 +1,76 @@
+package com.englishweb.english_web_be.service.impl;
+
+import com.englishweb.english_web_be.service.PronunciationService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.*;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Base64;
+
+@Service
+@Slf4j
+public class PronunciationServiceImpl implements PronunciationService {
+    private final RestTemplate restTemplate = new RestTemplate();
+    @Value("${pronunciation.api.url}")
+    private String apiUrl;
+    @Value("${pronunciation.api.subscription-key}")
+    private String subscriptionKey;
+
+    @Override
+    public String assessPronunciation(String referenceText,String audioFileBase64) {
+        File tempFile = null;
+        try {
+            tempFile = decodeBase64ToFile(audioFileBase64);
+
+            String urlWithParams = apiUrl + "?language=en-US&referenceText=" + referenceText;
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType("audio/wav; codecs=audio/pcm; samplerate=16000"));
+            headers.set("Ocp-Apim-Subscription-Key", subscriptionKey);
+
+            byte[] fileBytes = java.nio.file.Files.readAllBytes(tempFile.toPath());
+
+            HttpEntity<byte[]> requestEntity = new HttpEntity<>(fileBytes, headers);
+            ResponseEntity<String> response = restTemplate.exchange(
+                    urlWithParams,
+                    HttpMethod.POST,
+                    requestEntity,
+                    String.class
+            );
+            if (response.getStatusCode() == HttpStatus.OK) {
+                return response.getBody();
+            } else {
+                throw new RuntimeException("Pronunciation Assessment API call failed with status: " + response.getStatusCode());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private File decodeBase64ToFile(String base64Audio) throws IOException {
+        if(base64Audio == null || !base64Audio.contains(",")){
+            return null;
+        }
+        String[] parts = base64Audio.split(",");
+        String base64Data = parts[1];
+        String mimeType = parts[0].split(":")[1].split(";")[0];
+        byte[] audioBytes = Base64.getDecoder().decode(base64Audio);
+        File tempFile = File.createTempFile("audio", mimeTypeToFileExtension(mimeType));
+        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+            fos.write(audioBytes);
+        }
+        return tempFile;
+    }
+    private String mimeTypeToFileExtension(String mimeType) {
+        return switch (mimeType) {
+            case "audio/wav" -> ".wav";
+            case "audio/mpeg" -> ".mp3";
+            case "audio/ogg" -> ".ogg";
+            default -> throw new IllegalArgumentException("Unsupported MIME type: " + mimeType);
+        };
+    }
+}
