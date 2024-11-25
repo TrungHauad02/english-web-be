@@ -40,7 +40,7 @@ public class GeminiClientServiceImpl implements GeminiClientService {
 
             HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
 
-            String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash" + ":generateContent?key=" + "AIzaSyDO88ZqAbnrBQniRs3wwlCBw1MOH33a0qQ";
+            String url = apiUrl + ":generateContent?key=" + apiKey;
             log.info("Calling Gemini API at URL: {}", apiUrl + ":generateContent?key=<apiKey>");
 
             // Send the request and log the response

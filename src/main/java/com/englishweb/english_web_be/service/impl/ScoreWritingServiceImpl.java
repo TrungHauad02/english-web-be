@@ -1,10 +1,9 @@
 package com.englishweb.english_web_be.service.impl;
 
-import com.englishweb.english_web_be.dto.response.ScoreWritingResponse;
+import com.englishweb.english_web_be.dto.response.ScoreCommentResponse;
 import com.englishweb.english_web_be.service.GeminiClientService;
 import com.englishweb.english_web_be.service.ScoreWritingService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.textrazor.AnalysisException;
@@ -13,8 +12,6 @@ import com.textrazor.annotations.AnalyzedText;
 import com.textrazor.annotations.Topic;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.Arrays;
 
 @Service
 @Slf4j
@@ -27,7 +24,7 @@ public class ScoreWritingServiceImpl implements ScoreWritingService {
         this.geminiClientService = geminiClientService;
     }
 
-    public ScoreWritingResponse scoreWriting(String text, String topic) {
+    public ScoreCommentResponse scoreWriting(String text, String topic) {
         try {
             AnalyzedText analyzedText = textRazorServiceImpl.analyzeText(text);
             StringBuilder promptBuilder = new StringBuilder();
@@ -78,7 +75,7 @@ public class ScoreWritingServiceImpl implements ScoreWritingService {
             String comment = jsonNode.get("comment").asText();
             log.info("Score Text: {}", scoreText);
             log.info("Comment: {}", comment);
-            return ScoreWritingResponse.builder()
+            return ScoreCommentResponse.builder()
                     .score(scoreText)
                     .comment(comment)
                     .build();
