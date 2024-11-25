@@ -12,21 +12,14 @@ import org.springframework.stereotype.Service;
 public class TextRazorServiceImpl implements TextRazorService {
     @Value("${text-razor.api.key}")
     String apiKey;
-    private TextRazor client;
 
     public AnalyzedText analyzeText(String text) throws AnalysisException, NetworkException {
-        client = new TextRazor(apiKey);
+        TextRazor client = new TextRazor(apiKey);
         client.addExtractor("entities");
         client.addExtractor("topics");
         client.addExtractor("spelling");
         client.addExtractor("senses");
 
-        AnalyzedText response = client.analyze(text);
-
-        for (Topic topic : response.getResponse().getTopics()) {
-            System.out.println("Matched Topic: " + topic.getLabel() + ": " + topic.getScore());
-        }
-
-        return response;
+        return client.analyze(text);
     }
 }
