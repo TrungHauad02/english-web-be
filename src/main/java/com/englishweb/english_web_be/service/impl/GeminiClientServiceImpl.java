@@ -59,9 +59,6 @@ public class GeminiClientServiceImpl implements GeminiClientService {
                 log.error("No candidates found in the response from Gemini API.");
                 throw new RuntimeException("No candidates found in the response.");
             }
-        } catch (JsonProcessingException e) {
-            log.error("Error converting request object to JSON: {}", e.getMessage(), e);
-            throw new RuntimeException("Error converting request object to JSON: " + e.getMessage(), e);
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
                 log.error("Unauthorized access to Gemini API. Status code: {}, Message: {}", e.getStatusCode(), e.getMessage());

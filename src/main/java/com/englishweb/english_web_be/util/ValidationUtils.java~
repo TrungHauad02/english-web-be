@@ -27,13 +27,18 @@ public class ValidationUtils {
             throw new InvalidArgumentException("Page must be greater or equal than 0");
         }
 
+        boolean fieldExists = false;
         Field[] fields = dtoClass.getDeclaredFields();
         for (Field field : fields) {
             if (field.getName().equals(sortBy)) {
-                return;
+                fieldExists = true;
+                break;
             }
         }
-        throw new InvalidArgumentException("Field '" + sortBy + "' does not exist in the object");
+
+        if (!fieldExists) {
+            throw new InvalidArgumentException("Field '" + sortBy + "' does not exist in the object");
+        }
     }
 
     public <T> void validateExistId(JpaRepository<T, String> repository, String id) {
