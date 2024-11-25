@@ -1,0 +1,35 @@
+package com.englishweb.english_web_be.controller;
+
+import com.englishweb.english_web_be.dto.request.PronunciationRequestDTO;
+import com.englishweb.english_web_be.service.PronunciationService;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+
+@RestController
+@RequestMapping("/api/pronunciation")
+@Slf4j
+@AllArgsConstructor
+public class PronunciationController {
+    private PronunciationService service;
+
+    @PostMapping("/assess")
+    public ResponseEntity<?> assessPronunciation(
+            @RequestBody PronunciationRequestDTO request) {
+
+        try {
+            String resultJson = service.assessPronunciation(
+                    request.getReferenceText(),
+                    request.getAudioFileBase64()
+            );
+            return ResponseEntity.ok(resultJson);
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Error processing audio file: " + e.getMessage());
+        }
+    }
+}

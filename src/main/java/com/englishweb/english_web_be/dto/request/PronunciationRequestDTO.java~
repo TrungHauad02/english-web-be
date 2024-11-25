@@ -1,0 +1,17 @@
+package com.englishweb.english_web_be.dto.request;
+
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class PronunciationRequestDTO {
+    private String referenceText;
+    private String audioFileBase64;
+
+    public String getAudioFileBase64() {
+        return audioFileBase64;
+    }
+}

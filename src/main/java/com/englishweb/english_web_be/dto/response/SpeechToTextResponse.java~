@@ -1,0 +1,6 @@
+package com.englishweb.english_web_be.dto.response;
+
+public class SpeechToTextResponse {
+    private String transcript;
+    private Double confidence;
+}
