@@ -27,7 +27,7 @@ public class UserDTO implements BaseDTO {
 
     public LocalDate getStartDate() { return startDate;}
 
-    public void setStartDate() { this.startDate = LocalDate.now();}
+    public void setStartDate() { this.startDate = startDate;}
 
     public LocalDate getEndDate() { return endDate;}
 

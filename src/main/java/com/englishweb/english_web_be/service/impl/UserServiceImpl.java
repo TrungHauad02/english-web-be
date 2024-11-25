@@ -301,7 +301,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserReposito
         dto.setRole(entity.getRoleEnum());
         dto.setStatus(entity.getStatus());
         dto.setLevel(entity.getLevelEnum());
-        dto.setStartDate();
+        dto.setStartDate(entity.getStartDate());
         dto.setEndDate(entity.getEndDate());
         return dto;
     }
