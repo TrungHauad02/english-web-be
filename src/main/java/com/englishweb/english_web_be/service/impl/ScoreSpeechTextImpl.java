@@ -1,0 +1,84 @@
+package com.englishweb.english_web_be.service.impl;
+
+import com.englishweb.english_web_be.dto.response.ScoreCommentResponse;
+import com.englishweb.english_web_be.dto.response.ScoreSpeechTextResponse;
+import com.englishweb.english_web_be.service.ScoreSpeechText;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+@Slf4j
+@Service
+public class ScoreSpeechTextImpl implements ScoreSpeechText {
+    private final GeminiClientServiceImpl geminiClientServiceImpl;
+
+    public ScoreSpeechTextImpl(GeminiClientServiceImpl geminiClientServiceImpl) {
+        this.geminiClientServiceImpl = geminiClientServiceImpl;
+    }
+
+    @Override
+    public ScoreSpeechTextResponse scoreSpeechTextAndRealText(String speechText, String realText) throws JsonProcessingException {
+        StringBuilder promptBuilder = new StringBuilder();
+        promptBuilder.append("Role: Act as a professional English teacher.\n");
+        promptBuilder.append("Task: Evaluate the accuracy of a speech text against a reference text.\n");
+        promptBuilder.append("Instructions:\n");
+        promptBuilder.append("1. Analyze the speech text and provide:\n");
+        promptBuilder.append("   - A **score** (0-100) indicating accuracy (100 = perfect match).\n");
+        promptBuilder.append("   - A **comment** identifying and correcting errors in the speech text.\n");
+        promptBuilder.append("2. **Format for the output:**\n");
+        promptBuilder.append("   {\n");
+        promptBuilder.append("     \"score\": \"<score>/100\",\n");
+        promptBuilder.append("     \"comment\": [\n");
+        promptBuilder.append("       {\n");
+        promptBuilder.append("         \"startIndex\": <startIndex>,\n");
+        promptBuilder.append("         \"endIndex\": <endIndex>,\n");
+        promptBuilder.append("         \"errorChars\": \"<errorChars>\"\n");
+        promptBuilder.append("       }\n");
+        promptBuilder.append("     ]\n");
+        promptBuilder.append("   }\n");
+        promptBuilder.append("3. Guidelines for comments:\n");
+        promptBuilder.append("   - Identify only **one incorrect word** per `startIndex` and `endIndex`.\n");
+        promptBuilder.append("   - Use `startIndex` and `endIndex` to mark the **word's position** in the speech text.\n");
+        promptBuilder.append("   - Include the incorrect word in `errorChars`.\n");
+        promptBuilder.append("   - Do not correct words with identical meanings (e.g., \"is\" and \"'s\").\n");
+        promptBuilder.append("4. Example:\n");
+        promptBuilder.append("Example Input:\n");
+        promptBuilder.append("Speech Text: \"I have been in Korean\"\n");
+        promptBuilder.append("Reference Text: \"I've born in Japan\"\n");
+        promptBuilder.append("Example Output:\n");
+        promptBuilder.append("{\n");
+        promptBuilder.append("  \"score\": \"20/100\",\n");
+        promptBuilder.append("  \"comment\": [\n");
+        promptBuilder.append("    {\n");
+        promptBuilder.append("      \"startIndex\": 7,\n");
+        promptBuilder.append("      \"endIndex\": 11,\n");
+        promptBuilder.append("      \"errorChars\": \"been\"\n");
+        promptBuilder.append("    },\n");
+        promptBuilder.append("    {\n");
+        promptBuilder.append("      \"startIndex\": 12,\n");
+        promptBuilder.append("      \"endIndex\": 18,\n");
+        promptBuilder.append("      \"errorChars\": \"Korean\"\n");
+        promptBuilder.append("    }\n");
+        promptBuilder.append("  ]\n");
+        promptBuilder.append("}\n");
+        promptBuilder.append("Evaluate the accuracy of a speech text against a reference text.\n");
+        promptBuilder.append("5. Real work:\n");
+        promptBuilder.append("Speech Text: \"").append(speechText).append("\"\n");
+        promptBuilder.append("Reference Text: \"").append(realText).append("\"\n");
+        promptBuilder.append("Don't be delusional and evaluate accuracy then give exactly format as above.\n");
+        String prompt = promptBuilder.toString();
+        log.info("Score Speech Text with prompt: {}", prompt);
+
+        String response = geminiClientServiceImpl.generateText(prompt);
+        log.info("Response received from Gemini: {}", response);
+        int firstNewLine = response.indexOf('\n');
+        int lastNewLine = response.lastIndexOf('\n');
+        if (firstNewLine != -1 && lastNewLine != -1 && firstNewLine < lastNewLine) {
+            response = response.substring(firstNewLine + 1, lastNewLine);
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(response, ScoreSpeechTextResponse.class);
+    }
+}

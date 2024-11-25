@@ -1,0 +1,18 @@
+package com.englishweb.english_web_be.service.impl;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ScoreSpeechTextImplTest {
+
+    @Test
+    void scoreSpeechTextAndRealText() {
+        String speechText = "That is the right speech text";
+        String realText = "This is the right speech text";
+        ScoreSpeechTextImpl scoreSpeechText = new ScoreSpeechTextImpl(new GeminiClientServiceImpl());
+        String response = scoreSpeechText.scoreSpeechTextAndRealText(speechText, realText);
+        assertNotNull(response);
+        System.out.println(response);
+    }
+}
