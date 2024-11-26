@@ -3,12 +3,15 @@ package com.englishweb.english_web_be.service.impl;
 import com.englishweb.english_web_be.dto.TestMixingAnswerDTO;
 import com.englishweb.english_web_be.dto.TestMixingQuestionDTO;
 import com.englishweb.english_web_be.model.TestMixingQuestion;
+import com.englishweb.english_web_be.model.TestReading;
+import com.englishweb.english_web_be.model.TestReadingQuestion;
 import com.englishweb.english_web_be.modelenum.TestMixingTypeEnum;
 import com.englishweb.english_web_be.repository.TestMixingQuestionRepository;
 import com.englishweb.english_web_be.service.TestMixingQuestionService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -51,6 +54,22 @@ public class TestMixingQuestionServiceImpl extends BaseServiceImpl<TestMixingQue
                 .map(this::convertToDTO)
                 .toList();
     }
+    public int serialMaxMixingQuestionsByTestId(String testId) {
+
+        testService.isExist(testId);
+
+        List<TestMixingQuestion> list = repository.findAllByTest_Id(testId);
+
+        if (list.isEmpty()) {
+            return 0;
+        }
+
+        TestMixingQuestion lastQuestion = list.get(list.size() - 1);
+
+        return lastQuestion.getSerial();
+    }
+
+
 
     @Override
     protected TestMixingQuestion convertToEntity(TestMixingQuestionDTO dto) {

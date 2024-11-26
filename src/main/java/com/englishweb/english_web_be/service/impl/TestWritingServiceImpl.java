@@ -1,6 +1,7 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.TestWritingDTO;
+import com.englishweb.english_web_be.model.TestMixingQuestion;
 import com.englishweb.english_web_be.model.TestWriting;
 import com.englishweb.english_web_be.repository.TestWritingRepository;
 import com.englishweb.english_web_be.service.TestWritingService;
@@ -32,6 +33,22 @@ public class TestWritingServiceImpl extends BaseServiceImpl<TestWriting, TestWri
                 .map(this::convertToDTO)
                 .toList();
     }
+
+    public int serialMaxTestWritingByTestId(String testId) {
+
+        testService.isExist(testId);
+
+        List<TestWriting> list = repository.findAllByTest_Id(testId);
+
+        if (list.isEmpty()) {
+            return 0;
+        }
+
+        TestWriting lastWriting = list.get(list.size() - 1);
+
+        return lastWriting.getSerial();
+    }
+
 
     @Override
     protected TestWriting convertToEntity(TestWritingDTO dto) {

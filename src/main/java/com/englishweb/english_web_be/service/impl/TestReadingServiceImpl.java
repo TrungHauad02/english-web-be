@@ -12,6 +12,7 @@ import lombok.Getter;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 @Getter
 @Service
@@ -37,6 +38,35 @@ public class TestReadingServiceImpl extends BaseServiceImpl<TestReading, TestRea
                 .map(this::convertToDTO)
                 .toList();
     }
+
+    public int serialMaxReadingQuestionsByTestId(String testId) {
+
+
+        testService.isExist(testId);
+
+        List<TestReading> list = repository.findAllByTest_Id(testId);
+
+        if (list.isEmpty()) {
+            return 0;
+        }
+
+        list.sort(Comparator.comparingInt(TestReading::getSerial).reversed());
+        TestReading readingWithMaxSerial = list.get(0);
+
+        List<TestReadingQuestion> questions = readingWithMaxSerial.getQuestions();
+        if (questions == null || questions.isEmpty()) {
+            return 0;
+        }
+
+        questions.sort(Comparator.comparingInt(TestReadingQuestion::getSerial));
+        TestReadingQuestion lastQuestion = questions.get(questions.size() - 1);
+
+        return lastQuestion.getSerial();
+    }
+
+
+
+
 
     @Override
     protected TestReading convertToEntity(TestReadingDTO dto) {
