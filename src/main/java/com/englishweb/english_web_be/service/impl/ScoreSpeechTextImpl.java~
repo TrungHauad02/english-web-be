@@ -19,7 +19,7 @@ public class ScoreSpeechTextImpl implements ScoreSpeechText {
     }
 
     @Override
-    public String scoreSpeechTextAndRealText(String speechText, String realText) throws JsonProcessingException {
+    public ScoreSpeechTextResponse scoreSpeechTextAndRealText(String speechText, String realText) throws JsonProcessingException {
         StringBuilder promptBuilder = new StringBuilder();
         promptBuilder.append("Role: Act as a professional English teacher.\n");
         promptBuilder.append("Task: Evaluate the accuracy of a speech text against a reference text.\n");
@@ -79,7 +79,6 @@ public class ScoreSpeechTextImpl implements ScoreSpeechText {
             response = response.substring(firstNewLine + 1, lastNewLine);
         }
         ObjectMapper objectMapper = new ObjectMapper();
-        ScoreSpeechTextResponse scoreSpeechTextResponse = objectMapper.readValue(response, ScoreSpeechTextResponse.class);
-        return response;
+        return objectMapper.readValue(response, ScoreSpeechTextResponse.class);
     }
 }
