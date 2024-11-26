@@ -2,6 +2,7 @@ package com.englishweb.english_web_be.dto;
 
 import com.englishweb.english_web_be.model.SubmitTestListeningAnswer;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
+import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -20,6 +21,7 @@ public class SubmitTestDTO implements BaseDTO {
     String id;
     @NotBlank(message = "Test ID cannot be empty")
     String testId;
+    String  testTitle;
     @NotBlank(message = "User ID cannot be empty")
     String userId;
     @NotNull(message = "Score must be a positive number")

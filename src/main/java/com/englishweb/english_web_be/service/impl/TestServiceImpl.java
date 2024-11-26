@@ -30,15 +30,17 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO,TestRepository
     private final TestWritingServiceImpl testWritingService;
     private final TestMixingQuestionServiceImpl testMixingQuestionService;
     private final TestRepository testRepository;
+    private final SubmitTestServiceImpl submitTestService;
 
-    public TestServiceImpl(TestRepository repository, @Lazy TestSpeakingServiceImpl testSpeakingService, @Lazy TestReadingServiceImpl testReadingService, @Lazy TestListeningServiceImpl testListeningService, @Lazy TestWritingServiceImpl testWritingService, TestMixingQuestionServiceImpl testMixingQuestionService, TestRepository testRepository) {
+    public TestServiceImpl(TestRepository repository, @Lazy TestSpeakingServiceImpl testSpeakingService, @Lazy TestReadingServiceImpl testReadingService, @Lazy TestListeningServiceImpl testListeningService, @Lazy TestWritingServiceImpl testWritingService, @Lazy TestMixingQuestionServiceImpl testMixingQuestionService, @Lazy SubmitTestServiceImpl submitTestService) {
         super(repository);
         this.testSpeakingService = testSpeakingService;
         this.testReadingService = testReadingService;
         this.testListeningService = testListeningService;
         this.testWritingService = testWritingService;
         this.testMixingQuestionService = testMixingQuestionService;
-        this.testRepository = testRepository;
+        this.testRepository = repository;
+        this.submitTestService = submitTestService;
     }
 
 
@@ -74,11 +76,57 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO,TestRepository
                     dto.setSerial(test.getSerial());
                     dto.setTitle(test.getTitle());
                     dto.setStatus(test.getStatus());
+                    dto.setNumberOfQuestions(this.numberOfQuestionTest(test.getId(),test.getType()));
+                    dto.setScoreLastOfTest(submitTestService.scoreLastSubmitTest(test.getId()));
                     return dto;
                 })
                 .collect(Collectors.toList());
         return new PageImpl<>(dtoList, testPage.getPageable(), testPage.getTotalElements());
     }
+
+    public int numberOfQuestionTest(String testId, TestTypeEnum testType) {
+        int numberOfQuestions = 0;
+
+        switch (testType) {
+            case MIXING:
+                numberOfQuestions = testWritingService.serialMaxTestWritingByTestId(testId);
+                if (numberOfQuestions == 0) {
+                    numberOfQuestions = testSpeakingService.serialMaxSpeakingQuestionsByTestId(testId);
+                    if (numberOfQuestions == 0) {
+                        numberOfQuestions = testListeningService.serialMaxListeningQuestionsByTestId(testId);
+                        if (numberOfQuestions == 0) {
+                            numberOfQuestions = testReadingService.serialMaxReadingQuestionsByTestId(testId);
+                            if (numberOfQuestions == 0) {
+                                numberOfQuestions = testMixingQuestionService.serialMaxMixingQuestionsByTestId(testId);
+                            }
+                        }
+                    }
+                }
+                break;
+            case READING:
+                numberOfQuestions = testReadingService.serialMaxReadingQuestionsByTestId(testId);
+                break;
+
+            case LISTENING:
+                numberOfQuestions = testListeningService.serialMaxListeningQuestionsByTestId(testId);
+                break;
+
+            case SPEAKING:
+                numberOfQuestions = testSpeakingService.serialMaxSpeakingQuestionsByTestId(testId);
+                break;
+
+            case WRITING:
+                numberOfQuestions = testWritingService.serialMaxTestWritingByTestId(testId);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unknown test type: " + testType);
+        }
+
+        return numberOfQuestions;
+    }
+
+
 
     @Override
     protected Test convertToEntity(TestDTO dto) {

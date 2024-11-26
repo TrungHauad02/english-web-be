@@ -2,6 +2,7 @@ package com.englishweb.english_web_be.dto;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import jakarta.validation.constraints.NotBlank;
@@ -24,6 +25,10 @@ public class TestDTO implements BaseDTO {
     private int duration;
 
     private TestTypeEnum type;
+
+    private int numberOfQuestions;
+
+    private BigDecimal scoreLastOfTest;
 
     private StatusEnum status;
 

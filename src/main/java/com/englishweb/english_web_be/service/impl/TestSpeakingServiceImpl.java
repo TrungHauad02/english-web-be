@@ -4,12 +4,14 @@ import com.englishweb.english_web_be.dto.TestReadingQuestionDTO;
 import com.englishweb.english_web_be.dto.TestSpeakingDTO;
 import com.englishweb.english_web_be.dto.TestSpeakingQuestionDTO;
 import com.englishweb.english_web_be.model.TestSpeaking;
+import com.englishweb.english_web_be.model.TestSpeakingQuestion;
 import com.englishweb.english_web_be.repository.TestSpeakingRepository;
 import com.englishweb.english_web_be.service.TestSpeakingService;
 import lombok.Getter;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Getter
@@ -25,9 +27,9 @@ public class TestSpeakingServiceImpl extends BaseServiceImpl<TestSpeaking, TestS
         this.testSpeakingQuestionService = testSpeakingQuestionService;
     }
 
-    public List<TestSpeakingDTO> findAllByTest_Id(String test_id) {
-        testService.isExist(test_id);
-        List<TestSpeaking> list = repository.findAllByTest_Id(test_id);
+    public List<TestSpeakingDTO> findAllByTest_Id(String testId) {
+        testService.isExist(testId);
+        List<TestSpeaking> list = repository.findAllByTest_Id(testId);
 
         if (list.isEmpty()) {
             return null;
@@ -37,6 +39,33 @@ public class TestSpeakingServiceImpl extends BaseServiceImpl<TestSpeaking, TestS
                 .map(this::convertToDTO)
                 .toList();
     }
+
+    public int serialMaxSpeakingQuestionsByTestId(String testId) {
+
+        testService.isExist(testId);
+        List<TestSpeaking> list = repository.findAllByTest_Id(testId);
+
+        if (list.isEmpty()) {
+
+            return 0;
+        }
+
+        list.sort(Comparator.comparingInt(TestSpeaking::getSerial).reversed());
+        TestSpeaking speakingWithMaxSerial = list.get(0);
+
+        List<TestSpeakingQuestion> questions = speakingWithMaxSerial.getQuestions();
+        if (questions == null || questions.isEmpty()) {
+            return 0;
+        }
+
+        questions.sort(Comparator.comparingInt(TestSpeakingQuestion::getSerial));
+        TestSpeakingQuestion lastQuestion = questions.get(questions.size() - 1);
+
+        return lastQuestion.getSerial();
+    }
+
+
+
 
     @Override
     protected TestSpeaking convertToEntity(TestSpeakingDTO dto) {

@@ -4,12 +4,14 @@ import com.englishweb.english_web_be.dto.TestListeningDTO;
 import com.englishweb.english_web_be.dto.TestListeningQuestionDTO;
 import com.englishweb.english_web_be.dto.TestReadingQuestionDTO;
 import com.englishweb.english_web_be.model.TestListening;
+import com.englishweb.english_web_be.model.TestListeningQuestion;
 import com.englishweb.english_web_be.repository.TestListeningRepository;
 import com.englishweb.english_web_be.service.TestListeningService;
 import lombok.Getter;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Getter
@@ -38,6 +40,37 @@ public class TestListeningServiceImpl extends BaseServiceImpl<TestListening, Tes
         this.testService = testService;
         this.testListeningQuestionService = testListeningQuestionService;
     }
+
+
+
+    public int serialMaxListeningQuestionsByTestId(String testId) {
+
+
+        testService.isExist(testId);
+
+
+        List<TestListening> list = repository.findAllByTest_Id(testId);
+
+        if (list.isEmpty()) {
+
+            return 0;
+        }
+
+
+        list.sort(Comparator.comparingInt(TestListening::getSerial).reversed());
+        TestListening listeningWithMaxSerial = list.get(0);
+
+        List<TestListeningQuestion> questions = listeningWithMaxSerial.getQuestions();
+        if (questions == null || questions.isEmpty()) {
+            return 0;
+        }
+
+        questions.sort(Comparator.comparingInt(TestListeningQuestion::getSerial));
+        TestListeningQuestion lastQuestion = questions.get(questions.size() - 1);
+
+        return lastQuestion.getSerial();
+    }
+
 
 
     @Override
