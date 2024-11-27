@@ -1,0 +1,31 @@
+@startuml FindAllByQuestionId
+
+actor User
+participant "ReadingAnswerServiceImpl" as RAS
+participant "ReadingAnswerRepository" as RAR
+participant "ReadingQuestionServiceImpl" as RQS
+participant "BaseServiceImpl" as BSI
+
+== Find All Answers By Question ID ==
+User -> RAS: findAllByQuestionId(questionId)
+activate RAS
+
+RAS -> RQS: isExist(questionId)
+activate RQS
+RQS --> RAS: Question exists
+deactivate RQS
+
+RAS -> RAR: Find all answers by questionId
+activate RAR
+RAR --> RAS: List of ReadingAnswer entities
+deactivate RAR
+
+loop Convert each entity to DTO
+    RAS -> BSI: Call super.convertToDTO(entity)
+    note right: convertToDTO được định nghĩa trong BaseServiceImpl\nvà triển khai trong ReadingAnswerServiceImpl
+end
+
+RAS --> User: Return list of ReadingAnswerDTO
+deactivate RAS
+
+@enduml

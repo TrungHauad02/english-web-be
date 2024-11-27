@@ -1,0 +1,30 @@
+@startuml FindByPage
+
+actor User
+participant "BaseServiceImpl" as BSI
+participant "ValidationUtils" as VU
+participant "Repository" as REP
+
+== Find By Page ==
+User -> BSI: findByPage(page, size, sortBy, sortDir, dtoClass)
+activate BSI
+
+BSI -> VU: Validate page request parameters
+activate VU
+VU --> BSI: Validation complete
+deactivate VU
+
+BSI -> REP: Find entities by page
+activate REP
+REP --> BSI: Page of entities
+deactivate REP
+
+loop Convert each entity to DTO
+    BSI -> BSI: Call convertToDTO(entity)
+    note right: convertToDTO được triển khai trong lớp con
+end
+
+BSI --> User: Return Page of DTOs
+deactivate BSI
+
+@enduml

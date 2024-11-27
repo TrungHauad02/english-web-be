@@ -1,0 +1,31 @@
+@startuml FindByQuestionId
+
+actor User
+participant "ListeningAnswerServiceImpl" as LAS
+participant "ListeningAnswerRepository" as LAR
+participant "ListeningQuestionServiceImpl" as LQS
+participant "BaseServiceImpl" as BSI
+
+== Find All Answers By Question ID ==
+User -> LAS: findByQuestionId(questionId)
+activate LAS
+
+LAS -> LQS: isExist(questionId)
+activate LQS
+LQS --> LAS: Question exists
+deactivate LQS
+
+LAS -> LAR: Find all answers by questionId
+activate LAR
+LAR --> LAS: List of ListeningAnswer entities
+deactivate LAR
+
+loop Convert each entity to DTO
+    LAS -> BSI: Call super.convertToDTO(entity)
+    note right: convertToDTO được định nghĩa trong BaseServiceImpl\nvà triển khai trong ListeningAnswerServiceImpl
+end
+
+LAS --> User: Return list of ListeningAnswerDTO
+deactivate LAS
+
+@enduml

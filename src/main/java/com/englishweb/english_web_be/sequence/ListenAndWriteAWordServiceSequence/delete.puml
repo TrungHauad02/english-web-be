@@ -1,0 +1,23 @@
+@startuml DeleteListenAndWriteAWord
+
+actor User
+participant "ListenAndWriteAWordServiceImpl" as LWS
+participant "ListenAndWriteAWordRepository" as LWR
+participant "BaseServiceImpl" as BSI
+
+== Delete ListenAndWriteAWord ==
+User -> LWS: delete(id)
+activate LWS
+
+LWS -> BSI: Call super.delete(id)
+note right: Gọi hàm delete từ BaseServiceImpl
+BSI -> LWR: Delete entity by ID
+activate LWR
+LWR --> BSI: Entity deleted
+deactivate LWR
+
+BSI --> LWS: Confirm deletion
+LWS --> User: Confirm deletion
+deactivate LWS
+
+@enduml

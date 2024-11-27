@@ -1,0 +1,20 @@
+@startuml ConvertToEntity
+
+participant "BaseServiceImpl" as BSI
+participant "ListeningAnswerServiceImpl" as LAS
+participant "ListeningQuestionServiceImpl" as LQS
+
+== Convert ListeningAnswerDTO to Entity ==
+BSI -> LAS: convertToEntity(dto)
+note right: convertToEntity được triển khai trong ListeningAnswerServiceImpl
+activate LAS
+
+LAS -> LQS: Find question entity by ID
+activate LQS
+LQS --> LAS: ListeningQuestion entity
+deactivate LQS
+
+LAS --> BSI: ListeningAnswer entity
+deactivate LAS
+
+@enduml

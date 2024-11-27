@@ -1,0 +1,42 @@
+@startuml FindWithPagingSortingSearching
+
+actor User
+participant "GrammarServiceImpl" as GS
+participant "LessonSpecification" as LS
+participant "ValidationUtils" as VU
+participant "GrammarRepository" as GR
+participant "BaseServiceImpl" as BSI
+
+== Find with Paging, Sorting, and Searching ==
+User -> GS: findWithPagingSortingSearching(title, status, page, size, sortBy, sortDir, dtoClass)
+activate GS
+
+GS -> LS: Create Specification for title
+activate LS
+LS --> GS: Specification by title
+deactivate LS
+
+GS -> LS: Create Specification for status
+activate LS
+LS --> GS: Specification by status
+deactivate LS
+
+GS -> VU: Validate page request parameters
+activate VU
+VU --> GS: Validation complete
+deactivate VU
+
+GS -> GR: Find grammars with spec and paging
+activate GR
+GR --> GS: Page of Grammar entities
+deactivate GR
+
+loop Convert each entity to DTO
+    GS -> BSI: Call super.convertToDTO(entity)
+    note right: convertToDTO được định nghĩa trong BaseServiceImpl\nvà triển khai trong GrammarServiceImpl
+end
+
+GS --> User: Return Page of GrammarDTO
+deactivate GS
+
+@enduml

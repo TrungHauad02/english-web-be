@@ -1,0 +1,30 @@
+@startuml FindById
+
+actor User
+participant "BaseServiceImpl" as BSI
+participant "ValidationUtils" as VU
+participant "Repository" as REP
+
+== Find By ID ==
+User -> BSI: findById(id)
+activate BSI
+
+BSI -> BSI: isExist(id)
+BSI -> VU: Validate existence of ID
+activate VU
+VU --> BSI: Validation complete
+deactivate VU
+
+BSI -> REP: Find entity by ID
+activate REP
+REP --> BSI: Entity
+deactivate REP
+
+BSI -> BSI: convertToDTO(entity)
+note right: convertToDTO được triển khai trong lớp con
+BSI --> User: Return DTO
+deactivate BSI
+
+
+
+@enduml

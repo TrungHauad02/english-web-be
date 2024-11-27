@@ -1,0 +1,20 @@
+@startuml ConvertToEntity
+
+participant "BaseServiceImpl" as BSI
+participant "GrammarAnswerServiceImpl" as GAS
+participant "GrammarQuestionServiceImpl" as GQS
+
+== Convert DTO to Entity ==
+BSI -> GAS: convertToEntity(dto)
+note right: convertToEntity được triển khai trong GrammarAnswerServiceImpl
+activate GAS
+
+GAS -> GQS: Find question entity by ID
+activate GQS
+GQS --> GAS: GrammarQuestion entity
+deactivate GQS
+
+GAS --> BSI: GrammarAnswer entity
+deactivate GAS
+
+@enduml

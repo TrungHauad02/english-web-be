@@ -1,0 +1,31 @@
+@startuml FindAllByQuestionId
+
+actor User
+participant "GrammarAnswerServiceImpl" as GAS
+participant "GrammarAnswerRepository" as GAR
+participant "GrammarQuestionServiceImpl" as GQS
+participant "BaseServiceImpl" as BSI
+
+== Find All Grammar Answers ==
+User -> GAS: findAllByQuestionId(questionId)
+activate GAS
+
+GAS -> GQS: isExist(questionId)
+activate GQS
+GQS --> GAS: Question exists
+deactivate GQS
+
+GAS -> GAR: Find answers by questionId
+activate GAR
+GAR --> GAS: List of GrammarAnswer entities
+deactivate GAR
+
+loop Convert each entity to DTO
+    GAS -> BSI: Call super.convertToDTO(entity)
+    note right: convertToDTO được định nghĩa trong BaseServiceImpl\nvà triển khai trong GrammarAnswerServiceImpl
+end
+
+GAS --> User: Return list of GrammarAnswerDTO
+deactivate GAS
+
+@enduml
