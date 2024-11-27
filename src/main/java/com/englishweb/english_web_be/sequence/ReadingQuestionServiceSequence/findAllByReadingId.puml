@@ -1,0 +1,31 @@
+@startuml FindAllByReadingId
+
+actor User
+participant "ReadingQuestionServiceImpl" as RQS
+participant "ReadingQuestionRepository" as RQR
+participant "ReadingServiceImpl" as RS
+participant "BaseServiceImpl" as BSI
+
+== Find All Questions By Reading ID ==
+User -> RQS: findAllByReadingId(readingId)
+activate RQS
+
+RQS -> RS: isExist(readingId)
+activate RS
+RS --> RQS: Reading exists
+deactivate RS
+
+RQS -> RQR: Find all questions by readingId
+activate RQR
+RQR --> RQS: List of ReadingQuestion entities
+deactivate RQR
+
+loop Convert each entity to DTO
+    RQS -> BSI: Call super.convertToDTO(entity)
+    note right: convertToDTO được định nghĩa trong BaseServiceImpl\nvà triển khai trong ReadingQuestionServiceImpl
+end
+
+RQS --> User: Return list of ReadingQuestionDTO
+deactivate RQS
+
+@enduml

@@ -1,0 +1,13 @@
+@startuml ConvertToDTO
+
+participant "BaseServiceImpl" as BSI
+participant "ReadingAnswerServiceImpl" as RAS
+
+== Convert ReadingAnswer Entity to DTO ==
+BSI -> RAS: convertToDTO(entity)
+note right: convertToDTO được triển khai trong ReadingAnswerServiceImpl
+activate RAS
+RAS --> BSI: ReadingAnswerDTO
+deactivate RAS
+
+@enduml

@@ -1,0 +1,33 @@
+@startuml DeleteReadingQuestion
+
+actor User
+participant "ReadingQuestionServiceImpl" as RQS
+participant "ReadingAnswerServiceImpl" as RAS
+participant "BaseServiceImpl" as BSI
+participant "ReadingQuestionRepository" as RQR
+
+== Delete Reading Question ==
+User -> RQS: delete(id)
+activate RQS
+
+RQS -> RAS: Find all answers by questionId
+activate RAS
+RAS --> RQS: List of ReadingAnswerDTO
+deactivate RAS
+
+loop Delete all related answers
+    RQS -> RAS: delete(answerId)
+end
+
+RQS -> BSI: Call super.delete(id)
+note right: Gọi hàm delete từ BaseServiceImpl
+BSI -> RQR: Delete ReadingQuestion by ID
+activate RQR
+RQR --> BSI: Entity deleted
+deactivate RQR
+
+BSI --> RQS: Confirm deletion
+RQS --> User: Confirm deletion
+deactivate RQS
+
+@enduml

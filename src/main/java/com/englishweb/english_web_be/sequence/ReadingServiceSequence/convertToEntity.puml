@@ -1,0 +1,13 @@
+@startuml ConvertToEntity
+
+participant "BaseServiceImpl" as BSI
+participant "ReadingServiceImpl" as RS
+
+== Convert ReadingDTO to Entity ==
+BSI -> RS: convertToEntity(dto)
+note right: convertToEntity được triển khai trong ReadingServiceImpl
+activate RS
+RS --> BSI: Reading entity
+deactivate RS
+
+@enduml

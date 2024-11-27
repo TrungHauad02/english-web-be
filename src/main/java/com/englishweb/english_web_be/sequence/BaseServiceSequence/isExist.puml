@@ -1,0 +1,20 @@
+@startuml IsExist
+
+actor User
+participant "BaseServiceImpl" as BSI
+participant "ValidationUtils" as VU
+participant "Repository" as REP
+
+== Check Existence ==
+User -> BSI: isExist(id)
+activate BSI
+
+BSI -> VU: Validate existence of ID
+activate VU
+VU --> BSI: Validation complete
+deactivate VU
+
+BSI --> User: Confirm existence
+deactivate BSI
+
+@enduml

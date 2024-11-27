@@ -1,0 +1,35 @@
+@startuml CreateReadingQuestion
+
+actor User
+participant "ReadingQuestionServiceImpl" as RQS
+participant "ReadingQuestionRepository" as RQR
+participant "BaseServiceImpl" as BSI
+
+== Create Reading Question ==
+User -> RQS: create(dto)
+activate RQS
+
+RQS -> RQS: Check if serial is unique
+alt Serial not unique
+    RQS --> User: Throw DataIntegrityViolationException
+    deactivate RQS
+else Serial unique
+    RQS -> BSI: Call super.create(dto)
+    note right: Gọi hàm create từ BaseServiceImpl
+    BSI -> RQS: Call convertToEntity(dto)
+    note right: convertToEntity được định nghĩa trong BaseServiceImpl\nvà triển khai trong ReadingQuestionServiceImpl
+    RQS --> BSI: ReadingQuestion entity
+
+    BSI -> RQR: Save ReadingQuestion entity
+    activate RQR
+    RQR --> BSI: Saved entity
+    deactivate RQR
+
+    BSI -> RQS: Call convertToDTO(saved entity)
+    RQS --> BSI: ReadingQuestionDTO
+end
+
+RQS --> User: Return ReadingQuestionDTO
+deactivate RQS
+
+@enduml

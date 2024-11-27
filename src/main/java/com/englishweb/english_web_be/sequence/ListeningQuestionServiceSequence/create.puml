@@ -1,0 +1,35 @@
+@startuml CreateListeningQuestion
+
+actor User
+participant "ListeningQuestionServiceImpl" as LQS
+participant "ListeningQuestionRepository" as LQR
+participant "BaseServiceImpl" as BSI
+
+== Create Listening Question ==
+User -> LQS: create(dto)
+activate LQS
+
+LQS -> LQS: Check if serial is unique
+alt Serial not unique
+    LQS --> User: Throw DataIntegrityViolationException
+    deactivate LQS
+else Serial unique
+    LQS -> BSI: Call super.create(dto)
+    note right: Gọi hàm create từ BaseServiceImpl
+    BSI -> LQS: Call convertToEntity(dto)
+    note right: convertToEntity được định nghĩa trong BaseServiceImpl\nvà triển khai trong ListeningQuestionServiceImpl
+    LQS --> BSI: ListeningQuestion entity
+
+    BSI -> LQR: Save ListeningQuestion entity
+    activate LQR
+    LQR --> BSI: Saved entity
+    deactivate LQR
+
+    BSI -> LQS: Call convertToDTO(saved entity)
+    LQS --> BSI: ListeningQuestionDTO
+end
+
+LQS --> User: Return ListeningQuestionDTO
+deactivate LQS
+
+@enduml

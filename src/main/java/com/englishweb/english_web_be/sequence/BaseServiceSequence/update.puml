@@ -1,0 +1,24 @@
+@startuml Update
+
+actor User
+participant "BaseServiceImpl" as BSI
+participant "Repository" as REP
+
+== Update Entity ==
+User -> BSI: update(dto, id)
+activate BSI
+
+BSI -> BSI: isExist(id)
+BSI -> BSI: convertToEntity(dto)
+note right: convertToEntity được triển khai trong lớp con
+BSI -> REP: Save updated entity
+activate REP
+REP --> BSI: Updated entity
+deactivate REP
+
+BSI -> BSI: convertToDTO(updated entity)
+note right: convertToDTO được triển khai trong lớp con
+BSI --> User: Return updated DTO
+deactivate BSI
+
+@enduml

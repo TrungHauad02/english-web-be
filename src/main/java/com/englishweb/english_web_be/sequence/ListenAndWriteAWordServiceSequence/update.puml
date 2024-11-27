@@ -1,0 +1,35 @@
+@startuml UpdateListenAndWriteAWord
+
+actor User
+participant "ListenAndWriteAWordServiceImpl" as LWS
+participant "ListenAndWriteAWordRepository" as LWR
+participant "BaseServiceImpl" as BSI
+
+== Update ListenAndWriteAWord ==
+User -> LWS: update(dto, id)
+activate LWS
+
+LWS -> LWS: Check if serial is unique
+alt Serial not unique
+    LWS --> User: Throw DataIntegrityViolationException
+    deactivate LWS
+else Serial unique
+    LWS -> BSI: Call super.update(dto, id)
+    note right: Gọi hàm update từ BaseServiceImpl
+    BSI -> LWS: Call convertToEntity(dto)
+    note right: convertToEntity được định nghĩa trong BaseServiceImpl\nvà triển khai trong ListenAndWriteAWordServiceImpl
+    LWS --> BSI: Updated ListenAndWriteAWord entity
+
+    BSI -> LWR: Save updated entity
+    activate LWR
+    LWR --> BSI: Updated entity
+    deactivate LWR
+
+    BSI -> LWS: Call convertToDTO(updated entity)
+    LWS --> BSI: Updated ListenAndWriteAWordDTO
+end
+
+LWS --> User: Return updated ListenAndWriteAWordDTO
+deactivate LWS
+
+@enduml

@@ -1,0 +1,13 @@
+@startuml ConvertToDTO
+
+participant "BaseServiceImpl" as BSI
+participant "ListeningAnswerServiceImpl" as LAS
+
+== Convert ListeningAnswer Entity to DTO ==
+BSI -> LAS: convertToDTO(entity)
+note right: convertToDTO được triển khai trong ListeningAnswerServiceImpl
+activate LAS
+LAS --> BSI: ListeningAnswerDTO
+deactivate LAS
+
+@enduml

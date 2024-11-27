@@ -1,0 +1,35 @@
+@startuml DeleteListeningQuestion
+
+actor User
+participant "ListeningQuestionServiceImpl" as LQS
+participant "ListeningAnswerServiceImpl" as LAS
+participant "BaseServiceImpl" as BSI
+participant "ListeningQuestionRepository" as LQR
+
+== Delete Listening Question ==
+User -> LQS: delete(id)
+activate LQS
+
+LQS -> LQS: isExist(id)
+
+LQS -> LAS: Find all answers by questionId
+activate LAS
+LAS --> LQS: List of ListeningAnswerDTO
+deactivate LAS
+
+loop Delete all related answers
+    LQS -> LAS: delete(answerId)
+end
+
+LQS -> BSI: Call super.delete(id)
+note right: Gọi hàm delete từ BaseServiceImpl
+BSI -> LQR: Delete ListeningQuestion by ID
+activate LQR
+LQR --> BSI: Entity deleted
+deactivate LQR
+
+BSI --> LQS: Confirm deletion
+LQS --> User: Confirm deletion
+deactivate LQS
+
+@enduml

@@ -1,0 +1,33 @@
+@startuml DeleteGrammarQuestion
+
+actor User
+participant "GrammarQuestionServiceImpl" as GQS
+participant "GrammarAnswerServiceImpl" as GAS
+participant "BaseServiceImpl" as BSI
+participant "GrammarQuestionRepository" as GQR
+
+== Delete Grammar Question ==
+User -> GQS: delete(id)
+activate GQS
+
+GQS -> GAS: Find answers by questionId
+activate GAS
+GAS --> GQS: List of GrammarAnswerDTO
+deactivate GAS
+
+loop Delete all related answers
+    GQS -> GAS: delete(answerId)
+end
+
+GQS -> BSI: Call super.delete(id)
+note right: Gọi hàm delete từ BaseServiceImpl
+BSI -> GQR: Delete GrammarQuestion by ID
+activate GQR
+GQR --> BSI: Entity deleted
+deactivate GQR
+
+BSI --> GQS: Confirm deletion
+GQS --> User: Confirm deletion
+deactivate GQS
+
+@enduml

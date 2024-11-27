@@ -1,0 +1,20 @@
+@startuml ConvertToDTO
+
+participant "BaseServiceImpl" as BSI
+participant "GrammarQuestionServiceImpl" as GQS
+participant "GrammarAnswerServiceImpl" as GAS
+
+== Convert GrammarQuestion to DTO ==
+BSI -> GQS: convertToDTO(entity)
+note right: convertToDTO được triển khai trong GrammarQuestionServiceImpl
+activate GQS
+
+GQS -> GAS: Find answers by questionId
+activate GAS
+GAS --> GQS: List of GrammarAnswerDTO
+deactivate GAS
+
+GQS --> BSI: GrammarQuestionDTO
+deactivate GQS
+
+@enduml
