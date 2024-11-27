@@ -18,34 +18,6 @@ import java.util.List;
 
 @Slf4j
 public class SpeakingConversationUtils {
-
-    // ======= POST-RELATED METHODS =======
-
-    public static String addPostForSpeaking(ScoreSpeakingServiceImpl scoreSpeakingServiceImpl, String title, String content) {
-        PostResponse postResponse = scoreSpeakingServiceImpl.addPost(
-                PostRequest.builder()
-                        .postTitle(title)
-                        .postContent(content)
-                        .postLanguageId("22")
-                        .build()
-        );
-
-        if (postResponse != null) {
-            log.info("Post created with ID: {}", postResponse.getPostId());
-            return postResponse.getPostId();
-        } else {
-            log.warn("Failed to create post for title: {}", title);
-            return "";
-        }
-    }
-
-    public static void deletePostForSpeaking(ScoreSpeakingServiceImpl scoreSpeakingServiceImpl, SpeakingConversation entity) {
-        if (entity.getPostId() != null) {
-            scoreSpeakingServiceImpl.deletePost(entity.getPostId());
-            log.info("Deleted post with ID: {}", entity.getPostId());
-        }
-    }
-
     // ======= AUDIO-RELATED METHODS =======
 
     public static SpeakingConversationResponse saveAudio(TextToSpeechService textToSpeechService,

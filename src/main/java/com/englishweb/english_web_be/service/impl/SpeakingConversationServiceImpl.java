@@ -23,15 +23,13 @@ public class SpeakingConversationServiceImpl extends BaseServiceImpl<SpeakingCon
     private final SpeakingServiceImpl speakingService;
     private final TextToSpeechService textToSpeechService;
     private final FirebaseStorageServiceImpl firebaseStorageService;
-    private final ScoreSpeakingServiceImpl scoreSpeakingServiceImpl;
 
     public SpeakingConversationServiceImpl(SpeakingConversationRepository repository,
-                                           @Lazy SpeakingServiceImpl speakingService, TextToSpeechService textToSpeechService, FirebaseStorageServiceImpl firebaseStorageService, ScoreSpeakingServiceImpl scoreSpeakingServiceImpl) {
+                                           @Lazy SpeakingServiceImpl speakingService, TextToSpeechService textToSpeechService, FirebaseStorageServiceImpl firebaseStorageService) {
         super(repository);
         this.speakingService = speakingService;
         this.textToSpeechService = textToSpeechService;
         this.firebaseStorageService = firebaseStorageService;
-        this.scoreSpeakingServiceImpl = scoreSpeakingServiceImpl;
     }
 
     @Override
@@ -73,11 +71,8 @@ public class SpeakingConversationServiceImpl extends BaseServiceImpl<SpeakingCon
         if (SpeakingConversationUtils.isSerialUnique(dto.getSpeakingId(), dto.getSerial(), null, repository)) {
             throw new DataIntegrityViolationException("Serial " + dto.getSerial() + " must be unique for Speaking ID: " + dto.getSpeakingId());
         }
-        String postId = SpeakingConversationUtils.addPostForSpeaking(scoreSpeakingServiceImpl, dto.getName(), dto.getContent());
-
         SpeakingConversation entity = convertToEntity(dto);
         entity.setId(null);
-        entity.setPostId(postId);
         log.info("Saving SpeakingConversation: {}", entity);
 
         SpeakingConversationDTO dtoCreated = convertToDTO(repository.save(entity));
@@ -91,20 +86,9 @@ public class SpeakingConversationServiceImpl extends BaseServiceImpl<SpeakingCon
         if (SpeakingConversationUtils.isSerialUnique(dto.getSpeakingId(), dto.getSerial(), id, repository)) {
             throw new DataIntegrityViolationException("Serial " + dto.getSerial() + " must be unique for Speaking ID: " + dto.getSpeakingId());
         }
-        String postId = "";
-        if (SpeakingConversationUtils.shouldAddNewPost(dto, repository)) {
-            postId = SpeakingConversationUtils.addPostForSpeaking(scoreSpeakingServiceImpl, dto.getName(), dto.getContent());
-            log.info("Added new post for update, postId: {}", postId);
-            SpeakingConversationUtils.deletePostForSpeaking(scoreSpeakingServiceImpl, repository.findById(id).get());
-        }
 
         SpeakingConversation entity = convertToEntity(dto);
         entity.setId(id);
-        if (!postId.isEmpty()) {
-            entity.setPostId(postId);
-        } else {
-            entity.setPostId(repository.findById(id).get().getPostId());
-        }
 
         log.info("Updating SpeakingConversation with ID {}: {}", id, entity);
         SpeakingConversationDTO updatedDto = convertToDTO(repository.save(entity));
@@ -115,7 +99,6 @@ public class SpeakingConversationServiceImpl extends BaseServiceImpl<SpeakingCon
     @Override
     public void delete(String id) {
         SpeakingConversationDTO dto = super.findById(id);
-        SpeakingConversationUtils.deletePostForSpeaking(scoreSpeakingServiceImpl, repository.findById(id).get());
         this.deleteAudio(dto);
         super.delete(id);
     }
