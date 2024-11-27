@@ -39,7 +39,3 @@ gemini.api.url=https://generativelanguage.googleapis.com/v1beta/models/gemini-1.
 the-fluent-me.api.url=https://thefluentme.p.rapidapi.com
 the-fluent-me.x-rapidapi-key=aa27bcca56msh0bfee1421f1fa1cp19790cjsn1c8a16c56245
 the-fluent-me.x-rapidapi-host=thefluentme.p.rapidapi.com
-## Pronunciation
-pronunciation.api.url=https://<REGION>.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1
-pronunciation.api.subscription-key=
-pronunciation.api.region=

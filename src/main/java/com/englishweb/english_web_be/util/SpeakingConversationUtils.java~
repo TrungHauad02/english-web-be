@@ -109,13 +109,13 @@ public class SpeakingConversationUtils {
         }
     }
 
-    private boolean shouldAddNewPost(SpeakingConversationDTO dto, SpeakingConversationRepository repository) {
+    public static boolean shouldAddNewPost(SpeakingConversationDTO dto, SpeakingConversationRepository repository) {
         SpeakingConversation existingEntity = repository.findById(dto.getId())
                 .orElseThrow(() -> new DataIntegrityViolationException("Entity not found for ID: " + dto.getId()));
         return !dto.getContent().equals(existingEntity.getContent());
     }
 
-    private boolean isSerialUnique(String speakingId, Integer serial, String excludeId, SpeakingConversationRepository repository) {
+    public static boolean isSerialUnique(String speakingId, Integer serial, String excludeId, SpeakingConversationRepository repository) {
         List<SpeakingConversation> entityList = repository.findAllBySpeaking_Id(speakingId);
         return entityList.stream()
                 .filter(entity -> !entity.getId().equals(excludeId))
