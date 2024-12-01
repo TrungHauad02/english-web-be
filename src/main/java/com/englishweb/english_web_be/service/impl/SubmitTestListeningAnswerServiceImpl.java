@@ -2,6 +2,7 @@ package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.SubmitTestListeningAnswerDTO;
 import com.englishweb.english_web_be.model.SubmitTestListeningAnswer;
+import com.englishweb.english_web_be.model.TestListeningQuestion;
 import com.englishweb.english_web_be.repository.SubmitTestListeningAnswerRepository;
 import com.englishweb.english_web_be.service.SubmitTestListeningAnswerService;
 import org.springframework.context.annotation.Lazy;
@@ -29,11 +30,13 @@ public class SubmitTestListeningAnswerServiceImpl extends BaseServiceImpl<Submit
         this.testListeningAnswerService = testListeningAnswerService;
     }
     public List<SubmitTestListeningAnswerDTO> findAllBySubmitTestId(String submitTestId) {
-        List<SubmitTestListeningAnswer> entities = repository.findAllBySubmitTest_Id(submitTestId);
-        if (entities == null || entities.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return entities.stream().map(this::convertToDTO).collect(Collectors.toList());
+
+        submitTestService.isExist(submitTestId);
+        List<SubmitTestListeningAnswer> list = repository.findAllBySubmitTest_Id(submitTestId);
+
+        return list.stream()
+                .map(this::convertToDTO)
+                .toList();
     }
 
     @Override

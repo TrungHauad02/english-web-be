@@ -1,0 +1,48 @@
+@startuml findByPageAndStatusAndTopicId
+
+actor Teacher
+participant "VocabularyServiceImpl" as VocabularyService
+participant "TopicServiceImpl" as TopicService
+participant "VocabularyRepository" as Repository
+participant "ValidationUtils" as Validator
+
+
+== Lược đồ tuần tự chức năng lấy danh sách từ vựng theo chủ đề ==
+Teacher -> VocabularyService: findByPageAndStatusAndTopicId(status, page, size, sortBy, sortDir, dtoClass, topicId)
+activate VocabularyService
+
+alt Status is null
+    VocabularyService -> VocabularyService: findByPageTopicId(page, size, sortBy, sortDir, dtoClass, topicId)
+    activate VocabularyService
+    VocabularyService --> Teacher: Page<VocabularyDTO>
+    deactivate VocabularyService
+else Status is not null
+    VocabularyService -> Validator: validatePageRequestParam(page, size, sortBy, dtoClass)
+    activate Validator
+    Validator --> VocabularyService: Validation passed
+    deactivate Validator
+
+    VocabularyService -> TopicService: isExist(topicId)
+    activate TopicService
+    TopicService --> VocabularyService: Topic exists
+    deactivate TopicService
+
+    VocabularyService -> VocabularyService: Prepare sorting logic
+    VocabularyService -> Repository: findAllByStatusAndTopic_Id(status, topicId, pageable)
+    activate Repository
+    Repository --> VocabularyService: Page<Vocabulary>
+    deactivate Repository
+
+    loop Convert entities to DTOs
+        VocabularyService -> VocabularyService: convertToDTO(entity)
+        activate VocabularyService
+        VocabularyService --> VocabularyService: Vocabulary DTO
+        deactivate VocabularyService
+    end
+
+    VocabularyService --> Teacher: Page<VocabularyDTO>
+end
+
+deactivate VocabularyService
+
+@enduml

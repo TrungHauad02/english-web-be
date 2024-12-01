@@ -1,0 +1,51 @@
+@startuml findWithPagingSortingSearching
+
+actor Student
+participant "TopicServiceImpl" as TopicService
+participant "LessonSpecification" as LessonSpec
+participant "ValidationUtils" as ValidationUtils
+participant "TopicRepository" as Repository
+
+
+== Luợc đồ tuần tự chức năng xem danh sách chủ đề ==
+Student -> TopicService: findWithPagingSortingSearching(title, status, page, size, sortBy, sortDir, class)
+activate TopicService
+
+TopicService -> ValidationUtils: validatePageRequestParam(page, size, sortBy, class)
+activate ValidationUtils
+ValidationUtils --> TopicService: Validation complete
+deactivate ValidationUtils
+
+TopicService -> TopicService: Create Pageable and Sort objects
+
+alt Title filter is applied
+    TopicService -> LessonSpec: byTitle(title)
+    activate LessonSpec
+    LessonSpec --> TopicService: Specification<Topic>
+    deactivate LessonSpec
+else No title filter
+    TopicService -> TopicService: Specification<Topic> is null
+end
+
+alt Status filter is applied
+    TopicService -> LessonSpec: hasStatus(status)
+    activate LessonSpec
+    LessonSpec --> TopicService: Specification<Topic>
+    deactivate LessonSpec
+else No status filter
+    TopicService -> TopicService: Specification<Topic> is null
+end
+
+TopicService -> Repository: findAll(spec, pageable)
+activate Repository
+Repository --> TopicService: Page<Topic>
+deactivate Repository
+
+loop Map entities to DTOs
+    TopicService -> TopicService: convertToDTO(entity)
+end
+
+TopicService --> Student: Page<TopicDTO>
+deactivate TopicService
+
+@enduml

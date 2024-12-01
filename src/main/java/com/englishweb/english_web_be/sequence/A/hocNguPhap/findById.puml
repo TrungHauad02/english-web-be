@@ -1,0 +1,29 @@
+@startuml findByIdGrammarService
+
+actor Student
+participant "GrammarServiceImpl" as GrammarService
+participant "BaseServiceImpl" as BaseService
+participant "GrammarRepository" as Repository
+
+
+== Lược đồ tuần tự chức năng tìm kiếm bài ngữ pháp theo Id ==
+Student -> GrammarService: findById(id)
+activate GrammarService
+GrammarService -> BaseService: findById(id) << Inherited from Parent >>
+activate BaseService
+BaseService -> BaseService: isExist(id)
+BaseService -> Repository: findById(id)
+activate Repository
+Repository --> BaseService: GrammarEntity
+deactivate Repository
+BaseService -> GrammarService: convertToDTO(GrammarEntity) << Overridden >>
+activate GrammarService
+GrammarService -> GrammarService: convertToDTO(GrammarEntity)
+GrammarService --> BaseService: GrammarDTO
+deactivate GrammarService
+BaseService --> GrammarService: GrammarDTO
+deactivate BaseService
+GrammarService --> Student: GrammarDTO
+deactivate GrammarService
+
+@enduml

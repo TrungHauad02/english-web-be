@@ -1,0 +1,14 @@
+@startuml
+actor User
+participant "System" as System
+participant "Test Model" as tM
+
+User -> System: Request test detail
+activate System
+System -> tM: Fetch test
+activate tM
+tM --> System:  test data
+deactivate tM
+System -> User: test data
+deactivate System
+@enduml

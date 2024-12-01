@@ -3,6 +3,7 @@ package com.englishweb.english_web_be.service.impl;
 import com.englishweb.english_web_be.dto.*;
 import com.englishweb.english_web_be.model.*;
 import com.englishweb.english_web_be.modelenum.RoleEnum;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.modelenum.TestMixingTypeEnum;
 import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 import com.englishweb.english_web_be.repository.TestRepository;
@@ -10,6 +11,7 @@ import com.englishweb.english_web_be.service.TestService;
 import com.englishweb.english_web_be.util.TestSpecification;
 import com.englishweb.english_web_be.util.UserSpecification;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 @Service
 public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO,TestRepository> implements TestService {
@@ -43,41 +46,55 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO,TestRepository
         this.submitTestService = submitTestService;
     }
 
+    public TestDTO findByIdAndStatus(String id, StatusEnum status) {
+        if (status == null) {
+            Optional<Test> test = testRepository.findById(id);
+            if (test.isPresent()) {
+                TestDTO testDTO = convertToDTO(test.get());
+                testDTO.setTestMixingQuestions(testMixingQuestionService.findAllByTestId(id));
+                testDTO.setTestReadings(testReadingService.findAllByTestId(id));
+                testDTO.setTestListenings(testListeningService.findAllByTestId(id));
+                testDTO.setTestWritings(testWritingService.findAllByTestId(id));
+                testDTO.setTestSpeakings(testSpeakingService.findAllByTest_Id(id));
+                return testDTO;
+            }
+            throw new EntityNotFoundException("Test not found with id: " + id);
+        }
 
-    public Page<TestDTO> retrieveTestsByPage( int page, String type) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by("serial"));
-        TestTypeEnum testType = TestTypeEnum.valueOf(type.toUpperCase());
+        Test test = testRepository.findByIdAndStatus(id, status);
+        if (test != null) {
+            TestDTO testDTO = convertToDTO(test);
+            testDTO.setTestMixingQuestions(testMixingQuestionService.findAllTestMixingQuestionsByTestIdAndStatus(id, status));
+            testDTO.setTestReadings(testReadingService.findAllByTestIdAndStatus(id, status));
+            testDTO.setTestListenings(testListeningService.findAllByTestIdAndStatus(id, status));
+            testDTO.setTestWritings(testWritingService.findAllByTest_IdAAndStatus(id, status));
+            testDTO.setTestSpeakings(testSpeakingService.findAllTestSpeakingByTestIdAndStatus(id, status));
+            return testDTO;
+        }
 
-        Page<Test> tests = repository.findAllByType(pageable, testType);
-        Page<TestDTO> testDTOs = tests.map(this::convertToDTO);
-        return testDTOs;
-    }
-    public List<TestDTO> retrieveTestsAllByType(String type) {
-        List<Test> tests = repository.findAllByType(TestTypeEnum.valueOf(type));
-        List<TestDTO> testDTOs = tests.stream().map(this::convertToDTO).collect(Collectors.toList());
-        return testDTOs;
+        throw new EntityNotFoundException("Test not found with id: " + id + " and status: " + status);
     }
 
     @Override
-    public Page<TestDTO> findTestsBySpecification(String title, TestTypeEnum type, int page, int size) {
+    public Page<TestDTO> findTestsBySpecification(String title, TestTypeEnum type, int page, int size, StatusEnum status ,String userId) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "serial"));
 
-        Specification<Test> spec = Specification.where(TestSpecification.hasTitle(title))
-                .and(TestSpecification.hasType(type));
+        Specification<Test> spec = Specification.where(TestSpecification.hasTitle(title));
+        if(status != null) {
+            spec = spec.and(TestSpecification.hasStatus(status));
+        }
+        if(type!=null) {
+            spec = spec.and(TestSpecification.hasType(type));
+        }
 
         Page<Test> testPage = testRepository.findAll( spec,pageable);
         List<TestDTO> dtoList = testPage.getContent().stream()
                 .map(test -> {
-
-                    TestDTO dto = new TestDTO();
-                    dto.setId(test.getId());
-                    dto.setType(test.getType());
-                    dto.setDuration(test.getDuration());
-                    dto.setSerial(test.getSerial());
-                    dto.setTitle(test.getTitle());
-                    dto.setStatus(test.getStatus());
-                    dto.setNumberOfQuestions(this.numberOfQuestionTest(test.getId(),test.getType()));
-                    dto.setScoreLastOfTest(submitTestService.scoreLastSubmitTest(test.getId()));
+                    TestDTO dto = convertToDTO(test);
+                    if(userId!=null) {
+                        dto.setNumberOfQuestions(this.numberOfQuestionTest(test.getId(),test.getType()));
+                        dto.setScoreLastOfTest(submitTestService.scoreLastSubmitTest(test.getId(),userId));
+                    }
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -142,7 +159,6 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO,TestRepository
 
     @Override
     protected TestDTO convertToDTO(Test entity) {
-
         TestDTO dto = new TestDTO();
         dto.setId(entity.getId());
         dto.setSerial(entity.getSerial());
@@ -150,11 +166,6 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO,TestRepository
         dto.setTitle(entity.getTitle());
         dto.setDuration(entity.getDuration());
         dto.setStatus(entity.getStatus());
-        dto.setTestListenings(testListeningService.findAllByTestId(entity.getId()));
-        dto.setTestWritings(testWritingService.findAllByTestId(entity.getId()));
-        dto.setTestReadings(testReadingService.findAllByTestId(entity.getId()));
-        dto.setTestSpeakings(testSpeakingService.findAllByTest_Id(entity.getId()));
-        dto.setTestMixingQuestions(testMixingQuestionService.findAllByTestId(entity.getId()));
         return dto;
     }
 
@@ -184,6 +195,11 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO,TestRepository
         for (TestMixingQuestionDTO testMixingQuestion : testMixingQuestions) {
             testMixingQuestionService.delete(testMixingQuestion.getId());
         }
+        List<SubmitTestDTO> submitTestDTOS = submitTestService.findAllByTestId(id);
+        for (SubmitTestDTO submitTestDTO : submitTestDTOS) {
+            submitTestService.delete(submitTestDTO.getId());
+        }
+
         super.delete(id);
     }
 

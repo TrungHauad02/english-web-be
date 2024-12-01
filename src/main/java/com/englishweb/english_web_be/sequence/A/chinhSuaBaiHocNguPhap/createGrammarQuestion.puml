@@ -1,0 +1,40 @@
+@startuml createGrammarQuestion
+
+actor Teacher
+participant "GrammarQuestionServiceImpl" as GrammarQuestionService
+participant "BaseServiceImpl" as BaseService
+participant "GrammarQuestionRepository" as Repository
+
+
+
+== Lược đồ tuần tự chức năng thêm câu hỏi ngữ pháp ==
+Teacher -> GrammarQuestionService: create(dto)
+activate GrammarQuestionService
+
+GrammarQuestionService -> GrammarQuestionService: isSerialUnique(dto.getGrammarId(), dto.getSerial(), null)
+GrammarQuestionService -> BaseService: create(dto) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> GrammarQuestionService: convertToEntity(dto) << Overridden >>
+activate GrammarQuestionService
+GrammarQuestionService --> BaseService: GrammarQuestionEntity
+deactivate GrammarQuestionService
+
+BaseService -> Repository: save(entity)
+activate Repository
+Repository --> BaseService: Saved GrammarQuestionEntity
+deactivate Repository
+
+BaseService -> GrammarQuestionService: convertToDTO(entity) << Overridden >>
+activate GrammarQuestionService
+GrammarQuestionService -> GrammarQuestionService: convertToDTO(entity)
+GrammarQuestionService --> BaseService: GrammarQuestionDTO
+deactivate GrammarQuestionService
+
+BaseService --> GrammarQuestionService: Saved GrammarQuestionDTO
+deactivate BaseService
+
+GrammarQuestionService --> Teacher: GrammarQuestionDTO
+deactivate GrammarQuestionService
+
+@enduml

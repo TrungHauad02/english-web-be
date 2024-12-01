@@ -1,0 +1,34 @@
+@startuml updateTopic
+
+actor User
+participant "TopicServiceImpl" as TopicService
+participant "BaseServiceImpl" as BaseService
+participant "TopicRepository" as Repository
+participant "TopicDTO" as DTO
+
+== Update Topic ==
+User -> TopicService: update(dto, id)
+activate TopicService
+
+TopicService -> BaseService: update(dto, id) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> BaseService: isExist(id)
+BaseService -> Repository: save(convertToEntity(dto))
+activate Repository
+Repository --> BaseService: Updated Entity
+deactivate Repository
+
+BaseService -> TopicService: convertToDTO(updatedEntity) << Overridden >>
+activate TopicService
+TopicService -> TopicService: convertToDTO(updatedEntity)
+TopicService --> BaseService: Converted DTO
+deactivate TopicService
+
+BaseService --> TopicService: Updated DTO
+deactivate BaseService
+
+TopicService --> User: Updated DTO
+deactivate TopicService
+
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+actor Teacher
+participant "System" as System
+participant "Test Model" as tM
+
+Teacher -> System: Request to delete test
+activate System
+System -> tM: Send test ID for deletion
+activate tM
+tM -> tM: Delete test
+tM -> System: Test deletion confirmation
+deactivate tM
+System -> Teacher: Test deleted successfully
+deactivate System
+@enduml

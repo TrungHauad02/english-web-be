@@ -2,6 +2,7 @@ package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.SubmitTestMixingAnswerDTO;
 import com.englishweb.english_web_be.model.SubmitTest;
+import com.englishweb.english_web_be.model.SubmitTestListeningAnswer;
 import com.englishweb.english_web_be.model.SubmitTestMixingAnswer;
 import com.englishweb.english_web_be.repository.SubmitTestMixingAnswerRepository;
 import com.englishweb.english_web_be.service.SubmitTestMixingAnswerService;
@@ -29,11 +30,12 @@ public class SubmitTestMixingAnswerServiceImpl extends BaseServiceImpl<SubmitTes
         this.submitTestService = submitTestService;
     }
     public List<SubmitTestMixingAnswerDTO> findAllBySubmitTestId(String submitTestId) {
-        List<SubmitTestMixingAnswer> entities = repository.findAllBySubmitTest_Id(submitTestId);
-        if (entities == null || entities.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return entities.stream().map(this::convertToDTO).collect(Collectors.toList());
+        submitTestService.isExist(submitTestId);
+        List<SubmitTestMixingAnswer> list = repository.findAllBySubmitTest_Id(submitTestId);
+
+        return list.stream()
+                .map(this::convertToDTO)
+                .toList();
     }
 
     @Override

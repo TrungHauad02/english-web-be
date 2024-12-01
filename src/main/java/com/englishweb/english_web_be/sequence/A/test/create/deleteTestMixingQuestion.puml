@@ -1,0 +1,35 @@
+@startuml deleteTestMixingQuestion
+
+actor Teacher
+participant "TestMixingQuestionServiceImpl" as TestMixingQuestionService
+participant "TestMixingAnswerServiceImpl" as TestMixingAnswerService
+participant "BaseServiceImpl" as BaseService
+
+
+== Lược đồ tuần tự chức năng xoá câu hỏi kiểm tra từ vựng hoặc ngữ pháp ==
+Teacher -> TestMixingQuestionService: delete(id)
+activate TestMixingQuestionService
+
+TestMixingQuestionService -> TestMixingAnswerService: findAllByQuestionId(id)
+activate TestMixingAnswerService
+TestMixingAnswerService --> TestMixingQuestionService: List<TestMixingAnswerDTO>
+deactivate TestMixingAnswerService
+
+alt If answers exist
+    loop Delete TestMixingAnswers
+        TestMixingQuestionService -> TestMixingAnswerService: delete(answer.getId())
+        activate TestMixingAnswerService
+        TestMixingAnswerService --> TestMixingQuestionService: Deletion complete
+        deactivate TestMixingAnswerService
+    end
+end
+
+TestMixingQuestionService -> BaseService: delete(id) << Inherited from Parent >>
+activate BaseService
+BaseService --> TestMixingQuestionService: Entity deleted
+deactivate BaseService
+
+TestMixingQuestionService --> Teacher: Deletion complete
+deactivate TestMixingQuestionService
+
+@enduml

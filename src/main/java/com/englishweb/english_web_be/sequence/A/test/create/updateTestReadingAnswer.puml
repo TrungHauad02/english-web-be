@@ -1,0 +1,36 @@
+@startuml updateTestReadingAnswer
+actor Teacher
+participant "TestReadingAnswerServiceImpl" as TestReadingAnswerService
+participant "BaseServiceImpl" as BaseService
+participant "TestReadingAnswerRepository" as Repository
+
+== Lược đồ tuần tự chức năng chỉnh sửa câu trả lời của câu hỏi của bài kiểm tra đọc ==
+Teacher -> TestReadingAnswerService: update(dto, id)
+activate TestReadingAnswerService
+
+TestReadingAnswerService -> BaseService: update(dto, id) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> BaseService: isExist(id)
+BaseService -> TestReadingAnswerService: convertToEntity(dto) << Overridden >>
+activate TestReadingAnswerService
+TestReadingAnswerService --> BaseService: TestReadingAnswerEntity
+deactivate TestReadingAnswerService
+
+BaseService -> Repository: save(entity)
+activate Repository
+Repository --> BaseService: Updated Entity
+deactivate Repository
+
+BaseService -> TestReadingAnswerService: convertToDTO(updatedEntity) << Overridden >>
+activate TestReadingAnswerService
+TestReadingAnswerService --> BaseService: TestReadingAnswerDTO
+deactivate TestReadingAnswerService
+
+BaseService --> TestReadingAnswerService: Updated DTO
+deactivate BaseService
+
+TestReadingAnswerService --> Teacher: Updated DTO
+deactivate TestReadingAnswerService
+
+@enduml

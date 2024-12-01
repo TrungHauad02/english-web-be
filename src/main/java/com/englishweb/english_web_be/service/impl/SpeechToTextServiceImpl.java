@@ -37,7 +37,7 @@ public class SpeechToTextServiceImpl implements SpeechToTextService {
                     .setSampleRateHertz(48000)
                     .setModel("latest_long")
                     .setLanguageCode("en-US")
-                    .setAudioChannelCount(2)
+                    .setAudioChannelCount(1)
                     .setEnableWordTimeOffsets(true)
                     .setEnableWordConfidence(true)
                     .build();

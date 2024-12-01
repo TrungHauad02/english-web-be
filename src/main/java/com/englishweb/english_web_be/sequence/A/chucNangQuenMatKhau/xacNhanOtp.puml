@@ -1,0 +1,65 @@
+@startuml VerifyOtpFunction
+
+participant PageLogin
+participant UserController
+participant UserService
+participant OtpCache
+participant OtpVerifiedCache
+
+== Lược đồ tuần tự chức năng xác thực OTP ==
+
+PageLogin -> UserController: POST /api/users/forgot-password/verify-otp {email, otp}
+activate UserController
+
+UserController -> UserService: verifyOtp(email, otp)
+activate UserService
+
+UserService -> OtpCache: get(email.trim())
+activate OtpCache
+OtpCache --> UserService: OtpData (or null)
+deactivate OtpCache
+
+alt OtpData == null
+    UserService -> UserService: return false
+    UserService --> UserController: false
+    UserController --> PageLogin: Response (400 Bad Request, "OTP không hợp lệ hoặc đã hết hạn.")
+end
+
+UserService -> UserService: calculate elapsedTime (currentTime - otpData.timestamp)
+
+alt elapsedTime > 60 seconds
+    UserService -> OtpCache: remove(email.trim())
+    activate OtpCache
+    OtpCache --> UserService: removed
+    deactivate OtpCache
+    UserService -> UserService: return false
+    UserService --> UserController: false
+    UserController --> PageLogin: Response (400 Bad Request, "OTP không hợp lệ hoặc đã hết hạn.")
+
+end
+
+alt otpData.otp.trim() != inputOtp.trim()
+    UserService -> UserService: return false
+    UserService --> UserController: false
+    UserController --> PageLogin: Response (400 Bad Request, "OTP không đúng.")
+
+end
+
+UserService -> OtpCache: remove(email.trim())
+activate OtpCache
+OtpCache --> UserService: removed
+deactivate OtpCache
+
+UserService -> OtpVerifiedCache: put(email.trim(), true)
+activate OtpVerifiedCache
+OtpVerifiedCache --> UserService: stored
+deactivate OtpVerifiedCache
+
+UserService -> UserService: return true
+UserService --> UserController: true
+deactivate UserService
+
+UserController --> PageLogin: Response (200 OK)
+deactivate UserController
+
+@enduml

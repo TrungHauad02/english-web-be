@@ -1,8 +1,11 @@
 package com.englishweb.english_web_be.service.impl;
 
+import com.englishweb.english_web_be.dto.TestSpeakingQuestionDTO;
 import com.englishweb.english_web_be.dto.TestWritingDTO;
 import com.englishweb.english_web_be.model.TestMixingQuestion;
+import com.englishweb.english_web_be.model.TestSpeakingQuestion;
 import com.englishweb.english_web_be.model.TestWriting;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.TestWritingRepository;
 import com.englishweb.english_web_be.service.TestWritingService;
 import org.springframework.context.annotation.Lazy;
@@ -33,6 +36,19 @@ public class TestWritingServiceImpl extends BaseServiceImpl<TestWriting, TestWri
                 .map(this::convertToDTO)
                 .toList();
     }
+    public List<TestWritingDTO> findAllByTest_IdAAndStatus(String testId, StatusEnum status) {
+        if (status == null) {
+            return findAllByTestId(testId);
+        }
+
+        testService.isExist(testId);
+
+        List<TestWriting> list = repository.findAllByTest_IdAndStatus(testId, status);
+
+        return list.stream()
+                .map(this::convertToDTO)
+                .toList();
+    }
 
     public int serialMaxTestWritingByTestId(String testId) {
 
@@ -48,6 +64,9 @@ public class TestWritingServiceImpl extends BaseServiceImpl<TestWriting, TestWri
 
         return lastWriting.getSerial();
     }
+
+
+
 
 
     @Override

@@ -1,0 +1,32 @@
+@startuml deleteReading
+
+actor Teacher
+participant "ReadingServiceImpl" as ReadingService
+participant "ReadingQuestionServiceImpl" as ReadingQuestionService
+participant "ReadingRepository" as Repository
+
+== Lược đồ tuần tự chức năng xoá  bài học đọc ==
+Teacher -> ReadingService: delete(id)
+activate ReadingService
+
+ReadingService -> ReadingQuestionService: findAllByReadingId(id)
+activate ReadingQuestionService
+ReadingQuestionService --> ReadingService: List<ReadingQuestionDTO>
+deactivate ReadingQuestionService
+
+loop Delete Related Reading Questions
+    ReadingService -> ReadingQuestionService: delete(dto.getId())
+    activate ReadingQuestionService
+    ReadingQuestionService --> ReadingService: Deleted ReadingQuestion
+    deactivate ReadingQuestionService
+end
+
+ReadingService -> Repository: delete(id)
+activate Repository
+Repository --> ReadingService: Deleted Reading
+deactivate Repository
+
+ReadingService --> Teacher: Deletion successful
+deactivate ReadingService
+
+@enduml

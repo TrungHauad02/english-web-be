@@ -1,0 +1,41 @@
+@startuml createTopic
+
+actor Teacher
+participant "TopicServiceImpl" as TopicService
+participant "BaseServiceImpl" as BaseService
+participant "TopicRepository" as Repository
+participant "TopicEntity" as Entity
+
+== Create a New Topic ==
+Teacher -> TopicService: create(dto)
+activate TopicService
+
+TopicService -> BaseService: create(dto) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> TopicService: convertToEntity(dto) << Overridden >>
+activate TopicService
+TopicService -> TopicService: convertToEntity(dto)
+TopicService --> BaseService: TopicEntity
+deactivate TopicService
+
+BaseService -> Entity: setId(null)
+
+BaseService -> Repository: save(entity)
+activate Repository
+Repository --> BaseService: savedEntity
+deactivate Repository
+
+BaseService -> TopicService: convertToDTO(entity) << Overridden >>
+activate TopicService
+TopicService -> TopicService: convertToDTO(entity)
+TopicService --> BaseService: TopicDTO
+deactivate TopicService
+
+BaseService --> TopicService: savedDTO
+deactivate BaseService
+
+TopicService --> Teacher: TopicDTO
+deactivate TopicService
+
+@enduml

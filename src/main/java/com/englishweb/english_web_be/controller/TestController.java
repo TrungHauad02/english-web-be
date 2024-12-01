@@ -1,6 +1,8 @@
 package com.englishweb.english_web_be.controller;
 
+import com.englishweb.english_web_be.dto.ListenAndWriteAWordDTO;
 import com.englishweb.english_web_be.dto.TestDTO;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 import com.englishweb.english_web_be.service.TestService;
 import com.mysql.cj.log.Log;
@@ -32,17 +34,20 @@ public class TestController {
     public ResponseEntity<Page<TestDTO>> getTests(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) TestTypeEnum type,
+            @RequestParam(required = false) StatusEnum status,
+            @RequestParam(required = false) String userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        Page<TestDTO> result = testService.findTestsBySpecification(title, type, page, size);
+        Page<TestDTO> result = testService.findTestsBySpecification(title, type, page, size,status,userId);
         return ResponseEntity.ok(result);
     }
-
-    @Operation(method = "GET", summary = "Retrieve test by ID", description = "Retrieve specific test by its ID")
+    @Operation(method = "GET", summary = "get test by ID And Status" , description = "Retrieve specific test by its ID")
     @GetMapping("/{id}")
-    public ResponseEntity<TestDTO> retrieveTestById(@PathVariable String id) {
-        TestDTO result = testService.findById(id);
+    public ResponseEntity<TestDTO> getByTestIdAndStatus(
+            @PathVariable String id,
+            @RequestParam(required = false) StatusEnum status) {
+        TestDTO result = testService.findByIdAndStatus(id, status);
         return ResponseEntity.ok(result);
     }
 

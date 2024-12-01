@@ -1,0 +1,45 @@
+@startuml scoreWriting
+
+actor User
+participant "WritingService" as WritingService
+participant "TextRazorServiceImpl" as TextRazorService
+participant "GeminiClientService" as GeminiClientService
+participant "ObjectMapper" as ObjectMapper
+
+
+User -> WritingService: scoreWriting(text, topic)
+activate WritingService
+
+WritingService -> TextRazorService: analyzeText(text)
+activate TextRazorService
+TextRazorService --> WritingService: AnalyzedText
+deactivate TextRazorService
+
+
+WritingService -> WritingService: Build evaluation prompt
+activate WritingService
+
+alt Topics exist
+    WritingService -> WritingService: Append topics to prompt
+else No topics
+    WritingService -> WritingService: Append basic evaluation instructions
+end
+deactivate WritingService
+
+
+WritingService -> GeminiClientService: generateText(prompt)
+activate GeminiClientService
+GeminiClientService --> WritingService: Response (JSON format)
+deactivate GeminiClientService
+
+
+WritingService -> ObjectMapper: readTree(response)
+activate ObjectMapper
+ObjectMapper --> WritingService: JsonNode
+deactivate ObjectMapper
+
+WritingService -> WritingService: Extract score and comment
+WritingService --> User: ScoreCommentResponse
+deactivate WritingService
+
+@enduml

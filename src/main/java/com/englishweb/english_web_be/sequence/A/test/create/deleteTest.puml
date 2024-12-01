@@ -1,0 +1,73 @@
+@startuml deleteTest
+
+actor Teacher
+participant "TestServiceImpl" as TestService
+participant "TestSpeakingServiceImpl" as TestSpeakingService
+participant "TestReadingServiceImpl" as TestReadingService
+participant "TestListeningServiceImpl" as TestListeningService
+participant "TestWritingServiceImpl" as TestWritingService
+participant "TestMixingQuestionServiceImpl" as TestMixingQuestionService
+participant "SubmitTestServiceImpl" as SubmitTestService
+participant "BaseServiceImpl" as BaseService
+
+== Lược đồ tuần tự chức năng xóa bài kiểm tra ==
+Teacher -> TestService: delete(id)
+activate TestService
+
+TestService -> TestSpeakingService: findAllByTest_Id(id)
+activate TestSpeakingService
+TestSpeakingService --> TestService: List<TestSpeakingDTO>
+deactivate TestSpeakingService
+loop Delete TestSpeaking
+    TestService -> TestSpeakingService: delete(testSpeaking.getId())
+end
+
+TestService -> TestReadingService: findAllByTestId(id)
+activate TestReadingService
+TestReadingService --> TestService: List<TestReadingDTO>
+deactivate TestReadingService
+loop Delete TestReading
+    TestService -> TestReadingService: delete(testReading.getId())
+end
+
+TestService -> TestListeningService: findAllByTestId(id)
+activate TestListeningService
+TestListeningService --> TestService: List<TestListeningDTO>
+deactivate TestListeningService
+loop Delete TestListening
+    TestService -> TestListeningService: delete(testListening.getId())
+end
+
+TestService -> TestWritingService: findAllByTestId(id)
+activate TestWritingService
+TestWritingService --> TestService: List<TestWritingDTO>
+deactivate TestWritingService
+loop Delete TestWriting
+    TestService -> TestWritingService: delete(testWriting.getId())
+end
+
+TestService -> TestMixingQuestionService: findAllByTestId(id)
+activate TestMixingQuestionService
+TestMixingQuestionService --> TestService: List<TestMixingQuestionDTO>
+deactivate TestMixingQuestionService
+loop Delete TestMixingQuestion
+    TestService -> TestMixingQuestionService: delete(testMixingQuestion.getId())
+end
+
+TestService -> SubmitTestService: findAllByTestId(id)
+activate SubmitTestService
+SubmitTestService --> TestService: List<SubmitTestDTO>
+deactivate SubmitTestService
+loop Delete SubmitTest
+    TestService -> SubmitTestService: delete(submitTest.getId())
+end
+
+TestService -> BaseService: delete(id) << Inherited from Parent >>
+activate BaseService
+BaseService --> TestService: Entity deleted
+deactivate BaseService
+
+TestService --> Teacher: Deletion complete
+deactivate TestService
+
+@enduml

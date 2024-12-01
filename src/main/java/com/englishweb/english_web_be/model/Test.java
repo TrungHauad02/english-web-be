@@ -24,7 +24,7 @@ public class Test implements BaseEntity {
     private int serial;
     @Column(nullable = false)
     private int duration;
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private TestTypeEnum type;
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;

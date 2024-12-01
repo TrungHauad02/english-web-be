@@ -1,0 +1,40 @@
+@startuml findByListeningIdAndStatus
+
+actor Teacher
+participant "ListenAndWriteAWordServiceImpl" as ListenAndWriteService
+participant "ListeningServiceImpl" as ListeningService
+participant "ListenAndWriteAWordRepository" as Repository
+
+== Lược đồ tuần tự chức năng lấy thông tin bài nghe và viết từ ==
+Teacher -> ListenAndWriteService: findByListeningIdAndStatus(listeningId, status)
+activate ListenAndWriteService
+
+alt Status is null
+    ListenAndWriteService -> ListenAndWriteService: findByListeningId(listeningId)
+    activate ListenAndWriteService
+    ListenAndWriteService --> Teacher: List<ListenAndWriteAWordDTO>
+    deactivate ListenAndWriteService
+else Status is not null
+    ListenAndWriteService -> ListeningService: isExist(listeningId)
+    activate ListeningService
+    ListeningService --> ListenAndWriteService: Listening exists
+    deactivate ListeningService
+
+    ListenAndWriteService -> Repository: findAllByListening_IdAndStatus(listeningId, status)
+    activate Repository
+    Repository --> ListenAndWriteService: List<ListenAndWriteAWord>
+    deactivate Repository
+
+    loop Convert entities to DTOs
+        ListenAndWriteService -> ListenAndWriteService: convertToDTO(entity)
+        activate ListenAndWriteService
+        ListenAndWriteService --> ListenAndWriteService: ListenAndWriteAWordDTO
+        deactivate ListenAndWriteService
+    end
+
+    ListenAndWriteService --> Teacher: List<ListenAndWriteAWordDTO>
+end
+
+deactivate ListenAndWriteService
+
+@enduml

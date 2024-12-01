@@ -1,0 +1,35 @@
+@startuml createTestListening
+actor Teacher
+participant "TestListeningServiceImpl" as TestListeningService
+participant "BaseServiceImpl" as BaseService
+participant "TestListeningRepository" as Repository
+
+== Lược đồ tuần tự chức năng thêm bài kiểm tra nghe  ==
+Teacher -> TestListeningService: create(dto)
+activate TestListeningService
+
+TestListeningService -> BaseService: create(dto) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> TestListeningService: convertToEntity(dto) << Overridden >>
+activate TestListeningService
+TestListeningService --> BaseService: TestListeningEntity
+deactivate TestListeningService
+
+BaseService -> Repository: save(entity)
+activate Repository
+Repository --> BaseService: Saved Entity
+deactivate Repository
+
+BaseService -> TestListeningService: convertToDTO(entity) << Overridden >>
+activate TestListeningService
+TestListeningService --> BaseService: TestListeningDTO
+deactivate TestListeningService
+
+BaseService --> TestListeningService: Saved DTO
+deactivate BaseService
+
+TestListeningService --> Teacher: TestListeningDTO
+deactivate TestListeningService
+
+@enduml

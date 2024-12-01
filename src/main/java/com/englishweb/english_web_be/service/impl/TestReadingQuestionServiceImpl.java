@@ -4,12 +4,14 @@ import com.englishweb.english_web_be.dto.TestListeningQuestionDTO;
 import com.englishweb.english_web_be.dto.TestReadingAnswerDTO;
 import com.englishweb.english_web_be.dto.TestReadingQuestionDTO;
 import com.englishweb.english_web_be.model.TestReadingQuestion;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.TestReadingQuestionRepository;
 import com.englishweb.english_web_be.service.TestReadingQuestionService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -34,6 +36,24 @@ public class TestReadingQuestionServiceImpl extends BaseServiceImpl<TestReadingQ
                 .map(this::convertToDTO)
                 .toList();
     }
+    public List<TestReadingQuestionDTO> findAllByTestReading_IdAndStatus (String testReadingId, StatusEnum status) {
+        if (status == null) {
+            return findAllByTestReading_Id(testReadingId);
+        }
+
+        testReadingService.isExist(testReadingId);
+
+        List<TestReadingQuestion> list = repository.findAllByTestReading_IdAndStatus(testReadingId, status);
+
+        return list.stream()
+                .map(entity -> {
+                    TestReadingQuestionDTO dto = convertToDTO(entity);
+                    dto.setAnswers(testReadingAnswerService.findAllByQuestionIdAndStatus(entity.getId(), status));
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
 
 
     @Override

@@ -1,0 +1,38 @@
+@startuml getAvailableVoices
+
+actor Teacher
+participant "getAvailableVoices" as GetVoices
+participant "HttpRequest" as HttpRequest
+participant "HttpClient" as HttpClient
+participant "HttpResponse" as HttpResponse
+participant "IOException" as IOException
+
+== Lược đồ tuần tự chức năng lấy tiếng nói ==
+Teacher -> GetVoices: getAvailableVoices()
+activate GetVoices
+
+GetVoices -> HttpRequest: Build GET Request
+activate HttpRequest
+HttpRequest --> GetVoices: HttpRequest Created
+deactivate HttpRequest
+
+GetVoices -> HttpClient: Send Request
+activate HttpClient
+HttpClient -> HttpClient: Send Request to API
+HttpClient --> GetVoices: HttpResponse
+deactivate HttpClient
+
+alt Response status is not 200
+    GetVoices -> IOException: throw IOException
+    activate IOException
+    IOException --> GetVoices: Exception Thrown
+    deactivate IOException
+else Response status is 200
+    GetVoices -> HttpResponse: Return Body
+    HttpResponse --> GetVoices: JSON Body
+end
+
+GetVoices --> Teacher: Return List of Voices
+deactivate GetVoices
+
+@enduml

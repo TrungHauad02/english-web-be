@@ -1,11 +1,14 @@
 package com.englishweb.english_web_be.service.impl;
 
+import com.englishweb.english_web_be.dto.TestListeningDTO;
 import com.englishweb.english_web_be.dto.TestListeningQuestionDTO;
 import com.englishweb.english_web_be.dto.TestReadingDTO;
 
 import com.englishweb.english_web_be.dto.TestReadingQuestionDTO;
+import com.englishweb.english_web_be.model.TestListening;
 import com.englishweb.english_web_be.model.TestReading;
 import com.englishweb.english_web_be.model.TestReadingQuestion;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.TestReadingRepository;
 import com.englishweb.english_web_be.service.TestReadingService;
 import lombok.Getter;
@@ -14,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 @Service
 public class TestReadingServiceImpl extends BaseServiceImpl<TestReading, TestReadingDTO, TestReadingRepository> implements TestReadingService {
@@ -26,6 +31,7 @@ public class TestReadingServiceImpl extends BaseServiceImpl<TestReading, TestRea
         this.testReadingQuestionService = testReadingQuestionService;
     }
 
+
     public List<TestReadingDTO> findAllByTestId(String test_id) {
         testService.isExist(test_id);
         List<TestReading> list = repository.findAllByTest_Id(test_id);
@@ -37,6 +43,23 @@ public class TestReadingServiceImpl extends BaseServiceImpl<TestReading, TestRea
         return list.stream()
                 .map(this::convertToDTO)
                 .toList();
+    }
+    public List<TestReadingDTO> findAllByTestIdAndStatus(String test_id, StatusEnum status) {
+        if (status == null) {
+            return findAllByTestId(test_id);
+        }
+
+        testService.isExist(test_id);
+
+        List<TestReading> list = repository.findAllByTest_IdAndStatus(test_id, status);
+
+        return list.stream()
+                .map(entity -> {
+                    TestReadingDTO dto = convertToDTO(entity);
+                    dto.setQuestions(testReadingQuestionService.findAllByTestReading_IdAndStatus(entity.getId(),status));
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     public int serialMaxReadingQuestionsByTestId(String testId) {

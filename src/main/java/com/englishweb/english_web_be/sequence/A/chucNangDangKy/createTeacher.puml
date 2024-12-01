@@ -1,0 +1,55 @@
+@startuml createTeacher
+
+actor Admin
+participant "UserServiceImpl" as UserService
+participant "UserRepository" as Repository
+participant "PasswordEncoder" as PasswordEncoder
+participant "EmailService" as EmailService
+participant "UserDTO" as UserDTO
+participant "BaseServiceImpl" as BaseService
+
+== Create Teacher ==
+Admin -> UserService: createTeacher(dto)
+activate UserService
+
+UserService -> Repository: findByEmail(dto.getEmail())
+activate Repository
+Repository --> UserService: Email exists or not
+deactivate Repository
+
+alt Email exists
+    UserService -> UserService: throw ResponseStatusException("Email already exists.")
+end
+
+UserService -> UserService: generatePassword(12)
+activate UserService
+UserService --> UserService: rawPassword
+deactivate UserService
+
+UserService -> PasswordEncoder: encode(rawPassword)
+activate PasswordEncoder
+PasswordEncoder --> UserService: encodedPassword
+deactivate PasswordEncoder
+
+UserService -> UserDTO: setPassword(encodedPassword)
+UserService -> UserDTO: setStatus(StatusEnum.ACTIVE)
+UserService -> UserDTO: setRole(RoleEnum.TEACHER)
+
+UserService -> BaseService: create(dto) << Inherited from Parent >>
+activate BaseService
+BaseService -> Repository: save(dto)
+activate Repository
+Repository --> BaseService: Created User Entity
+deactivate Repository
+BaseService --> UserService: Created User DTO
+deactivate BaseService
+
+UserService -> EmailService: sendPasswordByEmail(dto.getEmail(), rawPassword)
+activate EmailService
+EmailService --> UserService: Email sent
+deactivate EmailService
+
+UserService --> Admin: createdTeacher
+deactivate UserService
+
+@enduml

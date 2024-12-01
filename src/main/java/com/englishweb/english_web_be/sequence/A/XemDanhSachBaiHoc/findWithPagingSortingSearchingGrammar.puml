@@ -1,0 +1,48 @@
+@startuml findWithPagingSortingSearching
+
+actor Student
+participant "GrammarServiceImpl" as GrammarService
+participant "LessonSpecification" as LessonSpec
+participant "ValidationUtils" as ValidationUtils
+
+== Hình 87:	Lược đồ tuần tự chức năng xem danh sách bài học ngữ pháp ==
+Student -> GrammarService: findWithPagingSortingSearching(title, status, page, size, sortBy, sortDir, class)
+activate GrammarService
+
+GrammarService -> ValidationUtils: validatePageRequestParam(page, size, sortBy, class)
+activate ValidationUtils
+ValidationUtils --> GrammarService: Validation complete
+deactivate ValidationUtils
+
+GrammarService -> GrammarService: Create Pageable and Sort objects
+
+alt Title filter is applied
+    GrammarService -> LessonSpec: byTitle(title)
+    activate LessonSpec
+    LessonSpec --> GrammarService: Specification<Grammar>
+    deactivate LessonSpec
+else No title filter
+    GrammarService -> GrammarService: Specification<Grammar> is null
+end
+
+alt Status filter is applied
+    GrammarService -> LessonSpec: hasStatus(status)
+    activate LessonSpec
+    LessonSpec --> GrammarService: Specification<Grammar>
+    deactivate LessonSpec
+else No status filter
+    GrammarService -> GrammarService: Specification<Grammar> is null
+end
+GrammarService -> Repository: findAll(spec, pageable)
+activate Repository
+Repository --> GrammarService: Page<Grammar>
+deactivate Repository
+
+loop Map entities to DTOs
+    GrammarService -> GrammarService: convertToDTO(entity)
+end
+
+GrammarService --> Student: Page<GrammarDTO>
+deactivate GrammarService
+
+@enduml
