@@ -22,7 +22,7 @@ public class ReadingAnswer implements BaseEntity {
     @Enumerated(EnumType.STRING)
     private StatusEnum status;
     @ManyToOne
-    @JoinColumn(name = "question_id")
+    @JoinColumn(name = "Reading_question_id")
     private ReadingQuestion question;
 
     @PrePersist

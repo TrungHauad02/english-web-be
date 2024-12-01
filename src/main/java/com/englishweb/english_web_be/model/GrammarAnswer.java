@@ -21,7 +21,7 @@ public class GrammarAnswer implements BaseEntity {
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
     @ManyToOne
-    @JoinColumn(name = "grammar_question_id")
+    @JoinColumn(name = "question_id")
     private GrammarQuestion question;
 
     @PrePersist
