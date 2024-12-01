@@ -19,7 +19,7 @@ public class TestSpeaking implements BaseEntity {
     @Column(nullable = false)
     private int serial;
     @Enumerated(EnumType.STRING)
-    private StatusEnum status = StatusEnum.ACTIVE;
+    private StatusEnum status =StatusEnum.ACTIVE;
 
     @PrePersist
     private void generateId() {
@@ -37,7 +37,7 @@ public class TestSpeaking implements BaseEntity {
     public TestSpeaking() {
     }
 
-    public TestSpeaking(String id, String title, int serial, StatusEnum statusEnum) {
+    public TestSpeaking(String id, String title, int serial, StatusEnum status) {
         this.id = id;
         this.title = title;
         this.serial = serial;

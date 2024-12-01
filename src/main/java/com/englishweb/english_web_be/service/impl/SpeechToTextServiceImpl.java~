@@ -24,8 +24,7 @@ public class SpeechToTextServiceImpl implements SpeechToTextService {
 
     @Override
     public SpeechToTextResponse speechToText(String audioBase64) throws IOException {
-        //String credentialsPath = "src/main/resources/englishweb-speech-to-text.json";
-        String credentialsPath = ttsConfigPath;
+        String credentialsPath = "src/main/resources/englishweb-speech-to-text.json";
         GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(credentialsPath));
         SpeechSettings speechSettings = SpeechSettings.newBuilder()
                 .setCredentialsProvider(() -> credentials)
@@ -37,7 +36,7 @@ public class SpeechToTextServiceImpl implements SpeechToTextService {
                     .setSampleRateHertz(48000)
                     .setModel("latest_long")
                     .setLanguageCode("en-US")
-                    .setAudioChannelCount(1)
+                    .setAudioChannelCount(2)
                     .setEnableWordTimeOffsets(true)
                     .setEnableWordConfidence(true)
                     .build();
