@@ -3,11 +3,15 @@ package com.englishweb.english_web_be.model;
 import com.englishweb.english_web_be.model.interfacemodel.BaseEntity;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+@Setter
+@Getter
 @Entity
-public class   TestSpeaking implements BaseEntity {
+public class TestSpeaking implements BaseEntity {
     @Id
     private String id;
     @Column(nullable = false)
@@ -33,7 +37,7 @@ public class   TestSpeaking implements BaseEntity {
     public TestSpeaking() {
     }
 
-    public TestSpeaking(String id, String title, int serial, StatusEnum statusEnum) {
+    public TestSpeaking(String id, String title, int serial, StatusEnum status) {
         this.id = id;
         this.title = title;
         this.serial = serial;

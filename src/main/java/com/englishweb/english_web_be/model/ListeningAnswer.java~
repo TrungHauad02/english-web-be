@@ -11,22 +11,21 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReadingAnswer implements BaseEntity {
+public class ListeningAnswer implements BaseEntity {
     @Id
     private String id;
     @Column(nullable = false)
     private String content;
     @Column(nullable = false)
     private boolean correct;
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private StatusEnum status;
+    private StatusEnum status = StatusEnum.ACTIVE;
     @ManyToOne
-    @JoinColumn(name = "question_id")
-    private ReadingQuestion question;
+    @JoinColumn(name = "Listening_question_id")
+    private ListeningQuestion question;
 
     @PrePersist
     private void generateId() {
-        this.id = "Read_ans_" + System.nanoTime();
+        this.id = "Listen_Ans_" + System.nanoTime();
     }
 }

@@ -22,7 +22,7 @@ public class TopicAnswer implements BaseEntity {
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
     @ManyToOne
-    @JoinColumn(name = "topic_question_id")
+    @JoinColumn(name = "question_id")
     private TopicQuestion question;
 
     @PrePersist

@@ -7,6 +7,7 @@ import com.google.cloud.speech.v1.*;
 import com.google.cloud.speech.v1.RecognitionConfig.AudioEncoding;
 import com.google.protobuf.ByteString;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
@@ -17,9 +18,14 @@ import java.util.List;
 @Service
 @Slf4j
 public class SpeechToTextServiceImpl implements SpeechToTextService {
+
+    @Value("${SPEECH_TO_TEXT_CONFIG_PATH}")
+    private String ttsConfigPath;
+
     @Override
     public SpeechToTextResponse speechToText(String audioBase64) throws IOException {
-        String credentialsPath = "src/main/resources/englishweb-speech-to-text.json";
+        //String credentialsPath = "src/main/resources/englishweb-speech-to-text.json";
+        String credentialsPath = ttsConfigPath;
         GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(credentialsPath));
         SpeechSettings speechSettings = SpeechSettings.newBuilder()
                 .setCredentialsProvider(() -> credentials)
