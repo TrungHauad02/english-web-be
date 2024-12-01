@@ -9,9 +9,9 @@ spring.h2.console.enabled=true
 #spring.datasource.password=dummy
 
 # Chay spring boot tren docker
-#spring.datasource.url=jdbc:mysql://host.docker.internal:3307/study-english
+spring.datasource.url=jdbc:mysql://host.docker.internal:3307/study-english
 # Chay spring boot bang ide
-spring.datasource.url=jdbc:mysql://localhost:3307/study-english
+#spring.datasource.url=jdbc:mysql://localhost:3307/study-english
 spring.datasource.username=study-english
 spring.datasource.password=123456
 spring.jpa.hibernate.ddl-auto=update
@@ -35,7 +35,7 @@ text-razor.api.key=3528fb5b59e9d8611651357e811a6b1719f21529b22389c8bce9cd3d
 ## Gemini
 gemini.api.key=AIzaSyDO88ZqAbnrBQniRs3wwlCBw1MOH33a0qQ
 gemini.api.url=https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash
-## The Fluent Me: score speaking
-the-fluent-me.api.url=https://thefluentme.p.rapidapi.com
-the-fluent-me.x-rapidapi-key=aa27bcca56msh0bfee1421f1fa1cp19790cjsn1c8a16c56245
-the-fluent-me.x-rapidapi-host=thefluentme.p.rapidapi.com
+
+#File config
+FIREBASE_CONFIG_PATH=src/main/resources/englishweb-firebase-adminsdk.json
+SPEECH_TO_TEXT_CONFIG_PATH=src/main/resources/englishweb-speech-to-text.json

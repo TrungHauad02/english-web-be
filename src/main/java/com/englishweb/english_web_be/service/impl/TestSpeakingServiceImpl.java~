@@ -1,5 +1,6 @@
 package com.englishweb.english_web_be.service.impl;
 
+import com.englishweb.english_web_be.dto.TestReadingQuestionDTO;
 import com.englishweb.english_web_be.dto.TestSpeakingDTO;
 import com.englishweb.english_web_be.dto.TestSpeakingQuestionDTO;
 import com.englishweb.english_web_be.model.TestSpeaking;
@@ -72,7 +73,7 @@ public class TestSpeakingServiceImpl extends BaseServiceImpl<TestSpeaking, TestS
         entity.setId(dto.getId());
         entity.setTitle(dto.getTitle());
         entity.setSerial(dto.getSerial());
-        entity.setStatus(dto.getStatus());
+        entity.setStatusEnum(dto.getStatus());
         entity.setTest(testService.convertToEntity(testService.findById(dto.getTestId())));
         return entity;
     }
@@ -82,7 +83,7 @@ public class TestSpeakingServiceImpl extends BaseServiceImpl<TestSpeaking, TestS
         TestSpeakingDTO dto = new TestSpeakingDTO();
         dto.setId(entity.getId());
         dto.setTitle(entity.getTitle());
-        dto.setStatus(entity.getStatus());
+        dto.setStatus(entity.getStatusEnum());
         dto.setTestId(entity.getTest().getId());
         dto.setSerial(entity.getSerial());
         dto.setQuestions(testSpeakingQuestionService.findAllByTestSpeaking_Id(entity.getId()));
