@@ -1,0 +1,27 @@
+@startuml deleteReadingAnswer
+
+actor Teacher
+participant "ReadingAnswerServiceImpl" as ReadingAnswerService
+participant "BaseServiceImpl" as BaseService
+participant "ReadingAnswerRepository" as Repository
+
+== Lược đồ tuần tự chức năng xoá câu trả lời  cho câu hỏi bài học đọc ==
+Teacher -> ReadingAnswerService: delete(id)
+activate ReadingAnswerService
+
+ReadingAnswerService -> BaseService: delete(id) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> BaseService: isExist(id)
+BaseService -> Repository: deleteById(id)
+activate Repository
+Repository --> BaseService: Deleted ReadingAnswerEntity
+deactivate Repository
+
+BaseService --> ReadingAnswerService: Deleted ReadingAnswerDTO
+deactivate BaseService
+
+ReadingAnswerService --> Teacher: Deleted ReadingAnswerDTO
+deactivate ReadingAnswerService
+
+@enduml

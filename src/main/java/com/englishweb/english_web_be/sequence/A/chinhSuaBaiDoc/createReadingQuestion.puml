@@ -1,0 +1,40 @@
+@startuml createReadingQuestion
+
+actor Teacher
+participant "ReadingQuestionServiceImpl" as ReadingQuestionService
+participant "BaseServiceImpl" as BaseService
+participant "ReadingQuestionRepository" as Repository
+
+
+== Lược đồ tuần tự chức năng tạo câu hỏi bài học đọc ==
+Teacher -> ReadingQuestionService: create(dto)
+activate ReadingQuestionService
+
+ReadingQuestionService -> ReadingQuestionService: isSerialUnique(dto.getReadingId(), dto.getSerial(), null)
+ReadingQuestionService -> BaseService: create(dto) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> ReadingQuestionService: convertToEntity(dto) << Overridden >>
+activate ReadingQuestionService
+ReadingQuestionService -> ReadingQuestionService: convertToEntity(dto)
+ReadingQuestionService --> BaseService: Converted Entity
+deactivate ReadingQuestionService
+
+BaseService -> Repository: save(entity)
+activate Repository
+Repository --> BaseService: Saved ReadingQuestionEntity
+deactivate Repository
+
+BaseService -> ReadingQuestionService: convertToDTO(savedEntity) << Overridden >>
+activate ReadingQuestionService
+ReadingQuestionService -> ReadingQuestionService: convertToDTO(savedEntity)
+ReadingQuestionService --> BaseService: Converted ReadingQuestionDTO
+deactivate ReadingQuestionService
+
+BaseService --> ReadingQuestionService: Created ReadingQuestionDTO
+deactivate BaseService
+
+ReadingQuestionService --> Teacher: Created ReadingQuestionDTO
+deactivate ReadingQuestionService
+
+@enduml

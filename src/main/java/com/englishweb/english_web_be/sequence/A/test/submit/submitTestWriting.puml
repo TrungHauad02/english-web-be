@@ -1,0 +1,34 @@
+@startuml submitTestWriting
+actor "Student" as Student
+participant "SubmitTestWritingAnswerServiceImpl" as SubmitTestWritingService
+participant "BaseServiceImpl" as BaseService
+participant "TestWritingAnswerRepository" as Repository
+
+== Lược đồ tuần tự chức năng nộp câu trả lời bài kiểm tra về viết ==
+Student -> SubmitTestWritingService: submitTestWritingAnswer(dto)
+activate SubmitTestWritingService
+
+SubmitTestWritingService -> BaseService: create(dto) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> SubmitTestWritingService: convertToEntity(dto) << Overridden >>
+activate SubmitTestWritingService
+SubmitTestWritingService --> BaseService: TestWritingAnswerEntity
+deactivate SubmitTestWritingService
+
+BaseService -> Repository: save(entity)
+activate Repository
+Repository --> BaseService: Saved TestWritingAnswerEntity
+deactivate Repository
+
+BaseService -> SubmitTestWritingService: convertToDTO(savedEntity) << Overridden >>
+activate SubmitTestWritingService
+SubmitTestWritingService --> BaseService: TestWritingAnswerDTO
+deactivate SubmitTestWritingService
+
+BaseService --> SubmitTestWritingService: Saved TestWritingAnswerDTO
+deactivate BaseService
+
+SubmitTestWritingService --> Student: TestWritingAnswerDTO
+deactivate SubmitTestWritingService
+@enduml

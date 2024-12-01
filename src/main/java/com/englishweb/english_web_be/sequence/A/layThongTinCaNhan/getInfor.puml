@@ -1,0 +1,33 @@
+@startuml getInfor
+
+actor User
+participant "UserServiceImpl" as UserService
+participant "SecurityContextHolder" as SecurityContext
+participant "UserRepository" as Repository
+
+== Get User Information ==
+User -> UserService: getInfor()
+activate UserService
+
+UserService -> SecurityContext: getContext()
+activate SecurityContext
+SecurityContext --> UserService: context
+
+UserService -> SecurityContext: getAuthentication().getName()
+SecurityContext --> UserService: username
+deactivate SecurityContext
+
+UserService -> Repository: findByEmail(username)
+activate Repository
+Repository --> UserService: User
+deactivate Repository
+
+alt User not found
+    UserService -> UserService: throw RuntimeException("User not found.")
+end
+
+UserService -> UserService: convertToDTO(user)
+UserService --> User: UserDTO
+deactivate UserService
+
+@enduml

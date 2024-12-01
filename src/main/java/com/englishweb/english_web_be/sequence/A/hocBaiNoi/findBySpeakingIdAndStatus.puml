@@ -1,0 +1,33 @@
+@startuml findBySpeakingIdAndStatus
+
+actor Student
+participant "SpeakingConversationServiceImpl" as SpeakingService
+participant "SpeakingConversationRepository" as Repository
+
+== Lược đồ tuần tự chức năng lấy thông tin bài nói ==
+Student -> SpeakingService: findBySpeakingIdAndStatus(speakingId, status)
+activate SpeakingService
+
+alt Status is null
+    SpeakingService -> SpeakingService: findBySpeakingId(speakingId)
+    activate SpeakingService
+    SpeakingService --> Student: List<SpeakingConversationDTO>
+    deactivate SpeakingService
+else Status is not null
+    SpeakingService -> Repository: findAllBySpeaking_IdAndStatus(speakingId, status)
+    activate Repository
+    Repository --> SpeakingService: List<SpeakingConversation>
+    deactivate Repository
+
+    loop Convert entities to DTOs
+        SpeakingService -> SpeakingService: convertToDTO(entity)
+        activate SpeakingService
+        SpeakingService --> SpeakingService: Converted DTO
+        deactivate SpeakingService
+    end
+end
+
+SpeakingService --> Student: List<SpeakingConversationDTO>
+deactivate SpeakingService
+
+@enduml

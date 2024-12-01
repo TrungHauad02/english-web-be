@@ -1,0 +1,38 @@
+@startuml createWriting
+
+actor Teacher
+participant "WritingServiceImpl" as WritingService
+participant "BaseServiceImpl" as BaseService
+participant "WritingRepository" as Repository
+
+== Lược đồ tuần tự chức năng thêm bài học viết ==
+Teacher -> WritingService: create(dto)
+activate WritingService
+
+WritingService -> BaseService: create(dto) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> WritingService: convertToEntity(dto) << Overridden >>
+activate WritingService
+WritingService -> WritingService: convertToEntity(dto)
+WritingService --> BaseService: WritingEntity
+deactivate WritingService
+
+BaseService -> Repository: save(entity)
+activate Repository
+Repository --> BaseService: Saved WritingEntity
+deactivate Repository
+
+BaseService -> WritingService: convertToDTO(savedEntity) << Overridden >>
+activate WritingService
+WritingService -> WritingService: convertToDTO(savedEntity)
+WritingService --> BaseService: Converted WritingDTO
+deactivate WritingService
+
+BaseService --> WritingService: Saved WritingDTO
+deactivate BaseService
+
+WritingService --> Teacher: Saved WritingDTO
+deactivate WritingService
+
+@enduml

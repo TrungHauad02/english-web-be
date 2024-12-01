@@ -1,0 +1,52 @@
+@startuml findTeachersBySpecification
+
+actor Admin
+participant "UserServiceImpl" as UserService
+participant "UserRepository" as UserRepository
+participant "UserSpecification" as UserSpec
+participant "PageRequest" as PageRequest
+
+
+== Find Teachers by Specification ==
+Admin -> UserService: findTeachersBySpecification(name, searchStartDate, searchEndDate, level, page, size)
+activate UserService
+
+UserService -> PageRequest: create Pageable (PageRequest.of(page, size))
+activate PageRequest
+PageRequest --> UserService: Pageable
+deactivate PageRequest
+
+UserService -> UserSpec: hasRole(RoleEnum.TEACHER)
+activate UserSpec
+UserSpec --> UserService: Specification<User>
+deactivate UserSpec
+
+UserService -> UserSpec: hasName(name)
+activate UserSpec
+UserSpec --> UserService: Specification<User>
+deactivate UserSpec
+
+UserService -> UserSpec: hasLevel(level)
+activate UserSpec
+UserSpec --> UserService: Specification<User>
+deactivate UserSpec
+
+UserService -> UserSpec: hasDateRange(searchStartDate, searchEndDate)
+activate UserSpec
+UserSpec --> UserService: Specification<User>
+deactivate UserSpec
+
+UserService -> UserRepository: findAll(spec, pageable)
+activate UserRepository
+UserRepository --> UserService: Page<User>
+deactivate UserRepository
+
+UserService -> UserService: convertToDTO(userPage)
+activate UserService
+UserService --> UserService: List<UserDTO>
+deactivate UserService
+
+UserService --> Admin: Page<UserDTO>
+deactivate UserService
+
+@enduml

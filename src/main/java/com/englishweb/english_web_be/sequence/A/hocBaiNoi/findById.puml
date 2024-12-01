@@ -1,0 +1,29 @@
+@startuml findByIdSpeakingService
+
+actor Student
+participant "SpeakingServiceImpl" as SpeakingService
+participant "BaseServiceImpl" as BaseService
+participant "SpeakingRepository" as Repository
+
+
+== Lược đồ tuần tự chức năng tìm kiếm bài nói theo Id ==
+Student -> SpeakingService: findById(id)
+activate SpeakingService
+SpeakingService -> BaseService: findById(id) << Inherited from Parent >>
+activate BaseService
+BaseService -> BaseService: isExist(id)
+BaseService -> Repository: findById(id)
+activate Repository
+Repository --> BaseService: SpeakingEntity
+deactivate Repository
+BaseService -> SpeakingService: convertToDTO(SpeakingEntity) << Overridden >>
+activate SpeakingService
+SpeakingService -> SpeakingService: convertToDTO(SpeakingEntity)
+SpeakingService --> BaseService: SpeakingDTO
+deactivate SpeakingService
+BaseService --> SpeakingService: SpeakingDTO
+deactivate BaseService
+SpeakingService --> Student: SpeakingDTO
+deactivate SpeakingService
+
+@enduml

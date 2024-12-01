@@ -1,0 +1,40 @@
+@startuml updateReading
+
+actor Teacher
+participant "ReadingServiceImpl" as ReadingService
+participant "BaseServiceImpl" as BaseService
+participant "ReadingRepository" as Repository
+
+
+== Lược đồ tuần tự chức năng chỉnh sửa bài học đọc ==
+Teacher -> ReadingService: update(dto, id)
+activate ReadingService
+
+ReadingService -> BaseService: update(dto, id) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> BaseService: isExist(id)
+BaseService -> ReadingService: convertToEntity(dto) << Overridden >>
+activate ReadingService
+ReadingService -> ReadingService: convertToEntity(dto)
+ReadingService --> BaseService: Converted ReadingEntity
+deactivate ReadingService
+
+BaseService -> Repository: save(updatedEntity)
+activate Repository
+Repository --> BaseService: Updated ReadingEntity
+deactivate Repository
+
+BaseService -> ReadingService: convertToDTO(updatedEntity) << Overridden >>
+activate ReadingService
+ReadingService -> ReadingService: convertToDTO(updatedEntity)
+ReadingService --> BaseService: Converted ReadingDTO
+deactivate ReadingService
+
+BaseService --> ReadingService: Updated ReadingDTO
+deactivate BaseService
+
+ReadingService --> Teacher: Updated ReadingDTO
+deactivate ReadingService
+
+@enduml

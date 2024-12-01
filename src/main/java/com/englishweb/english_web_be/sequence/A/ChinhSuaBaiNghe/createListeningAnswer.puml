@@ -1,0 +1,37 @@
+@startuml createListeningAnswer
+
+actor Teacher
+participant "ListeningAnswerServiceImpl" as ListeningAnswerService
+participant "BaseServiceImpl" as BaseService
+participant "ListeningAnswerRepository" as Repository
+
+
+== 	Lược đồ tuần tự chức năng tạo câu trả lời của câu hỏi bài học nghe ==
+Teacher -> ListeningAnswerService: create(dto)
+activate ListeningAnswerService
+
+ListeningAnswerService -> BaseService: create(dto) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> ListeningAnswerService: convertToEntity(dto) << Overridden >>
+activate ListeningAnswerService
+ListeningAnswerService --> BaseService: ListeningAnswerEntity
+deactivate ListeningAnswerService
+
+BaseService -> Repository: save(entity)
+activate Repository
+Repository --> BaseService: Saved ListeningAnswerEntity
+deactivate Repository
+
+BaseService -> ListeningAnswerService: convertToDTO(savedEntity) << Overridden >>
+activate ListeningAnswerService
+ListeningAnswerService --> BaseService: ListeningAnswerDTO
+deactivate ListeningAnswerService
+
+BaseService --> ListeningAnswerService: Saved ListeningAnswerDTO
+deactivate BaseService
+
+ListeningAnswerService --> Teacher: ListeningAnswerDTO
+deactivate ListeningAnswerService
+
+@enduml

@@ -1,0 +1,50 @@
+@startuml findWithPagingSortingSearching
+
+actor Student
+participant "SpeakingServiceImpl" as SpeakingService
+participant "LessonSpecification" as LessonSpec
+participant "ValidationUtils" as ValidationUtils
+participant "SpeakingRepository" as Repository
+
+== Lược đồ tuần tự chức năng xem danh sách bài học nói ==
+Student -> SpeakingService: findWithPagingSortingSearching(title, status, page, size, sortBy, sortDir, class)
+activate SpeakingService
+
+SpeakingService -> ValidationUtils: validatePageRequestParam(page, size, sortBy, class)
+activate ValidationUtils
+ValidationUtils --> SpeakingService: Validation complete
+deactivate ValidationUtils
+
+SpeakingService -> SpeakingService: Create Pageable and Sort objects
+
+alt Title filter is applied
+    SpeakingService -> LessonSpec: byTitle(title)
+    activate LessonSpec
+    LessonSpec --> SpeakingService: Specification<Speaking>
+    deactivate LessonSpec
+else No title filter
+    SpeakingService -> SpeakingService: Specification<Speaking> is null
+end
+
+alt Status filter is applied
+    SpeakingService -> LessonSpec: hasStatus(status)
+    activate LessonSpec
+    LessonSpec --> SpeakingService: Specification<Speaking>
+    deactivate LessonSpec
+else No status filter
+    SpeakingService -> SpeakingService: Specification<Speaking> is null
+end
+
+SpeakingService -> Repository: findAll(spec, pageable)
+activate Repository
+Repository --> SpeakingService: Page<Speaking>
+deactivate Repository
+
+loop Map entities to DTOs
+    SpeakingService -> SpeakingService: convertToDTO(entity)
+end
+
+SpeakingService --> Student: Page<SpeakingDTO>
+deactivate SpeakingService
+
+@enduml

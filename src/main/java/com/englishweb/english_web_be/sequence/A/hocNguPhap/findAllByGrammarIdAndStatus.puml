@@ -1,0 +1,46 @@
+@startuml findAllByGrammarIdAndStatus
+
+actor Student
+participant "GrammarQuestionServiceImpl" as GrammarQuestionService
+participant "GrammarServiceImpl" as GrammarService
+participant "GrammarQuestionRepository" as Repository
+
+== Lược đồ tuần tự chức năng lấy thông tin danh sách câu hỏi, câu trả lời của bài ngữ pháp ==
+Student -> GrammarQuestionService: findAllByGrammarIdAndStatus(grammarId, status)
+activate GrammarQuestionService
+
+alt Status is null
+    GrammarQuestionService -> GrammarQuestionService: findAllByGrammarId(grammarId)
+    activate GrammarQuestionService
+    GrammarQuestionService --> Student: List<GrammarQuestionDTO>
+    deactivate GrammarQuestionService
+else Status is not null
+    GrammarQuestionService -> GrammarService: isExist(grammarId)
+    activate GrammarService
+    GrammarService --> GrammarQuestionService: Grammar exists
+    deactivate GrammarService
+
+    GrammarQuestionService -> Repository: findAllByGrammar_IdAndStatus(grammarId, status)
+    activate Repository
+    Repository --> GrammarQuestionService: List<GrammarQuestion>
+    deactivate Repository
+
+    loop Convert entities to DTOs
+        GrammarQuestionService -> GrammarQuestionService: convertToDTO(entity)
+        activate GrammarQuestionService
+        GrammarQuestionService --> GrammarQuestionService: GrammarQuestionDTO
+        deactivate GrammarQuestionService
+    end
+
+    loop Filter answers in each DTO
+        GrammarQuestionService -> GrammarQuestionService: Filter answers by status
+        activate GrammarQuestionService
+        GrammarQuestionService --> GrammarQuestionService: Updated DTO with filtered answers
+        deactivate GrammarQuestionService
+    end
+end
+
+GrammarQuestionService --> Student: List<GrammarQuestionDTO>
+deactivate GrammarQuestionService
+
+@enduml

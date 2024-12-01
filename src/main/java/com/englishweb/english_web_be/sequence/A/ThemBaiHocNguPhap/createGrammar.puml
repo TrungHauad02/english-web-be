@@ -1,0 +1,42 @@
+@startuml createGrammar
+
+actor Student
+participant "GrammarServiceImpl" as GrammarService
+participant "BaseServiceImpl" as BaseService
+participant "GrammarRepository" as Repository
+participant "GrammarDTO" as DTO
+participant "GrammarEntity" as Entity
+
+== Lược đồ tuần tự chức năng thêm bài học ngữ pháp ==
+Student -> GrammarService: create(dto)
+activate GrammarService
+
+GrammarService -> BaseService: create(dto) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> GrammarService: convertToEntity(dto) << Overridden >>
+activate GrammarService
+GrammarService -> GrammarService: convertToEntity(dto)
+GrammarService --> BaseService: GrammarEntity
+deactivate GrammarService
+
+BaseService -> Entity: setId(null)
+
+BaseService -> Repository: save(entity)
+activate Repository
+Repository --> BaseService: savedEntity
+deactivate Repository
+
+BaseService -> GrammarService: convertToDTO(savedEntity) << Overridden >>
+activate GrammarService
+GrammarService -> GrammarService: convertToDTO(savedEntity)
+GrammarService --> BaseService: GrammarDTO
+deactivate GrammarService
+
+BaseService --> GrammarService: savedDTO
+deactivate BaseService
+
+GrammarService --> Student: GrammarDTO
+deactivate GrammarService
+
+@enduml

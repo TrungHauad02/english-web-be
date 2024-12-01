@@ -1,0 +1,40 @@
+@startuml updateListenAndWriteAWord
+
+actor Teacher
+participant "ListenAndWriteAWordServiceImpl" as ListenAndWriteService
+participant "BaseServiceImpl" as BaseService
+participant "ListenAndWriteAWordRepository" as Repository
+
+== Luợc đồ tuần tự chức năng chỉnh sửa câu trả lời viết từ bài học nghe ==
+Teacher -> ListenAndWriteService: update(dto, id)
+activate ListenAndWriteService
+
+ListenAndWriteService -> ListenAndWriteService: isSerialUnique(dto.getListeningId(), dto.getSerial(), id)
+ListenAndWriteService -> BaseService: update(dto, id) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> BaseService: isExist(id)
+BaseService -> ListenAndWriteService: convertToEntity(dto) << Overridden >>
+activate ListenAndWriteService
+ListenAndWriteService -> ListenAndWriteService: convertToEntity(dto)
+ListenAndWriteService --> BaseService: Updated Entity
+deactivate ListenAndWriteService
+
+BaseService -> Repository: save(updatedEntity)
+activate Repository
+Repository --> BaseService: Updated Entity
+deactivate Repository
+
+BaseService -> ListenAndWriteService: convertToDTO(updatedEntity) << Overridden >>
+activate ListenAndWriteService
+ListenAndWriteService -> ListenAndWriteService: convertToDTO(updatedEntity)
+ListenAndWriteService --> BaseService: Converted DTO
+deactivate ListenAndWriteService
+
+BaseService --> ListenAndWriteService: Updated DTO
+deactivate BaseService
+
+ListenAndWriteService --> Teacher: Updated DTO
+deactivate ListenAndWriteService
+
+@enduml

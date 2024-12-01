@@ -1,0 +1,46 @@
+@startuml findByListeningIdAndStatus
+
+actor Teacher
+participant "ListeningQuestionServiceImpl" as ListeningQuestionService
+participant "ListeningServiceImpl" as ListeningService
+participant "ListeningQuestionRepository" as Repository
+
+== Lược đồ tuần tự chức năng lấy danh sách câu hỏi và câu trả lời của bài nghe ==
+Teacher -> ListeningQuestionService: findByListeningIdAndStatus(listeningId, status)
+activate ListeningQuestionService
+
+alt Status is null
+    ListeningQuestionService -> ListeningQuestionService: findByListeningId(listeningId)
+    activate ListeningQuestionService
+    ListeningQuestionService --> Teacher: List<ListeningQuestionDTO>
+    deactivate ListeningQuestionService
+else Status is not null
+    ListeningQuestionService -> ListeningService: isExist(listeningId)
+    activate ListeningService
+    ListeningService --> ListeningQuestionService: Listening exists
+    deactivate ListeningService
+
+    ListeningQuestionService -> Repository: findAllByListening_IdAndStatus(listeningId, status)
+    activate Repository
+    Repository --> ListeningQuestionService: List<ListeningQuestion>
+    deactivate Repository
+
+    loop Convert entities to DTOs
+        ListeningQuestionService -> ListeningQuestionService: convertToDTO(entity)
+        activate ListeningQuestionService
+        ListeningQuestionService --> ListeningQuestionService: ListeningQuestionDTO
+        deactivate ListeningQuestionService
+    end
+
+    loop Filter answers in each DTO
+        ListeningQuestionService -> ListeningQuestionService: Filter answers by status
+        activate ListeningQuestionService
+        ListeningQuestionService --> ListeningQuestionService: Updated DTO with filtered answers
+        deactivate ListeningQuestionService
+    end
+end
+
+ListeningQuestionService --> Teacher: List<ListeningQuestionDTO>
+deactivate ListeningQuestionService
+
+@enduml

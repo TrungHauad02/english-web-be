@@ -1,0 +1,40 @@
+@startuml createGrammarAnswer
+
+actor Teacher
+participant "GrammarAnswerServiceImpl" as GrammarAnswerService
+participant "BaseServiceImpl" as BaseService
+participant "GrammarAnswerRepository" as Repository
+
+== Lược đồ tuần tự chức năng thêm câu trả lời ngữ pháp ==
+Teacher -> GrammarAnswerService: create(dto)
+activate GrammarAnswerService
+
+GrammarAnswerService -> BaseService: create(dto) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> GrammarAnswerService: convertToEntity(dto) << Overridden >>
+activate GrammarAnswerService
+GrammarAnswerService -> GrammarAnswerService: convertToEntity(dto)
+GrammarAnswerService --> BaseService: GrammarAnswerEntity
+deactivate GrammarAnswerService
+
+BaseService -> Entity: setId(null)
+
+BaseService -> Repository: save(entity)
+activate Repository
+Repository --> BaseService: savedEntity
+deactivate Repository
+
+BaseService -> GrammarAnswerService: convertToDTO(entity) << Overridden >>
+activate GrammarAnswerService
+GrammarAnswerService -> GrammarAnswerService: convertToDTO(entity)
+GrammarAnswerService --> BaseService: GrammarAnswerDTO
+deactivate GrammarAnswerService
+
+BaseService --> GrammarAnswerService: savedDTO
+deactivate BaseService
+
+GrammarAnswerService --> Teacher: GrammarAnswerDTO
+deactivate GrammarAnswerService
+
+@enduml

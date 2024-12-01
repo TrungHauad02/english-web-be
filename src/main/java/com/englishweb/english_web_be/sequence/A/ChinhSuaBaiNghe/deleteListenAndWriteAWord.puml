@@ -1,0 +1,27 @@
+@startuml deleteListenAndWriteAWord
+
+actor Teacher
+participant "ListenAndWriteAWordServiceImpl" as ListenAndWriteService
+participant "BaseServiceImpl" as BaseService
+participant "ListenAndWriteAWordRepository" as Repository
+
+== 	Lược đồ tuần tự chức năng xoá câu trả lời viết từ bài học nghe ==
+Teacher -> ListenAndWriteService: delete(id)
+activate ListenAndWriteService
+
+ListenAndWriteService -> BaseService: delete(id) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> BaseService: isExist(id)
+BaseService -> Repository: deleteById(id)
+activate Repository
+Repository --> BaseService: Deleted Entity
+deactivate Repository
+
+BaseService --> ListenAndWriteService: Deleted Entity
+deactivate BaseService
+
+ListenAndWriteService --> Teacher: Deleted Entity
+deactivate ListenAndWriteService
+
+@enduml

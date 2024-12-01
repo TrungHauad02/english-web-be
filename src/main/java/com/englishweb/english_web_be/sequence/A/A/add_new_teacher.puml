@@ -1,0 +1,17 @@
+@startuml
+actor Admin
+participant "System" as System
+participant "User Model" as uM
+
+Admin -> System: Request to add new teacher
+activate System
+System -> Admin: Require teacher data
+Admin -> System: Send teacher data
+System -> uM: Send user data
+activate uM
+uM -> uM: create user
+uM --> System: user created data
+deactivate uM
+System -> Admin: user created data
+deactivate System
+@enduml

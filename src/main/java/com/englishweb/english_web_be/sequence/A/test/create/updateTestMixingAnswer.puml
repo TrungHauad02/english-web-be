@@ -1,0 +1,36 @@
+@startuml updateTestMixingAnswer
+actor Teacher
+participant "TestMixingAnswerServiceImpl" as TestMixingAnswerService
+participant "BaseServiceImpl" as BaseService
+participant "TestMixingAnswerRepository" as Repository
+
+== Lược đồ tuần tự chức năng chỉnh sửa câu trả lời của câu hỏi kiểm tra từ vựng hoặc ngữ pháp ==
+Teacher -> TestMixingAnswerService: update(dto, id)
+activate TestMixingAnswerService
+
+TestMixingAnswerService -> BaseService: update(dto, id) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> BaseService: isExist(id)
+BaseService -> TestMixingAnswerService: convertToEntity(dto) << Overridden >>
+activate TestMixingAnswerService
+TestMixingAnswerService --> BaseService: TestMixingAnswerEntity
+deactivate TestMixingAnswerService
+
+BaseService -> Repository: save(entity)
+activate Repository
+Repository --> BaseService: Updated Entity
+deactivate Repository
+
+BaseService -> TestMixingAnswerService: convertToDTO(updatedEntity) << Overridden >>
+activate TestMixingAnswerService
+TestMixingAnswerService --> BaseService: TestMixingAnswerDTO
+deactivate TestMixingAnswerService
+
+BaseService --> TestMixingAnswerService: Updated DTO
+deactivate BaseService
+
+TestMixingAnswerService --> Teacher: Updated DTO
+deactivate TestMixingAnswerService
+
+@enduml
