@@ -1,0 +1,44 @@
+@startuml findAllByTopicIdAndStatus
+
+actor Teacher
+participant "TopicQuestionServiceImpl" as TopicQuestionService
+participant "TopicServiceImpl" as TopicService
+participant "TopicQuestionRepository" as Repository
+
+== Lược đồ tuần tự chức năng lấy danh sách câu hỏi và đáp án theo chủ đề  ==
+Teacher -> TopicQuestionService: findAllByTopicIdAndStatus(topicId, status)
+activate TopicQuestionService
+
+alt Status is null
+    TopicQuestionService -> TopicQuestionService: findAllByTopicId(topicId)
+    activate TopicQuestionService
+    TopicQuestionService --> Teacher: List<TopicQuestionDTO>
+    deactivate TopicQuestionService
+else Status is not null
+    TopicQuestionService -> TopicService: isExist(topicId)
+    activate TopicService
+    TopicService --> TopicQuestionService: Topic exists
+    deactivate TopicService
+
+    TopicQuestionService -> Repository: findAllByTopic_IdAndStatus(topicId, status)
+    activate Repository
+    Repository --> TopicQuestionService: List<TopicQuestion>
+    deactivate Repository
+
+    loop Convert entities to DTOs
+        TopicQuestionService -> TopicQuestionService: convertToDTO(entity)
+        activate TopicQuestionService
+        TopicQuestionService --> TopicQuestionService: Converted TopicQuestionDTO
+        deactivate TopicQuestionService
+
+        TopicQuestionService -> TopicQuestionService: Filter answers by status
+        activate TopicQuestionService
+        TopicQuestionService --> TopicQuestionService: Updated TopicQuestionDTO
+        deactivate TopicQuestionService
+    end
+end
+
+TopicQuestionService --> Teacher: List<TopicQuestionDTO>
+deactivate TopicQuestionService
+
+@enduml

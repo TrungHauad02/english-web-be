@@ -1,15 +1,17 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.TestListeningAnswerDTO;
+import com.englishweb.english_web_be.dto.TestListeningDTO;
 import com.englishweb.english_web_be.dto.TestListeningQuestionDTO;
 import com.englishweb.english_web_be.model.TestListeningQuestion;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.TestListeningQuestionRepository;
 import com.englishweb.english_web_be.service.TestListeningQuestionService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 
 @Service
@@ -32,6 +34,24 @@ public class TestListeningQuestionServiceImpl extends BaseServiceImpl<TestListen
                 .map(this::convertToDTO)
                 .toList();
     }
+    public List<TestListeningQuestionDTO> findAllByTestListening_IdAndStatus(String testListeningId, StatusEnum status) {
+        if(status == null){
+            return findAllByTestListening_Id(testListeningId);
+        }
+        testListeningService.isExist(testListeningId);
+        List<TestListeningQuestion> list = repository.findAllByTestListening_IdAndStatus(testListeningId,status);
+
+        return list.stream()
+                .map(entity -> {
+                    TestListeningQuestionDTO dto = convertToDTO(entity);
+                    dto.setAnswers(testListeningAnswerService.findAllByQuestionIdAndStatus(entity.getId(),status));
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+
+
 
     @Override
     protected TestListeningQuestion convertToEntity(TestListeningQuestionDTO dto) {

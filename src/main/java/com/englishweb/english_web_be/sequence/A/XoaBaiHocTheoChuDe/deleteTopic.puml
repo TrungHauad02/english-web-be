@@ -1,0 +1,54 @@
+@startuml deleteTopic
+
+actor Teacher
+participant "TopicServiceImpl" as TopicService
+participant "BaseServiceImpl" as BaseService
+participant "TopicRepository" as Repository
+participant "TopicQuestionServiceImpl" as TopicQuestionService
+participant "VocabularyServiceImpl" as VocabularyService
+participant "FirebaseStorageServiceImpl" as FirebaseStorageService
+
+
+== Lược đồ tuần tự chức năng xóa bài học từ vựng theo chủ đề ==
+Teacher -> TopicService: delete(id)
+activate TopicService
+
+TopicService -> TopicService: isExist(id)
+
+TopicService -> TopicQuestionService: findAllByTopicId(id)
+activate TopicQuestionService
+TopicQuestionService --> TopicService: List<TopicQuestionDTO>
+deactivate TopicQuestionService
+
+loop Delete all topic questions
+    TopicService -> TopicQuestionService: delete(questionId)
+end
+
+TopicService -> VocabularyService: findByTopicId(id)
+activate VocabularyService
+VocabularyService --> TopicService: List<VocabularyDTO>
+deactivate VocabularyService
+
+loop Delete all vocabularies
+    TopicService -> VocabularyService: delete(vocabularyId)
+end
+
+TopicService -> TopicService: findById(id)
+TopicService -> FirebaseStorageService: deleteFile(imagePath)
+activate FirebaseStorageService
+FirebaseStorageService --> TopicService: File deleted
+deactivate FirebaseStorageService
+
+TopicService -> BaseService: delete(id) << Inherited from Parent >>
+activate BaseService
+BaseService -> Repository: deleteById(id)
+activate Repository
+Repository --> BaseService: Deletion completed
+deactivate Repository
+BaseService --> TopicService: Deletion completed
+deactivate BaseService
+
+TopicService --> Teacher: Deletion completed
+deactivate TopicService
+
+@enduml

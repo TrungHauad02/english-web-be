@@ -7,5 +7,5 @@ import org.springframework.data.domain.Page;
 import java.time.LocalDateTime;
 
 public interface SubmitTestService extends BaseService<SubmitTestDTO> {
-     Page<SubmitTestDTO> findSubmitTestsBySpecification(String title, TestTypeEnum type, int page, int size, String startDate, String endDate);
+     Page<SubmitTestDTO> findSubmitTestsBySpecification(String title, TestTypeEnum type, int page, int size, String startDate, String endDate,String userId);
 }

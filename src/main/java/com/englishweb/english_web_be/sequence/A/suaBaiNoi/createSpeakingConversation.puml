@@ -1,0 +1,39 @@
+@startuml createSpeakingConversation
+
+actor Teacher
+participant "SpeakingConversationServiceImpl" as SpeakingConversationService
+participant "BaseServiceImpl" as BaseService
+participant "SpeakingConversationRepository" as Repository
+
+== Lược đồ tuần tự chức năng tạo cuộc hội thoại của bài học nói ==
+Teacher -> SpeakingConversationService: create(dto)
+activate SpeakingConversationService
+
+SpeakingConversationService -> SpeakingConversationService: isSerialUnique(dto.getSpeakingId(), dto.getSerial(), null, repository)
+SpeakingConversationService -> BaseService: create(dto) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> SpeakingConversationService: convertToEntity(dto) << Overridden >>
+activate SpeakingConversationService
+SpeakingConversationService -> SpeakingConversationService: convertToEntity(dto)
+SpeakingConversationService --> BaseService: SpeakingConversationEntity
+deactivate SpeakingConversationService
+
+BaseService -> Repository: save(entity)
+activate Repository
+Repository --> BaseService: Saved SpeakingConversationEntity
+deactivate Repository
+
+BaseService -> SpeakingConversationService: convertToDTO(savedEntity) << Overridden >>
+activate SpeakingConversationService
+SpeakingConversationService -> SpeakingConversationService: convertToDTO(savedEntity)
+SpeakingConversationService --> BaseService: SpeakingConversationDTO
+deactivate SpeakingConversationService
+
+BaseService --> SpeakingConversationService: Saved SpeakingConversationDTO
+deactivate BaseService
+
+SpeakingConversationService --> Teacher: Saved SpeakingConversationDTO
+deactivate SpeakingConversationService
+
+@enduml

@@ -1,0 +1,26 @@
+@startuml deleteTestMixingAnswer
+actor Teacher
+participant "TestMixingAnswerServiceImpl" as TestMixingAnswerService
+participant "BaseServiceImpl" as BaseService
+participant "TestMixingAnswerRepository" as Repository
+
+== Lược đồ tuần tự chức năng xoá câu trả lời của câu hỏi kiểm tra từ vựng hoặc ngữ pháp ==
+Teacher -> TestMixingAnswerService: delete(id)
+activate TestMixingAnswerService
+
+TestMixingAnswerService -> BaseService: delete(id) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> BaseService: isExist(id)
+BaseService -> Repository: deleteById(id)
+activate Repository
+Repository --> BaseService: Entity deleted
+deactivate Repository
+
+BaseService --> TestMixingAnswerService: Deletion complete
+deactivate BaseService
+
+TestMixingAnswerService --> Teacher: Deletion complete
+deactivate TestMixingAnswerService
+
+@enduml

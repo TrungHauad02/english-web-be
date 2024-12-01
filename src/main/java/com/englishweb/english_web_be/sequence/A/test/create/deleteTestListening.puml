@@ -1,0 +1,41 @@
+@startuml deleteTestListening
+
+actor Teacher
+participant "TestListeningServiceImpl" as TestListeningService
+participant "TestListeningQuestionServiceImpl" as TestListeningQuestionService
+participant "BaseServiceImpl" as BaseService
+participant "TestListeningRepository" as Repository
+
+== Lược đồ tuần tự chức năng xoá bài kiểm tra nghe ==
+Teacher -> TestListeningService: delete(id)
+activate TestListeningService
+
+TestListeningService -> TestListeningQuestionService: findAllByTestListening_Id(id)
+activate TestListeningQuestionService
+TestListeningQuestionService --> TestListeningService: List<TestListeningQuestionDTO>
+deactivate TestListeningQuestionService
+
+alt If questions exist
+    loop Delete TestListeningQuestions
+        TestListeningService -> TestListeningQuestionService: delete(question.getId())
+        activate TestListeningQuestionService
+        TestListeningQuestionService --> TestListeningService: Deletion complete
+        deactivate TestListeningQuestionService
+    end
+end
+
+TestListeningService -> BaseService: delete(id) << Inherited from Parent >>
+activate BaseService
+BaseService -> Repository: deleteById(id)
+activate Repository
+Repository --> BaseService: Entity deleted
+deactivate Repository
+
+BaseService --> TestListeningService: Entity deleted
+deactivate BaseService
+
+TestListeningService --> Teacher: Deletion complete
+deactivate TestListeningService
+
+@enduml
+`

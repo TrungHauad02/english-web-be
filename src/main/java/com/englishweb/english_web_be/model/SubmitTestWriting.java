@@ -22,10 +22,10 @@ public class SubmitTestWriting implements BaseEntity {
     @Column(nullable = false)
     private BigDecimal score;
 
-    @Column(nullable = false)
+    @Lob
     private String content;
 
-    @Column(nullable = false)
+    @Lob
     private String comment;
 
     @Enumerated(EnumType.STRING)

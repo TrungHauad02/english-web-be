@@ -25,10 +25,10 @@ public class SubmitTestSpeaking implements BaseEntity {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
+    @Lob
     private String explanation;
 
-    @Column(nullable = false)
+    @Lob
     private String comment;
 
     @Enumerated(EnumType.STRING)

@@ -1,0 +1,20 @@
+@startuml
+actor "Student" as Student
+participant "System" as System
+participant "User Model" as UserModel
+
+Student -> System: Request Sign Up
+activate System
+
+System -> Student: Request data for sign-up
+Student -> System: Send data sign-up
+
+System -> UserModel: Send user data
+activate UserModel
+UserModel -> UserModel: Create user
+UserModel -> System:  user created data
+deactivate UserModel
+
+System -> Student:  user created data
+deactivate System
+@enduml

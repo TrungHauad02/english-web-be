@@ -20,7 +20,7 @@ public class TestReadingDTO implements BaseDTO {
     private int serial;
     @NotBlank(message = "Nội dung không được để trống")
     private String content;
-    @NotBlank(message = "Hình ảnh không được để trống")
+
     private String image;
 
     private StatusEnum status;

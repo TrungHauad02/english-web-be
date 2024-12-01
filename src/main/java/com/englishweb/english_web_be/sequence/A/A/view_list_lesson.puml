@@ -1,0 +1,16 @@
+@startuml
+actor "User" as User
+participant "System" as System
+participant "Lesson Model" as LessonModel
+
+User -> System: Request list of lessons
+activate System
+
+System -> LessonModel: Fetch lesson list
+activate LessonModel
+LessonModel -> System: Lesson list data
+deactivate LessonModel
+
+System -> User:  Lesson list data
+deactivate System
+@enduml

@@ -1,0 +1,34 @@
+@startuml createSubmitTest
+actor "Student" as Student
+participant "SubmitTest" as SubmitTest
+participant "BaseServiceImpl" as BaseService
+participant "TestRepository" as Repository
+
+== Lược đồ tuần tự chức năng nộp bài kiểm tra viết ==
+Student -> SubmitTest: create(dto)
+activate SubmitTest
+
+SubmitTest -> BaseService: create(dto) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> SubmitTest: convertToEntity(dto) << Overridden >>
+activate SubmitTest
+SubmitTest --> BaseService: TestEntity
+deactivate SubmitTest
+
+BaseService -> Repository: save(entity)
+activate Repository
+Repository --> BaseService: Saved TestEntity
+deactivate Repository
+
+BaseService -> SubmitTest: convertToDTO(savedEntity) << Overridden >>
+activate SubmitTest
+SubmitTest --> BaseService: TestDTO
+deactivate SubmitTest
+
+BaseService --> SubmitTest: Saved TestDTO
+deactivate BaseService
+
+SubmitTest --> Student: TestDTO
+deactivate SubmitTest
+@enduml

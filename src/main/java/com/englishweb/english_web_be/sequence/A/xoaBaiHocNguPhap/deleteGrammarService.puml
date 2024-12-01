@@ -1,0 +1,40 @@
+@startuml deleteGrammarService
+
+actor Teacher
+participant "GrammarServiceImpl" as GrammarService
+participant "BaseServiceImpl" as BaseService
+participant "GrammarQuestionServiceImpl" as GrammarQuestionService
+
+participant "GrammarServiceRepository" as Repository
+
+== Lược đồ tuần tự chức năng xoá câu trả lời ngữ pháp  ==
+Teacher -> GrammarService: delete(id)
+activate GrammarService
+
+GrammarService -> GrammarQuestionService: findAllByGrammarId(id)
+activate GrammarQuestionService
+GrammarQuestionService --> GrammarService: List<GrammarQuestionDTO>
+deactivate GrammarQuestionService
+
+loop Delete associated Grammar Questions
+    GrammarService -> GrammarQuestionService: delete(questionDTO.getId())
+    activate GrammarQuestionService
+    GrammarQuestionService --> GrammarService: Grammar Question deleted
+    deactivate GrammarQuestionService
+end
+
+GrammarService -> BaseService: delete(id) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> Repository: deleteById(id)
+activate Repository
+Repository --> BaseService: Entity deleted
+deactivate Repository
+
+BaseService --> GrammarService: Deleted Grammar
+deactivate BaseService
+
+GrammarService --> Teacher: Deleted Grammar
+deactivate GrammarService
+
+@enduml

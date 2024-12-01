@@ -1,0 +1,39 @@
+@startuml createSpeaking
+
+actor Teacher
+participant "SpeakingServiceImpl" as SpeakingService
+participant "BaseServiceImpl" as BaseService
+participant "SpeakingRepository" as Repository
+
+== Lược đồ tuần tự chức năng thêm  bài học nói. ==
+Teacher -> SpeakingService: create(dto)
+activate SpeakingService
+
+SpeakingService -> BaseService: create(dto) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> SpeakingService: convertToEntity(dto) << Overridden >>
+activate SpeakingService
+SpeakingService -> SpeakingService: convertToEntity(dto)
+SpeakingService --> BaseService: SpeakingEntity
+deactivate SpeakingService
+
+BaseService -> Repository: save(entity)
+activate Repository
+Repository --> BaseService: Saved SpeakingEntity
+deactivate Repository
+
+BaseService -> SpeakingService: convertToDTO(savedEntity) << Overridden >>
+activate SpeakingService
+SpeakingService -> SpeakingService: convertToDTO(savedEntity)
+SpeakingService --> BaseService: Converted SpeakingDTO
+deactivate SpeakingService
+
+BaseService --> SpeakingService: Saved SpeakingDTO
+deactivate BaseService
+
+SpeakingService --> Teacher: Saved SpeakingDTO
+deactivate SpeakingService
+
+@enduml
+

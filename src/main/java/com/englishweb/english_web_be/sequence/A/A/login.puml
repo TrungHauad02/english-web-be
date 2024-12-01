@@ -1,0 +1,16 @@
+@startuml
+actor User
+participant "System" as System
+participant "User Model" as uM
+
+User -> System: Request Login
+activate System
+System -> User: Require credentials
+User -> System: Send credentials
+System -> uM: Validate credentials
+activate uM
+uM -> System: Validation result
+deactivate uM
+System -> User: Login success or failure
+deactivate System
+@enduml

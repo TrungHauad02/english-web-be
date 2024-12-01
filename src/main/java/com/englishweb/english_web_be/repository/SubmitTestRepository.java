@@ -13,4 +13,5 @@ import java.util.List;
 public interface SubmitTestRepository extends JpaRepository<SubmitTest, String> , JpaSpecificationExecutor<SubmitTest> {
 
      List<SubmitTest> findAllByTest_Id(String testId);
+     List<SubmitTest> findAllByTest_IdAndUserId(String testId,String userId);
 }

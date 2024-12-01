@@ -1,0 +1,38 @@
+@startuml createListeningQuestion
+
+actor Teacher
+participant "ListeningQuestionServiceImpl" as ListeningQuestionService
+participant "BaseServiceImpl" as BaseService
+participant "ListeningQuestionRepository" as Repository
+
+
+== Lược đồ tuần tự chức năng tạo câu hỏi bài học nghe ==
+Teacher -> ListeningQuestionService: create(dto)
+activate ListeningQuestionService
+
+ListeningQuestionService -> ListeningQuestionService: isSerialUnique(dto.getListeningId(), dto.getSerial(), null)
+ListeningQuestionService -> BaseService: create(dto) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> ListeningQuestionService: convertToEntity(dto) << Overridden >>
+activate ListeningQuestionService
+ListeningQuestionService --> BaseService: ListeningQuestionEntity
+deactivate ListeningQuestionService
+
+BaseService -> Repository: save(entity)
+activate Repository
+Repository --> BaseService: Saved ListeningQuestionEntity
+deactivate Repository
+
+BaseService -> ListeningQuestionService: convertToDTO(savedEntity) << Overridden >>
+activate ListeningQuestionService
+ListeningQuestionService --> BaseService: ListeningQuestionDTO
+deactivate ListeningQuestionService
+
+BaseService --> ListeningQuestionService: Saved ListeningQuestionDTO
+deactivate BaseService
+
+ListeningQuestionService --> Teacher: ListeningQuestionDTO
+deactivate ListeningQuestionService
+
+@enduml

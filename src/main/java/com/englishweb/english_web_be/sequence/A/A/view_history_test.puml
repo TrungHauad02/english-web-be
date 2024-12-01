@@ -1,0 +1,14 @@
+@startuml
+actor Student
+participant "System" as System
+participant "SubmitTest Model" as tM
+
+Student -> System: Request  list of test history
+activate System
+System -> tM: Fetch test history list
+activate tM
+tM -> System:  test history list
+deactivate tM
+System -> Student:  test history list
+deactivate System
+@enduml

@@ -41,10 +41,11 @@ public class SubmitTestController {
             @RequestParam(required = false) TestTypeEnum type,
             @RequestParam(required = false) String startDate,
             @RequestParam(required = false) String endDate,
+            @RequestParam(required = false) String userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        Page<SubmitTestDTO> result = submitTestServiceImpl.findSubmitTestsBySpecification(title, type, page, size, startDate, endDate);
+        Page<SubmitTestDTO> result = submitTestServiceImpl.findSubmitTestsBySpecification(title, type, page, size, startDate, endDate,userId);
         return ResponseEntity.ok(result);
     }
 

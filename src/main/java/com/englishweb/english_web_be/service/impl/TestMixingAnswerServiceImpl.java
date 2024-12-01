@@ -1,13 +1,17 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.TestMixingAnswerDTO;
+import com.englishweb.english_web_be.dto.TestMixingQuestionDTO;
 import com.englishweb.english_web_be.model.TestMixingAnswer;
+import com.englishweb.english_web_be.model.TestMixingQuestion;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.TestMixingAnswerRepository;
 import com.englishweb.english_web_be.service.TestMixingAnswerService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TestMixingAnswerServiceImpl extends BaseServiceImpl<TestMixingAnswer, TestMixingAnswerDTO, TestMixingAnswerRepository> implements TestMixingAnswerService {
@@ -23,6 +27,19 @@ public class TestMixingAnswerServiceImpl extends BaseServiceImpl<TestMixingAnswe
     public List<TestMixingAnswerDTO> findAllByQuestionId(String questionId) {
         testMixingQuestionService.isExist(questionId);
         List<TestMixingAnswer> list = repository.findAllByTestMixingQuestion_Id(questionId);
+
+        return list.stream()
+                .map(this::convertToDTO)
+                .toList();
+    }
+    public List<TestMixingAnswerDTO> findAllByQuestionIdAndStatus(String questionId, StatusEnum status) {
+        if (status == null) {
+            return findAllByQuestionId(questionId);
+        }
+
+        testMixingQuestionService.isExist(questionId);
+
+        List<TestMixingAnswer> list = repository.findAllByTestMixingQuestion_IdAndStatus(questionId, status);
 
         return list.stream()
                 .map(this::convertToDTO)

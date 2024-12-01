@@ -1,0 +1,31 @@
+@startuml scoreSpeechTextAndRealText
+
+actor User
+participant "SpeechService" as SpeechService
+participant "GeminiClientServiceImpl" as GeminiClientService
+participant "ObjectMapper" as ObjectMapper
+
+== Score Speech Text ==
+User -> SpeechService: scoreSpeechTextAndRealText(speechText, realText)
+activate SpeechService
+
+SpeechService -> SpeechService: Build evaluation prompt
+activate SpeechService
+SpeechService --> SpeechService: Prompt created
+deactivate SpeechService
+
+SpeechService -> GeminiClientService: generateText(prompt)
+activate GeminiClientService
+GeminiClientService --> SpeechService: JSON response
+deactivate GeminiClientService
+
+SpeechService -> SpeechService: Process response text
+SpeechService -> ObjectMapper: readValue(response, ScoreSpeechTextResponse.class)
+activate ObjectMapper
+ObjectMapper --> SpeechService: ScoreSpeechTextResponse
+deactivate ObjectMapper
+
+SpeechService --> User: ScoreSpeechTextResponse
+deactivate SpeechService
+
+@enduml

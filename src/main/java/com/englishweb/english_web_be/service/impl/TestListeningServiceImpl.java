@@ -5,6 +5,7 @@ import com.englishweb.english_web_be.dto.TestListeningQuestionDTO;
 import com.englishweb.english_web_be.dto.TestReadingQuestionDTO;
 import com.englishweb.english_web_be.model.TestListening;
 import com.englishweb.english_web_be.model.TestListeningQuestion;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.TestListeningRepository;
 import com.englishweb.english_web_be.service.TestListeningService;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Service
@@ -34,6 +36,25 @@ public class TestListeningServiceImpl extends BaseServiceImpl<TestListening, Tes
                 .map(this::convertToDTO)
                 .toList();
     }
+
+    public List<TestListeningDTO> findAllByTestIdAndStatus(String test_id, StatusEnum status) {
+        if (status == null) {
+            return findAllByTestId(test_id);
+        }
+
+        testService.isExist(test_id);
+
+        List<TestListening> list = repository.findAllByTest_IdAndStatus(test_id, status);
+
+        return list.stream()
+                .map(entity -> {
+                    TestListeningDTO dto = convertToDTO(entity);
+                    dto.setQuestions(testListeningQuestionService.findAllByTestListening_IdAndStatus(entity.getId(),status));
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
 
     public TestListeningServiceImpl(TestListeningRepository repository, @Lazy TestServiceImpl testService, @Lazy TestListeningQuestionServiceImpl testListeningQuestionService) {
         super(repository);

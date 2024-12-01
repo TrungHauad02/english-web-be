@@ -5,6 +5,7 @@ import com.englishweb.english_web_be.dto.TestSpeakingDTO;
 import com.englishweb.english_web_be.dto.TestSpeakingQuestionDTO;
 import com.englishweb.english_web_be.model.TestSpeaking;
 import com.englishweb.english_web_be.model.TestSpeakingQuestion;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.TestSpeakingRepository;
 import com.englishweb.english_web_be.service.TestSpeakingService;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Service
@@ -39,6 +41,24 @@ public class TestSpeakingServiceImpl extends BaseServiceImpl<TestSpeaking, TestS
                 .map(this::convertToDTO)
                 .toList();
     }
+    public List<TestSpeakingDTO> findAllTestSpeakingByTestIdAndStatus(String testId, StatusEnum status) {
+        if (status == null) {
+            return findAllByTest_Id(testId);
+        }
+
+        testService.isExist(testId);
+
+        List<TestSpeaking> list = repository.findAllByTest_IdAndStatus(testId, status);
+
+        return list.stream()
+                .map(entity -> {
+                    TestSpeakingDTO dto = convertToDTO(entity);
+                    dto.setQuestions(testSpeakingQuestionService.findAllByTestSpeaking_IdAndStatus(entity.getId(), status));
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
 
     public int serialMaxSpeakingQuestionsByTestId(String testId) {
 

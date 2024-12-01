@@ -1,0 +1,26 @@
+@startuml deleteTestSpeakingQuestion
+actor Teacher
+participant "TestSpeakingQuestionServiceImpl" as TestSpeakingQuestionService
+participant "BaseServiceImpl" as BaseService
+participant "TestSpeakingQuestionRepository" as Repository
+
+== Lược đồ tuần tự chức năng xoá câu hỏi của bài kiểm tra nói ==
+Teacher -> TestSpeakingQuestionService: delete(id)
+activate TestSpeakingQuestionService
+
+TestSpeakingQuestionService -> BaseService: delete(id) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> BaseService: isExist(id)
+BaseService -> Repository: deleteById(id)
+activate Repository
+Repository --> BaseService: Entity deleted
+deactivate Repository
+
+BaseService --> TestSpeakingQuestionService: Deletion complete
+deactivate BaseService
+
+TestSpeakingQuestionService --> Teacher: Deletion complete
+deactivate TestSpeakingQuestionService
+
+@enduml

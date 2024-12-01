@@ -1,0 +1,26 @@
+@startuml deleteTestWriting
+actor Teacher
+participant "TestWritingServiceImpl" as TestWritingService
+participant "BaseServiceImpl" as BaseService
+participant "TestWritingRepository" as Repository
+
+== Lược đồ tuần tự chức năng xoá bài kiểm tra viết ==
+Teacher -> TestWritingService: delete(id)
+activate TestWritingService
+
+TestWritingService -> BaseService: delete(id) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> BaseService: isExist(id)
+BaseService -> Repository: deleteById(id)
+activate Repository
+Repository --> BaseService: Entity deleted
+deactivate Repository
+
+BaseService --> TestWritingService: Deletion complete
+deactivate BaseService
+
+TestWritingService --> Teacher: Deletion complete
+deactivate TestWritingService
+
+@enduml

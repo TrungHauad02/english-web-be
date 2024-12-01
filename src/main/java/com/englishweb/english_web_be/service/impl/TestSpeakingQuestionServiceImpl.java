@@ -1,7 +1,10 @@
 package com.englishweb.english_web_be.service.impl;
 
+import com.englishweb.english_web_be.dto.TestReadingAnswerDTO;
 import com.englishweb.english_web_be.dto.TestSpeakingQuestionDTO;
+import com.englishweb.english_web_be.model.TestReadingAnswer;
 import com.englishweb.english_web_be.model.TestSpeakingQuestion;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.TestSpeakingQuestionRepository;
 import com.englishweb.english_web_be.service.TestSpeakingQuestionService;
 import org.springframework.context.annotation.Lazy;
@@ -21,6 +24,19 @@ public class TestSpeakingQuestionServiceImpl extends BaseServiceImpl<TestSpeakin
     public List<TestSpeakingQuestionDTO> findAllByTestSpeaking_Id (String testSpeakingId) {
         testSpeakingService.isExist(testSpeakingId);
         List<TestSpeakingQuestion> list = repository.findAllByTestSpeaking_Id(testSpeakingId);
+
+        return list.stream()
+                .map(this::convertToDTO)
+                .toList();
+    }
+    public List<TestSpeakingQuestionDTO> findAllByTestSpeaking_IdAndStatus(String speakingId, StatusEnum status) {
+        if (status == null) {
+            return findAllByTestSpeaking_Id(speakingId);
+        }
+
+        testSpeakingService.isExist(speakingId);
+
+        List<TestSpeakingQuestion> list = repository.findAllByTestSpeaking_IdAndStatus(speakingId, status);
 
         return list.stream()
                 .map(this::convertToDTO)

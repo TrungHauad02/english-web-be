@@ -24,7 +24,8 @@ public class SubmitTestDTO implements BaseDTO {
     String  testTitle;
     @NotBlank(message = "User ID cannot be empty")
     String userId;
-    @NotNull(message = "Score must be a positive number")
+
+    TestTypeEnum testType;
     BigDecimal score;
     LocalDateTime submitTime;
     StatusEnum status;

@@ -1,0 +1,41 @@
+@startuml speechToText
+
+actor User
+participant "SpeechService" as SpeechService
+participant "GoogleCredentials" as Credentials
+participant "SpeechClient" as SpeechClient
+participant "RecognizeResponse" as RecognizeResponse
+
+== Speech-to-Text Conversion ==
+User -> SpeechService: speechToText(audioBase64)
+activate SpeechService
+
+SpeechService -> Credentials: Load credentials (from file)
+activate Credentials
+Credentials --> SpeechService: GoogleCredentials
+deactivate Credentials
+
+SpeechService -> SpeechClient: Create SpeechClient with settings
+activate SpeechClient
+
+SpeechService -> SpeechService: Decode base64 audio
+SpeechService -> SpeechClient: recognize(config, audio)
+activate SpeechClient
+
+SpeechClient --> SpeechService: RecognizeResponse
+deactivate SpeechClient
+
+alt Transcript found
+    SpeechService -> RecognizeResponse: Get results and alternatives
+    activate RecognizeResponse
+    RecognizeResponse --> SpeechService: Transcript and Confidence
+    deactivate RecognizeResponse
+
+    SpeechService -> User: SpeechToTextResponse (transcript, confidence)
+else No transcript
+    SpeechService -> User: Empty SpeechToTextResponse
+end
+
+deactivate SpeechService
+
+@enduml

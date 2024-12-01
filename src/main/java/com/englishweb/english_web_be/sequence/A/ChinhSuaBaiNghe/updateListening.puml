@@ -1,0 +1,37 @@
+@startuml updateListening
+
+actor Teacher
+participant "ListeningServiceImpl" as ListeningService
+participant "BaseServiceImpl" as BaseService
+participant "ListeningRepository" as Repository
+
+== Lược đồ tuần tự chức năng chỉnh sửa  bài học nghe ==
+Teacher -> ListeningService: update(dto, id)
+activate ListeningService
+
+ListeningService -> BaseService: update(dto, id) << Inherited from Parent >>
+activate BaseService
+
+BaseService -> BaseService: isExist(id)
+BaseService -> ListeningService: convertToEntity(dto) << Overridden >>
+activate ListeningService
+ListeningService --> BaseService: ListeningEntity
+deactivate ListeningService
+
+BaseService -> Repository: save(entity)
+activate Repository
+Repository --> BaseService: Updated ListeningEntity
+deactivate Repository
+
+BaseService -> ListeningService: convertToDTO(updatedEntity) << Overridden >>
+activate ListeningService
+ListeningService --> BaseService: ListeningDTO
+deactivate ListeningService
+
+BaseService --> ListeningService: Updated ListeningDTO
+deactivate BaseService
+
+ListeningService --> Teacher: Updated ListeningDTO
+deactivate ListeningService
+
+@enduml

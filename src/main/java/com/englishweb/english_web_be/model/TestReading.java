@@ -20,7 +20,7 @@ public class TestReading implements BaseEntity {
     private int serial;
     @Column(nullable = false)
     private String content;
-    @Column(nullable = false)
+
     private String image;
     @Enumerated(EnumType.STRING)
     private StatusEnum status=StatusEnum.ACTIVE;
