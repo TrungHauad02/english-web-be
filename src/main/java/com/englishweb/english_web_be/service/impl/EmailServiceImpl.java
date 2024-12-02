@@ -14,6 +14,7 @@ public class EmailServiceImpl implements EmailService {
 
     public void sendPasswordByEmail(String toEmail, String password) {
         SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("Email send by Admin H2T English <hungat418@gmail.com>");
         message.setTo(toEmail);
         message.setSubject("Your Account Password");
         message.setText("Your account has been created.\n\nHere is your username: " + toEmail + " \nand password: " + password +
@@ -23,6 +24,7 @@ public class EmailServiceImpl implements EmailService {
 
     public void sendOtpByEmail(String toEmail, String otp) {
         SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("Email send by Admin H2T English <hungat418@gmail.com>");
         message.setTo(toEmail);
         message.setSubject("Your OTP Code");
         message.setText("We have received a request to reset your password.\n\nHere is your OTP code: " + otp +

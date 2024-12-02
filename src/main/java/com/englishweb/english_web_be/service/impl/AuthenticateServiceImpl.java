@@ -58,7 +58,7 @@ public class AuthenticateServiceImpl extends BaseServiceImpl<User, UserDTO, User
         Optional<User> userOptional = repository.findByEmail(dto.getEmail());
 
         if (userOptional.isEmpty()) {
-            throw new AuthenticationException( "Email or password is invalid. Please check again.");
+            throw new AuthenticationException( "Email is invalid. Please check again.");
         }
 
         User user = userOptional.get();
@@ -69,7 +69,7 @@ public class AuthenticateServiceImpl extends BaseServiceImpl<User, UserDTO, User
         boolean isAuthenticated = passwordEncoder.matches(dto.getPassword(), user.getPassword());
 
         if (!isAuthenticated) {
-            throw new AuthenticationException("Email or password is invalid. Please check again.");
+            throw new AuthenticationException("Password is invalid. Please check again.");
         }
         String id = user.getId();
         String role = user.getRoleEnum().name();
