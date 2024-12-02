@@ -15,15 +15,21 @@ import lombok.*;
 @AllArgsConstructor
 public class TestReading implements BaseEntity {
     @Id
+    @Column(columnDefinition = "VARCHAR(255) COMMENT 'Unique identifier for the test reading'")
     private String id;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "INT COMMENT 'Serial number of the test reading'")
     private int serial;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Content of the test reading'")
     private String content;
 
+    @Column(columnDefinition = "VARCHAR(255) COMMENT 'Image associated with the test reading'")
     private String image;
+
     @Enumerated(EnumType.STRING)
-    private StatusEnum status=StatusEnum.ACTIVE;
+    @Column(columnDefinition = "ENUM('ACTIVE', 'INACTIVE') COMMENT 'Status of the test reading'")
+    private StatusEnum status = StatusEnum.ACTIVE;
 
     @PrePersist
     private void generateId() {
@@ -32,7 +38,7 @@ public class TestReading implements BaseEntity {
 
 
     @ManyToOne
-    @JoinColumn(name = "test_id")
+    @JoinColumn(name = "test_id", columnDefinition = "VARCHAR(255) COMMENT 'The associated test for this reading'")
     private Test test;
 
     @OneToMany(mappedBy = "testReading", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

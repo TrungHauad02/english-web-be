@@ -21,7 +21,7 @@ public class ListeningAnswer implements BaseEntity {
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
     @ManyToOne
-    @JoinColumn(name = "Listening_question_id")
+    @JoinColumn(name = "question_id")
     private ListeningQuestion question;
 
     @PrePersist

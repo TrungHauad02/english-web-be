@@ -17,16 +17,24 @@ import java.util.List;
 @AllArgsConstructor
 public class Test implements BaseEntity {
     @Id
+    @Column(columnDefinition = "VARCHAR(255) COMMENT 'Unique identifier for the test'")
     private String id;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Title of the test'")
     private String title;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "INT COMMENT 'Serial number of the test'")
     private int serial;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "INT COMMENT 'Duration in minutes for the test'")
     private int duration;
+
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "enum('LISTENING','MIXING','READING','SPEAKING','WRITING') COMMENT 'Type of the test'")
     private TestTypeEnum type;
+
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "ENUM('ACTIVE', 'INACTIVE') COMMENT 'Status of the test'")
     private StatusEnum status = StatusEnum.ACTIVE;
 
     @PrePersist

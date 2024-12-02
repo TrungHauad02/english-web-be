@@ -15,13 +15,18 @@ import lombok.*;
 @AllArgsConstructor
 public class TestListeningQuestion implements BaseEntity {
     @Id
+    @Column(columnDefinition = "VARCHAR(255) COMMENT 'Unique identifier for the listening question'")
     private String id;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Content of the listening question'")
     private String content;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "INT COMMENT 'The serial number of the listening question'")
     private int serial;
+
     @Enumerated(EnumType.STRING)
-    private StatusEnum status=StatusEnum.ACTIVE;
+    @Column(columnDefinition = "ENUM('ACTIVE', 'INACTIVE') COMMENT 'Status of the listening question'")
+    private StatusEnum status = StatusEnum.ACTIVE;
 
     @PrePersist
     private void generateId() {
@@ -29,7 +34,7 @@ public class TestListeningQuestion implements BaseEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "test_listening_id")
+    @JoinColumn(name = "test_listening_id", columnDefinition = "VARCHAR(255) COMMENT 'The associated listening entry for this question'")
     private TestListening testListening;
 
     @OneToMany(mappedBy = "testListeningQuestion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

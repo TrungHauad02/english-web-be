@@ -31,7 +31,7 @@ build/
 
 ## Ignore service account key
 src/main/resources/englishweb-firebase-adminsdk.json
-src/main/resources/englishweb-speech-to-text.json.json
+src/main/resources/englishweb-speech-to-text.json
 
 ### VS Code ###
 .vscode/
