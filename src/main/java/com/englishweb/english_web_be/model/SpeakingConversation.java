@@ -13,17 +13,24 @@ import lombok.*;
 @AllArgsConstructor
 public class SpeakingConversation implements BaseEntity {
     @Id
+    @Column(columnDefinition = "VARCHAR(255) COMMENT 'Unique identifier for the speaking conversation'")
     private String id;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'The name of the speaking conversation'")
     private String name;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "INT COMMENT 'The serial number of the speaking conversation'")
     private int serial;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Content of the speaking conversation'")
     private String content;
+
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "ENUM('ACTIVE', 'INACTIVE') COMMENT 'The status of the speaking conversation'")
     private StatusEnum status = StatusEnum.ACTIVE;
+
     @ManyToOne
-    @JoinColumn(name = "speaking_id")
+    @JoinColumn(name = "speaking_id", columnDefinition = "VARCHAR(255) COMMENT 'The associated speaking lesson for this conversation'")
     private Speaking speaking;
 
     @PrePersist

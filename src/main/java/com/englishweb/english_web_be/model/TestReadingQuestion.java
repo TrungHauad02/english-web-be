@@ -15,24 +15,29 @@ import lombok.*;
 @AllArgsConstructor
 public class TestReadingQuestion implements BaseEntity {
     @Id
+    @Column(columnDefinition = "VARCHAR(255) COMMENT 'Unique identifier for the test reading question'")
     private String id;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Content of the test reading question'")
     private String content;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "INT COMMENT 'Serial number of the test reading question'")
     private int serial;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Explanation of the test reading question'")
     private String explantion;
+
     @Enumerated(EnumType.STRING)
-    private StatusEnum status=StatusEnum.ACTIVE;
+    @Column(columnDefinition = "ENUM('ACTIVE', 'INACTIVE') COMMENT 'Status of the test reading question'")
+    private StatusEnum status = StatusEnum.ACTIVE;
 
     @PrePersist
     private void generateId() {
         this.id = "TestReadingQuestion_" + System.nanoTime();
     }
 
-
     @ManyToOne
-    @JoinColumn(name = "test_reading_id")
+    @JoinColumn(name = "test_reading_id", columnDefinition = "VARCHAR(255) COMMENT 'Foreign key to the related TestReading'")
     private TestReading testReading;
 
     @OneToMany(mappedBy = "testReadingQuestion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
