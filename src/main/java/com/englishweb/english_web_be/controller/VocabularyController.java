@@ -32,10 +32,10 @@ public class VocabularyController {
                                                                     @RequestParam int size,
                                                                     @RequestParam(defaultValue = "id") String sortBy,
                                                                     @RequestParam(defaultValue = "asc") String sortDir,
-
                                                                     @RequestParam(required = false) StatusEnum status,
+                                                                    @RequestParam(required = false) String searchText,
                                                                     @RequestParam String topicId) {
-        return new ResponseEntity<>(service.findByPageAndStatusAndTopicId(status, page, size, sortBy, sortDir, VocabularyDTO.class, topicId), HttpStatus.OK);
+        return new ResponseEntity<>(service.findByPageAndStatusAndTopicId(status, page, size, sortBy, sortDir, VocabularyDTO.class, topicId, searchText), HttpStatus.OK);
     }
 
     @Operation(method = "GET", summary = "Get vocabulary by topic ID",

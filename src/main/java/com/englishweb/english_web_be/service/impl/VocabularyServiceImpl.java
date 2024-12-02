@@ -4,16 +4,21 @@ import com.englishweb.english_web_be.dto.VocabularyDTO;
 import com.englishweb.english_web_be.model.Vocabulary;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.VocabularyRepository;
+import com.englishweb.english_web_be.repository.specifications.VocabularySpecification;
 import com.englishweb.english_web_be.service.VocabularyService;
 import com.englishweb.english_web_be.util.ValidationUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class VocabularyServiceImpl extends BaseServiceImpl<Vocabulary, VocabularyDTO, VocabularyRepository> implements VocabularyService {
+@Slf4j
+public class VocabularyServiceImpl extends BaseServiceImpl<Vocabulary, VocabularyDTO, VocabularyRepository>
+        implements VocabularyService {
     private final TopicServiceImpl topicService;
 
     public VocabularyServiceImpl(VocabularyRepository repository,
@@ -23,36 +28,20 @@ public class VocabularyServiceImpl extends BaseServiceImpl<Vocabulary, Vocabular
     }
 
     @Override
-    public Page<VocabularyDTO> findByPageTopicId(int page, int size, String sortBy, String sortDir, Class<VocabularyDTO> dtoClass, String topicId) {
+    public Page<VocabularyDTO> findByPageAndStatusAndTopicId(StatusEnum status, int page, int size, String sortBy, String sortDir,
+                                                             Class<VocabularyDTO> dtoClass, String topicId, String searchText) {
         ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, dtoClass);
-        topicService.isExist(topicId);
-
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
-
-        Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Vocabulary> entityPage = repository.findAllByTopic_Id(pageable, topicId);
-
-        return entityPage.map(this::convertToDTO);
-    }
-
-    @Override
-    public Page<VocabularyDTO> findByPageAndStatusAndTopicId(StatusEnum status, int page, int size, String sortBy, String sortDir, Class<VocabularyDTO> dtoClass, String topicId) {
-        if(status == null)
-            return findByPageTopicId(page, size, sortBy, sortDir, dtoClass, topicId);
-
-        ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, dtoClass);
         topicService.isExist(topicId);
-
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
-                ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
-
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Vocabulary> entityPage = repository.findAllByStatusAndTopic_Id(status, topicId, pageable);
-
-        return entityPage.map(this::convertToDTO);
+        Specification<Vocabulary> specStatus = Specification.where(status != null ? VocabularySpecification.byStatus(status) : null);
+        Specification<Vocabulary> spec = specStatus.and(Specification.where(searchText != null ? VocabularySpecification.byWord(searchText): null));
+        log.info("Find Vocabulary page with searching: word: {}, status: {}, pageable: {}", searchText, status, pageable);
+        Page<VocabularyDTO> result = repository.findAll(spec, pageable).map(this::convertToDTO);
+        log.info("Find Vocabulary page with searching successfully: {} record found.", result.getNumberOfElements());
+        return result;
     }
 
     @Override
