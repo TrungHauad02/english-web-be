@@ -3,75 +3,42 @@ package com.englishweb.english_web_be.model;
 import com.englishweb.english_web_be.model.interfacemodel.BaseEntity;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class TestWriting implements BaseEntity {
     @Id
+    @Column(columnDefinition = "VARCHAR(255) COMMENT 'Unique identifier for TestWriting'")
     private String id;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "INT COMMENT 'Serial number of the TestWriting'")
     private int serial;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Content of the TestWriting'")
     private String content;
+
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "ENUM('ACTIVE', 'INACTIVE') COMMENT 'Status of the TestWriting'")
     private StatusEnum status;
+
+    public TestWriting(String testWritingId, int serial, String content, StatusEnum writingStatus) {
+        this.id = testWritingId;
+        this.serial = serial;
+        this.content = content;
+        this.status = writingStatus;
+    }
+
     @PrePersist
     private void generateId() {
         this.id = "TestWriting_" + System.nanoTime();
     }
 
     @ManyToOne
-    @JoinColumn(name = "test_id")
+    @JoinColumn(name = "test_id", columnDefinition = "VARCHAR(255) COMMENT 'Foreign key to the related Test'")
     private Test test;
-
-
-    public TestWriting() {
-    }
-
-    public TestWriting(String id, int serial, String content, StatusEnum status) {
-        this.id = id;
-        this.serial = serial;
-        this.content = content;
-        this.status = status;
-    }
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public int getSerial() {
-        return serial;
-    }
-
-    public void setSerial(int serial) {
-        this.serial = serial;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public StatusEnum getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusEnum status) {
-        this.status = status;
-    }
-
-    public Test getTest() {
-        return test;
-    }
-
-    public void setTest(Test test) {
-        this.test = test;
-    }
 }

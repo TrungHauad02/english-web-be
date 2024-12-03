@@ -13,28 +13,29 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class SubmitTestReadingAnswer implements BaseEntity {
 
     @Id
+    @Column(columnDefinition = "VARCHAR(255) COMMENT 'Unique identifier for the submitted test reading answer'")
     private String id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Comment associated with the submitted reading answer'")
     private String comment;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "ENUM('ACTIVE', 'INACTIVE') COMMENT 'The status of the submitted reading answer'")
     private StatusEnum status = StatusEnum.ACTIVE;
 
     @ManyToOne
-    @JoinColumn(name = "submit_test_id")
+    @JoinColumn(name = "submit_test_id", columnDefinition = "VARCHAR(255) COMMENT 'The associated submitted test for this reading answer'")
     private SubmitTest submitTest;
 
     @ManyToOne
-    @JoinColumn(name = "question_id")
+    @JoinColumn(name = "question_id", columnDefinition = "VARCHAR(255) COMMENT 'The associated reading question for this answer'")
     private TestReadingQuestion question;
 
     @ManyToOne
-    @JoinColumn(name = "answer_id")
+    @JoinColumn(name = "answer_id", columnDefinition = "VARCHAR(255) COMMENT 'The associated reading answer for this submission'")
     private TestReadingAnswer answer;
 
     @PrePersist

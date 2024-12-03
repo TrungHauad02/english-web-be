@@ -1,0 +1,6 @@
+CREATE TRIGGER IF NOT EXISTS trig_grammar_answer_bi
+BEFORE INSERT ON listen_and_writeaword
+FOR EACH ROW
+BEGIN
+    SET NEW.sentence = TRIM(NEW.sentence);
+END;

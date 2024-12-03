@@ -20,7 +20,6 @@ public class SpeakingConversation implements BaseEntity {
     private int serial;
     @Column(nullable = false)
     private String content;
-    private String postId; // Store post_id of this conversation in https://thefluent.me/
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.ACTIVE;
     @ManyToOne

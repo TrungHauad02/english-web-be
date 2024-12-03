@@ -12,27 +12,33 @@ import java.util.List;
 @Getter
 @Entity
 public class TestSpeaking implements BaseEntity {
+
     @Id
+    @Column(columnDefinition = "VARCHAR(255) COMMENT 'Unique identifier for the test speaking'")
     private String id;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Title of the test speaking'")
     private String title;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "INT COMMENT 'Serial number of the test speaking'")
     private int serial;
+
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "ENUM('ACTIVE', 'INACTIVE') COMMENT 'Status of the test speaking'")
     private StatusEnum status = StatusEnum.ACTIVE;
 
     @PrePersist
+    @Column(columnDefinition = "VARCHAR(255) COMMENT 'Generates unique ID before persisting the entity'")
     private void generateId() {
         this.id = "TestSpeaking_" + System.nanoTime();
     }
 
-
     @ManyToOne
-    @JoinColumn(name = "test_id")
+    @JoinColumn(name = "test_id", columnDefinition = "VARCHAR(255) COMMENT 'Foreign key to the related Test'")
     private Test test;
+
     @OneToMany(mappedBy = "testSpeaking", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TestSpeakingQuestion> questions;
-
 
     public TestSpeaking() {
     }
@@ -50,5 +56,4 @@ public class TestSpeaking implements BaseEntity {
         this.status = status;
         this.questions = questions;
     }
-
 }

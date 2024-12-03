@@ -17,17 +17,25 @@ import lombok.*;
 @AllArgsConstructor
 public class TestMixingQuestion implements BaseEntity {
     @Id
+    @Column(columnDefinition = "VARCHAR(255) COMMENT 'Unique identifier for the mixing question'")
     private String id;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Content of the mixing question'")
     private String content;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "INT COMMENT 'Serial number of the mixing question'")
     private int serial;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "TEXT COMMENT 'Explanation for the mixing question'")
     private String explanation;
+
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "enum('GRAMMAR','VOCABULARY') COMMENT 'Type of the mixing question'")
     private TestMixingTypeEnum type;
+
     @Enumerated(EnumType.STRING)
-    private StatusEnum status=StatusEnum.ACTIVE;
+    @Column(columnDefinition = "ENUM('ACTIVE', 'INACTIVE') COMMENT 'Status of the mixing question'")
+    private StatusEnum status = StatusEnum.ACTIVE;
 
     @PrePersist
     private void generateId() {
@@ -35,7 +43,7 @@ public class TestMixingQuestion implements BaseEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "test_id")
+    @JoinColumn(name = "test_id", columnDefinition = "VARCHAR(255) COMMENT 'The associated test for this question'")
     private Test test;
 
     @OneToMany(mappedBy = "testMixingQuestion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

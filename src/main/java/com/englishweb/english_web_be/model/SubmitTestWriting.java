@@ -17,26 +17,30 @@ import java.util.UUID;
 public class SubmitTestWriting implements BaseEntity {
 
     @Id
+    @Column(columnDefinition = "VARCHAR(255) COMMENT 'Unique identifier for the submitted writing test'")
     private String id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "decimal(38,2) COMMENT 'Score for the submitted writing test'")
     private BigDecimal score;
 
     @Lob
+    @Column(columnDefinition = "longtext COMMENT 'Content of the writing test submission'")
     private String content;
 
     @Lob
+    @Column(columnDefinition = "longtext COMMENT 'Comment for the writing test submission'")
     private String comment;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "ENUM('ACTIVE', 'INACTIVE') COMMENT 'The status of the submitted writing test'")
     private StatusEnum status = StatusEnum.ACTIVE;
 
     @ManyToOne
-    @JoinColumn(name = "test_writing_id")
+    @JoinColumn(name = "test_writing_id", columnDefinition = "VARCHAR(255) COMMENT 'The associated writing test for this submission'")
     private TestWriting testWriting;
 
     @ManyToOne
-    @JoinColumn(name = "submit_test_id")
+    @JoinColumn(name = "submit_test_id", columnDefinition = "VARCHAR(255) COMMENT 'The associated submitted test for this writing submission'")
     private SubmitTest submitTest;
 
     @PrePersist

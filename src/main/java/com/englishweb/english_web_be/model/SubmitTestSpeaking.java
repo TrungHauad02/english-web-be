@@ -17,29 +17,33 @@ import java.util.UUID;
 public class SubmitTestSpeaking implements BaseEntity {
 
     @Id
+    @Column(columnDefinition = "VARCHAR(255) COMMENT 'Unique identifier for the submitted speaking test'")
     private String id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "decimal(38,2) COMMENT 'Score for the submitted speaking test'")
     private BigDecimal score;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Content of the speaking test submission'")
     private String content;
 
     @Lob
+    @Column(columnDefinition = "longtext COMMENT 'Explanation for the speaking test submission'")
     private String explanation;
 
     @Lob
+    @Column(columnDefinition = "longtext COMMENT 'Comment for the speaking test submission'")
     private String comment;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "ENUM('ACTIVE', 'INACTIVE') COMMENT 'The status of the submitted speaking test'")
     private StatusEnum status = StatusEnum.ACTIVE;
 
     @ManyToOne
-    @JoinColumn(name = "test_speaking_question_id")
+    @JoinColumn(name = "test_speaking_question_id", columnDefinition = "VARCHAR(255) COMMENT 'The associated speaking test question for this submission'")
     private TestSpeakingQuestion testSpeakingQuestion;
 
     @ManyToOne
-    @JoinColumn(name = "submit_test_id")
+    @JoinColumn(name = "submit_test_id", columnDefinition = "VARCHAR(255) COMMENT 'The associated submitted test for this speaking submission'")
     private SubmitTest submitTest;
 
     @PrePersist
