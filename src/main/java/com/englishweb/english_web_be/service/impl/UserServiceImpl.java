@@ -1,6 +1,8 @@
 package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.UserDTO;
+import com.englishweb.english_web_be.exception.ResourceIsExistException;
+import com.englishweb.english_web_be.exception.ResourceNotFoundException;
 import com.englishweb.english_web_be.exception.UserNotFoundException;
 import com.englishweb.english_web_be.model.User;
 import com.englishweb.english_web_be.modelenum.LevelEnum;
@@ -100,7 +102,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserReposito
     @Override
     public UserDTO createStudent(UserDTO dto) {
         if (repository.findByEmail(dto.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists. Please use another email.");
+            throw new ResourceIsExistException("Email already exists. Please use another email.");
         }
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         dto.setStatus(StatusEnum.ACTIVE);
@@ -111,7 +113,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserReposito
     @Override
     public UserDTO createTeacher(UserDTO dto) {
         if (repository.findByEmail(dto.getEmail()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists. Please use another email.");
+            throw new ResourceIsExistException("Email already exists. Please use another email.");
         }
 
         String rawPassword = generatePassword(12);
@@ -219,11 +221,11 @@ public class UserServiceImpl extends BaseServiceImpl<User, UserDTO, UserReposito
 
     public void sendOtpForPasswordReset(String email) {
         if (email.trim().isEmpty()) {
-            throw new RuntimeException("Email không được để trống.");
+            throw new RuntimeException("Email cannot be empty.");
         }
         Optional<User> user = repository.findByEmail(email);
         if (user.isEmpty()) {
-            throw new RuntimeException("Email không tồn tại.");
+            throw new ResourceNotFoundException("Email does not exist.");
         }
 
         String otp = generateOtp();

@@ -31,6 +31,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    // Xử lý lỗi tài nguyên đã tồn tại
+    @ExceptionHandler(ResourceIsExistException.class)
+    public ResponseEntity<ErrorResponse> handleResourceIsExistException(ResourceIsExistException ex) {
+        log.error("ResourceIsExistException: {}", ex.getMessage(), ex);
+        ErrorResponse response = new ErrorResponse(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                "Resource is exist"
+        );
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex){
         log.error("AuthenticationException: {}", ex.getMessage(), ex);
