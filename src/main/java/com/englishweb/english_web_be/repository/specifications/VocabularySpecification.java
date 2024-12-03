@@ -12,4 +12,8 @@ public class VocabularySpecification {
     public static Specification<Vocabulary> byStatus(StatusEnum status) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("status"), status);
     }
+
+    public static Specification<Vocabulary> byTopicId(String topicId) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("topic").get("id"), topicId);
+    }
 }

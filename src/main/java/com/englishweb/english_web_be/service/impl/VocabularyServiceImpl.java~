@@ -17,29 +17,14 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class VocabularyServiceImpl extends BaseServiceImpl<Vocabulary, VocabularyDTO, VocabularyRepository> implements VocabularyService {
+public class VocabularyServiceImpl extends BaseServiceImpl<Vocabulary, VocabularyDTO, VocabularyRepository>
+        implements VocabularyService {
     private final TopicServiceImpl topicService;
 
     public VocabularyServiceImpl(VocabularyRepository repository,
                                  @Lazy TopicServiceImpl topicService) {
         super(repository);
         this.topicService = topicService;
-    }
-
-    @Override
-    public Page<VocabularyDTO> findByPageTopicId(int page, int size, String sortBy, String sortDir, Class<VocabularyDTO> dtoClass,
-                                                 String topicId) {
-        ValidationUtils.getInstance().validatePageRequestParam(page, size, sortBy, dtoClass);
-        topicService.isExist(topicId);
-
-        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
-                ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
-
-        Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Vocabulary> entityPage = repository.findAllByTopic_Id(pageable, topicId);
-
-        return entityPage.map(this::convertToDTO);
     }
 
     @Override
@@ -54,9 +39,9 @@ public class VocabularyServiceImpl extends BaseServiceImpl<Vocabulary, Vocabular
         Specification<Vocabulary> specStatus = Specification.where(status != null ? VocabularySpecification.byStatus(status) : null);
         Specification<Vocabulary> spec = specStatus.and(Specification.where(searchText != null ? VocabularySpecification.byWord(searchText): null));
         log.info("Find Vocabulary page with searching: word: {}, status: {}, pageable: {}", searchText, status, pageable);
-        Page<Vocabulary> entityPage = repository.findAllByStatusAndTopic_Id(status, topicId, pageable);
-
-        return entityPage.map(this::convertToDTO);
+        Page<VocabularyDTO> result = repository.findAll(spec, pageable).map(this::convertToDTO);
+        log.info("Find Vocabulary page with searching successfully: {} record found.", result.getNumberOfElements());
+        return result;
     }
 
     @Override
