@@ -19,7 +19,7 @@ public class DatabaseInitializer implements CommandLineRunner {
     private final JdbcTemplate jdbcTemplate;
     private final ApplicationContext applicationContext;
 
-    public DatabaseInitializer(JdbcTemplate jdbcTemplate, ResourceLoader resourceLoader, ApplicationContext applicationContext) {
+    public DatabaseInitializer(JdbcTemplate jdbcTemplate, ApplicationContext applicationContext) {
         this.jdbcTemplate = jdbcTemplate;
         this.applicationContext = applicationContext;
     }
