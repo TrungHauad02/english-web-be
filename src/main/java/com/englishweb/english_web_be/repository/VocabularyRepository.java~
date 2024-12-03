@@ -14,4 +14,6 @@ import java.util.List;
 
 public interface VocabularyRepository extends JpaRepository<Vocabulary, String> , JpaSpecificationExecutor<Vocabulary> {
     List<Vocabulary> findAllByTopic_Id(String topicId);
+
+    Page<Vocabulary> findAllByTopic_Id(String topicId, Pageable pageable);
 }

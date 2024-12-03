@@ -37,7 +37,8 @@ public class VocabularyServiceImpl extends BaseServiceImpl<Vocabulary, Vocabular
         topicService.isExist(topicId);
         Pageable pageable = PageRequest.of(page, size, sort);
         Specification<Vocabulary> specStatus = Specification.where(status != null ? VocabularySpecification.byStatus(status) : null);
-        Specification<Vocabulary> spec = specStatus.and(Specification.where(searchText != null ? VocabularySpecification.byWord(searchText): null));
+        Specification<Vocabulary> specSearch = specStatus.and(Specification.where(searchText != null ? VocabularySpecification.byWord(searchText): null));
+        Specification<Vocabulary> spec = specSearch.and(Specification.where(topicId != null ? VocabularySpecification.byTopicId(topicId): null));
         log.info("Find Vocabulary page with searching: word: {}, status: {}, pageable: {}", searchText, status, pageable);
         Page<VocabularyDTO> result = repository.findAll(spec, pageable).map(this::convertToDTO);
         log.info("Find Vocabulary page with searching successfully: {} record found.", result.getNumberOfElements());
