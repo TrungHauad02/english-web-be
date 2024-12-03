@@ -1,0 +1,8 @@
+CREATE TRIGGER IF NOT EXISTS trig_speaking_conversation_bi
+BEFORE INSERT ON speaking_conversation
+FOR EACH ROW
+BEGIN
+    SET NEW.title = TRIM(NEW.title);
+    SET NEW.description = TRIM(NEW.description);
+    SET NEW.topic = TRIM(NEW.topic);
+END;
