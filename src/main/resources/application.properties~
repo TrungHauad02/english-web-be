@@ -11,11 +11,19 @@ spring.h2.console.enabled=true
 # Chay spring boot tren docker
 #spring.datasource.url=jdbc:mysql://host.docker.internal:3307/study-english
 # Chay spring boot bang ide
-spring.datasource.url=jdbc:mysql://localhost:3308/study-english
-spring.datasource.username=root
+# Chay db online
+#spring.datasource.url=jdbc:mysql://database-1.cjqc82uyshn6.ap-southeast-2.rds.amazonaws.com:3306/study-english
+# Chay db local
+spring.datasource.url=jdbc:mysql://localhost:3306/study-english
+spring.datasource.username=study-english
 spring.datasource.password=123456
+
+# C?u hình Hibernate
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+# Tùy ch?n pool k?t n?i
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.hikari.maximum-pool-size=10
 
 jwt.signerkey=1TjXchw5FloESb63Kc+DFhTARvpWL4jUGCwfGWxuG5SIf/1y/LgJxHnMqaF6A/ij
 
