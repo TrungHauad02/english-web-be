@@ -71,4 +71,25 @@ public class TestController {
         testService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/update-status/{id}")
+    public ResponseEntity<String> updateStatus(@PathVariable String id) {
+        boolean updated = testService.updateStatus(id);
+
+        if (updated) {
+            return ResponseEntity.ok("Status updated successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to update status.");
+        }
+    }
+    @GetMapping("/max-serial")
+    public ResponseEntity<Integer> getMaxSerial() {
+        Integer maxSerial = testService.getMaxSerial();
+
+        if (maxSerial != null) {
+            return ResponseEntity.ok(maxSerial);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 }
