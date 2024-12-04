@@ -142,6 +142,26 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO,TestRepository
 
         return numberOfQuestions;
     }
+    public boolean updateStatus(String id) {
+        Test test = testRepository.findById(id).orElse(null);
+
+        if (test != null) {
+            if (StatusEnum.ACTIVE.equals(test.getStatus())) {
+                test.setStatus(StatusEnum.INACTIVE);
+            } else if (StatusEnum.INACTIVE.equals(test.getStatus())) {
+                test.setStatus(StatusEnum.ACTIVE);
+            } else {
+                return false;
+            }
+            testRepository.save(test);
+            return true;
+        }
+        return false;
+    }
+    public Integer getMaxSerial() {
+        Integer maxSerial = testRepository.findMaxSerial();
+        return maxSerial != null ? maxSerial : 0;
+    }
 
 
 
@@ -171,37 +191,52 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO,TestRepository
 
     @Override
     public void delete(String id) {
+
+        List<SubmitTestDTO> submitTestDTOS = submitTestService.findAllByTestId(id);
+        if (submitTestDTOS != null && !submitTestDTOS.isEmpty()) {
+            for (SubmitTestDTO submitTestDTO : submitTestDTOS) {
+                submitTestService.delete(submitTestDTO.getId());
+            }
+        }
+
         List<TestSpeakingDTO> testSpeakings = testSpeakingService.findAllByTest_Id(id);
-        for (TestSpeakingDTO testSpeaking : testSpeakings) {
-            testSpeakingService.delete(testSpeaking.getId());
+        if (testSpeakings != null && !testSpeakings.isEmpty()) {
+            for (TestSpeakingDTO testSpeaking : testSpeakings) {
+                testSpeakingService.delete(testSpeaking.getId());
+            }
         }
 
         List<TestReadingDTO> testReadings = testReadingService.findAllByTestId(id);
-        for (TestReadingDTO testReading : testReadings) {
-            testReadingService.delete(testReading.getId());
+        if (testReadings != null && !testReadings.isEmpty()) {
+            for (TestReadingDTO testReading : testReadings) {
+                testReadingService.delete(testReading.getId());
+            }
         }
 
         List<TestListeningDTO> testListenings = testListeningService.findAllByTestId(id);
-        for (TestListeningDTO testListening : testListenings) {
-            testListeningService.delete(testListening.getId());
+        if (testListenings != null && !testListenings.isEmpty()) {
+            for (TestListeningDTO testListening : testListenings) {
+                testListeningService.delete(testListening.getId());
+            }
         }
 
         List<TestWritingDTO> testWritings = testWritingService.findAllByTestId(id);
-        for (TestWritingDTO testWriting : testWritings) {
-            testWritingService.delete(testWriting.getId());
+        if (testWritings != null && !testWritings.isEmpty()) {
+            for (TestWritingDTO testWriting : testWritings) {
+                testWritingService.delete(testWriting.getId());
+            }
         }
 
         List<TestMixingQuestionDTO> testMixingQuestions = testMixingQuestionService.findAllByTestId(id);
-        for (TestMixingQuestionDTO testMixingQuestion : testMixingQuestions) {
-            testMixingQuestionService.delete(testMixingQuestion.getId());
-        }
-        List<SubmitTestDTO> submitTestDTOS = submitTestService.findAllByTestId(id);
-        for (SubmitTestDTO submitTestDTO : submitTestDTOS) {
-            submitTestService.delete(submitTestDTO.getId());
+        if (testMixingQuestions != null && !testMixingQuestions.isEmpty()) {
+            for (TestMixingQuestionDTO testMixingQuestion : testMixingQuestions) {
+                testMixingQuestionService.delete(testMixingQuestion.getId());
+            }
         }
 
         super.delete(id);
     }
+
 
 
 
