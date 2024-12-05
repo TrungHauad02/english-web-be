@@ -59,29 +59,28 @@ public class TestSpeakingServiceImpl extends BaseServiceImpl<TestSpeaking, TestS
     }
 
 
-    public int serialMaxSpeakingQuestionsByTestId(String testId) {
-
+    public int totalActiveSpeakingQuestionsByTestId(String testId) {
         testService.isExist(testId);
-        List<TestSpeaking> list = repository.findAllByTest_Id(testId);
+
+        List<TestSpeaking> list = repository.findAllByTest_IdAndStatus(testId,StatusEnum.ACTIVE);
 
         if (list.isEmpty()) {
-
             return 0;
         }
 
-        list.sort(Comparator.comparingInt(TestSpeaking::getSerial).reversed());
-        TestSpeaking speakingWithMaxSerial = list.get(0);
-
-        List<TestSpeakingQuestion> questions = speakingWithMaxSerial.getQuestions();
-        if (questions == null || questions.isEmpty()) {
-            return 0;
-        }
-
-        questions.sort(Comparator.comparingInt(TestSpeakingQuestion::getSerial));
-        TestSpeakingQuestion lastQuestion = questions.get(questions.size() - 1);
-
-        return lastQuestion.getSerial();
+        return list.stream()
+                .mapToInt(speaking -> {
+                    List<TestSpeakingQuestion> questions = speaking.getQuestions();
+                    if (questions == null) {
+                        return 0;
+                    }
+                    return (int) questions.stream()
+                            .filter(question -> question.getStatus() == StatusEnum.ACTIVE)
+                            .count();
+                })
+                .sum();
     }
+
 
 
 
@@ -121,16 +120,5 @@ public class TestSpeakingServiceImpl extends BaseServiceImpl<TestSpeaking, TestS
         super.delete(id);
     }
 
-    public void deleteQuestionTest(String questionId) {
 
-        testSpeakingQuestionService.delete(questionId);
-    }
-    public void updateQuestionTest(List<TestSpeakingQuestionDTO> questions) {
-
-        if (questions != null) {
-            for (TestSpeakingQuestionDTO question : questions) {
-                testSpeakingQuestionService.update(question,question.getId());
-            }
-        }
-    }
 }

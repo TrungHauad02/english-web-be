@@ -78,15 +78,13 @@ public class TestMixingQuestionServiceImpl extends BaseServiceImpl<TestMixingQue
 
         testService.isExist(testId);
 
-        List<TestMixingQuestion> list = repository.findAllByTest_Id(testId);
+        List<TestMixingQuestion> list = repository.findAllByTest_IdAndStatus(testId,StatusEnum.ACTIVE);
 
         if (list.isEmpty()) {
             return 0;
         }
 
-        TestMixingQuestion lastQuestion = list.get(list.size() - 1);
-
-        return lastQuestion.getSerial();
+        return list.size();
     }
 
 

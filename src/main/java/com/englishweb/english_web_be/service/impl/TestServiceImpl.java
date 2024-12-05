@@ -56,6 +56,12 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO,TestRepository
                 testDTO.setTestListenings(testListeningService.findAllByTestId(id));
                 testDTO.setTestWritings(testWritingService.findAllByTestId(id));
                 testDTO.setTestSpeakings(testSpeakingService.findAllByTest_Id(id));
+                List<SubmitTestDTO> submitTests = submitTestService.findAllByTestId(id);
+                List<String> submitTestStrings = submitTests.stream()
+                        .map(SubmitTestDTO::getId)
+                        .collect(Collectors.toList());
+                testDTO.setSubmitTestDTOId(submitTestStrings);
+
                 return testDTO;
             }
             throw new EntityNotFoundException("Test not found with id: " + id);
@@ -106,30 +112,20 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO,TestRepository
 
         switch (testType) {
             case MIXING:
-                numberOfQuestions = testWritingService.serialMaxTestWritingByTestId(testId);
-                if (numberOfQuestions == 0) {
-                    numberOfQuestions = testSpeakingService.serialMaxSpeakingQuestionsByTestId(testId);
-                    if (numberOfQuestions == 0) {
-                        numberOfQuestions = testListeningService.serialMaxListeningQuestionsByTestId(testId);
-                        if (numberOfQuestions == 0) {
-                            numberOfQuestions = testReadingService.serialMaxReadingQuestionsByTestId(testId);
-                            if (numberOfQuestions == 0) {
-                                numberOfQuestions = testMixingQuestionService.serialMaxMixingQuestionsByTestId(testId);
-                            }
-                        }
-                    }
-                }
+                numberOfQuestions = testWritingService.serialMaxTestWritingByTestId(testId)+testSpeakingService.totalActiveSpeakingQuestionsByTestId(testId)
+                +testListeningService.totalActiveListeningQuestionsByTestId(testId)+ testReadingService.totalReadingQuestionsByTestId(testId)
+                +testMixingQuestionService.serialMaxMixingQuestionsByTestId(testId);
                 break;
             case READING:
-                numberOfQuestions = testReadingService.serialMaxReadingQuestionsByTestId(testId);
+                numberOfQuestions = testReadingService.totalReadingQuestionsByTestId(testId);
                 break;
 
             case LISTENING:
-                numberOfQuestions = testListeningService.serialMaxListeningQuestionsByTestId(testId);
+                numberOfQuestions = testListeningService.totalActiveListeningQuestionsByTestId(testId);
                 break;
 
             case SPEAKING:
-                numberOfQuestions = testSpeakingService.serialMaxSpeakingQuestionsByTestId(testId);
+                numberOfQuestions = testSpeakingService.totalActiveSpeakingQuestionsByTestId(testId);
                 break;
 
             case WRITING:

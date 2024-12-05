@@ -64,33 +64,29 @@ public class TestListeningServiceImpl extends BaseServiceImpl<TestListening, Tes
 
 
 
-    public int serialMaxListeningQuestionsByTestId(String testId) {
-
-
+    public int totalActiveListeningQuestionsByTestId(String testId) {
         testService.isExist(testId);
 
-
-        List<TestListening> list = repository.findAllByTest_Id(testId);
+        List<TestListening> list = repository.findAllByTest_IdAndStatus(testId,StatusEnum.ACTIVE);
 
         if (list.isEmpty()) {
-
             return 0;
         }
 
+        return list.stream()
+                .mapToInt(listening -> {
+                    List<TestListeningQuestion> questions = listening.getQuestions();
+                    if (questions == null) {
+                        return 0;
+                    }
 
-        list.sort(Comparator.comparingInt(TestListening::getSerial).reversed());
-        TestListening listeningWithMaxSerial = list.get(0);
-
-        List<TestListeningQuestion> questions = listeningWithMaxSerial.getQuestions();
-        if (questions == null || questions.isEmpty()) {
-            return 0;
-        }
-
-        questions.sort(Comparator.comparingInt(TestListeningQuestion::getSerial));
-        TestListeningQuestion lastQuestion = questions.get(questions.size() - 1);
-
-        return lastQuestion.getSerial();
+                    return (int) questions.stream()
+                            .filter(question -> question.getStatus() == StatusEnum.ACTIVE)
+                            .count();
+                })
+                .sum();
     }
+
 
 
 

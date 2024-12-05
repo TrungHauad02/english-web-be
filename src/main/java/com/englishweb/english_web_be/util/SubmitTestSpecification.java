@@ -1,6 +1,7 @@
 package com.englishweb.english_web_be.util;
 
 import com.englishweb.english_web_be.model.SubmitTest;
+import com.englishweb.english_web_be.model.Test;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 import org.springframework.data.jpa.domain.Specification;
@@ -13,7 +14,7 @@ public class SubmitTestSpecification {
     public static Specification<SubmitTest> hasScoreRange(BigDecimal minScore, BigDecimal maxScore) {
         return (root, query, criteriaBuilder) -> {
             if (minScore == null && maxScore == null) {
-                return criteriaBuilder.conjunction(); // Không lọc theo điểm số
+                return criteriaBuilder.conjunction();
             }
 
             if (minScore != null && maxScore != null) {
@@ -68,6 +69,18 @@ public class SubmitTestSpecification {
                 ? criteriaBuilder.conjunction()
                 : criteriaBuilder.like(root.get("test").get("title"), "%" + testTitle + "%");
     }
+    public static Specification<SubmitTest> hasTestStatus(StatusEnum status) {
+        return (root, query, criteriaBuilder) -> {
+            if (status == null) {
+
+                return criteriaBuilder.conjunction();
+            }
+
+            return criteriaBuilder.equal(root.get("test").get("status"), status);
+        };
+    }
+
+
 
     public static Specification<SubmitTest> hasTestType(TestTypeEnum testType) {
         return  (root, query, criteriaBuilder) -> testType == null

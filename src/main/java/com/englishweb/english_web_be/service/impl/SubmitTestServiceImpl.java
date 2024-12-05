@@ -5,6 +5,7 @@ import com.englishweb.english_web_be.model.SubmitTest;
 import com.englishweb.english_web_be.model.SubmitTestMixingAnswer;
 import com.englishweb.english_web_be.model.SubmitTestReadingAnswer;
 import com.englishweb.english_web_be.model.SubmitTestWriting;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 import com.englishweb.english_web_be.repository.SubmitTestRepository;
 import com.englishweb.english_web_be.service.SubmitTestService;
@@ -55,13 +56,13 @@ public class SubmitTestServiceImpl extends BaseServiceImpl<SubmitTest, SubmitTes
     }
 
     @Override
-    public Page<SubmitTestDTO> findSubmitTestsBySpecification(String title, TestTypeEnum type, int page, int size, String startDate, String endDate,String userId) {
+    public Page<SubmitTestDTO> findSubmitTestsBySpecification(String title, TestTypeEnum type, int page, int size, String startDate, String endDate, String userId, StatusEnum status) {
 
         Pageable pageable = PageRequest.of(page, size);
 
 
 
-        Specification<SubmitTest> spec = Specification.where(SubmitTestSpecification.hasTestTitle(title).and(SubmitTestSpecification.hasUserId(userId)));
+        Specification<SubmitTest> spec = Specification.where(SubmitTestSpecification.hasTestTitle(title).and(SubmitTestSpecification.hasUserId(userId)).and(SubmitTestSpecification.hasTestStatus(status)));
 
         if (type != null) {
             spec = spec.and(SubmitTestSpecification.hasTestType(type));

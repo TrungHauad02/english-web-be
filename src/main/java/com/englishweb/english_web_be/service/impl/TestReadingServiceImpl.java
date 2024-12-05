@@ -62,31 +62,27 @@ public class TestReadingServiceImpl extends BaseServiceImpl<TestReading, TestRea
                 .collect(Collectors.toList());
     }
 
-    public int serialMaxReadingQuestionsByTestId(String testId) {
-
-
+    public int totalReadingQuestionsByTestId(String testId) {
         testService.isExist(testId);
 
-        List<TestReading> list = repository.findAllByTest_Id(testId);
+        List<TestReading> list = repository.findAllByTest_IdAndStatus(testId, StatusEnum.ACTIVE);
 
         if (list.isEmpty()) {
             return 0;
         }
 
-        list.sort(Comparator.comparingInt(TestReading::getSerial).reversed());
-        TestReading readingWithMaxSerial = list.get(0);
-
-        List<TestReadingQuestion> questions = readingWithMaxSerial.getQuestions();
-        if (questions == null || questions.isEmpty()) {
-            return 0;
-        }
-
-        questions.sort(Comparator.comparingInt(TestReadingQuestion::getSerial));
-        TestReadingQuestion lastQuestion = questions.get(questions.size() - 1);
-
-        return lastQuestion.getSerial();
+        return list.stream()
+                .mapToInt(reading -> {
+                    List<TestReadingQuestion> questions = reading.getQuestions();
+                    if (questions == null) {
+                        return 0;
+                    }
+                    return (int) questions.stream()
+                            .filter(question -> question.getStatus() == StatusEnum.ACTIVE)
+                            .count();
+                })
+                .sum();
     }
-
 
 
 

@@ -54,15 +54,13 @@ public class TestWritingServiceImpl extends BaseServiceImpl<TestWriting, TestWri
 
         testService.isExist(testId);
 
-        List<TestWriting> list = repository.findAllByTest_Id(testId);
+        List<TestWriting> list = repository.findAllByTest_IdAndStatus(testId,StatusEnum.ACTIVE);
 
         if (list.isEmpty()) {
             return 0;
         }
 
-        TestWriting lastWriting = list.get(list.size() - 1);
-
-        return lastWriting.getSerial();
+        return list.size();
     }
 
 
