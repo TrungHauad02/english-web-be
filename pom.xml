@@ -125,6 +125,11 @@
 			<artifactId>firebase-admin</artifactId>
 			<version>9.4.1</version>
 		</dependency>
+		<dependency>
+			<groupId>jakarta.persistence</groupId>
+			<artifactId>jakarta.persistence-api</artifactId>
+			<version>3.1.0</version> <!-- Hoặc phiên bản phù hợp với dự án của bạn -->
+		</dependency>
 
 		<!-- Google Cloud Storage Client (Sử dụng Firebase Storage) -->
 		<dependency>
