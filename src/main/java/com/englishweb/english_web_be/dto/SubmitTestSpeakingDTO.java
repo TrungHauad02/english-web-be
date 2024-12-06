@@ -23,7 +23,7 @@ public class SubmitTestSpeakingDTO implements BaseDTO {
 
     String content;
 
-    String explanation;
+    String transcript;
 
     String comment;
     StatusEnum status;

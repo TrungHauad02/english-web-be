@@ -27,8 +27,8 @@ public class SubmitTestSpeaking implements BaseEntity {
     private String content;
 
     @Lob
-    @Column(columnDefinition = "longtext COMMENT 'Explanation for the speaking test submission'")
-    private String explanation;
+    @Column(columnDefinition = "longtext COMMENT 'Transcript for the speaking test submission'")
+    private String transcript;
 
     @Lob
     @Column(columnDefinition = "longtext COMMENT 'Comment for the speaking test submission'")
