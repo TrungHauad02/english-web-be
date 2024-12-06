@@ -13,8 +13,13 @@ spring.h2.console.enabled=true
 # Chay db online
 #spring.datasource.url=jdbc:mysql://database-1.cjqc82uyshn6.ap-southeast-2.rds.amazonaws.com:3306/study-english
 # Chay db local
+<<<<<<< HEAD
 spring.datasource.url=jdbc:mysql://localhost:3306/study-english
+spring.datasource.username=root
+=======
+spring.datasource.url=jdbc:mysql://localhost:3307/study-english
 spring.datasource.username=study-english
+>>>>>>> f206922c044316b0258ee02a5a3c703c0bc9673d
 spring.datasource.password=123456
 
 # C?u hình Hibernate

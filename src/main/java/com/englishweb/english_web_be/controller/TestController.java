@@ -36,10 +36,11 @@ public class TestController {
             @RequestParam(required = false) TestTypeEnum type,
             @RequestParam(required = false) StatusEnum status,
             @RequestParam(required = false) String userId,
+            @RequestParam(required = false) String sortDirection,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        Page<TestDTO> result = testService.findTestsBySpecification(title, type, page, size,status,userId);
+        Page<TestDTO> result = testService.findTestsBySpecification(title, type, page, size,status,userId,sortDirection);
         return ResponseEntity.ok(result);
     }
     @Operation(method = "GET", summary = "get test by ID And Status" , description = "Retrieve specific test by its ID")
@@ -70,5 +71,26 @@ public class TestController {
     public ResponseEntity<Void> deleteTestById(@PathVariable String id) {
         testService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/update-status/{id}")
+    public ResponseEntity<String> updateStatus(@PathVariable String id) {
+        boolean updated = testService.updateStatus(id);
+
+        if (updated) {
+            return ResponseEntity.ok("Status updated successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to update status.");
+        }
+    }
+    @GetMapping("/max-serial")
+    public ResponseEntity<Integer> getMaxSerial() {
+        Integer maxSerial = testService.getMaxSerial();
+
+        if (maxSerial != null) {
+            return ResponseEntity.ok(maxSerial);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 }

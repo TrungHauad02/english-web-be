@@ -7,14 +7,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
 public interface TestRepository extends JpaRepository<Test, String>  , JpaSpecificationExecutor<Test> {
 
-    Page<Test> findAllByType(Pageable pageable, TestTypeEnum type);
 
     Test findByIdAndStatus(String id, StatusEnum status);
+    @Query("SELECT MAX(t.serial) FROM Test t")
+    Integer findMaxSerial();
 
 
 }
