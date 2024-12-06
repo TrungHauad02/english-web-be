@@ -2,6 +2,7 @@ package com.englishweb.english_web_be.controller;
 
 import com.englishweb.english_web_be.dto.SubmitTestDTO;
 import com.englishweb.english_web_be.dto.TestDTO;
+import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 import com.englishweb.english_web_be.repository.SubmitTestRepository;
 import com.englishweb.english_web_be.service.impl.SubmitTestServiceImpl;
@@ -42,10 +43,11 @@ public class SubmitTestController {
             @RequestParam(required = false) String startDate,
             @RequestParam(required = false) String endDate,
             @RequestParam(required = false) String userId,
+            @RequestParam(required = false) StatusEnum status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        Page<SubmitTestDTO> result = submitTestServiceImpl.findSubmitTestsBySpecification(title, type, page, size, startDate, endDate,userId);
+        Page<SubmitTestDTO> result = submitTestServiceImpl.findSubmitTestsBySpecification(title, type, page, size, startDate, endDate,userId,status);
         return ResponseEntity.ok(result);
     }
 

@@ -1,4 +1,5 @@
 package com.englishweb.english_web_be.dto;
+import com.englishweb.english_web_be.model.SubmitTest;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 
@@ -40,7 +41,10 @@ public class TestDTO implements BaseDTO {
 
     private List<TestSpeakingDTO> testSpeakings;
 
+
     private List<TestMixingQuestionDTO> testMixingQuestions;
+
+    private List<String> submitTestsId;
 
 
     @Override

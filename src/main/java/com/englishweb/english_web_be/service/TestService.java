@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface TestService extends BaseService<TestDTO> {
-    Page<TestDTO> findTestsBySpecification(String title, TestTypeEnum type, int page, int size, StatusEnum status , String userId);
+    Page<TestDTO> findTestsBySpecification(String title, TestTypeEnum type, int page, int size, StatusEnum status , String userId,String sortDirection);
     TestDTO findByIdAndStatus(String id, StatusEnum status);
     boolean updateStatus(String id);
     Integer getMaxSerial();
