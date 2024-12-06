@@ -44,7 +44,7 @@ public class TestDTO implements BaseDTO {
 
     private List<TestMixingQuestionDTO> testMixingQuestions;
 
-    private List<String> SubmitTestDTOId;
+    private List<String> submitTestsId;
 
 
     @Override

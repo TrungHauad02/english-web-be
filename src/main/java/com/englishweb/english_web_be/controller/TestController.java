@@ -36,10 +36,11 @@ public class TestController {
             @RequestParam(required = false) TestTypeEnum type,
             @RequestParam(required = false) StatusEnum status,
             @RequestParam(required = false) String userId,
+            @RequestParam(required = false) String sortDirection,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        Page<TestDTO> result = testService.findTestsBySpecification(title, type, page, size,status,userId);
+        Page<TestDTO> result = testService.findTestsBySpecification(title, type, page, size,status,userId,sortDirection);
         return ResponseEntity.ok(result);
     }
     @Operation(method = "GET", summary = "get test by ID And Status" , description = "Retrieve specific test by its ID")
