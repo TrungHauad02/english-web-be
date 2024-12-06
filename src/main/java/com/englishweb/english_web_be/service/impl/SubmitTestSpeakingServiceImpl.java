@@ -42,7 +42,7 @@ public class SubmitTestSpeakingServiceImpl extends BaseServiceImpl<SubmitTestSpe
         entity.setTestSpeakingQuestion(testSpeakingQuestionService.convertToEntity(testSpeakingQuestionService.findById(dto.getTestSpeakingQuestionId())));
         entity.setScore(dto.getScore());
         entity.setContent(dto.getContent());
-        entity.setExplanation(dto.getExplanation());
+        entity.setTranscript(dto.getTranscript());
         entity.setComment(dto.getComment());
         entity.setStatus(dto.getStatus());
         return entity;
@@ -56,7 +56,7 @@ public class SubmitTestSpeakingServiceImpl extends BaseServiceImpl<SubmitTestSpe
         dto.setTestSpeakingQuestionId(entity.getTestSpeakingQuestion().getId());
         dto.setScore(entity.getScore());
         dto.setContent(entity.getContent());
-        dto.setExplanation(entity.getExplanation());
+        dto.setTranscript(entity.getTranscript());
         dto.setComment(entity.getComment());
         dto.setStatus(entity.getStatus());
         return dto;
