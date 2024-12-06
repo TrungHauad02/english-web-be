@@ -101,15 +101,18 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO,TestRepository
         List<TestDTO> dtoList = testPage.getContent().stream()
                 .map(test -> {
                     TestDTO dto = convertToDTO(test);
-                    if (userId == null || userId.trim().isEmpty()) {
+                    if (userId != null ) {
                         dto.setNumberOfQuestions(this.numberOfQuestionTest(test.getId(),test.getType()));
                         dto.setScoreLastOfTest(submitTestService.scoreLastSubmitTest(test.getId(),userId));
                     }
-                    List<SubmitTestDTO> submitTests = submitTestService.findAllByTestId(test.getId());
-                    List<String> submitTestStrings = submitTests.stream()
-                            .map(SubmitTestDTO::getId)
-                            .collect(Collectors.toList());
-                    dto.setSubmitTestsId(submitTestStrings);
+                    if (userId.trim().isEmpty() ) {
+                        List<SubmitTestDTO> submitTests = submitTestService.findAllByTestId(test.getId());
+                        List<String> submitTestStrings = submitTests.stream()
+                                .map(SubmitTestDTO::getId)
+                                .collect(Collectors.toList());
+                        dto.setSubmitTestsId(submitTestStrings);
+                    }
+
 
                     return dto;
                 })
