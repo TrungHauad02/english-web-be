@@ -10,7 +10,6 @@ spring.h2.console.enabled=true
 
 # Chay spring boot tren docker
 #spring.datasource.url=jdbc:mysql://host.docker.internal:3307/study-english
-# Chay spring boot bang ide
 # Chay db online
 #spring.datasource.url=jdbc:mysql://database-1.cjqc82uyshn6.ap-southeast-2.rds.amazonaws.com:3306/study-english
 # Chay db local
