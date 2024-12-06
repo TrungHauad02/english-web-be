@@ -60,7 +60,7 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO,TestRepository
                 List<String> submitTestStrings = submitTests.stream()
                         .map(SubmitTestDTO::getId)
                         .collect(Collectors.toList());
-                testDTO.setSubmitTestsId(submitTestStrings);
+                testDTO.setSubmitTestIds(submitTestStrings);
 
                 return testDTO;
             }
@@ -110,7 +110,7 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO,TestRepository
                         List<String> submitTestStrings = submitTests.stream()
                                 .map(SubmitTestDTO::getId)
                                 .collect(Collectors.toList());
-                        dto.setSubmitTestsId(submitTestStrings);
+                        dto.setSubmitTestIds(submitTestStrings);
                     }
 
 
