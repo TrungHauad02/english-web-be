@@ -5,6 +5,8 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Random;
+
 @Entity
 @Getter
 @Setter
@@ -35,6 +37,6 @@ public class SpeakingConversation implements BaseEntity {
 
     @PrePersist
     private void generateId() {
-        this.id = "Speak_con_" + System.nanoTime();
+        this.id = "Speak_con_" + System.nanoTime()+ "_" + new Random().nextInt(10000);
     }
 }
