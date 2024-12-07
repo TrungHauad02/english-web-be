@@ -4,6 +4,7 @@ import com.englishweb.english_web_be.model.interfacemodel.BaseEntity;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.Random;
 
 @Entity
 @Getter
@@ -32,6 +33,6 @@ public class TopicAnswer implements BaseEntity {
 
     @PrePersist
     private void generateId() {
-        this.id = "Topic_ans_" + System.nanoTime();
+        this.id = "Topic_ans_" + System.nanoTime() + "_" + new Random().nextInt(10000);
     }
 }
