@@ -25,9 +25,8 @@ public class CommentTestReadingQuestionServiceImpl implements CommentTestReading
             for (int i = 0; i < answers.length; i++) {
                 promptBuilder.append(i + 1).append(". ").append(answers[i]).append("\n");
             }
-            promptBuilder.append("User's answer: ").append(userAnswer).append("\n");
-            promptBuilder.append("Give a concise comment on the correctness, potential confusion points, and improvement suggestions, limited to 30 words.");
-
+            promptBuilder.append("My answer: ").append(userAnswer).append("\n");
+            promptBuilder.append("Without focusing on correctness, analyze the reasoning behind my answer. Identify potential sources of confusion and offer constructive suggestions on concepts or topics I should revisit to enhance understanding, in 30 words.");
             String prompt = promptBuilder.toString();
             log.info("Generated 30-word prompt for reading analysis: {}", prompt);
             String response = geminiClientService.generateText(prompt);
