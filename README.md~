@@ -19,7 +19,7 @@ docker image ls
 ```bash
 docker container run -d -p <port>:<port> <tên image>:<version>  
 # Ví dụ
-docker container run -d -p 3000:3000 english-web-fe:0.0.2
+docker container run -d -p 8080:8080 english-web-fe:0.0.2
 ```
 
 ---

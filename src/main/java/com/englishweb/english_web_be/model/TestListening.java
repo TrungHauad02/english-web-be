@@ -24,7 +24,7 @@ public class TestListening implements BaseEntity {
     @Column(nullable = false, columnDefinition = "varchar(255) COMMENT 'Content of the test listening'")
     private String content;
 
-    @Column(nullable = false, columnDefinition = "varchar(255) COMMENT 'Transcript of the test listening'")
+    @Column(nullable = false, columnDefinition = "LONGTEXT COMMENT 'Transcript of the test listening'")
     private String transcript;
 
     @Enumerated(EnumType.STRING)

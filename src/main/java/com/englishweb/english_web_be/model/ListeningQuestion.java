@@ -22,7 +22,7 @@ public class ListeningQuestion implements BaseEntity {
     @Column(nullable = false, columnDefinition = "INT COMMENT 'The serial number of the listening question'")
     private int serial;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Explanation for the listening question'")
+    @Column(nullable = false, columnDefinition = "LONGTEXT COMMENT 'Explanation for the listening question'")
     private String explanation;
 
     @Enumerated(EnumType.STRING)

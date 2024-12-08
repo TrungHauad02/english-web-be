@@ -26,7 +26,7 @@ public class TestMixingQuestion implements BaseEntity {
     @Column(nullable = false, columnDefinition = "INT COMMENT 'Serial number of the mixing question'")
     private int serial;
 
-    @Column(nullable = false, columnDefinition = "TEXT COMMENT 'Explanation for the mixing question'")
+    @Column(nullable = false, columnDefinition = "LONGTEXT COMMENT 'Explanation for the mixing question'")
     private String explanation;
 
     @Enumerated(EnumType.STRING)

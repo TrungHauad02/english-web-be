@@ -23,7 +23,7 @@ public class Reading implements LessonEntity {
     @Column(unique = true, nullable = false, columnDefinition = "INT COMMENT 'The serial number of the reading lesson'")
     private int serial;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Description of the reading lesson'")
+    @Column(nullable = false, columnDefinition = "LONGTEXT COMMENT 'Description of the reading lesson'")
     private String description;
 
     @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'File associated with the reading lesson'")

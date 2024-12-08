@@ -9,18 +9,18 @@ spring.h2.console.enabled=true
 #spring.datasource.password=dummy
 
 # Chay spring boot tren docker
-#spring.datasource.url=jdbc:mysql://host.docker.internal:3307/study-english
+spring.datasource.url=jdbc:mysql://host.docker.internal:3307/study-english
 # Chay db online
 #spring.datasource.url=jdbc:mysql://database-1.cjqc82uyshn6.ap-southeast-2.rds.amazonaws.com:3306/study-english
 # Chay db local
-spring.datasource.url=jdbc:mysql://localhost:3307/study-english
-spring.datasource.username=study-english
+#spring.datasource.url=jdbc:mysql://localhost:3307/study-english
+spring.datasource.username=root
 spring.datasource.password=123456
 
-# C?u hình Hibernate
+# Cau hinh Hibernate
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
-# Tùy ch?n pool k?t n?i
+# Tuy chon pool ket noi
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.datasource.hikari.maximum-pool-size=10
 

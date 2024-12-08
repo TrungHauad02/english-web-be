@@ -30,7 +30,7 @@ public class TestMixingQuestion implements BaseEntity {
     private String explanation;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "ENUM('TYPE1', 'TYPE2') COMMENT 'Type of the mixing question'")
+    @Column(columnDefinition = "enum('GRAMMAR','VOCABULARY') COMMENT 'Type of the mixing question'")
     private TestMixingTypeEnum type;
 
     @Enumerated(EnumType.STRING)

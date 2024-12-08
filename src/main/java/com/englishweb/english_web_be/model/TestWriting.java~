@@ -27,6 +27,10 @@ public class TestWriting implements BaseEntity {
     private StatusEnum status;
 
     public TestWriting(String testWritingId, int serial, String content, StatusEnum writingStatus) {
+        this.id = testWritingId;
+        this.serial = serial;
+        this.content = content;
+        this.status = writingStatus;
     }
 
     @PrePersist

@@ -13,17 +13,24 @@ import lombok.*;
 @AllArgsConstructor
 public class TopicQuestion implements BaseEntity {
     @Id
+    @Column(columnDefinition = "VARCHAR(255) COMMENT 'Unique identifier for the Topic Question'")
     private String id;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Content of the Topic Question'")
     private String content;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "INT COMMENT 'Serial number for ordering the questions'")
     private int serial;
-    @Column(nullable = false)
+
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Explanation for the Topic Question'")
     private String explanation;
+
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "ENUM('ACTIVE', 'INACTIVE') COMMENT 'Status of the Topic Question'")
     private StatusEnum status = StatusEnum.ACTIVE;
+
     @ManyToOne
-    @JoinColumn(name = "topic_id")
+    @JoinColumn(name = "topic_id", columnDefinition = "VARCHAR(255) COMMENT 'Foreign key linking the question to a specific Topic'")
     private Topic topic;
 
     @PrePersist

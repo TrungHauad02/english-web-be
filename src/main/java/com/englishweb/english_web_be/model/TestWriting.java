@@ -19,7 +19,7 @@ public class TestWriting implements BaseEntity {
     @Column(nullable = false, columnDefinition = "INT COMMENT 'Serial number of the TestWriting'")
     private int serial;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Content of the TestWriting'")
+    @Column(nullable = false, columnDefinition = "LONGTEXT COMMENT 'Content of the TestWriting'")
     private String content;
 
     @Enumerated(EnumType.STRING)

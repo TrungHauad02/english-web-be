@@ -24,7 +24,7 @@ public class TestReadingQuestion implements BaseEntity {
     @Column(nullable = false, columnDefinition = "INT COMMENT 'Serial number of the test reading question'")
     private int serial;
 
-    @Column(nullable = false, columnDefinition = "LONGTEXT COMMENT 'Explanation of the test reading question'")
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Explanation of the test reading question'")
     private String explanation;
 
     @Enumerated(EnumType.STRING)
