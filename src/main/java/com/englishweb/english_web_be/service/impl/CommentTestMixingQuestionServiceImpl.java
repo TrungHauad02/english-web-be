@@ -24,8 +24,8 @@ public class CommentTestMixingQuestionServiceImpl implements CommentTestMixingQu
             for (int i = 0; i < answers.length; i++) {
                 promptBuilder.append(i + 1).append(". ").append(answers[i]).append("\n");
             }
-            promptBuilder.append("User's answer: ").append(userAnswer).append("\n");
-            promptBuilder.append("Provide a concise comment on correctness, potential confusion points, and suggestions for improvement within 30 words.");
+            promptBuilder.append("My answer: ").append(userAnswer).append("\n");
+            promptBuilder.append("Without focusing on correctness, analyze the reasoning behind my answer. Identify potential sources of confusion and offer constructive suggestions on concepts or topics I should revisit to enhance understanding, in 30 words.");
 
             String prompt = promptBuilder.toString();
             log.info("Generated 30-word prompt: {}", prompt);
