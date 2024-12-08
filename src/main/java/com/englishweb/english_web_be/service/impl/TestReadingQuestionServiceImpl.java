@@ -62,7 +62,7 @@ public class TestReadingQuestionServiceImpl extends BaseServiceImpl<TestReadingQ
         entity.setId(dto.getId());
         entity.setSerial(dto.getSerial());
         entity.setContent(dto.getContent());
-        entity.setExplantion(dto.getExplanation());
+        entity.setExplanation(dto.getExplanation());
         entity.setStatus(dto.getStatus());
         entity.setTestReading(testReadingService.convertToEntity(testReadingService.findById(dto.getTestReadingId())));
         return entity;
@@ -74,7 +74,7 @@ public class TestReadingQuestionServiceImpl extends BaseServiceImpl<TestReadingQ
         dto.setId(entity.getId());
         dto.setSerial(entity.getSerial());
         dto.setContent(entity.getContent());
-        dto.setExplanation(entity.getExplantion());
+        dto.setExplanation(entity.getExplanation());
         dto.setStatus(entity.getStatus());
         dto.setTestReadingId(entity.getTestReading().getId());
         dto.setAnswers(testReadingAnswerService.findAllByQuestionId(entity.getId()));
