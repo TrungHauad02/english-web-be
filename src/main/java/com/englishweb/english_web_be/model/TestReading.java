@@ -21,7 +21,7 @@ public class TestReading implements BaseEntity {
     @Column(nullable = false, columnDefinition = "INT COMMENT 'Serial number of the test reading'")
     private int serial;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Content of the test reading'")
+    @Column(nullable = false, columnDefinition = "LONGTEXT COMMENT 'Content of the test reading'")
     private String content;
 
     @Column(columnDefinition = "VARCHAR(255) COMMENT 'Image associated with the test reading'")

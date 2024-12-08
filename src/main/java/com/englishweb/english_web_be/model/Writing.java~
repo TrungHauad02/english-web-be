@@ -24,7 +24,7 @@ public class Writing implements LessonEntity {
     @Column(unique = true, nullable = false, columnDefinition = "INT COMMENT 'Serial number of the Writing'")
     private int serial;
 
-    @Column(nullable = false, columnDefinition = "LONGTEXT COMMENT 'Description of the Writing'")
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Description of the Writing'")
     private String description;
 
     @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Topic related to the Writing'")

@@ -22,7 +22,7 @@ public class Grammar implements LessonEntity {
     private int serial;
     @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'The content of the grammar lesson'")
     private String content;
-    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'The description of the grammar lesson'")
+    @Column(nullable = false, columnDefinition = "LONGTEXT COMMENT 'The description of the grammar lesson'")
     private String description;
     @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Link to the image of the grammar lesson'")
     private String image;

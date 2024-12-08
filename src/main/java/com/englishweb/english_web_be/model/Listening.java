@@ -22,7 +22,7 @@ public class Listening implements LessonEntity {
     @Column(unique = true, nullable = false, columnDefinition = "INT COMMENT 'The serial number of the listening entry'")
     private int serial;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Description of the listening entry'")
+    @Column(nullable = false, columnDefinition = "LONGTEXT COMMENT 'Description of the listening entry'")
     private String description;
 
     @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Image associated with the listening entry'")

@@ -24,7 +24,7 @@ public class TestReadingQuestion implements BaseEntity {
     @Column(nullable = false, columnDefinition = "INT COMMENT 'Serial number of the test reading question'")
     private int serial;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Explanation of the test reading question'")
+    @Column(nullable = false, columnDefinition = "LONGTEXT COMMENT 'Explanation of the test reading question'")
     private String explanation;
 
     @Enumerated(EnumType.STRING)
@@ -43,4 +43,20 @@ public class TestReadingQuestion implements BaseEntity {
     @OneToMany(mappedBy = "testReadingQuestion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TestReadingAnswer> answers;
 
+    public TestReadingQuestion(String id, String content, int serial, String explanation, StatusEnum status) {
+        this.id = id;
+        this.content = content;
+        this.serial = serial;
+        this.explanation = explanation;
+        this.status = status;
+    }
+
+    public TestReadingQuestion(String id, String content, int serial, String explanation, StatusEnum status, List<TestReadingAnswer> answers) {
+        this.id = id;
+        this.content = content;
+        this.serial = serial;
+        this.explanation = explanation;
+        this.status = status;
+        this.answers = answers;
+    }
 }

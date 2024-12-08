@@ -27,11 +27,11 @@ public class SubmitTestSpeaking implements BaseEntity {
     private String content;
 
     @Lob
-    @Column(columnDefinition = "LONGTEXT COMMENT 'Transcript for the speaking test submission'")
+    @Column(columnDefinition = "longtext COMMENT 'Transcript for the speaking test submission'")
     private String transcript;
 
     @Lob
-    @Column(columnDefinition = "LONGTEXT COMMENT 'Comment for the speaking test submission'")
+    @Column(columnDefinition = "longtext COMMENT 'Comment for the speaking test submission'")
     private String comment;
 
     @Enumerated(EnumType.STRING)

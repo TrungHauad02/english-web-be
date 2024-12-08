@@ -28,7 +28,7 @@ public class Topic implements LessonEntity {
     @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Image URL or path associated with the Topic'")
     private String image;
 
-    @Column(nullable = false, columnDefinition = "TEXT COMMENT 'Description of the Topic'")
+    @Column(nullable = false, columnDefinition = "LONGTEXT COMMENT 'Description of the Topic'")
     private String description;
 
     @Enumerated(EnumType.STRING)

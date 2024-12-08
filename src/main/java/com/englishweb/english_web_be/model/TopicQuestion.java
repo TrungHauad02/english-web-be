@@ -22,7 +22,7 @@ public class TopicQuestion implements BaseEntity {
     @Column(nullable = false, columnDefinition = "INT COMMENT 'Serial number for ordering the questions'")
     private int serial;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Explanation for the Topic Question'")
+    @Column(nullable = false, columnDefinition = "LONGTEXT COMMENT 'Explanation for the Topic Question'")
     private String explanation;
 
     @Enumerated(EnumType.STRING)

@@ -22,7 +22,7 @@ public class ReadingQuestion implements BaseEntity {
     @Column(nullable = false, columnDefinition = "INT COMMENT 'The serial number of the reading question'")
     private int serial;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(255) COMMENT 'Explanation for the reading question'")
+    @Column(nullable = false, columnDefinition = "LONGTEXT COMMENT 'Explanation for the reading question'")
     private String explanation;
 
     @Column(nullable = false, columnDefinition = "ENUM('ACTIVE', 'INACTIVE') COMMENT 'The status of the reading question'")
