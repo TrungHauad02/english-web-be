@@ -7,10 +7,7 @@ import lombok.Getter;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -21,7 +18,7 @@ public class SpeechToTextController {
     SpeechToTextService service;
 
     @PostMapping
-    public ResponseEntity<SpeechToTextResponse> speechToText(@RequestBody AudioData request) {
+    public ResponseEntity<SpeechToTextResponse> speechToText(@RequestBody AudioData request, @RequestParam (required = false, defaultValue = "1") int channel_counts) {
         String audioData = request.getAudioData();
         if (audioData == null || !audioData.contains(",")) {
             return ResponseEntity.badRequest().build();
@@ -31,7 +28,7 @@ public class SpeechToTextController {
             throw new IllegalArgumentException("Invalid Base64 encoding");
         }
         try {
-            return new ResponseEntity<>(service.speechToText(base64Data), HttpStatus.OK);
+            return new ResponseEntity<>(service.speechToText(base64Data, channel_counts), HttpStatus.OK);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

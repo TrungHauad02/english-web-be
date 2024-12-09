@@ -39,7 +39,6 @@ public class SpeechToTextServiceImpl implements SpeechToTextService {
                     .setLanguageCode("en-US")
                     .setEnableWordTimeOffsets(true)
                     .setEnableWordConfidence(true)
-                    .setAudioChannelCount(channel_counts)
                     .build();
             RecognitionAudio audio = RecognitionAudio.newBuilder().setContent(ByteString.copyFrom(audioBytes)).build();
             RecognizeResponse response = speechClient.recognize(config, audio);
