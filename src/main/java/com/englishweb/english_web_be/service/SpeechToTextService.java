@@ -6,5 +6,5 @@ import java.io.IOException;
 
 public interface SpeechToTextService {
 
-    SpeechToTextResponse speechToText(String audioUrl) throws IOException;
+    SpeechToTextResponse speechToText(String audioUrl, int channel_counts) throws IOException;
 }
