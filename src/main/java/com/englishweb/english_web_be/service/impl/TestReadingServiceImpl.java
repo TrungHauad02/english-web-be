@@ -1,34 +1,35 @@
 package com.englishweb.english_web_be.service.impl;
 
-import com.englishweb.english_web_be.dto.TestListeningDTO;
-import com.englishweb.english_web_be.dto.TestListeningQuestionDTO;
-import com.englishweb.english_web_be.dto.TestReadingDTO;
+import com.englishweb.english_web_be.dto.*;
 
-import com.englishweb.english_web_be.dto.TestReadingQuestionDTO;
-import com.englishweb.english_web_be.model.TestListening;
+
 import com.englishweb.english_web_be.model.TestReading;
 import com.englishweb.english_web_be.model.TestReadingQuestion;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.TestReadingRepository;
 import com.englishweb.english_web_be.service.TestReadingService;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
 @Service
+@Slf4j
 public class TestReadingServiceImpl extends BaseServiceImpl<TestReading, TestReadingDTO, TestReadingRepository> implements TestReadingService {
 
     private final TestServiceImpl testService;
     private final TestReadingQuestionServiceImpl testReadingQuestionService;
-    public TestReadingServiceImpl(TestReadingRepository repository, @Lazy TestServiceImpl testService, @Lazy TestReadingQuestionServiceImpl testReadingQuestionService) {
+    private final FirebaseStorageServiceImpl firebaseStorageService;
+    public TestReadingServiceImpl(TestReadingRepository repository, @Lazy TestServiceImpl testService, @Lazy TestReadingQuestionServiceImpl testReadingQuestionService, FirebaseStorageServiceImpl firebaseStorageService) {
         super(repository);
         this.testService = testService;
         this.testReadingQuestionService = testReadingQuestionService;
+        this.firebaseStorageService = firebaseStorageService;
     }
 
 
@@ -113,7 +114,13 @@ public class TestReadingServiceImpl extends BaseServiceImpl<TestReading, TestRea
     }
     @Override
     public void delete(String id) {
+        TestReadingDTO dto = super.findById(id);
+        try {
+            firebaseStorageService.deleteFile(dto.getImage());
 
+        } catch (IOException e) {
+            log.error("Error occurred while deleting audio for TestReading with ID: {}", dto.getId(), e);
+        }
         List<TestReadingQuestionDTO> questions = testReadingQuestionService.findAllByTestReading_Id(id);
         if (questions != null) {
             for (TestReadingQuestionDTO question : questions) {
@@ -121,19 +128,6 @@ public class TestReadingServiceImpl extends BaseServiceImpl<TestReading, TestRea
             }
         }
         super.delete(id);
-    }
-    public void deleteQuestionTest(String questionId) {
-
-        testReadingQuestionService.delete(questionId);
-    }
-
-    public void updateQuestionTest(List<TestReadingQuestionDTO> questions) {
-
-        if (questions != null) {
-            for (TestReadingQuestionDTO question : questions) {
-                testReadingQuestionService.update(question,question.getId());
-            }
-        }
     }
 }
 
