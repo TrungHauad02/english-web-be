@@ -1,4 +1,4 @@
-package com.englishweb.english_web_be.util;
+package com.englishweb.english_web_be.repository.specifications;
 import com.englishweb.english_web_be.model.User;
 import com.englishweb.english_web_be.modelenum.LevelEnum;
 import com.englishweb.english_web_be.modelenum.RoleEnum;

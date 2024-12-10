@@ -2,15 +2,11 @@ package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.*;
 import com.englishweb.english_web_be.model.*;
-import com.englishweb.english_web_be.modelenum.RoleEnum;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
-import com.englishweb.english_web_be.modelenum.TestMixingTypeEnum;
 import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 import com.englishweb.english_web_be.repository.TestRepository;
 import com.englishweb.english_web_be.service.TestService;
-import com.englishweb.english_web_be.util.TestSpecification;
-import com.englishweb.english_web_be.util.UserSpecification;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.englishweb.english_web_be.repository.specifications.TestSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.*;
@@ -19,8 +15,6 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 @Service

@@ -2,14 +2,11 @@ package com.englishweb.english_web_be.service.impl;
 
 import com.englishweb.english_web_be.dto.*;
 import com.englishweb.english_web_be.model.SubmitTest;
-import com.englishweb.english_web_be.model.SubmitTestMixingAnswer;
-import com.englishweb.english_web_be.model.SubmitTestReadingAnswer;
-import com.englishweb.english_web_be.model.SubmitTestWriting;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 import com.englishweb.english_web_be.repository.SubmitTestRepository;
 import com.englishweb.english_web_be.service.SubmitTestService;
-import com.englishweb.english_web_be.util.SubmitTestSpecification;
+import com.englishweb.english_web_be.repository.specifications.SubmitTestSpecification;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;

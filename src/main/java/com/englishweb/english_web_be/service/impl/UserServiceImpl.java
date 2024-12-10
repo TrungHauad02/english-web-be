@@ -11,31 +11,26 @@ import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.repository.UserRepository;
 import com.englishweb.english_web_be.service.EmailService;
 import com.englishweb.english_web_be.service.UserService;
-import com.englishweb.english_web_be.util.UserSpecification;
+import com.englishweb.english_web_be.repository.specifications.UserSpecification;
 import com.englishweb.english_web_be.util.ValidationUtils;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.security.SecureRandom;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.regex.Pattern;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)

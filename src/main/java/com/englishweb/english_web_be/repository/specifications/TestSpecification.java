@@ -1,8 +1,6 @@
-package com.englishweb.english_web_be.util;
+package com.englishweb.english_web_be.repository.specifications;
 
-import com.englishweb.english_web_be.model.SubmitTest;
 import com.englishweb.english_web_be.model.Test;
-import com.englishweb.english_web_be.model.User;
 import com.englishweb.english_web_be.modelenum.StatusEnum;
 import com.englishweb.english_web_be.modelenum.TestTypeEnum;
 import org.springframework.data.jpa.domain.Specification;
