@@ -194,6 +194,15 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO,TestRepository
 
     @Override
     public void delete(String id) {
+        
+        TestDTO testDTO = super.findById(id);
+        List<Test> testDTOList  = testRepository.findAll();
+        testDTOList.stream()
+                .filter(test -> test.getSerial() > testDTO.getSerial())
+                .forEach(testToUpdate -> {
+                    testToUpdate.setSerial(testToUpdate.getSerial() - 1);
+                    testRepository.save(testToUpdate);
+                });
 
         List<SubmitTestDTO> submitTestDTOS = submitTestService.findAllByTestId(id);
         if (submitTestDTOS != null && !submitTestDTOS.isEmpty()) {
