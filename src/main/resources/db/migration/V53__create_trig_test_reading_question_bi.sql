@@ -3,5 +3,5 @@ BEFORE INSERT ON test_reading_question
 FOR EACH ROW
 BEGIN
     SET NEW.content = TRIM(NEW.content);
-    SET NEW.explantion = TRIM(NEW.explantion);
+    SET NEW.explanation = TRIM(NEW.explanation);
 END;
