@@ -19,4 +19,5 @@ public interface TestService extends BaseService<TestDTO> {
     TestDTO findByIdAndStatus(String id, StatusEnum status);
     boolean updateStatus(String id);
     Integer getMaxSerial();
+    void deleteSubmitTestsById(String id);
 }
