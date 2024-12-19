@@ -111,6 +111,13 @@ public class SubmitTestServiceImpl extends BaseServiceImpl<SubmitTest, SubmitTes
                 .map(this::convertToDTO)
                 .toList();
     }
+    public boolean existsSubmitTestByTestId(String testId) {
+
+        testService.isExist(testId);
+
+        return repository.existsByTest_Id(testId);
+    }
+
 
 
     public BigDecimal scoreLastSubmitTest(String testId,String userId) {

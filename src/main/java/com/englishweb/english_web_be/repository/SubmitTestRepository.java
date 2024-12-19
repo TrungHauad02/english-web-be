@@ -14,4 +14,5 @@ public interface SubmitTestRepository extends JpaRepository<SubmitTest, String> 
 
      List<SubmitTest> findAllByTest_Id(String testId);
      List<SubmitTest> findAllByTest_IdAndUserId(String testId,String userId);
+     boolean existsByTest_Id(String testId);
 }

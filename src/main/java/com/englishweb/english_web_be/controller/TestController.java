@@ -93,4 +93,9 @@ public class TestController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+    @DeleteMapping("/delete-submit-tests/{id}")
+    public ResponseEntity<Void> deleteSubmitTestsById(@PathVariable String id) {
+        testService.deleteSubmitTestsById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

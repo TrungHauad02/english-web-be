@@ -50,11 +50,8 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO,TestRepository
                 testDTO.setTestListenings(testListeningService.findAllByTestId(id));
                 testDTO.setTestWritings(testWritingService.findAllByTestId(id));
                 testDTO.setTestSpeakings(testSpeakingService.findAllByTest_Id(id));
-                List<SubmitTestDTO> submitTests = submitTestService.findAllByTestId(id);
-                List<String> submitTestStrings = submitTests.stream()
-                        .map(SubmitTestDTO::getId)
-                        .collect(Collectors.toList());
-                testDTO.setSubmitTestIds(submitTestStrings);
+
+                testDTO.setIsSubmitTest(submitTestService.existsSubmitTestByTestId(id));
 
                 return testDTO;
             }
@@ -100,14 +97,8 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO,TestRepository
                         dto.setScoreLastOfTest(submitTestService.scoreLastSubmitTest(test.getId(),userId));
                     }
                     if (userId.trim().isEmpty() ) {
-                        List<SubmitTestDTO> submitTests = submitTestService.findAllByTestId(test.getId());
-                        List<String> submitTestStrings = submitTests.stream()
-                                .map(SubmitTestDTO::getId)
-                                .collect(Collectors.toList());
-                        dto.setSubmitTestIds(submitTestStrings);
+                        dto.setIsSubmitTest(submitTestService.existsSubmitTestByTestId(test.getId()));
                     }
-
-
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -247,6 +238,14 @@ public class TestServiceImpl extends BaseServiceImpl<Test,TestDTO,TestRepository
         }
 
         super.delete(id);
+    }
+    public void deleteSubmitTestsById(String id){
+        List<SubmitTestDTO> submitTestDTOS = submitTestService.findAllByTestId(id);
+        if (submitTestDTOS != null && !submitTestDTOS.isEmpty()) {
+            for (SubmitTestDTO submitTestDTO : submitTestDTOS) {
+                submitTestService.delete(submitTestDTO.getId());
+            }
+        }
     }
 
 
